@@ -1,0 +1,818 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Calcula tus notas | Prepatop</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+</head>
+<body>
+<!-- ═══════════════════════════════════════════════════════════════════
+     CALCULADORA PREPATOP — Oposiciones Cuerpo de Maestros, C. de Madrid
+     Convocatoria 2026 (Resolución 2-2-2026, BOCM 12-2-2026, Anexo IV)
+     Listas de interinos 2026-27 (Resolución 29-4-2026, BOCM 14-5-2026, Anexo II)
+     Archivo autocontenido: no requiere librerías ni conexión.
+     ═══════════════════════════════════════════════════════════════════ -->
+<style>
+  :root{
+    /* Identidad PrepaTop: azul marino + dorado (tokens de prepatop.com) */
+    --papel:#F8FAFC; --superficie:#FFFFFF; --tinta:#141D2E; --tinta-suave:#626D84;
+    --linea:#DADEE6; --azul:#142952; --azul-osc:#0D1E3F; --azul-claro:#EEF2F9;
+    --accion:#2662D9; --accion-osc:#1A44B8; --accion-claro:#A9C4F0;
+    --ok:#1E8A55; --ok-bg:#E7F4ED;
+    --aviso:#8F6210; --aviso-bg:#FBF3DF; --error:#D93636; --error-bg:#FBECEC;
+    --radio:12px;
+    --sans:"Inter",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif;
+    --serif:"Playfair Display",ui-serif,Georgia,"Iowan Old Style","Times New Roman",serif;
+  }
+  #ptop-calc *{box-sizing:border-box;margin:0;padding:0}
+  #ptop-calc{
+    font-family:var(--sans);color:var(--tinta);background:var(--papel);
+    padding:28px 16px 64px;line-height:1.5;
+  }
+  #ptop-calc .marco{max-width:700px;margin:0 auto}
+  /* Cabecera */
+  #ptop-calc .cab{text-align:center;margin-bottom:26px}
+  #ptop-calc h1{font-family:var(--serif);font-size:clamp(30px,6vw,44px);font-weight:800;
+    color:var(--azul);line-height:1.12;text-wrap:balance;margin-bottom:10px}
+  #ptop-calc h1 em{font-style:italic;color:var(--accion)}
+  #ptop-calc .cab p{color:var(--tinta-suave);font-size:15px;max-width:52ch;margin:0 auto}
+  /* Progreso */
+  #ptop-calc .progreso{margin:22px 0 14px}
+  #ptop-calc .progreso .texto{display:flex;justify-content:space-between;font-size:12px;
+    font-weight:600;color:var(--tinta-suave);letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+  #ptop-calc .barra{height:5px;background:var(--linea);border-radius:999px;overflow:hidden}
+  #ptop-calc .barra i{display:block;height:100%;border-radius:999px;
+    background:linear-gradient(90deg,var(--accion) 0%,var(--accion-osc) 100%);
+    transition:width .35s ease}
+  @media (prefers-reduced-motion:reduce){#ptop-calc .barra i{transition:none}}
+  /* Tarjeta de paso */
+  #ptop-calc .tarjeta{background:var(--superficie);border:1px solid var(--linea);
+    border-radius:var(--radio);padding:28px 26px;box-shadow:0 1px 3px rgba(34,38,58,.06)}
+  #ptop-calc .tarjeta h2{font-family:var(--serif);font-size:22px;font-weight:700;
+    line-height:1.25;text-wrap:balance;margin-bottom:6px}
+  #ptop-calc .tarjeta .ayuda{color:var(--tinta-suave);font-size:14px;margin-bottom:20px}
+  #ptop-calc fieldset{border:0}
+  #ptop-calc .grupo{margin-bottom:20px}
+  #ptop-calc .grupo:last-child{margin-bottom:0}
+  #ptop-calc label.etq, #ptop-calc legend.etq{display:block;font-weight:600;font-size:15px;margin-bottom:6px}
+  #ptop-calc .nota-campo{font-size:12.5px;color:var(--tinta-suave);margin-top:5px}
+  /* Controles */
+  #ptop-calc input[type=number], #ptop-calc input[type=text]{
+    width:120px;font:inherit;font-size:17px;font-variant-numeric:tabular-nums;
+    padding:9px 12px;border:1.5px solid var(--linea);border-radius:8px;background:#fff;color:var(--tinta)}
+  /* 16px mínimo: evita el zoom automático de iOS al tocar el selector */
+  #ptop-calc select{font:inherit;font-size:16px;font-weight:600;padding:10px 12px;max-width:100%;
+    border:1.5px solid var(--linea);border-radius:8px;background:#fff;color:var(--tinta)}
+  #ptop-calc input:focus-visible, #ptop-calc button:focus-visible, #ptop-calc select:focus-visible{
+    outline:2.5px solid var(--accion);outline-offset:2px}
+  #ptop-calc .opciones{display:flex;flex-wrap:wrap;gap:8px}
+  #ptop-calc .chip{font:inherit;font-size:15px;font-weight:600;padding:10px 18px;cursor:pointer;
+    border:1.5px solid var(--linea);border-radius:999px;background:#fff;color:var(--tinta)}
+  #ptop-calc .chip:hover{border-color:var(--azul)}
+  #ptop-calc .chip.activo{background:var(--azul);border-color:var(--azul);color:#fff}
+  /* Contador +/- */
+  #ptop-calc .contador{display:inline-flex;align-items:center;gap:0;border:1.5px solid var(--linea);
+    border-radius:8px;overflow:hidden;background:#fff}
+  #ptop-calc .contador button{font:inherit;font-size:20px;font-weight:600;width:42px;height:42px;
+    border:0;background:var(--azul-claro);color:var(--azul);cursor:pointer}
+  #ptop-calc .contador span{min-width:52px;text-align:center;font-size:17px;font-weight:700;
+    font-variant-numeric:tabular-nums}
+  /* Filas de experiencia */
+  #ptop-calc .fila-exp{display:flex;flex-wrap:wrap;align-items:center;gap:10px;
+    padding:13px 0;border-bottom:1px solid var(--linea)}
+  #ptop-calc .fila-exp:last-of-type{border-bottom:0}
+  #ptop-calc .fila-exp .desc{flex:1 1 220px;font-size:14.5px}
+  #ptop-calc .fila-exp .desc b{display:block;font-size:15px}
+  #ptop-calc .fila-exp .desc small{color:var(--tinta-suave)}
+  #ptop-calc .fila-exp .tiempo{display:flex;align-items:center;gap:6px;font-size:13.5px;color:var(--tinta-suave)}
+  #ptop-calc .fila-exp input{width:70px}
+  /* Estado en vivo */
+  #ptop-calc .en-vivo{margin-top:18px;padding:13px 16px;border-radius:8px;font-size:14.5px;
+    font-variant-numeric:tabular-nums}
+  #ptop-calc .en-vivo.bien{background:var(--ok-bg);color:var(--ok)}
+  #ptop-calc .en-vivo.mal{background:var(--error-bg);color:var(--error)}
+  #ptop-calc .en-vivo.neutro{background:var(--azul-claro);color:var(--azul-osc)}
+  /* Navegación */
+  #ptop-calc .nav{display:flex;justify-content:space-between;align-items:center;margin-top:26px;gap:12px}
+  #ptop-calc .btn{font:inherit;font-size:16px;font-weight:700;padding:13px 30px;cursor:pointer;
+    border-radius:999px;border:0;color:#fff;
+    background:linear-gradient(135deg,var(--accion) 0%,var(--accion-osc) 100%);
+    box-shadow:0 8px 24px -6px rgba(38,98,217,.4)}
+  #ptop-calc .btn:hover{background:var(--accion-osc)}
+  #ptop-calc .btn.secundario{background:transparent;color:var(--tinta-suave);font-weight:600;padding:13px 10px}
+  #ptop-calc .btn.secundario:hover{color:var(--tinta);background:transparent}
+  /* Resultados */
+  #ptop-calc .res-tarjetas{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:22px}
+  @media (max-width:620px){#ptop-calc .res-tarjetas{grid-template-columns:1fr}}
+  #ptop-calc .res-t{background:var(--superficie);border:1px solid var(--linea);border-radius:var(--radio);
+    padding:18px 16px;text-align:center}
+  #ptop-calc .res-t.destacada{background:linear-gradient(180deg,#19325F 0%,#0D1E3F 100%);
+    border-color:var(--azul-osc);color:#fff;box-shadow:0 16px 48px -8px rgba(20,41,82,.35)}
+  #ptop-calc .res-t.destacada .cifra{color:#fff}
+  #ptop-calc .res-t .titulo{font-size:11.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;
+    color:var(--tinta-suave);margin-bottom:6px}
+  #ptop-calc .res-t.destacada .titulo{color:#AEBBD6}
+  #ptop-calc .res-t .cifra{font-family:var(--serif);font-size:38px;font-weight:700;line-height:1;
+    font-variant-numeric:tabular-nums}
+  #ptop-calc .res-t .sub{font-size:12px;color:var(--tinta-suave);margin-top:6px}
+  #ptop-calc .res-t.destacada .sub{color:#B9C6DE}
+  #ptop-calc .res-t .cifra.suspensa{font-size:20px;color:var(--error);padding-top:9px}
+  #ptop-calc .seccion{background:var(--superficie);border:1px solid var(--linea);
+    border-radius:var(--radio);padding:22px;margin-bottom:16px;overflow:hidden}
+  #ptop-calc .seccion h3{font-family:var(--serif);font-size:18px;margin-bottom:4px}
+  #ptop-calc .seccion .sub-h{font-size:13px;color:var(--tinta-suave);margin-bottom:14px}
+  #ptop-calc .rollo{overflow-x:auto}
+  #ptop-calc table{width:100%;border-collapse:collapse;font-size:14px;min-width:430px}
+  #ptop-calc th{font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--tinta-suave);
+    text-align:left;padding:7px 8px;border-bottom:2px solid var(--linea)}
+  #ptop-calc th.num, #ptop-calc td.num{text-align:right;font-variant-numeric:tabular-nums;white-space:nowrap}
+  #ptop-calc td{padding:8px;border-bottom:1px solid var(--linea);vertical-align:top}
+  #ptop-calc tr.subtotal td{font-weight:700;background:var(--azul-claro);border-bottom:0}
+  #ptop-calc tr.total-fila td{font-weight:700;font-size:15px;background:var(--azul-osc);color:#fff;border-bottom:0}
+  #ptop-calc td .mini{display:block;font-size:12px;color:var(--tinta-suave);font-weight:400}
+  #ptop-calc .pastilla{display:inline-block;font-size:10.5px;font-weight:700;letter-spacing:.05em;
+    text-transform:uppercase;padding:2px 8px;border-radius:999px;background:var(--aviso-bg);color:var(--aviso);
+    margin-left:6px;vertical-align:1px}
+  /* Móvil: las tablas se apilan en tarjetas, sin scroll horizontal */
+  @media (max-width:620px){
+    #ptop-calc table, #ptop-calc tbody{display:block;min-width:0}
+    #ptop-calc thead{display:none}
+    #ptop-calc tr{display:block;padding:10px 2px;border-bottom:1px solid var(--linea)}
+    #ptop-calc td{display:flex;justify-content:space-between;align-items:baseline;gap:14px;
+      border:0;padding:2px 0;white-space:normal;text-align:right}
+    #ptop-calc td:first-child{text-align:left}
+    #ptop-calc td:empty{display:none}
+    #ptop-calc td::before{font-size:11px;font-weight:600;letter-spacing:.05em;
+      text-transform:uppercase;color:var(--tinta-suave);flex:0 0 auto;text-align:left}
+    #ptop-calc .t-opo td:nth-child(2)::before{content:"Nota"}
+    #ptop-calc .t-opo td:nth-child(3)::before{content:"Pondera"}
+    #ptop-calc .t-opo td:nth-child(4)::before{content:"Aporta"}
+    #ptop-calc .t-exp td:nth-child(2)::before{content:"Tiempo"}
+    #ptop-calc .t-exp td:nth-child(3)::before{content:"Baremo oposición"}
+    #ptop-calc .t-exp td:nth-child(4)::before{content:"Lista interinos"}
+    #ptop-calc .t-mer td:nth-child(2)::before{content:"Baremo oposición"}
+    #ptop-calc .t-mer td:nth-child(3)::before{content:"Lista interinos"}
+    #ptop-calc .t-int td:nth-child(2)::before{content:"Cálculo"}
+    #ptop-calc .t-int td:nth-child(3)::before{content:"Puntos"}
+    #ptop-calc .t-int td:nth-child(4)::before{content:"Máx."}
+    #ptop-calc td[colspan]::before{content:none !important}
+    #ptop-calc tr.subtotal, #ptop-calc tr.total-fila{border-radius:8px;border-bottom:0;
+      margin-top:8px;padding:8px 10px}
+    #ptop-calc tr.subtotal{background:var(--azul-claro)}
+    #ptop-calc tr.total-fila{background:var(--azul-osc)}
+    #ptop-calc tr.subtotal td, #ptop-calc tr.total-fila td{background:transparent;padding:2px 0}
+    #ptop-calc tr.total-fila td::before{color:#B9C6DE}
+  }
+  /* Avisos */
+  #ptop-calc .aviso-caja{background:var(--aviso-bg);border:1px solid #EAD9AE;border-radius:8px;
+    padding:13px 15px;font-size:13.5px;color:#6B4C10;margin-bottom:10px}
+  #ptop-calc .aviso-caja b{color:var(--aviso)}
+  #ptop-calc .fuentes{font-size:12.5px;color:var(--tinta-suave)}
+  #ptop-calc .fuentes li{margin:4px 0 4px 18px}
+  #ptop-calc .pie-res{display:flex;gap:10px;justify-content:center;margin-top:20px;flex-wrap:wrap}
+</style>
+
+<div id="ptop-calc">
+  <div class="marco">
+    <header class="cab">
+      <h1>Calcula <em>tus notas</em></h1>
+      <p>Tu nota de oposición con el baremo y tu puntuación en la lista de interinos, desglosadas mérito a mérito.</p>
+    </header>
+    <div class="progreso" id="progreso" hidden>
+      <div class="texto"><span id="prog-paso"></span><span id="prog-pct"></span></div>
+      <div class="barra"><i id="prog-fill" style="width:0%"></i></div>
+    </div>
+    <main id="paso-caja"></main>
+  </div>
+</div>
+
+<script>
+(function(){
+'use strict';
+
+/* ══════════════ DATOS DE LA CONVOCATORIA (verificados en BOCM) ══════════════ */
+
+var ESPECIALIDADES = [
+  {id:'EI',  nombre:'Educación Infantil',        pruebaComun:false, musica:false},
+  {id:'PRI', nombre:'Educación Primaria',        pruebaComun:true,  musica:false},
+  {id:'FI',  nombre:'Lengua Extranjera: Inglés', pruebaComun:true,  musica:false},
+  {id:'EF',  nombre:'Educación Física',          pruebaComun:true,  musica:false},
+  {id:'PT',  nombre:'Pedagogía Terapéutica',     pruebaComun:true,  musica:false},
+  {id:'AL',  nombre:'Audición y Lenguaje',       pruebaComun:true,  musica:false}
+];
+
+/* Experiencia — Anexo IV convocatoria (concurso) y Anexo II listas (interinos).
+   Valores mensuales del concurso: literales del BOCM (truncados). */
+var EXP_CATS = [
+  {id:'pubMismo',    titulo:'Maestro/a en centros públicos',
+   detalle:'Especialidades del cuerpo de Maestros en la red pública',
+   concAnyo:1.000, concMes:0.08333, intAnyo:0.45},
+  {id:'pubDistinto', titulo:'Otro cuerpo docente en centros públicos',
+   detalle:'P. ej. Secundaria, EOI… en la red pública',
+   concAnyo:0.500, concMes:0.0416, intAnyo:0.36},
+  {id:'privMismo',   titulo:'Mismo nivel en centros privados/concertados',
+   detalle:'Infantil o Primaria en centros no públicos',
+   concAnyo:0.500, concMes:0.0416, intAnyo:0.135},
+  {id:'privDistinto',titulo:'Otro nivel en centros privados/concertados',
+   detalle:'P. ej. ESO en un centro concertado',
+   concAnyo:0.250, concMes:0.0208, intAnyo:0.09}
+];
+
+/* ══════════════ ESTADO ══════════════ */
+
+var S = {
+  esp:'PRI', presentado2026:true,
+  a1:'', a2:'', comp:'', interp:'', pA:'', pB:'',
+  prog:'', upd:'',
+  presentadoAntes:null, mejorNotaAnterior:'', fasesAprobadas:0, mejorNotaAprobada:'',
+  exp:{pubMismo:{a:0,m:0}, pubDistinto:{a:0,m:0}, privMismo:{a:0,m:0}, privDistinto:{a:0,m:0}},
+  interinoCM:null,
+  tieneExp:null, escala:'10', notaExp:'',
+  tieneMaster:null, masters:1, doctorado:null, premioDoc:null,
+  gradosExtra:0, diplomasExtra:0, titMusicaDanza:0, eoi:0, certC1:0, tsFP:0, tsAPD:0, tsDep:0,
+  horasForm:'', horasPonente:'', b2:0, premioFin:null, deportista:null, musicaProf:null, musicaPts:'',
+  pasoIdx:0
+};
+
+function num(v){ if(v===''||v==null) return NaN; var n=parseFloat(String(v).replace(',','.')); return isNaN(n)?NaN:n; }
+function nota(v){ var n=num(v); if(isNaN(n)) return NaN; return Math.min(10,Math.max(0,n)); }
+function r4(x){ return Math.round(x*10000)/10000; }
+function fmt(x,dec){ if(x==null||isNaN(x)) return '—';
+  var d = (dec==null)?4:dec;
+  var s = x.toFixed(d);
+  if(d>2){ s = s.replace(/0+$/,''); var p = s.split('.'); if(p.length<2 || p[1].length<2) s = x.toFixed(2); }
+  return s.replace('.',','); }
+
+/* ══════════════ MOTOR DE CÁLCULO ══════════════ */
+
+function calcOposicion(){
+  var esp = ESPECIALIDADES.find(function(e){return e.id===S.esp;}) || ESPECIALIDADES[0];
+  var out = {esp:esp, presentado:S.presentado2026===true, p1:null, p2:null, notaOpo:null,
+             A:null, A1:null, A2:null, B:null, progN:null, updN:null,
+             p1Superada:false, p2Superada:false, aprobado:false, motivoP1:''};
+  if(!out.presentado) return out;
+  var B = nota(S.pB); out.B = B;
+  var A;
+  if(!esp.pruebaComun){ A = nota(S.pA); }
+  else {
+    var a1 = nota(S.a1), a2;
+    if(esp.musica){ var c=nota(S.comp), i=nota(S.interp);
+      a2 = (!isNaN(c)&&!isNaN(i)) ? (c+i)/2 : NaN; }
+    else a2 = nota(S.a2);
+    out.A1=a1; out.A2=a2;
+    A = (!isNaN(a1)&&!isNaN(a2)) ? 0.3*a1 + 0.7*a2 : NaN;
+  }
+  out.A = A;
+  if(isNaN(A)||isNaN(B)) return out;
+  var p1 = r4(0.7*A + 0.3*B); out.p1 = p1;
+  if(A < 2.5) out.motivoP1 = 'La parte A no llega al mínimo de 2,5';
+  else if(B < 2.5) out.motivoP1 = 'La parte B no llega al mínimo de 2,5';
+  else if(p1 < 5) out.motivoP1 = 'El total no llega a 5';
+  out.p1Superada = (A>=2.5 && B>=2.5 && p1>=5);
+  if(out.p1Superada){
+    var pr = nota(S.prog), up = nota(S.upd);
+    out.progN=pr; out.updN=up;
+    if(!isNaN(pr)&&!isNaN(up)){
+      var p2 = r4(0.3*pr + 0.7*up); out.p2 = p2;
+      out.p2Superada = p2>=5;
+    }
+  }
+  if(out.p1Superada && out.p2Superada){
+    out.notaOpo = r4((out.p1+out.p2)/2);
+    out.aprobado = out.notaOpo>=5;
+  }
+  return out;
+}
+
+/* Reparto de meses con tope, priorizando los subapartados de más valor
+   (criterio "más favorable"; la norma no fija regla expresa — se avisa). */
+function repartirExp(topeMeses){
+  var quedan = topeMeses, reparto = {};
+  EXP_CATS.forEach(function(c){
+    var meses = (S.exp[c.id].a||0)*12 + (S.exp[c.id].m||0);
+    var usa = Math.min(meses, quedan);
+    quedan -= usa;
+    reparto[c.id] = {meses:usa, tenia:meses};
+  });
+  return reparto;
+}
+
+function calcConcurso(opo){
+  var esp = opo.esp;
+  /* Apartado 1 — experiencia (máx. 5 años / 5 puntos) */
+  var rep = repartirExp(60);
+  var exp1 = {lineas:[], raw:0, recortado:false};
+  EXP_CATS.forEach(function(c){
+    var m = rep[c.id].meses;
+    var pts = r4(Math.floor(m/12)*c.concAnyo + (m%12)*c.concMes);
+    if(rep[c.id].tenia>0) exp1.lineas.push({cat:c, meses:m, tenia:rep[c.id].tenia, pts:pts});
+    if(rep[c.id].tenia>rep[c.id].meses) exp1.recortado = true;
+    exp1.raw += pts;
+  });
+  exp1.raw = r4(exp1.raw);
+  exp1.total = Math.min(5, exp1.raw);
+
+  /* Apartado 2 — formación académica (máx. 5) */
+  var f = {lineas:[], raw:0};
+  function linea2(txt, pts, mini){ if(pts>0||mini){ f.lineas.push({txt:txt, pts:pts, mini:mini||''}); f.raw+=pts; } }
+  var ne = num(S.notaExp);
+  var ptsExp = 0;
+  if(S.tieneExp!==false && !isNaN(ne)){
+    ne = Math.round(ne*100)/100;
+    if(S.escala==='10'){ if(ne>7.50) ptsExp=1.5; else if(ne>=6.00) ptsExp=1.0; }
+    else { if(ne>2.00) ptsExp=1.5; else if(ne>=1.25) ptsExp=1.0; }
+    linea2('2.1 · Nota media del expediente ('+fmt(ne,2)+(S.escala==='10'?' /10':' /4')+')', ptsExp,
+           ptsExp===0 ? 'Por debajo de '+(S.escala==='10'?'6,00':'1,25')+' no puntúa' : '');
+  }
+  if(S.tieneMaster===true && S.masters>0)
+    linea2('2.2.1 · Máster universitario oficial ×'+S.masters, S.masters*1.0, '1,000 por máster');
+  if(S.doctorado===true) linea2('2.2.2 · Título de Doctor', 1.0);
+  if(S.doctorado===true && S.premioDoc===true) linea2('2.2.3 · Premio extraordinario de doctorado', 0.5);
+  if(S.diplomasExtra>0){
+    var ptsD = Math.max(0, S.diplomasExtra-1)*1.0;
+    linea2('2.3.1 · Diplomaturas / 1.er ciclo adicionales ×'+S.diplomasExtra, ptsD,
+      'En Maestros (A2) la primera titulación de 1.er ciclo presentada no se valora');
+  }
+  if(S.gradosExtra>0) linea2('2.3.2 · Otros grados / licenciaturas / t. superiores ×'+S.gradosExtra, S.gradosExtra*1.0, '1,000 por título');
+  if(S.titMusicaDanza>0) linea2('2.4.1 · Título Profesional de Música o Danza ×'+S.titMusicaDanza, S.titMusicaDanza*0.5);
+  if(S.eoi>0) linea2('2.4.2 · C1/C2 de EOI ×'+S.eoi+' idioma(s)', S.eoi*0.5, '0,500 por idioma');
+  if(S.tsAPD>0) linea2('2.4.3 · Técnico Superior de Artes Plásticas y Diseño ×'+S.tsAPD, S.tsAPD*0.2);
+  if(S.tsFP>0) linea2('2.4.4 · Técnico Superior de FP ×'+S.tsFP, S.tsFP*0.2);
+  if(S.tsDep>0) linea2('2.4.5 · Técnico Deportivo Superior ×'+S.tsDep, S.tsDep*0.2);
+  if(S.certC1>0) linea2('2.5 · C1/C2 no EOI (Cambridge, DALF, Goethe…) ×'+S.certC1+' idioma(s)', S.certC1*0.5, 'Solo idiomas no puntuados ya por EOI');
+  f.raw = r4(f.raw); f.total = Math.min(5, f.raw);
+
+  /* Apartado 3 — otros méritos (máx. 2) */
+  var o = {lineas:[], raw:0};
+  function linea3(txt, pts, mini){ if(pts>0){ o.lineas.push({txt:txt, pts:pts, mini:mini||''}); o.raw+=pts; } }
+  var hf = num(S.horasForm);
+  if(!isNaN(hf)&&hf>0){ var cr = Math.floor(hf/10);
+    linea3('3.1 · Formación permanente ('+fmt(hf,0)+' h = '+cr+' créditos)', r4(cr*0.05), '0,050 por crédito (10 h)'); }
+  var hp = num(S.horasPonente);
+  if(!isNaN(hp)&&hp>0){ var cp = Math.floor(hp/10);
+    linea3('3.2 · Ponente / director / coordinador ('+fmt(hp,0)+' h = '+cp+' créditos)', r4(cp*0.07), '0,070 por crédito'); }
+  if(esp.id==='EF' && S.deportista===true) linea3('3.3.1 · Deportista de alto nivel / alto rendimiento', 2.0);
+  if(esp.id==='MU' && S.musicaProf===true){ var mp = Math.min(2, Math.max(0, num(S.musicaPts)||0));
+    if(mp>0) linea3('3.3.2 · Ejercicio profesional de la música', r4(mp), 'Hasta 2,000 — lo valora la comisión'); }
+  if(S.b2>0) linea3('3.4 · Certificados B2 ×'+S.b2+' idioma(s)', S.b2*0.25, '0,250 por idioma');
+  if(S.premioFin===true) linea3('3.5 · Premio extraordinario fin de carrera', 1.0);
+  o.raw = r4(o.raw); o.total = Math.min(2, o.raw);
+
+  var total = Math.min(10, r4(exp1.total + f.total + o.total));
+  return {exp:exp1, form:f, otros:o, total:total};
+}
+
+function calcInterinos(opo, conc){
+  var esp = opo.esp;
+  var I = {lineas:[], total:0};
+
+  /* Nota 2026 a efectos de lista (criterio para no aprobados: no publicado — se avisa) */
+  var nota26 = null;
+  if(opo.presentado){
+    if(opo.notaOpo!=null) nota26 = opo.notaOpo;
+    else if(opo.p1!=null && opo.p2!=null) nota26 = r4((opo.p1+opo.p2)/2);
+    else if(opo.p1!=null) nota26 = opo.p1;
+  }
+  var mejorAnt = nota(S.mejorNotaAnterior); if(isNaN(mejorAnt)) mejorAnt = null;
+  var mejorApr = nota(S.mejorNotaAprobada); if(isNaN(mejorApr)) mejorApr = null;
+
+  /* 1.1 mejor nota fase de oposición × 0,45 (máx. 4,5) */
+  var candidatas = [nota26, mejorAnt, mejorApr].filter(function(x){return x!=null;});
+  var mejor = candidatas.length ? Math.max.apply(null,candidatas) : null;
+  var p11 = mejor!=null ? r4(Math.min(4.5, mejor*0.45)) : 0;
+  I.lineas.push({ap:'1.1', txt:'Mejor nota de fase de oposición (ventana 5 convocatorias / 10 años)',
+    calc: mejor!=null ? fmt(mejor)+' × 0,45' : 'Sin nota en la ventana', pts:p11, max:'4,5'});
+
+  /* 1.2 experiencia hasta 10 años, valores del Anexo II (máx. 4,5) */
+  var rep = repartirExp(120), p12 = 0, detalle = [];
+  EXP_CATS.forEach(function(c){
+    var m = rep[c.id].meses;
+    if(m>0){ var pts = r4(Math.floor(m/12)*c.intAnyo + (m%12)*(c.intAnyo/12));
+      p12 += pts; detalle.push(c.titulo+': '+fmt(pts)); }
+  });
+  p12 = r4(Math.min(4.5, p12));
+  I.lineas.push({ap:'1.2', txt:'Experiencia docente (hasta 10 años · 0,45 / 0,36 / 0,135 / 0,09 por año)',
+    calc: detalle.length?detalle.join(' · '):'Sin experiencia', pts:p12, max:'4,5'});
+
+  /* 1.3 formación académica del concurso × 0,25 (máx. 1,25) */
+  var p13 = r4(Math.min(1.25, conc.form.total*0.25));
+  I.lineas.push({ap:'1.3', txt:'Formación académica del baremo × 0,25',
+    calc: fmt(conc.form.total)+' × 0,25', pts:p13, max:'1,25'});
+
+  /* 1.4 otros méritos del concurso × 0,25 (máx. 0,5) */
+  var p14 = r4(Math.min(0.5, conc.otros.total*0.25));
+  I.lineas.push({ap:'1.4', txt:'Otros méritos del baremo × 0,25',
+    calc: fmt(conc.otros.total)+' × 0,25', pts:p14, max:'0,5'});
+
+  /* 2.1.1 — 0,5 por cada prueba/parte ≥ 5 sin ponderar en 2026 */
+  var superadas = [];
+  if(opo.presentado){
+    if(opo.B!=null && opo.B>=5) superadas.push('tema');
+    var practico = esp.pruebaComun ? opo.A2 : opo.A;
+    if(practico!=null && practico>=5) superadas.push('ejercicio práctico');
+    if(esp.pruebaComun && opo.A1!=null && opo.A1>=5) superadas.push('prueba común');
+    if(opo.progN!=null && opo.progN>=5) superadas.push('defensa de programación');
+    if(opo.updN!=null && opo.updN>=5) superadas.push('defensa de la UPD');
+  }
+  var p211 = r4(superadas.length*0.5);
+  I.lineas.push({ap:'2.1.1', txt:'Pruebas con nota ≥ 5 (sin ponderar) en la oposición 2026',
+    calc: superadas.length ? superadas.length+' × 0,5 ('+superadas.join(', ')+')' : 'Ninguna',
+    pts:p211, max: esp.pruebaComun?'2,5':'2,0'});
+
+  /* 2.1.2 — tramos por la mejor fase de oposición APROBADA de la ventana */
+  var aprobadas = [];
+  if(opo.aprobado && nota26!=null) aprobadas.push(nota26);
+  if(mejorApr!=null && mejorApr>=5) aprobadas.push(mejorApr);
+  var p212 = 0, base212 = null;
+  if(aprobadas.length){ base212 = Math.max.apply(null,aprobadas);
+    if(base212>=9) p212=2; else if(base212>=7.5) p212=1.5; else if(base212>=6) p212=1; else if(base212>=5) p212=0.5; }
+  I.lineas.push({ap:'2.1.2', txt:'Mejor fase de oposición aprobada en la ventana (tramos)',
+    calc: base212!=null ? 'Mejor nota aprobada: '+fmt(base212) : 'Ninguna fase aprobada', pts:p212, max:'2'});
+
+  /* 2.1.3 — 1 punto por fase aprobada anterior (sin contar 2026) */
+  var p213 = (S.fasesAprobadas||0)*1.0;
+  I.lineas.push({ap:'2.1.3', txt:'Fases de oposición aprobadas en convocatorias anteriores',
+    calc: (S.fasesAprobadas||0)+' × 1,000', pts:p213, max:'—'});
+
+  /* 2.2 — trabajo previo como interino en la CM */
+  var p22 = S.interinoCM===true ? 1.0 : 0;
+  I.lineas.push({ap:'2.2', txt:'Interinidad en la C. de Madrid ≥ 165 días en un mismo curso (últimos 6)',
+    calc: S.interinoCM===true?'Sí':'No', pts:p22, max:'1'});
+
+  I.total = r4(p11+p12+p13+p14+p211+p212+p213+p22);
+  I.nota26 = nota26;
+  return I;
+}
+
+/* ══════════════ PASOS DEL ASISTENTE ══════════════ */
+
+function pasos(){
+  return ['notas','experiencia','meritos','resultados'];
+}
+
+function irA(idx){ S.pasoIdx = idx; render(); window.scrollTo({top:0,behavior:'smooth'}); }
+function avanzar(){ irA(Math.min(S.pasoIdx+1, pasos().length-1)); }
+function retroceder(){ irA(Math.max(S.pasoIdx-1, 0)); }
+
+/* Helpers de plantilla */
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function chipSiNo(campo, valor){
+  return '<div class="opciones">'+
+    '<button type="button" class="chip '+(valor===true?'activo':'')+'" data-set="'+campo+'" data-val="si">Sí</button>'+
+    '<button type="button" class="chip '+(valor===false?'activo':'')+'" data-set="'+campo+'" data-val="no">No</button>'+
+  '</div>';
+}
+function contador(campo, valor){
+  return '<div class="contador" data-cont="'+campo+'">'+
+    '<button type="button" data-cambia="-1" aria-label="Quitar uno">−</button>'+
+    '<span>'+valor+'</span>'+
+    '<button type="button" data-cambia="1" aria-label="Añadir uno">+</button>'+
+  '</div>';
+}
+function campoNota(campo, valor, etiqueta, ayuda){
+  return '<div class="grupo"><label class="etq" for="in-'+campo+'">'+etiqueta+'</label>'+
+    '<input id="in-'+campo+'" type="text" inputmode="decimal" placeholder="0 – 10" value="'+esc(valor)+'" data-campo="'+campo+'">'+
+    (ayuda?'<p class="nota-campo">'+ayuda+'</p>':'')+'</div>';
+}
+
+/* ── Render de cada paso ── */
+
+var PLANTILLAS = {
+
+notas: function(){
+  var esp = ESPECIALIDADES.find(function(e){return e.id===S.esp;});
+  var o = calcOposicion();
+  var h = '<h2>Tus notas del proceso</h2>'+
+    '<p class="ayuda">Escribe cada nota de 0 a 10 (admite decimales, p. ej. 6,25). Si alguna aún no la tienes, déjala vacía.</p>';
+  h += '<div class="grupo"><label class="etq" for="in-esp">Tu especialidad</label>'+
+    '<select id="in-esp" data-campo="esp">';
+  ESPECIALIDADES.forEach(function(e){
+    h += '<option value="'+e.id+'"'+(S.esp===e.id?' selected':'')+'>'+e.nombre+'</option>';
+  });
+  h += '</select><p class="nota-campo">Solo cambia la estructura del examen: Infantil no tiene prueba común y Música tiene dos ejercicios prácticos.</p></div>';
+  if(!esp.pruebaComun){
+    h += campoNota('pA', S.pA, '1.ª prueba · Parte A: ejercicio práctico', 'En Infantil la parte A es un único examen práctico. Mínimo 2,5.');
+  } else {
+    h += campoNota('a1', S.a1, '1.ª prueba · A1: prueba común (Matemáticas y Lengua)', 'Vale el 30 % de la parte A.');
+    if(esp.musica){
+      h += campoNota('comp', S.comp, '1.ª prueba · A2: composición', '');
+      h += campoNota('interp', S.interp, '1.ª prueba · A2: interpretación', 'La nota de A2 es la media de ambas y vale el 70 % de la parte A.');
+    } else {
+      h += campoNota('a2', S.a2, '1.ª prueba · A2: ejercicio práctico de la especialidad', 'Vale el 70 % de la parte A.');
+    }
+  }
+  h += campoNota('pB', S.pB, '1.ª prueba · Parte B: desarrollo del tema', 'Mínimo 2,5. Vale el 30 % de la prueba.');
+  if(o.p1Superada){
+    h += campoNota('prog', S.prog, '2.ª prueba · Defensa de la programación docente', 'Vale el 30 % de la prueba. Déjala vacía si no llegaste a hacerla.');
+    h += campoNota('upd', S.upd, '2.ª prueba · Exposición de la unidad didáctica (UPD)', 'Vale el 70 % de la prueba.');
+  }
+  if(o.p1!=null){
+    h += '<div class="en-vivo '+(o.p1Superada?'bien':'mal')+'">1.ª prueba = 0,7 × '+fmt(o.A)+' + 0,3 × '+fmt(o.B)+
+      ' = <b>'+fmt(o.p1)+'</b> — '+(o.p1Superada?'✓ Superada':'✗ No superada ('+o.motivoP1+')')+'</div>';
+  }
+  if(o.p2!=null){
+    h += '<div class="en-vivo '+(o.p2Superada?'bien':'mal')+'" style="margin-top:8px">2.ª prueba = 0,3 × '+fmt(o.progN)+' + 0,7 × '+fmt(o.updN)+
+      ' = <b>'+fmt(o.p2)+'</b> — '+(o.p2Superada?'✓ Superada':'✗ No superada (mínimo 5)')+'</div>';
+  }
+  if(o.notaOpo!=null){
+    h += '<div class="en-vivo neutro" style="margin-top:8px">Fase de oposición = ('+fmt(o.p1)+' + '+fmt(o.p2)+') / 2 = <b>'+fmt(o.notaOpo)+'</b></div>';
+  }
+  return h;
+},
+
+experiencia: function(){
+  var h = '<h2>Tu experiencia y oposiciones anteriores</h2>'+
+    '<p class="ayuda">Años y meses completos trabajados en cada situación. Para la oposición computan hasta 5 años; para la lista de interinos, hasta 10.</p>';
+  EXP_CATS.forEach(function(c){
+    var v = S.exp[c.id];
+    h += '<div class="fila-exp"><div class="desc"><b>'+c.titulo+'</b><small>'+c.detalle+'</small></div>'+
+      '<div class="tiempo"><input type="number" min="0" max="45" step="1" value="'+(v.a||'')+'" data-exp="'+c.id+'" data-t="a" aria-label="Años: '+c.titulo+'" placeholder="0"> años'+
+      '<input type="number" min="0" max="11" step="1" value="'+(v.m||'')+'" data-exp="'+c.id+'" data-t="m" aria-label="Meses: '+c.titulo+'" placeholder="0"> meses</div></div>';
+  });
+  h += '<div class="grupo" style="margin-top:20px"><span class="etq">¿Has trabajado como interino/a docente en la Comunidad de Madrid al menos 165 días dentro de un mismo curso, en alguno de los últimos 6 cursos?</span>'+
+    chipSiNo('interinoCM', S.interinoCM)+
+    '<p class="nota-campo">Da 1 punto en la lista de interinos (apartado 2.2) y prioridad en el desempate.</p></div>';
+  h += '<div class="grupo"><span class="etq">¿Te habías presentado antes a esta especialidad en Madrid?</span>'+
+    chipSiNo('presentadoAntes', S.presentadoAntes)+
+    '<p class="nota-campo">Cuentan las convocatorias de Maestros de la Comunidad de Madrid de los últimos 10 años: 2017, 2019, 2022, estabilización (exámenes 2024) y 2024.</p></div>';
+  if(S.presentadoAntes===true){
+    h += campoNota('mejorNotaAnterior', S.mejorNotaAnterior,
+      'Tu mejor nota de fase de oposición anterior (aunque suspendieras)',
+      'La que constaba en las listas. Déjalo vacío si no la recuerdas.');
+    h += '<div class="grupo"><span class="etq">¿Cuántas veces aprobaste la fase de oposición completa (las dos pruebas) en esas convocatorias?</span>'+
+      contador('fasesAprobadas', S.fasesAprobadas)+
+      '<p class="nota-campo">Cada fase aprobada anterior vale 1 punto en la lista de interinos (apartado 2.1.3).</p></div>';
+    if(S.fasesAprobadas>0){
+      h += campoNota('mejorNotaAprobada', S.mejorNotaAprobada,
+        'Tu mejor nota de las fases que aprobaste', 'Entre 5 y 10. Determina los tramos del apartado 2.1.2.');
+    }
+  }
+  return h;
+},
+
+meritos: function(){
+  var espM = ESPECIALIDADES.find(function(e){return e.id===S.esp;});
+  var h = '<h2>Tu formación y tus méritos</h2>'+
+    '<p class="ayuda">Formación académica (máximo 5 puntos) y otros méritos (máximo 2). En la lista de interinos estos bloques se multiplican por 0,25.</p>';
+  h += '<div class="grupo"><span class="etq">¿Recuerdas la nota media del expediente de tu título de acceso (Magisterio / Grado en Educación)?</span>'+chipSiNo('tieneExp', S.tieneExp)+'</div>';
+  if(S.tieneExp===true){
+    h += '<div class="grupo"><span class="etq">Escala del expediente</span><div class="opciones">'+
+      '<button type="button" class="chip '+(S.escala==='10'?'activo':'')+'" data-set-txt="escala" data-val="10">Sobre 10</button>'+
+      '<button type="button" class="chip '+(S.escala==='4'?'activo':'')+'" data-set-txt="escala" data-val="4">Sobre 4</button></div></div>';
+    h += campoNota('notaExp', S.notaExp, 'Nota media del expediente',
+      S.escala==='10' ? 'De 6,00 a 7,50 → 1 punto · más de 7,50 → 1,5 puntos' : 'De 1,25 a 2,00 → 1 punto · más de 2,00 → 1,5 puntos');
+  }
+  h += '<div class="grupo"><span class="etq">¿Tienes algún máster universitario oficial?</span>'+chipSiNo('tieneMaster', S.tieneMaster)+
+    (S.tieneMaster===true?'<div style="margin-top:10px">'+contador('masters', S.masters)+'<p class="nota-campo">1 punto por máster oficial (el habilitante de Secundaria puntúa para Maestros, con matiz interpretativo que verás en los avisos).</p></div>':'')+'</div>';
+  h += '<div class="grupo"><span class="etq">¿Tienes el título de Doctor/a?</span>'+chipSiNo('doctorado', S.doctorado)+'</div>';
+  if(S.doctorado===true) h += '<div class="grupo"><span class="etq">¿Con premio extraordinario de doctorado?</span>'+chipSiNo('premioDoc', S.premioDoc)+'</div>';
+  h += '<div class="grupo"><span class="etq">Otras carreras terminadas además de tu título de acceso</span>'+
+    '<div class="fila-exp"><div class="desc"><b>Grados, licenciaturas o títulos superiores de enseñanzas artísticas</b><small>1 punto cada uno</small></div>'+contador('gradosExtra', S.gradosExtra)+'</div>'+
+    '<div class="fila-exp"><div class="desc"><b>Diplomaturas / titulaciones de primer ciclo</b><small>La primera que presentes no puntúa (regla del cuerpo de Maestros)</small></div>'+contador('diplomasExtra', S.diplomasExtra)+'</div></div>';
+  h += '<div class="grupo"><span class="etq">Idiomas y enseñanzas de régimen especial</span>'+
+    '<div class="fila-exp"><div class="desc"><b>Idiomas con C1 o C2 de la EOI</b><small>0,5 por idioma</small></div>'+contador('eoi', S.eoi)+'</div>'+
+    '<div class="fila-exp"><div class="desc"><b>Idiomas con C1/C2 de otros organismos</b><small>Cambridge, DALF, Goethe… 0,5 por idioma (si no lo puntuaste ya por EOI)</small></div>'+contador('certC1', S.certC1)+'</div>'+
+    '<div class="fila-exp"><div class="desc"><b>Título Profesional de Música o Danza</b><small>0,5 cada uno</small></div>'+contador('titMusicaDanza', S.titMusicaDanza)+'</div>'+
+    '<div class="fila-exp"><div class="desc"><b>Técnico Superior de FP</b><small>0,2 cada uno</small></div>'+contador('tsFP', S.tsFP)+'</div>'+
+    '<div class="fila-exp"><div class="desc"><b>Técnico Superior de Artes Plásticas y Diseño</b><small>0,2 cada uno</small></div>'+contador('tsAPD', S.tsAPD)+'</div>'+
+    '<div class="fila-exp"><div class="desc"><b>Técnico Deportivo Superior</b><small>0,2 cada uno</small></div>'+contador('tsDep', S.tsDep)+'</div></div>';
+  h += '<div class="grupo"><label class="etq" for="in-horasForm">Horas totales de formación permanente homologada</label>'+
+    '<input id="in-horasForm" type="number" min="0" step="1" value="'+esc(S.horasForm)+'" data-campo="horasForm" placeholder="p. ej. 250"> '+
+    '<p class="nota-campo">Cursos de administraciones educativas, universidades o entidades con convenio. Se suman todas las horas, cada 10 h = 1 crédito = 0,050 puntos (1 ECTS = 25 h si el certificado no indica horas).</p></div>';
+  h += '<div class="grupo"><label class="etq" for="in-horasPonente">Horas como ponente, director o coordinador de esas actividades</label>'+
+    '<input id="in-horasPonente" type="number" min="0" step="1" value="'+esc(S.horasPonente)+'" data-campo="horasPonente" placeholder="0"> '+
+    '<p class="nota-campo">0,070 puntos por crédito de 10 horas.</p></div>';
+  h += '<div class="grupo"><span class="etq">Idiomas con certificado B2</span>'+contador('b2', S.b2)+
+    '<p class="nota-campo">0,25 por idioma. No cuentes un idioma que ya puntuaste con C1/C2.</p></div>';
+  h += '<div class="grupo"><span class="etq">¿Tienes premio extraordinario fin de carrera?</span>'+chipSiNo('premioFin', S.premioFin)+'</div>';
+  if(espM.id==='EF') h += '<div class="grupo"><span class="etq">¿Eres o has sido deportista de alto nivel o alto rendimiento (RD 971/2007)?</span>'+chipSiNo('deportista', S.deportista)+'<p class="nota-campo">2 puntos, solo en Educación Física.</p></div>';
+  if(espM.id==='MU'){
+    h += '<div class="grupo"><span class="etq">¿Puedes acreditar ejercicio profesional como músico (hasta 3 años)?</span>'+chipSiNo('musicaProf', S.musicaProf)+'</div>';
+    if(S.musicaProf===true) h += campoNota('musicaPts', S.musicaPts, 'Puntos estimados (0 a 2)', 'La comisión valora este mérito de forma discrecional, hasta 2,000.');
+  }
+  return h;
+},
+
+resultados: function(){ return renderResultados(); }
+};
+
+/* ══════════════ RESULTADOS ══════════════ */
+
+function filaMerito(l, factorInterinos){
+  var int_ = r4(l.pts*factorInterinos);
+  return '<tr><td>'+l.txt+(l.mini?'<span class="mini">'+l.mini+'</span>':'')+'</td>'+
+    '<td class="num">'+fmt(l.pts)+'</td><td class="num">'+fmt(int_)+'</td></tr>';
+}
+
+function renderResultados(){
+  var opo = calcOposicion();
+  var conc = calcConcurso(opo);
+  var I = calcInterinos(opo, conc);
+  var esp = opo.esp;
+  var global_ = (opo.aprobado) ? r4(opo.notaOpo*2/3 + conc.total/3) : null;
+
+  var h = '';
+
+  /* Tarjetas cabecera */
+  h += '<div class="res-tarjetas">';
+  h += '<div class="res-t"><div class="titulo">Fase de oposición</div>'+
+    (opo.notaOpo!=null
+      ? '<div class="cifra">'+fmt(opo.notaOpo,2)+'</div><div class="sub">('+fmt(opo.p1)+' + '+fmt(opo.p2)+') / 2</div>'
+      : '<div class="cifra suspensa">'+(opo.p1==null?'Notas sin introducir':(!opo.p1Superada?'1.ª prueba no superada':(opo.p2==null?'Sin notas de la 2.ª prueba':'2.ª prueba no superada')))+'</div><div class="sub">Se necesita ≥ 5 en cada prueba</div>')+
+    '</div>';
+  h += '<div class="res-t destacada"><div class="titulo">Nota global oposición</div>'+
+    (global_!=null
+      ? '<div class="cifra">'+fmt(global_,2)+'</div><div class="sub">⅔ × '+fmt(opo.notaOpo,2)+' + ⅓ × '+fmt(conc.total,2)+' (baremo)</div>'
+      : '<div class="cifra suspensa" style="color:#C9D3E8">—</div><div class="sub">Solo se calcula si superas las dos pruebas</div>')+
+    '</div>';
+  h += '<div class="res-t"><div class="titulo">Lista de interinos</div>'+
+    '<div class="cifra">'+fmt(I.total,2)+'</div><div class="sub">puntos en la lista de '+esp.nombre+'</div></div>';
+  h += '</div>';
+
+  /* Desglose fase de oposición */
+  if(opo.presentado && opo.p1!=null){
+    h += '<section class="seccion"><h3>Desglose de la fase de oposición</h3>'+
+      '<p class="sub-h">'+esp.nombre+' · convocatoria 2026</p><div class="rollo"><table class="t-opo">'+
+      '<thead><tr><th>Ejercicio</th><th class="num">Nota</th><th class="num">Pondera</th><th class="num">Aporta</th></tr></thead><tbody>';
+    if(esp.pruebaComun){
+      h += '<tr><td>1.ª prueba · A1 Prueba común (Mates y Lengua)</td><td class="num">'+fmt(opo.A1)+'</td><td class="num">× 0,3 (de A)</td><td class="num">'+fmt(r4(opo.A1*0.3))+'</td></tr>';
+      h += '<tr><td>1.ª prueba · A2 Ejercicio práctico'+(esp.musica?' (media de composición e interpretación)':'')+'</td><td class="num">'+fmt(opo.A2)+'</td><td class="num">× 0,7 (de A)</td><td class="num">'+fmt(r4(opo.A2*0.7))+'</td></tr>';
+      h += '<tr><td>1.ª prueba · Parte A completa <span class="mini">mínimo 2,5</span></td><td class="num">'+fmt(opo.A)+'</td><td class="num">× 0,7</td><td class="num">'+fmt(r4(opo.A*0.7))+'</td></tr>';
+    } else {
+      h += '<tr><td>1.ª prueba · Parte A práctica <span class="mini">mínimo 2,5</span></td><td class="num">'+fmt(opo.A)+'</td><td class="num">× 0,7</td><td class="num">'+fmt(r4(opo.A*0.7))+'</td></tr>';
+    }
+    h += '<tr><td>1.ª prueba · Parte B tema <span class="mini">mínimo 2,5</span></td><td class="num">'+fmt(opo.B)+'</td><td class="num">× 0,3</td><td class="num">'+fmt(r4(opo.B*0.3))+'</td></tr>';
+    h += '<tr class="subtotal"><td>Primera prueba '+(opo.p1Superada?'✓':'✗ '+opo.motivoP1)+'</td><td class="num">'+fmt(opo.p1)+'</td><td class="num"></td><td class="num"></td></tr>';
+    if(opo.p2!=null){
+      h += '<tr><td>2.ª prueba · Defensa de la programación</td><td class="num">'+fmt(opo.progN)+'</td><td class="num">× 0,3</td><td class="num">'+fmt(r4(opo.progN*0.3))+'</td></tr>';
+      h += '<tr><td>2.ª prueba · Exposición de la UPD</td><td class="num">'+fmt(opo.updN)+'</td><td class="num">× 0,7</td><td class="num">'+fmt(r4(opo.updN*0.7))+'</td></tr>';
+      h += '<tr class="subtotal"><td>Segunda prueba '+(opo.p2Superada?'✓':'✗ mínimo 5')+'</td><td class="num">'+fmt(opo.p2)+'</td><td class="num"></td><td class="num"></td></tr>';
+    }
+    if(opo.notaOpo!=null) h += '<tr class="total-fila"><td>Nota de la fase de oposición (media de las dos pruebas)</td><td class="num">'+fmt(opo.notaOpo)+'</td><td class="num"></td><td class="num"></td></tr>';
+    h += '</tbody></table></div></section>';
+  }
+
+  /* Desglose experiencia (doble baremo) */
+  var repC = repartirExp(60), repI = repartirExp(120);
+  var hayExp = EXP_CATS.some(function(c){ return (S.exp[c.id].a||0)+(S.exp[c.id].m||0) > 0; });
+  h += '<section class="seccion"><h3>Experiencia docente, mérito a mérito</h3>'+
+    '<p class="sub-h">La oposición baremea hasta 5 años (Anexo IV); la lista de interinos, hasta 10 años con otros valores (Anexo II).</p><div class="rollo"><table class="t-exp">'+
+    '<thead><tr><th>Dónde trabajaste</th><th class="num">Tiempo</th><th class="num">Baremo oposición</th><th class="num">Lista interinos</th></tr></thead><tbody>';
+  if(hayExp){
+    EXP_CATS.forEach(function(c){
+      var tenia = (S.exp[c.id].a||0)*12 + (S.exp[c.id].m||0);
+      if(tenia<=0) return;
+      var mC = repC[c.id].meses, mI = repI[c.id].meses;
+      var pC = r4(Math.floor(mC/12)*c.concAnyo + (mC%12)*c.concMes);
+      var pI = r4(Math.floor(mI/12)*c.intAnyo + (mI%12)*(c.intAnyo/12));
+      h += '<tr><td>'+c.titulo+'<span class="mini">'+fmt(c.concAnyo,3)+'/año en oposición · '+fmt(c.intAnyo,3)+'/año en interinos</span></td>'+
+        '<td class="num">'+Math.floor(tenia/12)+' a '+(tenia%12)+' m</td>'+
+        '<td class="num">'+fmt(pC)+(mC<tenia?'<span class="pastilla">tope</span>':'')+'</td>'+
+        '<td class="num">'+fmt(pI)+(mI<tenia?'<span class="pastilla">tope</span>':'')+'</td></tr>';
+    });
+  } else {
+    h += '<tr><td colspan="4" style="color:var(--tinta-suave)">Sin experiencia declarada.</td></tr>';
+  }
+  h += '<tr class="subtotal"><td>Subtotal experiencia</td><td class="num"></td>'+
+    '<td class="num">'+fmt(conc.exp.total)+' <span class="mini">máx. 5</span></td>'+
+    '<td class="num">'+fmt(I.lineas[1].pts)+' <span class="mini">máx. 4,5</span></td></tr>';
+  h += '</tbody></table></div></section>';
+
+  /* Desglose formación + otros (doble baremo) */
+  h += '<section class="seccion"><h3>Formación y otros méritos, mérito a mérito</h3>'+
+    '<p class="sub-h">Columna de interinos = puntos del baremo × 0,25 (los topes se aplican en cada subtotal).</p><div class="rollo"><table class="t-mer">'+
+    '<thead><tr><th>Mérito</th><th class="num">Baremo oposición</th><th class="num">Lista interinos</th></tr></thead><tbody>';
+  if(conc.form.lineas.length){
+    conc.form.lineas.forEach(function(l){ h += filaMerito(l, 0.25); });
+  } else {
+    h += '<tr><td colspan="3" style="color:var(--tinta-suave)">Sin méritos de formación académica declarados.</td></tr>';
+  }
+  h += '<tr class="subtotal"><td>Subtotal formación académica'+(conc.form.raw>5?' <span class="pastilla">tope aplicado</span>':'')+'</td>'+
+    '<td class="num">'+fmt(conc.form.total)+' <span class="mini">máx. 5</span></td>'+
+    '<td class="num">'+fmt(I.lineas[2].pts)+' <span class="mini">máx. 1,25</span></td></tr>';
+  if(conc.otros.lineas.length){
+    conc.otros.lineas.forEach(function(l){ h += filaMerito(l, 0.25); });
+  } else {
+    h += '<tr><td colspan="3" style="color:var(--tinta-suave)">Sin otros méritos declarados.</td></tr>';
+  }
+  h += '<tr class="subtotal"><td>Subtotal otros méritos'+(conc.otros.raw>2?' <span class="pastilla">tope aplicado</span>':'')+'</td>'+
+    '<td class="num">'+fmt(conc.otros.total)+' <span class="mini">máx. 2</span></td>'+
+    '<td class="num">'+fmt(I.lineas[3].pts)+' <span class="mini">máx. 0,5</span></td></tr>';
+  h += '<tr class="total-fila"><td>Baremo del concurso (experiencia + formación + otros)</td>'+
+    '<td class="num">'+fmt(conc.total)+' <span class="mini" style="color:#B9C6DE">máx. 10</span></td><td class="num"></td></tr>';
+  h += '</tbody></table></div></section>';
+
+  /* Desglose lista interinos */
+  h += '<section class="seccion"><h3>Tu puntuación en la lista de interinos, apartado por apartado</h3>'+
+    '<p class="sub-h">Anexo II de la Resolución de 29 de abril de 2026 (listas 2026-27).</p><div class="rollo"><table class="t-int">'+
+    '<thead><tr><th>Apartado</th><th class="num">Cálculo</th><th class="num">Puntos</th><th class="num">Máx.</th></tr></thead><tbody>';
+  I.lineas.forEach(function(l){
+    h += '<tr><td><b>'+l.ap+'</b> · '+l.txt+'</td><td class="num" style="white-space:normal">'+l.calc+'</td>'+
+      '<td class="num">'+fmt(l.pts)+'</td><td class="num">'+l.max+'</td></tr>';
+  });
+  h += '<tr class="total-fila"><td>Total lista de interinos</td><td class="num"></td><td class="num">'+fmt(I.total)+'</td><td class="num"></td></tr>';
+  h += '</tbody></table></div></section>';
+
+  /* Avisos */
+  var avisos = [];
+  if(S.tieneMaster===true && S.masters>0)
+    avisos.push('<b>Máster de Formación del Profesorado:</b> para el cuerpo de Maestros no es requisito de ingreso y la lectura habitual es que puntúa 1,000 en el apartado 2.2.1, pero no hay criterio oficial publicado de la comisión de baremación. Si tu máster es el habilitante de Secundaria, cuenta con ese matiz.');
+  if(opo.p1!=null && !opo.aprobado)
+    avisos.push('<b>Nota de oposición para la lista (apartado 1.1):</b> la norma no publica cómo se computa la nota de quien no supera las dos pruebas. Esta calculadora usa la nota de la 1.ª prueba (o la media si hiciste ambas), que es el criterio más habitual; la resolución definitiva de listas puede aplicar otro.');
+  if(conc.exp.recortado)
+    avisos.push('<b>Tope de experiencia:</b> tienes más tiempo trabajado que el máximo baremable. Hemos contado primero los periodos que más puntúan (criterio más favorable); la Administración no publica una regla expresa de selección.');
+  if(S.diplomasExtra>0)
+    avisos.push('<b>Diplomaturas (2.3.1):</b> en el cuerpo de Maestros la primera titulación de primer ciclo presentada como mérito no se valora; solo hemos puntuado a partir de la segunda.');
+  if(S.fasesAprobadas>0)
+    avisos.push('<b>Apartado 2.1.3:</b> el cómputo exacto de la ventana de convocatorias (incluido el proceso de estabilización con exámenes en 2024) puede variar según el criterio de la comisión de seguimiento.');
+  h += '<section class="seccion"><h3>Avisos y letra pequeña</h3><div style="margin-top:10px">';
+  avisos.forEach(function(a){ h += '<div class="aviso-caja">'+a+'</div>'; });
+  h += '<div class="aviso-caja"><b>Cálculo orientativo.</b> Basado en la Resolución de 2-2-2026 (BOCM 12-2-2026, convocatoria y Anexo IV) y la Resolución de 29-4-2026 (BOCM 14-5-2026, Anexo II de listas). La puntuación oficial es la que publique la Dirección General de Recursos Humanos.</div>';
+  h += '<ul class="fuentes" style="margin-top:12px">'+
+    '<li>Convocatoria Maestros 2026: BOCM n.º 36, 12-2-2026 (BOCM-20260212-7). Plazas ampliadas a 1.756: BOCM n.º 135, 9-6-2026.</li>'+
+    '<li>Listas de interinos 2026-27: BOCM n.º 113, 14-5-2026 (BOCM-20260514-7).</li>'+
+    '<li>RD 276/2007, arts. 21, 23 y 25 y Anexo I.</li></ul>';
+  h += '</div></section>';
+
+  h += '<div class="pie-res">'+
+    '<button type="button" class="btn" data-accion="editar">Editar mis respuestas</button>'+
+    '<button type="button" class="btn secundario" data-accion="reiniciar">Empezar de nuevo</button></div>';
+  return h;
+}
+
+/* ══════════════ RENDER Y EVENTOS ══════════════ */
+
+var caja = document.getElementById('paso-caja');
+
+function puedeAvanzar(id){
+  return true;
+}
+
+function render(){
+  var lista = pasos();
+  if(S.pasoIdx >= lista.length) S.pasoIdx = lista.length-1;
+  var id = lista[S.pasoIdx];
+  var esUltimo = id==='resultados';
+
+  var prog = document.getElementById('progreso');
+  prog.hidden = esUltimo;
+  if(!esUltimo){
+    document.getElementById('prog-paso').textContent = 'Paso '+(S.pasoIdx+1)+' de '+(lista.length-1);
+    var pct = Math.round(100*S.pasoIdx/(lista.length-1));
+    document.getElementById('prog-pct').textContent = pct+' %';
+    document.getElementById('prog-fill').style.width = pct+'%';
+  }
+
+  var html = esUltimo ? PLANTILLAS.resultados()
+    : '<div class="tarjeta"><form autocomplete="off">'+PLANTILLAS[id]()+'</form>'+
+      '<div class="nav">'+
+      (S.pasoIdx>0 ? '<button type="button" class="btn secundario" data-accion="atras">← Atrás</button>' : '<span></span>')+
+      '<button type="button" class="btn" data-accion="seguir" '+(puedeAvanzar(id)?'':'disabled style="opacity:.45;cursor:not-allowed"')+'>'+
+      (lista[S.pasoIdx+1]==='resultados'?'Ver mis notas →':'Continuar →')+'</button></div></div>';
+  caja.innerHTML = html;
+}
+
+caja.addEventListener('click', function(ev){
+  var b = ev.target.closest('button'); if(!b) return;
+  if(b.dataset.set){ S[b.dataset.set] = (b.dataset.val==='si'); render(); return; }
+  if(b.dataset.setTxt){ S[b.dataset.setTxt] = b.dataset.val; render(); return; }
+  if(b.dataset.cambia){
+    var cont = b.closest('.contador'), campo = cont.dataset.cont;
+    S[campo] = Math.max(0, Math.min(20, (S[campo]||0) + parseInt(b.dataset.cambia,10)));
+    cont.querySelector('span').textContent = S[campo];
+    return;
+  }
+  if(b.dataset.accion==='seguir'){ if(!b.disabled) avanzar(); return; }
+  if(b.dataset.accion==='atras'){ retroceder(); return; }
+  if(b.dataset.accion==='editar'){ irA(0); return; }
+  if(b.dataset.accion==='reiniciar'){ location.reload(); return; }
+});
+
+caja.addEventListener('input', function(ev){
+  var el = ev.target;
+  if(el.dataset.campo){ S[el.dataset.campo] = el.value;
+    /* refresco en vivo de los cálculos de prueba sin perder el foco */
+    var id = pasos()[S.pasoIdx];
+    if(id==='notas'){
+      var foco = el.id, pos = el.selectionStart;
+      render();
+      var de = document.getElementById(foco);
+      if(de){ de.focus(); try{ de.setSelectionRange(pos,pos); }catch(e){} }
+    }
+    return;
+  }
+  if(el.dataset.exp){
+    var v = parseInt(el.value,10); if(isNaN(v)||v<0) v=0;
+    if(el.dataset.t==='m') v = Math.min(11,v);
+    S.exp[el.dataset.exp][el.dataset.t] = v;
+  }
+});
+
+render();
+})();
+</script>
+</body>
+</html>
