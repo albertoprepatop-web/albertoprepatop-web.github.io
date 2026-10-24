@@ -293,10 +293,12 @@ var gn = $('[data-gracias-nombre]');
 if (gn) try {
 var env = JSON.parse(sessionStorage.getItem('prepatop_envio'));
 if (env) {
-if (env.nombre) gn.textContent = env.nombre;
+var gnc = $('[data-gracias-nombre-coma]'), gct = $('[data-gracias-contacto]');
+if (env.nombre) { gn.textContent = env.nombre; if (gnc) gnc.hidden = false; } // «Recibido, Ana.»
 var gtl = $('[data-gracias-telefono]'), gco = $('[data-gracias-correo]');
 if (gtl && env.telefono) gtl.textContent = env.telefono;
 if (gco && env.correo) gco.textContent = env.correo;
+if (gct && env.telefono && env.correo) gct.hidden = false; // «al 600… o a ana@…»
 if (env.conversion) {
 delete env.conversion; sessionStorage.setItem('prepatop_envio', JSON.stringify(env));
 if (publicidadOk()) { activarAds(); gt('event', 'conversion', { send_to: ADS + '/RvGTCMW9488cEOCuro1E', value: 1, currency: 'EUR' }); }
@@ -349,6 +351,10 @@ $$('[data-esp]', grupo).forEach(function (c) { c.setAttribute('aria-pressed', St
 $$('a[data-wa-con]', grupo.closest('[data-wa-ambito]') || d).forEach(function (a) {
 var sin = a.getAttribute('data-wa-sin');
 a.href = esp ? urlWa(a.getAttribute('data-wa-con').split('{esp}').join(esp)) : sin ? urlWa(sin) : a.href;
+});
+$$('[data-equipo-esp]', grupo.parentNode).forEach(function (p) { // fichas de esa especialidad
+p.hidden = p.getAttribute('data-equipo-esp') !== esp;
+var l = !p.hidden && $('[data-carrusel]', p); if (l) { l.scrollLeft = 0; l.dispatchEvent(new Event('scroll')); } // pinta los puntos al verse
 });
 return;
 }
