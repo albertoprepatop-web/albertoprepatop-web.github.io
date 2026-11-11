@@ -7,8 +7,8 @@ var $$ = function (s, c) { return [].slice.call((c || d).querySelectorAll(s)); }
 var on = function (el, ev, fn, o) { if (el) el.addEventListener(ev, fn, o); };
 var porId = function (id) { try { return d.getElementById(decodeURIComponent(id)); } catch (e) {} };
 var mostrarPlegada = function (el) {
-if (!el.classList.contains('oculto-estrecho') || el.getClientRects().length) return false;
-var ver = $('[data-mostrar*="estrecho"]'); if (ver) ver.click(); return true;
+var ver = el.getClientRects().length ? null : el.closest('.opiniones');
+ver = ver && $('[data-mostrar]', ver); if (ver) ver.click(); return !!ver;
 };
 on(d, 'touchstart', function () {}, { passive: true }); // iOS solo aplica :active si hay un escuchador táctil
 var quieto = w.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -138,9 +138,9 @@ var it = items(), n = it.length, k = indice(it), clave = k + '/' + n;
 if (clave === pintado) return;
 var antes = pintado.split('/')[1]; pintado = clave;
 attr(ant, 'aria-disabled', String(k < 1)); attr(sig, 'aria-disabled', String(k >= n - 1));
-if (n > 7) { puntos.className = 'carrusel__puntos carrusel__contador'; puntos.textContent = (k + 1) + ' / ' + n; return; } // «3 / 13»
-if (String(n) !== antes || puntos.classList.contains('carrusel__contador')) {
-puntos.className = 'carrusel__puntos'; puntos.textContent = '';
+puntos.hidden = n > 7; if (n > 7) return;
+if (String(n) !== antes) {
+puntos.textContent = '';
 for (var i = 0; i < n; i++) {
 var p = d.createElement('button'); p.type = 'button'; p.className = 'carrusel__punto';
 p.setAttribute('aria-label', 'Ir al elemento ' + (i + 1) + ' de ' + n); p.onclick = ir.bind(null, i); puntos.appendChild(p);
@@ -186,7 +186,7 @@ e.hidden = !ok; if (ok && e.getClientRects().length) n++;
 });
 if (vacio) vacio.hidden = n > 0; // nunca una rejilla vacía
 var vivo = $('[data-filtro-estado]', cont);
-if (vivo) vivo.textContent = f === 'google' ? n + ' reseñas de Google' : f === 'alumno' ? n + ' testimonios' : 'Todas las opiniones';
+if (vivo) vivo.textContent = f === 'google' ? 'Reseñas de Google' : f === 'alumno' ? 'Testimonios' : 'Todas las opiniones';
 var l = $('[data-carrusel]', cont); if (l) { l.scrollLeft = 0; l.dispatchEvent(new Event('scroll')); }
 });
 });
