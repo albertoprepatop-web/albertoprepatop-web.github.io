@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>DirectorIA · Imagen para publicaciones y enlaces (1200 × 630)</title>
+<link rel="stylesheet" href="redes.css">
+<style>
+  /* 1200 × 630 (1,91 : 1), para publicaciones y enlaces que no traen imagen propia. No es la imagen de la web:
+     la web declara la suya (web/img/og.png). X la recorta a 2 : 1 (15 px arriba y abajo): nada importante en los bordes.
+     Logotipo horizontal de 512 px de ancho (96 px de alto, 1 x = 55 px). En el móvil mide 31 px de alto
+     en LinkedIn (a todo el ancho, 390 px, ×0,325) y 24,4 px en X (en la columna del texto, unos 306 px, ×0,255),
+     así que no baja del mínimo de 24 px. El eslogan va compuesto como titular en Rubik 600 a 64 px, separado
+     del logotipo por más de 1 x; no se usa el logotipo con eslogan, cuyo eslogan se quedaría en unos 7 px. */
+  body { width: 1200px; height: 630px; }
+  /* top: -6px sube el bloque al centro óptico (la «g» de «colegio» tira de la tinta hacia abajo) */
+  .marca { position: absolute; left: 80px; top: -6px; height: 630px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+  .logo { width: 512px; height: auto; }
+  .titular { font-size: 64px; line-height: 1.06; margin-top: 50px; margin-left: 2px; }
+  /* Disco de 416 px (208/240 de la ilustración), a 80 px del borde derecho y centrado en altura */
+  .ilustracion { position: absolute; width: 480px; height: 480px; left: 672px; top: 75px; }
+</style>
+</head>
+<body class="claro">
+  <div class="marca">
+    <img class="logo" src="../../../logo/logo-horizontal.svg" alt="DirectorIA">
+    <h1 class="titular">Vuestra IA,<br>dentro del colegio</h1>
+  </div>
+  <img class="ilustracion" src="../../../ilustraciones/colegio-servidor.svg" alt="">
+</body>
+</html>

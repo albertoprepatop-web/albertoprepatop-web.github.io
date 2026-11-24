@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>DirectorIA · Membrete</title>
+<link rel="stylesheet" href="../../../fuentes/fuentes.css">
+<style>
+  /*
+    Membrete de DirectorIA en A4, con la misma carta de ejemplo que membrete.docx.
+    Márgenes como en Word: 40 mm arriba, 28 mm abajo, 25 mm a los lados.
+    El logotipo horizontal mide 36,9 mm de tinta (lo mismo que el PNG de 600 px colocado a 45 mm,
+    que lleva 1 x de margen transparente por lado) y su tinta empieza en el margen izquierdo.
+    Interlineados como el «sencillo» de Word: Nunito Sans ≈ 1,43 veces el cuerpo.
+  */
+  @page { size: A4; margin: 0; }
+  :root {
+    --pizarra: #17322C;
+    --texto: #41524D;
+    --linea: #D5DED9;
+    --chispa-texto: #B4531C;
+  }
+  html, body { margin: 0; padding: 0; background: #FFFFFF; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .pagina { position: relative; width: 210mm; height: 297mm; overflow: hidden; }
+  .logo { position: absolute; left: 24.512mm; top: 16.53mm; width: 37.844mm; height: 7.075mm; }
+  .cuerpo {
+    position: absolute; left: 25mm; right: 25mm; top: 40mm;
+    font: 400 10.5pt/15pt 'Nunito Sans', Arial, sans-serif; color: var(--texto);
+  }
+  .cuerpo p { margin: 0 0 8pt; }
+  .fecha { margin-bottom: 14pt !important; }
+  .destinatario { margin-bottom: 18pt !important; }
+  h1 {
+    font: 700 20pt/23.5pt 'Rubik', Arial, sans-serif; color: var(--pizarra);
+    margin: 0 0 10pt;
+  }
+  h2 {
+    font: 700 11.5pt/14pt 'Rubik', Arial, sans-serif; color: var(--pizarra);
+    margin: 12pt 0 3pt;
+  }
+  ul { list-style: none; margin: 0 0 8pt; padding: 0; }
+  li { position: relative; padding-left: 5mm; margin: 0 0 4pt; }
+  li::before {
+    content: "•"; position: absolute; left: 0; top: 0;
+    font-weight: 700; color: var(--chispa-texto);
+  }
+  .saludo { margin-top: 4pt !important; margin-bottom: 30pt !important; }
+  .firma { margin: 0 !important; }
+  .firma strong { color: var(--pizarra); font-weight: 700; }
+  .pie {
+    position: absolute; left: 25mm; right: 25mm; top: 279.2mm;
+    border-top: 0.5pt solid var(--linea); padding-top: 6pt;
+    font: 400 7.5pt/10pt 'Nunito Sans', Arial, sans-serif; color: var(--texto);
+  }
+</style>
+</head>
+<body>
+<div class="pagina">
+  <img class="logo" src="../../../logo/logo-horizontal.svg" alt="DirectorIA">
+
+  <div class="cuerpo">
+    <p class="fecha">[Localidad], [fecha]</p>
+    <p class="destinatario">[Nombre y apellidos]<br>[Directora / Director]<br>[Nombre del colegio]<br>[Dirección del colegio]<br>[Código postal y localidad]</p>
+
+    <h1>Una IA propia para [Nombre del colegio]</h1>
+
+    <p>[Estimada directora / Estimado director]:</p>
+    <p>Os escribo para presentaros DirectorIA. Instalamos en colegios privados y concertados una IA propia, en un servidor dentro del centro, que quita papeleo al equipo directivo y al claustro.</p>
+
+    <h2>Qué prepara para vuestro equipo</h2>
+    <ul>
+      <li>Cuando falta un profesor, propone quién cubre cada hora, con un reparto de guardias equilibrado, y prepara la ficha para quien sustituye.</li>
+      <li>Saca los plazos de las circulares, redacta las actas a partir del dictado y propone respuestas al correo.</li>
+      <li>Envía a dirección un resumen del día a las 8:00 y guía paso a paso protocolos como los de acoso escolar y absentismo.</li>
+      <li>Cada docente tiene su propio asistente.</li>
+    </ul>
+
+    <h2>La IA propone. Vosotros decidís.</h2>
+    <p>Decidir, aprobar y firmar es siempre cosa de una persona del colegio. La IA nunca evalúa, puntúa ni clasifica a ningún alumno, y trata los datos de los alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos.</p>
+
+    <h2>Antes de firmar nada</h2>
+    <p>Os proponemos una demo de 45 minutos en vuestro colegio, con una mañana real: una sustitución y un acta. Y, si queréis, analizamos gratis vuestros gastos para buscar ahorros. El informe es vuestro, firméis o no.</p>
+    <p>Os llamaré en los próximos días para buscar una fecha. Si lo preferís, podéis escribirme a [correo@dominio.es] o llamarme al [teléfono].</p>
+
+    <p class="saludo">Un cordial saludo,</p>
+    <p class="firma"><strong>[Tu nombre]</strong><br>[Cargo] · DirectorIA</p>
+  </div>
+
+  <div class="pie">[Razón social] · [NIF] · [Dirección postal] · [teléfono] · [correo@dominio.es] · [dominio.es]</div>
+</div>
+</body>
+</html>

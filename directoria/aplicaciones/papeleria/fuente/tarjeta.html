@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>DirectorIA · Tarjeta de visita</title>
+<link rel="stylesheet" href="../../../fuentes/fuentes.css">
+<style>
+  /*
+    Tarjeta de visita de DirectorIA.
+    Corte: 85 × 55 mm. Sangrado: 3 mm por cada lado. Página: 91 × 61 mm.
+    Todas las medidas van en milímetros desde la esquina de la PÁGINA (corte + 3 mm).
+    Margen de los textos: 6 mm desde el corte (el mínimo pedido es 4 mm).
+    Las líneas base se calculan con las métricas de las fuentes:
+      Rubik:       ascendente 0,935 · descendente 0,250 · mayúscula 0,700
+      Nunito Sans: ascendente 1,011 · descendente 0,353 · mayúscula 0,705
+    Con line-height igual al cuerpo, la línea base queda a 0,8425 × cuerpo (Rubik)
+    y a 0,829 × cuerpo (Nunito Sans) del borde superior de la caja.
+  */
+  @page { size: 91mm 61mm; margin: 0; }
+  :root {
+    --pizarra: #17322C;
+    --tiza: #F6F3EC;
+    --texto: #41524D;
+    --chispa-texto: #B4531C;
+  }
+  html, body { margin: 0; padding: 0; }
+  body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .cara { position: relative; width: 91mm; height: 61mm; overflow: hidden; break-after: page; }
+  .cara:last-child { break-after: auto; }
+  .anverso { background: var(--pizarra); }
+  .reverso { background: var(--tiza); }
+  .cara img { position: absolute; display: block; }
+  .linea { position: absolute; left: 9mm; margin: 0; white-space: nowrap; }
+
+  /* Anverso: logotipo con eslogan en negativo, 60 mm de ancho de archivo (x = 6,45 mm), centrado en el corte */
+  .logo-eslogan { width: 60mm; height: 15.942mm; left: 15.5mm; top: 22.529mm; }
+
+  /* Reverso */
+  .nombre {  /* Rubik 600 a 10,5 pt; altura de mayúscula a 6 mm del corte: línea base en 8,593 mm del corte */
+    font: 600 10.5pt/10.5pt 'Rubik', Arial, sans-serif; color: var(--pizarra);
+    top: 8.472mm;
+  }
+  .cargo {   /* Nunito Sans 600 a 7,5 pt; línea base 4,6 mm por debajo de la del nombre */
+    font: 600 7.5pt/7.5pt 'Nunito Sans', Arial, sans-serif; color: var(--chispa-texto);
+    top: 14.0mm;
+  }
+  .contacto { /* Nunito Sans 400 a 7,5 pt; interlínea 3,9 mm; última línea base a 6 mm del corte inferior */
+    font: 400 7.5pt/7.5pt 'Nunito Sans', Arial, sans-serif; color: var(--texto);
+  }
+  .c1 { top: 42.006mm; }
+  .c2 { top: 45.906mm; }
+  .c3 { top: 49.806mm; }
+  /* Isotipo: el cuenco ocupa la misma altura que el bloque de contacto (de la altura de mayúscula
+     de la primera línea a la línea base de la última); su borde derecho, a 6 mm del corte. */
+  .isotipo { width: 9.435mm; height: 10.931mm; left: 73.025mm; top: 41.702mm; }
+
+  /* Guías de comprobación (solo con <body class="guias">) */
+  .guias .cara::before, .guias .cara::after { content: ""; position: absolute; pointer-events: none; z-index: 9; }
+  .guias .cara::before { left: 3mm; top: 3mm; width: 85mm; height: 55mm; outline: 0.1mm solid #ff00ff; }
+  .guias .cara::after { left: 7mm; top: 7mm; width: 77mm; height: 47mm; outline: 0.1mm dashed #00a0ff; }
+</style>
+</head>
+<body>
+  <!-- Página 1 · Anverso -->
+  <section class="cara anverso" aria-label="Anverso">
+    <img class="logo-eslogan" src="../../../logo/logo-eslogan-negativo.svg" alt="DirectorIA. Vuestra IA, dentro del colegio">
+  </section>
+
+  <!-- Página 2 · Reverso -->
+  <section class="cara reverso" aria-label="Reverso">
+    <p class="linea nombre">[Tu nombre]</p>
+    <p class="linea cargo">[Cargo]</p>
+    <p class="linea contacto c1">[teléfono]</p>
+    <p class="linea contacto c2">[correo@dominio.es]</p>
+    <p class="linea contacto c3">[dominio.es]</p>
+    <img class="isotipo" src="../../../logo/isotipo.svg" alt="">
+  </section>
+</body>
+</html>

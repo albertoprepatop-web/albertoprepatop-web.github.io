@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>DirectorIA · Publicación de LinkedIn: presentación (1200 × 1200)</title>
+<link rel="stylesheet" href="redes.css">
+<style>
+  /* 1200 × 1200, márgenes de 96 px. La portada de la presentación comercial llevada al formato
+     cuadrado: barra chispa, eslogan como titular, subtítulo, imagen clave y logotipo en negativo. */
+  body { width: 1200px; height: 1200px; }
+  .barra { position: absolute; left: 96px; top: 96px; width: 96px; height: 10px; }
+  .titular { position: absolute; left: 92px; top: 140px; font-size: 104px; line-height: 1.04; }
+  .sub { position: absolute; left: 96px; top: 392px; width: 760px; font-size: 36px; line-height: 1.38; color: var(--texto-suave); }
+  /* Disco de 572 px a 96 px de los bordes derecho e inferior */
+  .ilustracion { position: absolute; width: 660px; height: 660px; left: 488px; top: 488px; }
+  /* Horizontal a 80 px de alto (1 x = 46 px): en el feed del móvil (390 px de ancho, 0,325) mide 26 px,
+     por encima del mínimo de 24 px de construccion.md */
+  .logo { position: absolute; left: 96px; bottom: 96px; height: 80px; width: auto; }
+</style>
+</head>
+<body class="oscuro">
+  <div class="barra"></div>
+  <h1 class="titular">Vuestra IA,<br>dentro del colegio</h1>
+  <p class="sub">Menos papeleo para dirección y claustro.<br>La IA trata los datos de vuestros alumnos<br>en un servidor dentro del colegio.</p>
+  <img class="ilustracion" src="../../../ilustraciones/colegio-servidor.svg" alt="">
+  <img class="logo" src="../../../logo/logo-horizontal-negativo.svg" alt="DirectorIA">
+</body>
+</html>

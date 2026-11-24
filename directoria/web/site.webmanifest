@@ -1,0 +1,17 @@
+{
+  "name": "DirectorIA · Vuestra IA, dentro del colegio",
+  "short_name": "DirectorIA",
+  "description": "IA para dirección y claustro, en un servidor dentro del colegio.",
+  "lang": "es-ES",
+  "dir": "ltr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "browser",
+  "background_color": "#F6F3EC",
+  "theme_color": "#F6F3EC",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

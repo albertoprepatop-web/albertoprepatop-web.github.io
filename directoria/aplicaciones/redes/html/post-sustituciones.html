@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>DirectorIA · Publicación de LinkedIn: sustituciones (1200 × 1200)</title>
+<link rel="stylesheet" href="redes.css">
+<style>
+  body { width: 1200px; height: 1200px; }
+  .barra { position: absolute; left: 96px; top: 96px; width: 96px; height: 10px; }
+  .titular { position: absolute; left: 94px; top: 136px; width: 1010px; font-size: 62px; line-height: 1.12; }
+
+  /* Historia en tres pasos: tres columnas de 352 px con discos de 300 px (la ilustración mide 346 px;
+     el disco ocupa 208/240). Los bordes de los discos exteriores caen en los márgenes de 96 px,
+     y a 390 px de ancho (móvil) cada disco sigue midiendo unos 96 px. El bloque sube a 442 px para que
+     entre el texto de los pasos y el logotipo de 80 px quede más de 1 x (46 px). */
+  .pasos { position: absolute; left: 72px; top: 442px; width: 1056px; display: grid; grid-template-columns: repeat(3, 1fr); }
+  .paso { display: flex; flex-direction: column; align-items: center; text-align: center; }
+  .paso img { width: 346px; height: 346px; }
+  .paso h2 { font-family: 'Rubik', Arial, sans-serif; font-weight: 600; font-size: 35px; line-height: 1.12; color: var(--pizarra); margin-top: 20px; }
+  .paso p { font-size: 29px; line-height: 1.3; color: var(--texto); margin-top: 12px; width: 300px; }
+
+  /* Flechas finas en pizarra-linea, centradas en el hueco de 52 px entre discos */
+  .flecha { position: absolute; top: 604px; width: 32px; height: 22px; }
+  .flecha.f1 { left: 408px; }
+  .flecha.f2 { left: 760px; }
+
+  /* Horizontal a 80 px de alto (1 x = 46 px): en el feed del móvil (390 px de ancho, 0,325) mide 26 px,
+     por encima del mínimo de 24 px de construccion.md */
+  .logo { position: absolute; left: 96px; bottom: 96px; height: 80px; width: auto; }
+</style>
+</head>
+<body class="claro">
+  <div class="barra"></div>
+  <h1 class="titular">Cuando falta un profesor,<br>DirectorIA propone quién cubre<br>cada hora y prepara la ficha<br>de quien sustituye</h1>
+
+  <div class="pasos">
+    <div class="paso">
+      <img src="../../../ilustraciones/jefatura.svg" alt="">
+      <h2>Guardias<br>equilibradas</h2>
+      <p>Jefatura revisa la propuesta y decide.</p>
+    </div>
+    <div class="paso">
+      <img src="../../../ilustraciones/ficha.svg" alt="">
+      <h2>La ficha,<br>preparada</h2>
+      <p>Tarea, adaptaciones, alergias y recogidas.</p>
+    </div>
+    <div class="paso">
+      <img src="../../../ilustraciones/sustituto.svg" alt="">
+      <h2>Sustituto<br>informado</h2>
+      <p>Entra en clase sabiendo qué hacer.</p>
+    </div>
+  </div>
+
+  <svg class="flecha f1" viewBox="0 0 32 22" aria-hidden="true"><path d="M2 11H29M21 3L29 11L21 19" fill="none" stroke="#2E5A50" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  <svg class="flecha f2" viewBox="0 0 32 22" aria-hidden="true"><path d="M2 11H29M21 3L29 11L21 19" fill="none" stroke="#2E5A50" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>
+
+  <img class="logo" src="../../../logo/logo-horizontal.svg" alt="DirectorIA">
+</body>
+</html>

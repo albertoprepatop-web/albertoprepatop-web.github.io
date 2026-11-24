@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>DirectorIA · Cabecera de X (1500 × 500)</title>
+<link rel="stylesheet" href="redes.css">
+<style>
+  /* 1500 × 500. X pone el avatar abajo a la izquierda (x < 400, y > 300) y en algunas pantallas
+     recorta unos 60 px por arriba y por abajo: todo lo importante va entre y = 70 y y = 430.
+     El avatar ya muestra el símbolo, así que aquí va solo la palabra (logotipo-negativo.svg), a 50 px de alto
+     (1 x = 38,5 px): en el móvil X muestra la cabecera a 390 px de ancho (×0,26) y la palabra mide 13 px,
+     por encima de su mínimo de 12 px. */
+  body { width: 1500px; height: 500px; }
+  .texto { position: absolute; left: 456px; top: 0; height: 500px; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+  .logo { height: 50px; width: auto; }
+  .titular { font-size: 66px; line-height: 1.08; margin-top: 38px; }
+  .descriptor { font-size: 30px; font-weight: 600; line-height: 1.3; color: var(--texto-suave); margin-top: 18px; }
+  /* Disco de 321 px (el disco ocupa 208/240 de la ilustración), a 76 px del borde derecho y centrado en altura */
+  .ilustracion { position: absolute; width: 370px; height: 370px; left: 1078px; top: 65px; }
+</style>
+</head>
+<body class="oscuro">
+  <div class="texto">
+    <img class="logo" src="../../../logo/logotipo-negativo.svg" alt="DirectorIA">
+    <h1 class="titular">Vuestra IA,<br>dentro del colegio</h1>
+    <p class="descriptor">IA para dirección y claustro</p>
+  </div>
+  <img class="ilustracion" src="../../../ilustraciones/colegio-servidor.svg" alt="">
+</body>
+</html>

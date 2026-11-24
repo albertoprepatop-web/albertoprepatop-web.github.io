@@ -1,0 +1,40 @@
+/* Piezas para redes sociales de DirectorIA: colores de tokens.json y fuentes locales (SIL OFL 1.1). */
+@import url("../../../fuentes/fuentes.css");
+
+:root {
+  --pizarra: #17322C;
+  --pizarra-2: #21433B;
+  --pizarra-linea: #2E5A50;
+  --tiza: #F6F3EC;
+  --salvia: #E7EEE9;
+  --papel: #FFFDF8;
+  --linea: #D5DED9;
+  --texto: #41524D;
+  --texto-suave: #C9DAD4;
+  --chispa: #E07A3A;        /* solo sobre pizarra */
+  --chispa-texto: #B4531C;  /* naranja sobre fondos claros */
+}
+
+html, body { margin: 0; padding: 0; }
+body {
+  position: relative;
+  overflow: hidden;
+  font-family: 'Nunito Sans', Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: geometricPrecision;
+}
+body.oscuro { background: var(--pizarra); color: var(--texto-suave); }
+body.claro { background: var(--tiza); color: var(--texto); }
+
+p, h1, h2 { margin: 0; }
+img { display: block; }
+
+/* Titular: Rubik. Nunca text-transform sobre el nombre (identidad verbal). */
+.titular { font-family: 'Rubik', Arial, sans-serif; font-weight: 600; letter-spacing: -0.01em; }
+.oscuro .titular { color: var(--tiza); }
+.claro .titular { color: var(--pizarra); }
+
+/* Barra de acento, como en la portada de la presentación */
+.barra { border-radius: 999px; }
+.oscuro .barra { background: var(--chispa); }
+.claro .barra { background: var(--chispa-texto); }

@@ -1,0 +1,13 @@
+{
+  "name": "directoria-papeleria",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Genera la papelería y los documentos comerciales de DirectorIA (ver construir.sh)",
+  "type": "module",
+  "scripts": {
+    "construir": "bash construir.sh"
+  },
+  "dependencies": {
+    "playwright": "1.63.0"
+  }
+}

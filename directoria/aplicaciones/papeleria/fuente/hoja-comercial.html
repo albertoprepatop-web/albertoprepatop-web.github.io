@@ -1,0 +1,276 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<title>DirectorIA · Hoja comercial</title>
+<link rel="stylesheet" href="../../../fuentes/fuentes.css">
+<style>
+  /*
+    Hoja comercial de DirectorIA: A4, dos páginas, para enviar en PDF o imprimir en la oficina.
+    Página blanca con márgenes de 14 mm y paneles de color dentro (sin sangrado: las impresoras de
+    oficina no imprimen hasta el borde).
+  */
+  @page { size: A4; margin: 0; }
+  :root {
+    --pizarra: #17322C;
+    --pizarra-2: #21433B;
+    --pizarra-linea: #2E5A50;
+    --tiza: #F6F3EC;
+    --salvia: #E7EEE9;
+    --papel: #FFFDF8;
+    --linea: #D5DED9;
+    --texto: #41524D;
+    --texto-suave: #C9DAD4;
+    --chispa: #E07A3A;
+    --chispa-texto: #B4531C;
+    --m: 14mm;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; background: #FFFFFF; }
+  body {
+    -webkit-print-color-adjust: exact; print-color-adjust: exact;
+    font: 400 10pt/14.5pt 'Nunito Sans', Arial, sans-serif; color: var(--texto);
+  }
+  p, ul, h1, h2, h3 { margin: 0; }
+  p, li, h1, h2, h3 { text-wrap: pretty; }  /* sin palabras sueltas al final de párrafo */
+  ul { list-style: none; padding: 0; }
+
+  .pagina {
+    position: relative; width: 210mm; height: 297mm; overflow: hidden;
+    padding: 30mm var(--m) 0; break-after: page;
+  }
+  .pagina:last-child { break-after: auto; }
+
+  /* Cabecera: horizontal con 44 mm de tinta; el descriptor, en la línea base de la palabra */
+  .logo-cab { position: absolute; left: 13.418mm; top: 13.418mm; width: 45.164mm; height: 8.443mm; }
+  .descriptor {
+    position: absolute; right: var(--m); top: 17.58mm; margin: 0;
+    font: 600 8.5pt/8.5pt 'Nunito Sans', Arial, sans-serif; color: var(--texto);
+  }
+  .pie {
+    position: absolute; left: var(--m); right: var(--m); bottom: 9mm;
+    display: flex; justify-content: space-between;
+    font: 400 7.5pt/10pt 'Nunito Sans', Arial, sans-serif; color: var(--texto);
+    border-top: 0.5pt solid var(--linea); padding-top: 2.2mm;
+  }
+
+  .antetitulo {
+    font: 700 7.5pt/10pt 'Nunito Sans', Arial, sans-serif; letter-spacing: 0.16em;
+    text-transform: uppercase; color: var(--chispa-texto); margin-bottom: 1.6mm;
+  }
+  h2 { font: 600 15pt/18pt 'Rubik', Arial, sans-serif; color: var(--pizarra); margin-bottom: 3.6mm; }
+  section { margin-top: 8.5mm; }
+
+  /* ---------------------------------------------------------------- página 1 */
+  .portada {
+    background: var(--pizarra); border-radius: 5mm; color: var(--texto-suave);
+    display: grid; grid-template-columns: 1fr 62mm; gap: 6mm; align-items: center;
+    padding: 10mm 9mm 10mm 11mm; height: 84mm;
+  }
+  .portada .antetitulo { color: var(--chispa); }
+  .portada h1 {
+    font: 700 29pt/31pt 'Rubik', Arial, sans-serif; color: var(--tiza); margin: 1.2mm 0 5mm;
+  }
+  .portada .sub { font: 400 11pt/15.5pt 'Nunito Sans', Arial, sans-serif; max-width: 98mm; }
+  .portada .lema {
+    font: 500 12pt/15pt 'Rubik', Arial, sans-serif; color: var(--tiza); margin-top: 5mm;
+  }
+  .portada img { width: 60mm; height: 60mm; display: block; }
+
+  .cargos { border-top: 0.8pt solid var(--pizarra); }
+  .cargo {
+    display: grid; grid-template-columns: 50mm 1fr; align-items: baseline;
+    padding: 2.7mm 0 2.6mm; border-bottom: 0.5pt solid var(--linea);
+  }
+  .cargo b { font: 600 10.5pt/14pt 'Rubik', Arial, sans-serif; color: var(--pizarra); }
+
+  .privacidad {
+    margin-top: 9mm; background: var(--salvia); border-radius: 4mm;
+    display: grid; grid-template-columns: 30mm 1fr; gap: 7mm; align-items: center;
+    padding: 6.5mm 8mm 6.5mm 7mm;
+  }
+  .privacidad img { width: 30mm; height: 30mm; display: block; }
+  .privacidad h2 { margin-bottom: 2.6mm; }
+  .vinetas li { position: relative; padding-left: 4.2mm; margin-bottom: 1.4mm; }
+  .vinetas li:last-child { margin-bottom: 0; }
+  .vinetas li::before {
+    content: "•"; position: absolute; left: 0; top: 0; font-weight: 700; color: var(--chispa-texto);
+  }
+
+  /* ---------------------------------------------------------------- página 2 */
+  /* Pasos: cuatro columnas unidas por una línea, con el número en un círculo pizarra.
+     Los títulos caben en una línea. Si alguno pasa a dos, la subrejilla (número, título, texto)
+     hace que los cuatro textos sigan empezando a la misma altura. */
+  .pasos {
+    position: relative; display: grid; grid-template-columns: repeat(4, 1fr);
+    grid-template-rows: auto auto auto; column-gap: 5mm; row-gap: 0;
+  }
+  .pasos::before {
+    /* del centro del círculo 1 al del 4: columnas de (182 − 3 × 5) / 4 = 41,75 mm */
+    content: ""; position: absolute; left: 3.5mm; right: 38.25mm; top: 3.5mm;
+    border-top: 0.8pt solid var(--linea);
+  }
+  .paso { position: relative; display: grid; grid-row: span 3; grid-template-rows: subgrid; align-content: start; }
+  .paso .n {
+    width: 7mm; height: 7mm; border-radius: 50%; background: var(--pizarra); color: var(--tiza);
+    font: 600 10pt/7mm 'Rubik', Arial, sans-serif; text-align: center;
+    box-shadow: 0 0 0 1.6mm #FFFFFF;
+  }
+  .paso h3 {
+    font: 600 10.5pt/13pt 'Rubik', Arial, sans-serif; color: var(--pizarra); margin: 3.2mm 0 1.2mm;
+  }
+  .paso p { font-size: 9.5pt; line-height: 13.5pt; }
+
+  .planes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4mm; }
+  .plan { border: 0.8pt solid var(--linea); border-radius: 3mm; padding: 4.4mm 5mm 4.2mm; background: var(--papel); }
+  .plan h3 { font: 600 12.5pt/15pt 'Rubik', Arial, sans-serif; color: var(--pizarra); }
+  .plan .tam { font-size: 9.5pt; line-height: 13pt; margin-top: 0.6mm; }
+  .plan .cuota { margin-top: 3.4mm; font-size: 9pt; line-height: 12pt; }
+  .plan .importe { font: 700 19pt/22pt 'Rubik', Arial, sans-serif; color: var(--pizarra); }
+  .plan .importe small { font: 400 9.5pt/12pt 'Nunito Sans', Arial, sans-serif; color: var(--texto); }
+  .plan .inicial {
+    margin-top: 3.2mm; padding-top: 3mm; border-top: 0.5pt solid var(--linea);
+    display: flex; justify-content: space-between; align-items: baseline; font-size: 9.5pt;
+  }
+  .plan .inicial b { font: 600 11.5pt/14pt 'Rubik', Arial, sans-serif; color: var(--pizarra); }
+  .plan .inicial-nota { font-size: 8.5pt; line-height: 11.5pt; margin-top: 0.4mm; }
+  .condiciones { margin-top: 3.6mm; }
+  .condiciones b { color: var(--pizarra); font-weight: 700; }
+
+  .no-hace { display: grid; grid-template-columns: 1fr 1fr; column-gap: 8mm; row-gap: 2mm; }
+  .no-hace li {
+    position: relative; padding: 0 0 0 5.2mm;
+  }
+  .no-hace li::before {
+    content: "–"; position: absolute; left: 0; top: 0; font-weight: 700; color: var(--chispa-texto);
+  }
+
+  .contacto {
+    position: absolute; left: var(--m); right: var(--m); bottom: 21mm;
+    background: var(--pizarra); border-radius: 5mm; color: var(--texto-suave);
+    display: grid; grid-template-columns: 1fr 64mm; gap: 8mm; align-items: center;
+    padding: 8mm 10mm 8mm 11mm;
+  }
+  .contacto h2 { color: var(--tiza); font-size: 17pt; line-height: 20.5pt; margin-bottom: 2.6mm; }
+  .contacto .sub { font-size: 10.5pt; line-height: 15pt; max-width: 88mm; }
+  .contacto .datos { font-size: 10pt; line-height: 15pt; color: var(--texto-suave); }
+  .contacto .datos b { font: 600 11.5pt/15pt 'Rubik', Arial, sans-serif; color: var(--tiza); display: block; }
+  .contacto .datos .cargo-c { color: var(--chispa); font-weight: 600; margin-bottom: 2.4mm; }
+  .contacto .datos .sede { margin-top: 2.4mm; font-size: 8.5pt; line-height: 12pt; }
+</style>
+</head>
+<body>
+
+<!-- ======================================================= Página 1 -->
+<div class="pagina">
+  <img class="logo-cab" src="../../../logo/logo-horizontal.svg" alt="DirectorIA">
+  <p class="descriptor">IA para dirección y claustro</p>
+
+  <div class="portada">
+    <div>
+      <p class="antetitulo">Para equipos directivos</p>
+      <h1>Vuestra IA,<br>dentro del colegio</h1>
+      <p class="sub">DirectorIA instala en colegios privados y concertados una IA propia, en un servidor dentro del centro. Prepara sustituciones y guardias, actas, respuestas de correo y avisos de plazos para dirección y claustro.</p>
+      <p class="lema">La IA propone. Vosotros decidís.</p>
+    </div>
+    <img src="../../../ilustraciones/colegio-servidor.svg" alt="Un colegio con el servidor de DirectorIA dentro">
+  </div>
+
+  <section>
+    <p class="antetitulo">Para cada cargo</p>
+    <h2>Qué cambia en vuestro colegio</h2>
+    <div class="cargos">
+      <div class="cargo"><b>Dirección</b><span>El resumen del día a las 8:00 y cada correo con una respuesta propuesta.</span></div>
+      <div class="cargo"><b>Jefatura de estudios</b><span>Una propuesta de guardias para cada ausencia y la ficha del sustituto.</span></div>
+      <div class="cargo"><b>Secretaría</b><span>Los plazos de cada circular, con aviso, y un analista que busca ahorros.</span></div>
+      <div class="cargo"><b>Orientación y tutoría</b><span>Los protocolos de acoso y absentismo, paso a paso y con sus documentos.</span></div>
+      <div class="cargo"><b>Cada docente</b><span>Su propio asistente: correos dictados y sus plazos, siempre a la vista.</span></div>
+    </div>
+  </section>
+
+  <div class="privacidad">
+    <img src="../../../ilustraciones/candado.svg" alt="">
+    <div>
+      <h2>Privacidad, puertas adentro</h2>
+      <ul class="vinetas">
+        <li>La IA trata los datos de los alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos.</li>
+        <li>El colegio sigue siendo el responsable del tratamiento. Os entregamos los borradores de la evaluación de impacto y del registro de actividades de tratamiento.</li>
+        <li>La IA propone y una persona decide. Nunca evalúa, puntúa ni clasifica a ningún alumno.</li>
+        <li>El módulo opcional de Claude, en la nube, es solo para material didáctico, no para datos de alumnos.</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="pie"><span>[dominio.es]</span><span>1 / 2</span></div>
+</div>
+
+<!-- ======================================================= Página 2 -->
+<div class="pagina">
+  <img class="logo-cab" src="../../../logo/logo-horizontal.svg" alt="DirectorIA">
+  <p class="descriptor">IA para dirección y claustro</p>
+
+  <section style="margin-top:0">
+    <p class="antetitulo">Cómo empezamos</p>
+    <h2>De la demo al uso diario, sin obras</h2>
+    <div class="pasos">
+      <div class="paso"><div class="n">1</div><h3>Demo en el colegio</h3><p>45 minutos con una mañana real: una sustitución y un acta.</p></div>
+      <div class="paso"><div class="n">2</div><h3>Análisis de gastos</h3><p>Gratis y antes de firmar, con vuestras facturas y contratos. El informe es vuestro.</p></div>
+      <div class="paso"><div class="n">3</div><h3>Instalación en un día</h3><p>El servidor llega montado. Cargamos los datos y creamos los usuarios.</p></div>
+      <div class="paso"><div class="n">4</div><h3>Formación y soporte</h3><p>6 horas de formación para el claustro y soporte en horario lectivo.</p></div>
+    </div>
+  </section>
+
+  <section>
+    <p class="antetitulo">Precios</p>
+    <h2>Una cuota inicial y una suscripción mensual</h2>
+    <div class="planes">
+      <div class="plan">
+        <h3>Básico</h3><p class="tam">Hasta 40 docentes</p>
+        <p class="cuota">Suscripción</p><p class="importe">1.200 € <small>al mes</small></p>
+        <div class="inicial"><span>Cuota inicial</span><b>6.000 €</b></div>
+        <p class="inicial-nota">Servidor e instalación</p>
+      </div>
+      <div class="plan">
+        <h3>Centro</h3><p class="tam">De 41 a 80 docentes</p>
+        <p class="cuota">Suscripción</p><p class="importe">1.600 € <small>al mes</small></p>
+        <div class="inicial"><span>Cuota inicial</span><b>9.000 €</b></div>
+        <p class="inicial-nota">Servidor e instalación</p>
+      </div>
+      <div class="plan">
+        <h3>Grande</h3><p class="tam">De 81 a 150 docentes</p>
+        <p class="cuota">Suscripción</p><p class="importe">2.200 € <small>al mes</small></p>
+        <div class="inicial"><span>Cuota inicial</span><b>14.000 €</b></div>
+        <p class="inicial-nota">Servidor e instalación</p>
+      </div>
+    </div>
+    <p class="condiciones"><b>Precios sin IVA. Compromiso mínimo de dos cursos escolares.</b> La cuota inicial se paga una vez. El módulo opcional de Claude no está incluido: si lo activáis, su uso se paga aparte, en la cuenta del colegio.</p>
+  </section>
+
+  <section>
+    <p class="antetitulo">Por diseño</p>
+    <h2>Lo que no hace, a propósito</h2>
+    <ul class="no-hace">
+      <li>No evalúa, puntúa ni clasifica a ningún alumno.</li>
+      <li>No decide: propone, y decide una persona del colegio.</li>
+      <li>No contesta el correo por su cuenta: cada respuesta la revisa y la envía una persona.</li>
+      <li>No sustituye a la gestoría ni lleva la contabilidad oficial.</li>
+    </ul>
+  </section>
+
+  <div class="contacto">
+    <div>
+      <h2>¿Probamos con vuestra próxima sustitución?</h2>
+      <p class="sub">Os lo enseñamos funcionando en vuestro colegio, con vuestros horarios. Pedidnos una demo.</p>
+    </div>
+    <div class="datos">
+      <b>[Tu nombre]</b>
+      <div class="cargo-c">[Cargo]</div>
+      [teléfono]<br>[correo@dominio.es]<br>[dominio.es]
+      <p class="sede">Empresa de la Comunidad de Madrid</p>
+    </div>
+  </div>
+
+  <div class="pie"><span>[dominio.es]</span><span>2 / 2</span></div>
+</div>
+</body>
+</html>

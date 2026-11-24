@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<!-- La web no pide nada a otros sitios: ni fuentes, ni scripts, ni analítica. Esta política lo garantiza en el navegador. -->
+<meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; font-src 'self'; script-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
+<meta name="referrer" content="no-referrer">
+<title>DirectorIA · Vuestra propia IA, dentro del colegio</title>
+<meta name="description" content="IA propia para colegios privados y concertados, en un servidor dentro del centro: propone quién cubre cada ausencia y prepara actas, correos y avisos de plazos.">
+<!-- Antes de publicar con los datos reales: quitad la línea «robots» y poned la dirección definitiva en «canonical», «og:url» y las imágenes (ver README.md). -->
+<meta name="robots" content="noindex">
+<!-- <link rel="canonical" href="https://[dominio.es]/"> -->
+<meta name="theme-color" content="#F6F3EC">
+<meta name="color-scheme" content="light">
+<link rel="icon" href="favicon.ico" sizes="32x32">
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="manifest" href="site.webmanifest">
+<link rel="preload" href="fuentes/rubik-latin-600-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fuentes/nunito-sans-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="fuentes/fuentes.css">
+<link rel="stylesheet" href="estilos.css">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_ES">
+<meta property="og:site_name" content="DirectorIA">
+<meta property="og:title" content="DirectorIA · Vuestra propia IA, dentro del colegio">
+<meta property="og:description" content="Propone quién cubre cada ausencia, redacta actas y correos, y os avisa de los plazos. Vosotros decidís. Los datos de vuestros alumnos no salen del colegio.">
+<!-- <meta property="og:url" content="https://[dominio.es]/"> -->
+<!-- Las redes sociales necesitan la imagen con su dirección completa: https://[dominio.es]/img/og.png -->
+<meta property="og:image" content="img/og.png">
+<meta property="og:image:type" content="image/png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="DirectorIA. Vuestra propia IA, dentro del colegio. Ilustración de un colegio con el servidor dentro.">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="DirectorIA · Vuestra propia IA, dentro del colegio">
+<meta name="twitter:description" content="Propone quién cubre cada ausencia, redacta actas y correos, y os avisa de los plazos. Vosotros decidís.">
+<meta name="twitter:image" content="img/og.png">
+<meta name="twitter:image:alt" content="DirectorIA. Vuestra propia IA, dentro del colegio. Ilustración de un colegio con el servidor dentro.">
+</head>
+<body>
+<a class="saltar" href="#contenido">Saltar al contenido</a>
+
+<header class="cabecera">
+  <div class="contenedor cabecera-fila">
+    <a class="cabecera-marca" href="#inicio"><img src="img/logo/logo-horizontal.svg" alt="DirectorIA, ir al inicio" width="214" height="40"></a>
+    <nav class="menu" aria-label="Secciones">
+      <ul role="list">
+        <li><a href="#como-funciona">Cómo funciona</a></li>
+        <li><a href="#cargos">Para cada cargo</a></li>
+        <li><a href="#privacidad">Privacidad</a></li>
+        <li><a href="#precios">Precios</a></li>
+        <li><a href="#preguntas">Preguntas</a></li>
+      </ul>
+    </nav>
+    <a class="boton boton-cabecera" href="#contacto">Pedir una demo</a>
+    <details class="menu-movil">
+      <summary><span class="menu-icono" aria-hidden="true"></span>Menú</summary>
+      <nav aria-label="Menú de secciones">
+        <ul role="list">
+          <li><a href="#como-funciona">Cómo funciona</a></li>
+          <li><a href="#cargos">Para cada cargo</a></li>
+          <li><a href="#ficha">La ficha de sustitución</a></li>
+          <li><a href="#privacidad">Privacidad</a></li>
+          <li><a href="#gastos">Análisis de gastos gratis</a></li>
+          <li><a href="#precios">Precios</a></li>
+          <li><a href="#preguntas">Preguntas frecuentes</a></li>
+          <li><a href="#contacto">Pedir una demo</a></li>
+        </ul>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<main id="contenido" tabindex="-1">
+
+  <!-- Portada -->
+  <section class="portada" id="inicio" aria-labelledby="titulo-portada">
+    <div class="contenedor portada-rejilla">
+      <div class="portada-texto">
+        <p class="antetitulo">IA para dirección y claustro</p>
+        <h1 id="titulo-portada">Vuestra propia IA, dentro del colegio</h1>
+        <p class="entradilla">Propone quién cubre cada ausencia, redacta actas y correos, y os avisa de los plazos. Vosotros decidís. Los datos de vuestros alumnos no salen del colegio.</p>
+        <div class="botones">
+          <a class="boton" href="#contacto">Pedir una demo en el colegio</a>
+          <a class="boton boton-borde" href="#gastos">Análisis de gastos gratis</a>
+        </div>
+        <ul class="portada-datos" role="list" aria-label="En pocas palabras">
+          <li>Un servidor con IA, dentro del colegio</li>
+          <li>Instalación en un día, sin obras</li>
+          <li>Para colegios privados y concertados</li>
+        </ul>
+      </div>
+      <figure class="portada-imagen">
+        <img src="img/ilustraciones/colegio-servidor.svg" alt="Ilustración: un colegio con el servidor de DirectorIA dentro, a la vista por el ventanal." width="480" height="480">
+        <figcaption>
+          <span class="chip chip-propone"><span class="insignia" aria-hidden="true"></span>La IA propone.</span>
+          <span class="chip chip-decidis"><span class="marca-visto" aria-hidden="true"></span>Vosotros decidís.</span>
+        </figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Cómo funciona -->
+  <section class="seccion seccion-linea" id="como-funciona" aria-labelledby="t-como">
+    <div class="contenedor">
+      <div class="cabeza-seccion">
+        <p class="antetitulo">Cómo funciona</p>
+        <h2 id="t-como">Un servidor en el colegio y, a su alrededor, las personas que lo usan</h2>
+        <p class="entradilla">DirectorIA es un servidor con IA que instalamos dentro de vuestro colegio y un programa para el día a día. Cada cargo tiene su asistente. La IA prepara, resume, propone y avisa; decidir, aprobar y firmar es cosa de personas.</p>
+      </div>
+
+      <div class="mapa">
+        <svg class="mapa-lineas" viewBox="0 0 1200 760" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+          <g stroke="#2E5A50" stroke-opacity="0.45" stroke-width="1.5" fill="none" vector-effect="non-scaling-stroke">
+            <line x1="430" y1="380" x2="150" y2="190" vector-effect="non-scaling-stroke"/>
+            <line x1="430" y1="380" x2="430" y2="190" vector-effect="non-scaling-stroke"/>
+            <line x1="430" y1="380" x2="710" y2="190" vector-effect="non-scaling-stroke"/>
+            <line x1="430" y1="380" x2="150" y2="570" vector-effect="non-scaling-stroke"/>
+            <line x1="430" y1="380" x2="430" y2="570" vector-effect="non-scaling-stroke"/>
+            <line x1="430" y1="380" x2="710" y2="570" vector-effect="non-scaling-stroke"/>
+          </g>
+          <line x1="430" y1="380" x2="1050" y2="230" stroke="#2E5A50" stroke-opacity="0.7" stroke-width="1.5" stroke-dasharray="6 7" vector-effect="non-scaling-stroke"/>
+        </svg>
+
+        <div class="mapa-dentro">
+          <p class="mapa-etiqueta">Dentro del colegio</p>
+          <figure class="mapa-centro">
+            <img src="img/ilustraciones/colegio-servidor.svg" alt="" width="210" height="210">
+            <figcaption>Vuestro servidor con IA</figcaption>
+          </figure>
+          <ul class="mapa-personas" role="list" aria-label="Quién lo usa dentro del colegio">
+            <li class="mp mp-arriba mp-1">
+              <img src="img/ilustraciones/direccion.svg" alt="" width="96" height="96">
+              <p><strong>Dirección</strong> Resumen de las 8:00 y respuestas propuestas al correo</p>
+            </li>
+            <li class="mp mp-arriba mp-2">
+              <img src="img/ilustraciones/jefatura.svg" alt="" width="96" height="96">
+              <p><strong>Jefatura de estudios</strong> Una propuesta de guardias para cada ausencia</p>
+            </li>
+            <li class="mp mp-arriba mp-3">
+              <img src="img/ilustraciones/secretaria.svg" alt="" width="96" height="96">
+              <p><strong>Secretaría</strong> Avisos antes de cada plazo, revisión o contrato</p>
+            </li>
+            <li class="mp mp-abajo mp-4">
+              <img src="img/ilustraciones/docente.svg" alt="" width="96" height="96">
+              <p><strong>Docentes</strong> Correos dictados y sus plazos, a la vista</p>
+            </li>
+            <li class="mp mp-abajo mp-5">
+              <img src="img/ilustraciones/orientacion.svg" alt="" width="96" height="96">
+              <p><strong>Orientación y tutoría</strong> Sus pautas, en la ficha de quien sustituye</p>
+            </li>
+            <li class="mp mp-abajo mp-6">
+              <img src="img/ilustraciones/sustituto.svg" alt="" width="96" height="96">
+              <p><strong>Quien sustituye</strong> Su ficha, con solo lo necesario</p>
+            </li>
+          </ul>
+        </div>
+
+        <div class="mapa-fuera">
+          <p class="mapa-etiqueta">Fuera del colegio</p>
+          <ul class="mapa-externos" role="list" aria-label="Fuera del colegio">
+            <li class="mp mp-nube">
+              <img src="img/ilustraciones/nube-claude.svg" alt="" width="96" height="96">
+              <p><strong>Módulo de Claude, opcional</strong> Solo material didáctico, sin datos personales</p>
+            </li>
+            <li class="mp mp-familia">
+              <img src="img/ilustraciones/familia.svg" alt="" width="96" height="96">
+              <p><strong>Familias</strong> Reciben las circulares que enviáis vosotros</p>
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="manana-bloque">
+        <h3 class="subtitulo" id="t-manana">Una mañana con una ausencia</h3>
+        <p class="subtitulo-texto">Así se cubre la ausencia de un profesor, de primera hora al final de la jornada.</p>
+        <ol class="manana" role="list" aria-labelledby="t-manana">
+          <li>
+            <img src="img/ilustraciones/reloj.svg" alt="" width="96" height="96">
+            <p class="hora">08:00</p>
+            <h4>El resumen del día</h4>
+            <p>Dirección recibe quién falta hoy, qué vence y qué correos importan.</p>
+          </li>
+          <li>
+            <img src="img/ilustraciones/jefatura.svg" alt="" width="96" height="96">
+            <p class="hora">08:05</p>
+            <h4>La propuesta de guardias</h4>
+            <p>La IA propone quién cubre cada hora, con las guardias bien repartidas. Jefatura de estudios la revisa y la confirma.</p>
+          </li>
+          <li>
+            <img src="img/ilustraciones/ficha.svg" alt="" width="96" height="96">
+            <p class="hora">08:06</p>
+            <h4>La ficha, para quien cubre</h4>
+            <p>La tarea de la sesión y lo que tiene que saber: alumnado con necesidades, alergias y recogidas.</p>
+          </li>
+          <li>
+            <img src="img/ilustraciones/sustituto.svg" alt="" width="96" height="96">
+            <p class="hora">En clase</p>
+            <h4>La clase sigue su curso</h4>
+            <p>La tarea sale de la programación quincenal de quien falta. Nadie tiene que mandarla con fiebre.</p>
+          </li>
+          <li>
+            <img src="img/ilustraciones/candado.svg" alt="" width="96" height="96">
+            <p class="hora">Al acabar la jornada</p>
+            <h4>La ficha se cierra</h4>
+            <p>Y queda registrado quién la ha visto.</p>
+          </li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- Para cada cargo -->
+  <section class="seccion seccion-salvia" id="cargos" aria-labelledby="t-cargos">
+    <div class="contenedor">
+      <div class="cabeza-seccion">
+        <p class="antetitulo">Para cada cargo</p>
+        <h2 id="t-cargos">Así mejora vuestro centro, de dirección al aula</h2>
+        <p class="entradilla">Cada cargo tiene su asistente. La IA prepara y propone; decide siempre una persona.</p>
+      </div>
+      <nav class="cargos-indice" aria-label="Ir a un cargo">
+        <ul role="list">
+          <li><a href="#cargo-direccion">Dirección</a></li>
+          <li><a href="#cargo-jefatura">Jefatura de estudios</a></li>
+          <li><a href="#cargo-secretaria">Secretaría</a></li>
+          <li><a href="#cargo-docentes">Docentes</a></li>
+          <li><a href="#cargo-orientacion">Orientación y tutoría</a></li>
+        </ul>
+      </nav>
+
+      <div class="cargos">
+        <article class="cargo" id="cargo-direccion" aria-labelledby="t-direccion">
+          <div class="cargo-cabeza">
+            <img src="img/ilustraciones/direccion.svg" alt="" width="96" height="96">
+            <p class="cargo-nombre">Dirección</p>
+            <h3 id="t-direccion">Dirigir el centro, no la bandeja de entrada</h3>
+            <p class="cargo-estrella"><strong>Función estrella:</strong> el resumen de las 8:00, con quién falta, qué vence hoy y qué correos importan.</p>
+          </div>
+          <div class="cargo-cambios">
+            <p class="cambios-cabecera" aria-hidden="true"><span>Antes</span><span>Con DirectorIA</span></p>
+            <ul class="cambios" role="list">
+              <li class="cambio">
+                <p class="antes"><span class="etiqueta-fila">Antes</span> Consejería, inspección, familias y proveedores en la misma bandeja.</p>
+                <p class="ahora"><span class="etiqueta-fila">Con DirectorIA</span> Cada correo llega resumido, con una respuesta propuesta que revisáis antes de enviar.</p>
+              </li>
+              <li class="cambio">
+                <p class="antes"><span class="etiqueta-fila">Antes</span> ¿Esto no lo acordamos ya en claustro? Nadie sabe en qué acta.</p>
+                <p class="ahora"><span class="etiqueta-fila">Con DirectorIA</span> El borrador del acta sale del dictado y cada acuerdo queda en un archivo con buscador.</p>
+              </li>
+              <li class="cambio">
+                <p class="antes"><span class="etiqueta-fila">Antes</span> La inspección pide documentos y toca buscarlos carpeta por carpeta.</p>
+                <p class="ahora"><span class="etiqueta-fila">Con DirectorIA</span> Reúne en un dosier los documentos del centro que pide la inspección, listo para revisar.</p>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="cargo" id="cargo-jefatura" aria-labelledby="t-jefatura">
+          <div class="cargo-cabeza">
+            <img src="img/ilustraciones/jefatura.svg" alt="" width="96" height="96">
+            <p class="cargo-nombre">Jefatura de estudios</p>
+            <h3 id="t-jefatura">Cada ausencia, cubierta y con la clase preparada</h3>
+            <p class="cargo-estrella"><strong>Función estrella:</strong> la ficha de sustitución, con solo lo necesario y solo para quien sustituye.</p>
+          </div>
+          <div class="cargo-cambios">
+            <p class="cambios-cabecera" aria-hidden="true"><span>Antes</span><span>Con DirectorIA</span></p>
+            <ul class="cambios" role="list">
+              <li class="cambio">
+                <p class="antes"><span class="etiqueta-fila">Antes</span> Falta alguien a primera hora y hay que reorganizar las guardias.</p>
+                <p class="ahora"><span class="etiqueta-fila">Con DirectorIA</span> Propone quién cubre cada hora, con las guardias bien repartidas, y vosotros confirmáis.</p>
+              </li>
+              <li class="cambio">
+                <p class="antes"><span class="etiqueta-fila">Antes</span> Quien hace la guardia entra al aula sin tarea y sin conocer al grupo.</p>
+                <p class="ahora"><span class="etiqueta-fila">Con DirectorIA</span> Quien cubre recibe su ficha: tarea, pautas del alumnado con necesidades, alergias y recogidas.</p>
+              </li>
+              <li class="cambio">
+                <p class="antes"><span class="etiqueta-fila">Antes</span> Cuadrar exámenes, optativas y aulas sin que nada se pise.</p>
+                <p class="ahora"><span class="etiqueta-fila">Con DirectorIA</span> Propone el calendario de exámenes y el reparto de optativas y aulas, y avisa de cada choque.</p>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="cargo" id="cargo-secretaria" aria-labelledby="t-secretaria">
+          <div class="cargo-cabeza">
+            <img src="img/ilustraciones/secretaria.svg" alt="" width="96" height="96">
+            <p class="cargo-nombre">Secretaría y administración</p>
+            <h3 id="t-secretaria">Plazos con aviso y papeles listos para firmar</h3>
+            <p class="cargo-estrella"><strong>Función estrella:</strong> el analista de gastos, que avisa de renovaciones y señala dónde ahorrar.</p>
+          </div>
+          <div class="cargo-cambios">
+            <p class="cambios-cabecera" aria-hidden="true"><span>Antes</span><span>Con DirectorIA</span></p>
+            <ul class="cambios" role="list">
+              <li class="cambio">
+                <p class="antes"><span class="etiqueta-fila">Antes</span> Plazos de Consejería escondidos en circulares de varias páginas.</p>
+                <p class="ahora"><span class="etiqueta-fila">Con DirectorIA</span> De cada circular saca qué hay que entregar, quién y cuándo, y avisa antes del plazo.</p>
+              </li>
+              <li class="cambio">
+                <p class="antes"><span class="etiqueta-fila">Antes</span> Certificados de matrícula y de estudios, redactados uno a uno.</p>
+                <p class="ahora"><span class="etiqueta-fila">Con DirectorIA</span> Prepara cada certificado con los datos que ya tiene el centro, listo para revisar y firmar.</p>
+              </li>
+              <li class="cambio">
+                <p class="antes"><span class="etiqueta-fila">Antes</span> Extintores, ascensor, caldera: revisiones que se pasan de fecha.</p>
+                <p class="ahora"><span class="etiqueta-fila">Con DirectorIA</span> Calendario de mantenimiento legal del edificio, con aviso antes de cada revisión obligatoria.</p>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="cargo" id="cargo-docentes" aria-labelledby="t-docentes">
+          <div class="cargo-cabeza">
+            <img src="img/ilustraciones/docente.svg" alt="" width="96" height="96">
+            <p class="cargo-nombre">Docentes</p>
+            <h3 id="t-docentes">Menos trabajo a deshoras para cada docente</h3>
+            <p class="cargo-estrella"><strong>Función estrella:</strong> el correo dictado. Nunca sale sin que lo reviséis vosotros.</p>
+          </div>
+          <div class="cargo-cambios">
+            <p class="cambios-cabecera" aria-hidden="true"><span>Antes</span><span>Con DirectorIA</span></p>
+            <ul class="cambios" role="list">
+              <li class="cambio">
+                <p class="antes"><span class="etiqueta-fila">Antes</span> Escribir de noche correos delicados a familias, midiendo cada palabra.</p>
+                <p class="ahora"><span class="etiqueta-fila">Con DirectorIA</span> Los dictáis tal como os salen y os llegan redactados en el tono adecuado, listos para revisar.</p>
+              </li>
+              <li class="cambio">
+                <p class="antes"><span class="etiqueta-fila">Antes</span> Enterarse tarde de una entrega perdida en una circular.</p>
+                <p class="ahora"><span class="etiqueta-fila">Con DirectorIA</span> Vuestros plazos, a la vista: qué entregar, cuándo y dónde, con aviso antes de que venzan.</p>
+              </li>
+              <li class="cambio">
+                <p class="antes"><span class="etiqueta-fila">Antes</span> Amanecer con fiebre y tener que mandar la tarea para la guardia.</p>
+                <p class="ahora"><span class="etiqueta-fila">Con DirectorIA</span> La tarea sale de vuestra programación quincenal: quien os cubre ya sabe qué toca.</p>
+              </li>
+            </ul>
+          </div>
+        </article>
+
+        <article class="cargo" id="cargo-orientacion" aria-labelledby="t-orientacion">
+          <div class="cargo-cabeza">
+            <img src="img/ilustraciones/orientacion.svg" alt="" width="96" height="96">
+            <p class="cargo-nombre">Orientación y tutoría</p>
+            <h3 id="t-orientacion">Lo sensible, protegido; lo necesario, en el aula</h3>
+            <p class="cargo-estrella"><strong>Función estrella:</strong> los protocolos de acoso y absentismo, paso a paso y con sus documentos.</p>
+          </div>
+          <div class="cargo-cambios">
+            <p class="cambios-cabecera" aria-hidden="true"><span>Antes</span><span>Con DirectorIA</span></p>
+            <ul class="cambios" role="list">
+              <li class="cambio">
+                <p class="antes"><span class="etiqueta-fila">Antes</span> Las pautas de orientación no llegan a quien entra de guardia.</p>
+                <p class="ahora"><span class="etiqueta-fila">Con DirectorIA</span> Lo que indicáis para el alumnado con necesidades aparece en la ficha de quien entra al aula.</p>
+              </li>
+              <li class="cambio">
+                <p class="antes"><span class="etiqueta-fila">Antes</span> Familias que no entienden la circular por idioma o dificultad lectora.</p>
+                <p class="ahora"><span class="etiqueta-fila">Con DirectorIA</span> La circular o la carta, traducida o en lectura fácil, para revisarla antes de enviarla.</p>
+              </li>
+              <li class="cambio">
+                <p class="antes"><span class="etiqueta-fila">Antes</span> Información delicada del alumnado dispersa en correos y carpetas.</p>
+                <p class="ahora"><span class="etiqueta-fila">Con DirectorIA</span> Lo que anotáis queda en el servidor del colegio, con acceso por cargo y registro de accesos.</p>
+              </li>
+            </ul>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- La ficha de sustitución -->
+  <section class="seccion" id="ficha" aria-labelledby="t-ficha">
+    <div class="contenedor dos-columnas">
+      <div class="columna-texto">
+        <p class="antetitulo">La ficha de sustitución</p>
+        <h2 id="t-ficha">Quien sustituye sabe qué hacer y qué tiene que saber</h2>
+        <p class="entradilla">Cuando jefatura confirma quién cubre cada hora, la IA prepara una ficha para cada sesión. La tarea sale de la programación quincenal de quien falta; las pautas, la salud y las recogidas las introducen tutoría, orientación y dirección.</p>
+        <ul class="lista-puntos" role="list">
+          <li>Solo lo necesario, y solo para quien sustituye.</li>
+          <li>Se abre antes de la sesión y se cierra al acabar la jornada.</li>
+          <li>Queda registrado quién la ha visto.</li>
+          <li>No cuenta casos: ante una orden de alejamiento, da solo la instrucción. El detalle lo ve dirección.</li>
+        </ul>
+      </div>
+      <figure class="maqueta maqueta-ficha" aria-labelledby="pie-ficha">
+        <div class="ficha">
+          <div class="ficha-cabeza">
+            <p class="ficha-sesion">3.º B · Matemáticas · 6.ª hora</p>
+            <p class="ficha-origen"><span class="insignia" aria-hidden="true"></span>Preparada por la IA · confirmada por jefatura</p>
+          </div>
+          <dl class="ficha-datos">
+            <div>
+              <dt>Tarea</dt>
+              <dd>Ejercicios 4 a 9 de la página 58. Los libros están en el armario del aula.</dd>
+            </div>
+            <div>
+              <dt>Necesidades</dt>
+              <dd>Mario: instrucciones por escrito y más tiempo.</dd>
+            </div>
+            <div>
+              <dt>Salud</dt>
+              <dd>Lucía: alérgica a frutos secos. Su autoinyector está en conserjería.</dd>
+            </div>
+            <div class="ficha-aviso">
+              <dt>Recogida · última hora</dt>
+              <dd>Hugo solo puede salir con su madre o su abuela. Si viene otra persona, no lo entregues y avisa a dirección (ext. 201).</dd>
+            </div>
+          </dl>
+          <p class="ficha-pie">Se cierra al acabar la jornada · Queda registrado quién la ve</p>
+        </div>
+        <figcaption id="pie-ficha">Ejemplo ficticio de ficha de sustitución: los nombres son inventados.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Protocolos paso a paso -->
+  <section class="seccion seccion-linea" id="protocolos" aria-labelledby="t-protocolos">
+    <div class="contenedor dos-columnas dos-columnas-invertidas">
+      <div class="columna-texto">
+        <p class="antetitulo">Protocolos paso a paso</p>
+        <h2 id="t-protocolos">Cada protocolo, con su paso, su responsable y su documento</h2>
+        <p class="entradilla">Ante un posible caso de acoso, de absentismo o un accidente, DirectorIA muestra qué paso toca, quién lo hace y qué documento corresponde, y lo deja redactado para revisar y firmar. También recuerda cada fecha del plan del centro.</p>
+        <ul class="lista-puntos" role="list">
+          <li>La IA guía, recuerda y redacta. Abrir el protocolo, valorar el caso y decidir las medidas corresponde al equipo del centro.</li>
+          <li>Solo el equipo del caso ve los datos, y queda registro de cada acceso.</li>
+          <li>En el resumen de las 8:00 solo aparece el código del caso.</li>
+          <li>Nada de esto pasa por el módulo de Claude.</li>
+        </ul>
+      </div>
+      <figure class="maqueta maqueta-protocolo" aria-labelledby="pie-protocolo">
+        <div class="ventana">
+          <div class="ventana-barra">
+            <p>Protocolos · Caso 2026-07</p>
+            <p class="ventana-reserva">Confidencial · solo equipo del caso</p>
+          </div>
+          <div class="ventana-cuerpo">
+            <p class="proto-titulo">Posible acoso escolar · Plan del protocolo</p>
+            <ol class="proto-pasos" role="list">
+              <li class="hecho"><span class="paso">Comunicación a la dirección</span><span class="paso-meta">Anexo I.a · lun 16 nov</span><span class="estado">Hecho</span></li>
+              <li class="hecho"><span class="paso">Apertura y comunicación oficial</span><span class="paso-meta">Raíces · lun 16 nov</span><span class="estado">Hecho</span></li>
+              <li class="hecho"><span class="paso">Medidas de protección</span><span class="paso-meta">Adoptadas lun 16 nov</span><span class="estado">Hecho</span></li>
+              <li class="en-curso"><span class="paso">Recogida de información</span><span class="paso-meta">Anexo II · 17–23 nov</span><span class="estado">En curso</span></li>
+              <li><span class="paso">Reunión para la toma de decisiones</span><span class="paso-meta">Anexo III · mar 24 nov</span><span class="estado">Pendiente</span></li>
+              <li class="condicional"><span class="paso">Fiscalía de Menores e Inspección</span><span class="paso-meta">Si se confirma</span><span class="estado">Pendiente</span></li>
+              <li class="condicional"><span class="paso">Familias y plan de intervención</span><span class="paso-meta">Si se confirma</span><span class="estado">Pendiente</span></li>
+              <li class="condicional"><span class="paso">Procedimiento disciplinario</span><span class="paso-meta">Si se confirma</span><span class="estado">Pendiente</span></li>
+              <li><span class="paso">Seguimiento y cierre</span><span class="paso-meta">Anexo IV.c · Raíces</span><span class="estado">Pendiente</span></li>
+            </ol>
+            <div class="proto-docs">
+              <p class="proto-docs-titulo"><span class="insignia" aria-hidden="true"></span>Documentos preparados para revisar</p>
+              <ul role="list">
+                <li>Anexo II con los datos del caso, para los dos docentes designados</li>
+                <li>Citación a la familia · pendiente de firma de la dirección</li>
+                <li>Anexo III con los datos del caso; la conclusión, en blanco</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <figcaption id="pie-protocolo">Ejemplo ficticio basado en el protocolo contra el acoso escolar de la Comunidad de Madrid. Cada centro configura el protocolo vigente en su comunidad autónoma.</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- Privacidad -->
+  <section class="seccion seccion-oscura" id="privacidad" aria-labelledby="t-privacidad">
+    <div class="contenedor privacidad-rejilla">
+      <div class="privacidad-intro">
+        <p class="antetitulo">Privacidad</p>
+        <h2 id="t-privacidad">Los datos de vuestros alumnos, en casa</h2>
+        <p class="entradilla">La IA trata los datos de vuestros alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos. Es una decisión de diseño, y empieza por algo que podéis ver: el servidor está en vuestro edificio.</p>
+        <div class="privacidad-imagenes">
+          <img src="img/ilustraciones/servidor.svg" alt="" width="136" height="136">
+          <img src="img/ilustraciones/candado.svg" alt="" width="136" height="136">
+        </div>
+      </div>
+      <ul class="privacidad-lista" role="list">
+        <li>
+          <h3>Dentro del colegio</h3>
+          <p>Horarios, ausencias, pautas, salud, recogidas, actas y protocolos se tratan en el servidor del colegio. Cada persona ve lo que corresponde a su cargo, y queda registro de los accesos.</p>
+        </li>
+        <li>
+          <h3>El responsable sigue siendo el colegio</h3>
+          <p>Usar DirectorIA no cambia quién responde de los datos: el titular del centro. Os entregamos un borrador de la evaluación de impacto y del registro de actividades de tratamiento. El colegio los completa y los aprueba, con el asesoramiento de su delegado de protección de datos.</p>
+        </li>
+        <li>
+          <h3>Claude, solo si lo activáis</h3>
+          <p>El módulo de Claude es opcional y solo sirve para preparar material didáctico, como «actividades de fracciones para 5.º». Un filtro está diseñado para bloquear datos personales, y la norma de uso es no introducirlos.</p>
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Lo que no hace -->
+  <section class="seccion" id="lo-que-no-hace" aria-labelledby="t-no-hace">
+    <div class="contenedor">
+      <div class="cabeza-seccion">
+        <p class="antetitulo">Por diseño</p>
+        <h2 id="t-no-hace">Lo que no hace, a propósito</h2>
+      </div>
+      <ul class="no-hace" role="list">
+        <li>
+          <h3>No evalúa, puntúa ni clasifica a ningún alumno.</h3>
+          <p>Tampoco vigila al alumnado para detectar casos: solo hace llegar lo que indican orientación y tutoría a quien lo necesita.</p>
+        </li>
+        <li>
+          <h3>No decide.</h3>
+          <p>La IA prepara, resume, propone y avisa. Decidir, aprobar y firmar es siempre cosa de una persona.</p>
+        </li>
+        <li>
+          <h3>No responde ni firma por vosotros.</h3>
+          <p>Cada correo, circular o carta lo revisa y lo envía alguien del colegio.</p>
+        </li>
+        <li>
+          <h3>No envía los datos de vuestros alumnos fuera del colegio.</h3>
+          <p>El módulo opcional de Claude solo recibe peticiones de material didáctico.</p>
+        </li>
+      </ul>
+      <p class="no-hace-cierre">Diseñado para quedar fuera de los usos de alto riesgo del Reglamento europeo de IA. <a href="#pregunta-reglamento">Leer por qué</a>.</p>
+    </div>
+  </section>
+
+  <!-- Análisis de gastos gratis -->
+  <section class="seccion seccion-salvia" id="gastos" aria-labelledby="t-gastos">
+    <div class="contenedor">
+      <div class="cabeza-seccion">
+        <p class="antetitulo">Análisis de gastos gratis</p>
+        <h2 id="t-gastos">Analizamos vuestros gastos gratis, antes de firmar</h2>
+      </div>
+      <div class="gastos-rejilla">
+        <ol class="pasos-numerados" role="list">
+          <li>
+            <span class="numero" aria-hidden="true">1</span>
+            <div>
+              <h3>Nos pasáis facturas y contratos</h3>
+              <p>Los de los últimos 12 meses, solo de empresas: nunca nóminas ni datos de personas. Antes firmamos un acuerdo de confidencialidad.</p>
+            </div>
+          </li>
+          <li>
+            <span class="numero" aria-hidden="true">2</span>
+            <div>
+              <h3>Os preparamos un informe</h3>
+              <p>Con el ahorro posible, partida por partida: luz, fotocopiadoras, seguros, licencias o banco.</p>
+            </div>
+          </li>
+          <li>
+            <span class="numero" aria-hidden="true">3</span>
+            <div>
+              <h3>Vosotros decidís</h3>
+              <p>Si el ahorro cubre lo que cuesta DirectorIA, el sistema os sale gratis. Y si no, os quedáis el informe.</p>
+            </div>
+          </li>
+        </ol>
+        <div class="caja-oscura">
+          <img src="img/ilustraciones/documento-ia.svg" alt="" width="96" height="96">
+          <p class="caja-titulo">Sin compromiso: el informe es vuestro.</p>
+          <p>Al terminar, borramos vuestros documentos.</p>
+          <a class="boton" href="mailto:correo@dominio.es?subject=An%C3%A1lisis%20de%20gastos%20gratis">Pedir el análisis de gastos</a>
+        </div>
+      </div>
+      <div class="gastos-despues">
+        <h3>Después, el analista de gastos sigue todo el año</h3>
+        <p>Ordena el gasto por partidas y mes a mes, avisa antes de que un contrato se renueve solo y pone lado a lado los presupuestos de los proveedores. Prepara un informe mensual para dirección y titularidad. No sustituye a la gestoría ni lleva la contabilidad oficial.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Cómo empezamos -->
+  <section class="seccion" id="empezar" aria-labelledby="t-empezar">
+    <div class="contenedor">
+      <div class="cabeza-seccion">
+        <p class="antetitulo">Cómo empezamos</p>
+        <h2 id="t-empezar">De la demo al uso diario, sin obras</h2>
+        <p class="entradilla">Escuchamos cómo trabaja vuestro colegio antes de proponer nada. Y de lo técnico nos ocupamos nosotros.</p>
+      </div>
+      <ol class="empezar" role="list">
+        <li>
+          <img src="img/ilustraciones/reloj.svg" alt="" width="96" height="96">
+          <p class="paso-numero">Paso 1</p>
+          <h3>Demo en vuestro colegio</h3>
+          <p>45 minutos con una mañana de ejemplo: una ausencia, su ficha y un acta.</p>
+        </li>
+        <li>
+          <img src="img/ilustraciones/documento-ia.svg" alt="" width="96" height="96">
+          <p class="paso-numero">Paso 2</p>
+          <h3>Análisis de gastos gratis</h3>
+          <p>Con vuestras facturas de los últimos 12 meses, antes de firmar.</p>
+        </li>
+        <li>
+          <img src="img/ilustraciones/servidor.svg" alt="" width="96" height="96">
+          <p class="paso-numero">Paso 3</p>
+          <h3>Instalación en un día</h3>
+          <p>Llevamos el servidor ya montado. Cargamos los datos y creamos los usuarios.</p>
+        </li>
+        <li>
+          <img src="img/ilustraciones/docente.svg" alt="" width="96" height="96">
+          <p class="paso-numero">Paso 4</p>
+          <h3>Formación y soporte</h3>
+          <p>6 horas de formación al claustro y soporte en horario lectivo.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- Precios -->
+  <section class="seccion seccion-salvia" id="precios" aria-labelledby="t-precios">
+    <div class="contenedor">
+      <div class="cabeza-seccion">
+        <p class="antetitulo">Precios</p>
+        <h2 id="t-precios">Una cuota inicial y una suscripción mensual</h2>
+        <p class="entradilla">Sin letra pequeña: esto es lo que cuesta y lo que os pedimos.</p>
+      </div>
+      <ul class="planes" role="list">
+        <li class="plan">
+          <h3>Básico</h3>
+          <p class="plan-tamano">Hasta 40 docentes</p>
+          <dl class="plan-precios">
+            <div>
+              <dt>Cuota inicial</dt>
+              <dd><span class="cifra">6.000&nbsp;€</span> <span class="cifra-nota">servidor e instalación</span></dd>
+            </div>
+            <div>
+              <dt>Suscripción</dt>
+              <dd><span class="cifra">1.200&nbsp;€</span> <span class="cifra-nota">al mes</span></dd>
+            </div>
+          </dl>
+        </li>
+        <li class="plan">
+          <h3>Centro</h3>
+          <p class="plan-tamano">De 41 a 80 docentes</p>
+          <dl class="plan-precios">
+            <div>
+              <dt>Cuota inicial</dt>
+              <dd><span class="cifra">9.000&nbsp;€</span> <span class="cifra-nota">servidor e instalación</span></dd>
+            </div>
+            <div>
+              <dt>Suscripción</dt>
+              <dd><span class="cifra">1.600&nbsp;€</span> <span class="cifra-nota">al mes</span></dd>
+            </div>
+          </dl>
+        </li>
+        <li class="plan">
+          <h3>Grande</h3>
+          <p class="plan-tamano">De 81 a 150 docentes</p>
+          <dl class="plan-precios">
+            <div>
+              <dt>Cuota inicial</dt>
+              <dd><span class="cifra">14.000&nbsp;€</span> <span class="cifra-nota">servidor e instalación</span></dd>
+            </div>
+            <div>
+              <dt>Suscripción</dt>
+              <dd><span class="cifra">2.200&nbsp;€</span> <span class="cifra-nota">al mes</span></dd>
+            </div>
+          </dl>
+        </li>
+      </ul>
+      <div class="condiciones">
+        <div>
+          <h3>Los tres planes incluyen</h3>
+          <ul class="lista-visto" role="list">
+            <li>El servidor, que es vuestro, y la instalación en un día.</li>
+            <li>Un borrador de la evaluación de impacto y del registro de actividades.</li>
+            <li>6 horas de formación al claustro.</li>
+            <li>Soporte en horario lectivo.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Condiciones</h3>
+          <ul class="lista-puntos" role="list">
+            <li>Precios sin IVA.</li>
+            <li>Compromiso mínimo de dos cursos escolares.</li>
+            <li>El módulo de Claude es opcional. Si lo usáis, el colegio paga su uso directamente a Anthropic, con su propia cuenta.</li>
+            <li>¿Más de 150 docentes? <a href="#contacto">Escribidnos</a> y lo vemos juntos.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Preguntas frecuentes -->
+  <section class="seccion" id="preguntas" aria-labelledby="t-preguntas">
+    <div class="contenedor preguntas-rejilla">
+      <div class="cabeza-seccion">
+        <p class="antetitulo">Preguntas frecuentes</p>
+        <h2 id="t-preguntas">Lo que suelen preguntarnos</h2>
+        <p class="entradilla">¿Os queda alguna duda? Escribidnos a <span class="dato-contacto">[correo@dominio.es]</span> o llamadnos al <span class="dato-contacto">[teléfono]</span>.</p>
+      </div>
+      <div class="preguntas">
+        <details id="pregunta-datos">
+          <summary>¿Dónde están los datos de nuestros alumnos?</summary>
+          <div class="respuesta">
+            <p>En un servidor dentro de vuestro colegio. La IA los trata ahí, sin transferencias internacionales de esos datos. Cada persona ve lo que corresponde a su cargo, y queda registro de los accesos.</p>
+            <p>El colegio sigue siendo el responsable del tratamiento. Os entregamos un borrador de la evaluación de impacto y del registro de actividades para que lo completéis y lo aprobéis, con el asesoramiento de vuestro delegado de protección de datos.</p>
+          </div>
+        </details>
+        <details id="pregunta-claude">
+          <summary>¿Qué es el módulo de Claude y qué recibe?</summary>
+          <div class="respuesta">
+            <p>Es un módulo opcional para preparar material didáctico: actividades, situaciones de aprendizaje o rúbricas. Solo recibe peticiones de ese tipo, como «actividades de fracciones para 5.º». Un filtro está diseñado para bloquear datos personales, y la norma de uso es no introducirlos.</p>
+            <p>Si lo activáis, el colegio usa su propia cuenta de Anthropic y paga su uso directamente. Anthropic recibe los datos de esa cuenta, como el nombre y el correo de quien la administra. Sin el módulo, todo lo demás funciona igual, con la IA del colegio.</p>
+          </div>
+        </details>
+        <details id="pregunta-informatico">
+          <summary>¿Necesitamos un informático en el colegio?</summary>
+          <div class="respuesta">
+            <p>No. De lo técnico nos ocupamos nosotros: llevamos el servidor ya montado, lo instalamos en un día, cargamos los datos y creamos los usuarios. Después, el claustro recibe 6 horas de formación y tenéis soporte en horario lectivo.</p>
+          </div>
+        </details>
+        <details id="pregunta-internet">
+          <summary>¿Y si se cae internet?</summary>
+          <div class="respuesta">
+            <p>DirectorIA funciona en el servidor del colegio, no en la nube. Si se cae internet, desde la red del colegio seguís teniendo las fichas, las actas, los plazos y los protocolos. Lo que necesita conexión es lo que entra o sale del centro, como el correo o el módulo de Claude.</p>
+          </div>
+        </details>
+        <details id="pregunta-servidor">
+          <summary>¿De quién es el servidor y qué pasa con él?</summary>
+          <div class="respuesta">
+            <p>Es vuestro: va incluido en la cuota inicial. Nosotros lo instalamos y nos ocupamos del soporte en horario lectivo.</p>
+            <p>Si un día dejáis DirectorIA, cerramos nuestros accesos y devolvemos o borramos cualquier copia que tengamos de vuestros datos. El servidor, y lo que guarda, sigue en vuestro colegio.</p>
+          </div>
+        </details>
+        <details id="pregunta-compromiso">
+          <summary>¿Qué compromiso nos pedís?</summary>
+          <div class="respuesta">
+            <p>Un compromiso mínimo de dos cursos escolares. Pagáis la cuota inicial y la suscripción mensual de vuestro plan, más el IVA. Si usáis el módulo de Claude, su uso se paga aparte, a Anthropic.</p>
+            <p>Antes de firmar, tenéis por escrito qué hace, qué no hace, cuánto cuesta y qué compromiso os pedimos.</p>
+          </div>
+        </details>
+        <details id="pregunta-protocolos">
+          <summary>¿Sirve con los protocolos de nuestra comunidad autónoma?</summary>
+          <div class="respuesta">
+            <p>Sí. Cada centro configura los protocolos vigentes en su comunidad autónoma, y os ayudamos a hacerlo. El ejemplo de esta página se basa en el protocolo contra el acoso escolar de la Comunidad de Madrid.</p>
+          </div>
+        </details>
+        <details id="pregunta-reglamento">
+          <summary>¿Qué pasa con el Reglamento europeo de IA?</summary>
+          <div class="respuesta">
+            <p>Lo que decide si un uso de la IA es de alto riesgo es para qué se usa, no dónde está el servidor. DirectorIA está diseñado para quedar fuera de los usos de alto riesgo: no evalúa, puntúa ni clasifica a ningún alumno; propone las guardias a partir de los horarios y las normas de vuestro centro; y cada propuesta la revisa y la decide una persona.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </section>
+
+  <!-- Contacto -->
+  <section class="seccion seccion-oscura seccion-contacto" id="contacto" aria-labelledby="t-contacto">
+    <div class="contenedor contacto-rejilla">
+      <div>
+        <p class="antetitulo">Pedir una demo</p>
+        <h2 id="t-contacto">¿Probamos con vuestra próxima sustitución?</h2>
+        <p class="entradilla">Os enseñamos DirectorIA funcionando en vuestro colegio, en 45 minutos. Escribidnos o llamadnos y buscamos una fecha que os venga bien.</p>
+        <div class="botones">
+          <a class="boton" href="mailto:correo@dominio.es?subject=Demo%20de%20DirectorIA%20en%20nuestro%20colegio&amp;body=Colegio%20y%20localidad%3A%20%0D%0AVuestro%20cargo%3A%20%0D%0AN%C3%BAmero%20de%20docentes%3A%20%0D%0ATel%C3%A9fono%20de%20contacto%3A%20%0D%0A">Pedir una demo en el colegio</a>
+          <a class="boton boton-borde" href="mailto:correo@dominio.es?subject=An%C3%A1lisis%20de%20gastos%20gratis">Análisis de gastos gratis</a>
+        </div>
+      </div>
+      <div class="contacto-datos">
+        <dl>
+          <div>
+            <dt>Correo</dt>
+            <dd><span class="dato-contacto">[correo@dominio.es]</span></dd>
+          </div>
+          <div>
+            <dt>Teléfono</dt>
+            <dd><span class="dato-contacto">[teléfono]</span></dd>
+          </div>
+          <div>
+            <dt>Dónde estamos</dt>
+            <dd>Comunidad de Madrid</dd>
+          </div>
+        </dl>
+        <p class="contacto-nota">Usamos vuestros datos solo para responderos. Por favor, no incluyáis datos de alumnos en el mensaje. Más información en la <a href="privacidad.html">política de privacidad</a>.</p>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<footer class="pie">
+  <div class="contenedor pie-rejilla">
+    <div class="pie-marca">
+      <img src="img/logo/logo-eslogan-negativo.svg" alt="DirectorIA. Vuestra IA, dentro del colegio." width="258" height="69">
+      <p>IA para dirección y claustro. Empresa de la Comunidad de Madrid.</p>
+    </div>
+    <nav class="pie-enlaces" aria-label="Información legal">
+      <ul role="list">
+        <li><a href="aviso-legal.html">Aviso legal</a></li>
+        <li><a href="privacidad.html">Privacidad</a></li>
+        <li><a href="#inicio">Volver arriba</a></li>
+      </ul>
+    </nav>
+    <p class="pie-legal">© 2026 [Razón social] · Esta web no usa cookies ni herramientas de analítica.</p>
+  </div>
+</footer>
+</body>
+</html>
