@@ -9,14 +9,14 @@ Esta carpeta tiene la tarjeta de visita, la firma de correo, el membrete, la pro
 | `tarjeta.pdf` | 24 KB · 2 páginas de 91 × 61 mm | Tarjeta de visita para la imprenta: 85 × 55 mm al corte, con 3 mm de sangrado por cada lado. Página 1: anverso, con el logotipo con eslogan en negativo sobre pizarra. Página 2: reverso, con los datos y el isotipo sobre tiza. |
 | `tarjeta-anverso.png` · `tarjeta-reverso.png` | 35 KB · 30 KB · 643 × 416 px | Vistas previas recortadas al corte, a 2x. |
 | `firma-correo.html` | 3 KB | Firma de correo, hecha con tablas y estilos en línea. |
-| `firma-correo.png` | 49 KB · 936 × 523 px | Vista previa de la firma, en Arial, que es como la verá la mayoría. |
-| `membrete.docx` | 46 KB · A4 | Membrete para Word, con los estilos de la marca y una carta de ejemplo a la dirección de un colegio. |
-| `membrete.pdf` | 23 KB · A4, 1 página | El mismo membrete con la misma carta, en PDF. |
-| `membrete.png` | 233 KB · 1241 × 1754 px | Vista previa de `membrete.pdf`, a 150 ppp. |
+| `firma-correo.png` | 49 KB · 936 × 535 px | Vista previa de la firma, en Arial, que es como la verá la mayoría. |
+| `membrete.docx` | 46 KB · A4 | Membrete para Word, con los estilos de la marca y una carta de ejemplo a la dirección de un colegio: los próximos pasos después de una demo. |
+| `membrete.pdf` | 24 KB · A4, 1 página | El mismo membrete con la misma carta, en PDF. |
+| `membrete.png` | 214 KB · 1241 × 1754 px | Vista previa de `membrete.pdf`, a 150 ppp. |
 | `propuesta-comercial.docx` | 136 KB · A4, unas 5 páginas | Plantilla de propuesta comercial: portada y ocho apartados, con los datos que hay que completar entre corchetes. |
 | `hoja-comercial.pdf` | 78 KB · A4, 2 páginas | Hoja comercial para enviar por correo o imprimir. |
-| `hoja-comercial-1.png` · `hoja-comercial-2.png` | 230 KB · 242 KB · 1241 × 1754 px | Vista previa de cada página, a 150 ppp. |
-| `fuente/` | 117 KB | Los archivos que generan todo lo anterior. Ver «Cómo regenerarlo todo». |
+| `hoja-comercial-1.png` · `hoja-comercial-2.png` | 230 KB · 237 KB · 1241 × 1754 px | Vista previa de cada página, a 150 ppp. |
+| `fuente/` | 118 KB | Los archivos que generan todo lo anterior. Ver «Cómo regenerarlo todo». |
 
 ## Antes de usar nada
 
@@ -52,6 +52,8 @@ Esta carpeta tiene la tarjeta de visita, la firma de correo, el membrete, la pro
    - Abrid `firma-correo.html` con un editor de texto: Bloc de notas, TextEdit en modo texto o VS Code.
    - Cambiad los corchetes. Cambiad también [dominio.es] en la dirección de la imagen y en los enlaces `tel:` y `mailto:`.
 3. **Copiadla.** Abrid el archivo en el navegador y comprobad que se ve el logotipo. Después seleccionad todo (Ctrl+A o Cmd+A) y copiadlo (Ctrl+C o Cmd+C).
+
+**Área de respeto del logotipo.** Entre el logotipo y los textos de arriba y de abajo quedan al menos 16 px. Es 1 x, la altura de la I a 118 × 20 px, como pide `logo/construccion.md`. Si retocáis la firma, no bajéis el `padding` de la fila del logotipo (14 px) ni el de la fila del eslogan (12 px), y no pongáis nada a su lado.
 
 ### Gmail
 
@@ -99,7 +101,10 @@ Esta carpeta tiene la tarjeta de visita, la firma de correo, el membrete, la pro
   - Lista con viñetas y Lista con números, con la viñeta o el número en chispa-texto.
   - Propios: Antetítulo, Destacado, Nota, Tabla y Pie DirectorIA.
 - **Para usarlo.** Abridlo, cambiad los corchetes y escribid encima de la carta de ejemplo. Para tenerlo como plantilla: «Archivo» → «Guardar como» → «Plantilla de Word (*.dotx)».
-- **Cartas de presentación.** El manual del logotipo pide la versión con eslogan en las cartas que presentan DirectorIA a un colegio o a las familias. En esas cartas, cambiad la imagen de la cabecera por `logo/png/logo-eslogan-600.png`, de 55 mm de ancho como mínimo.
+- **Carta de ejemplo.** Es una carta del día a día a la dirección de un colegio: los próximos pasos después de una demo, con una lista numerada y otra de viñetas. No presenta DirectorIA, así que no lleva el logotipo con eslogan.
+- **Cartas de presentación.** Las cartas que presentan DirectorIA a un colegio o a las familias llevan el logotipo con eslogan, como pide el manual del logotipo. En esas cartas:
+  1. Borrad el logotipo de la cabecera e insertad en su lugar `logo/png/logo-eslogan-600.png`, a 55 mm de ancho como mínimo. Así su tinta mide 45 mm, el mínimo impreso.
+  2. Poned la sangría izquierda de ese párrafo en −0,5 cm, para que la tinta quede alineada con el texto. Cabe en la cabecera sin mover la carta.
 - **El PDF.** `membrete.pdf` es el mismo diseño, hecho desde `fuente/membrete.html`. Sirve para imprimir o para verlo sin Word. `membrete.png` es su vista previa.
 
 ## Propuesta comercial (`propuesta-comercial.docx`)
@@ -124,7 +129,8 @@ Esta carpeta tiene la tarjeta de visita, la firma de correo, el membrete, la pro
 ## Hoja comercial (`hoja-comercial.pdf`)
 
 - **Página 1:** qué es DirectorIA, el eslogan, la ilustración del colegio con su servidor, qué cambia para cada cargo (una línea por cargo) y la privacidad.
-- **Página 2:** cómo empezamos (demo, análisis de gastos gratis, instalación en un día, formación y soporte), los tres planes, lo que no hace y el contacto.
+- **Página 2:** cómo empezamos (demo en el colegio, análisis de gastos gratis y antes de firmar, instalación en un día, formación y soporte), los tres planes, lo que no hace y el contacto.
+- **Si cambiáis los pasos de «Cómo empezamos»,** que cada título quepa en una línea y no acabe en preposición. Si alguno pasa a dos líneas, los cuatro textos siguen empezando a la misma altura.
 - **Impresión.** Página blanca con márgenes de 14 mm y sin sangrado, para que salga bien en la impresora de la oficina.
 - **Vuestros datos de contacto:** cambiad los corchetes de `fuente/hoja-comercial.html` y volved a generarla.
 

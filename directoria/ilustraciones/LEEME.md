@@ -76,7 +76,7 @@ Veintiuna ilustraciones planas para contar, desde la primera diapositiva, cómo 
   - `docente` + `microfono` + `acta`: del dictado al acta;
   - `jefatura` + `calendario` + `alerta`: plazos y choques avisados;
   - `secretaria` + `circular` + `correo` + `familia`: circulares a las familias;
-  - `colegio-servidor` + `candado`: los datos de los alumnos no salen del colegio.
+  - `colegio-servidor` + `candado`: la IA trata los datos de los alumnos dentro del colegio.
 
 ## Para cambiarlas
 

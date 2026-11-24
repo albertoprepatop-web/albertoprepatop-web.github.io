@@ -83,7 +83,9 @@ def membrete():
 
     pie_legal(sec.footer.paragraphs[0])
 
-    # Carta de ejemplo
+    # Carta de ejemplo: una carta del día a día (los pasos después de una demo), no de presentación.
+    # Las cartas que presentan DirectorIA a un colegio o a las familias llevan el logotipo con eslogan
+    # (logo/construccion.md); ver el README.
     p = doc.add_paragraph('[Localidad], [fecha]')
     p.paragraph_format.space_after = Pt(14)
 
@@ -92,34 +94,36 @@ def membrete():
                '[Dirección del colegio]', '[Código postal y localidad]'])
     p.paragraph_format.space_after = Pt(18)
 
-    doc.add_paragraph('Una IA propia para [Nombre del colegio]', style='Title')
+    doc.add_paragraph('Próximos pasos después de la demo', style='Title')
 
     doc.add_paragraph('[Estimada directora / Estimado director]:')
-    doc.add_paragraph('Os escribo para presentaros DirectorIA. Instalamos en colegios privados y concertados '
-                      'una IA propia, en un servidor dentro del centro, que quita papeleo al equipo directivo '
-                      'y al claustro.')
+    doc.add_paragraph('Gracias por recibirnos el [fecha] para la demo. Como quedamos, os confirmo por escrito '
+                      'los próximos pasos y lo que necesitamos de vosotros.')
 
-    doc.add_paragraph('Qué prepara para vuestro equipo', style='Heading 2')
-    for t in ('Cuando falta un profesor, propone quién cubre cada hora, con un reparto de guardias '
-              'equilibrado, y prepara la ficha para quien sustituye.',
-              'Saca los plazos de las circulares, redacta las actas a partir del dictado y propone '
-              'respuestas al correo.',
-              'Envía a dirección un resumen del día a las 8:00 y guía paso a paso protocolos como los de '
-              'acoso escolar y absentismo.',
-              'Cada docente tiene su propio asistente.'):
-        doc.add_paragraph(t, style='List Bullet')
+    doc.add_paragraph('Qué haremos y cuándo', style='Heading 2')
+    for entradilla, texto in (
+            ('Análisis de gastos gratuito.',
+             'Analizamos vuestras facturas y contratos, y el [fecha] os entregamos un informe con el ahorro '
+             'posible, partida por partida. El informe es vuestro, firméis o no.'),
+            ('Propuesta por escrito.',
+             'Antes del [fecha] os enviamos la propuesta para [Nombre del colegio]: qué incluye, cuánto cuesta '
+             'y qué compromiso os pedimos, sin letra pequeña.'),
+            ('Instalación y formación.',
+             'Si decidís seguir, instalamos el servidor en un día, en la fecha que elijáis, y damos 6 horas de '
+             'formación al claustro.')):
+        con_entradilla(doc, entradilla, texto, estilo='List Number')
 
-    doc.add_paragraph('La IA propone. Vosotros decidís.', style='Heading 2')
-    doc.add_paragraph('Decidir, aprobar y firmar es siempre cosa de una persona del colegio. La IA nunca '
-                      'evalúa, puntúa ni clasifica a ningún alumno, y trata los datos de los alumnos en un '
-                      'servidor dentro del colegio, sin transferencias internacionales de esos datos.')
+    doc.add_paragraph('Qué necesitamos de vosotros', style='Heading 2')
+    for t in ('Las facturas y los contratos de los últimos 12 meses. Solo de empresas: nunca nóminas ni datos '
+              'de personas. Al terminar el análisis, borramos los documentos.',
+              'El acuerdo de confidencialidad que va con esta carta, firmado.'):
+        p = doc.add_paragraph(t, style='List Bullet')
+    # El último punto deja 8 pt, como un párrafo, para que el texto siguiente no parezca parte de la lista
+    # (Word suma el espacio después y el espacio antes; LibreOffice puede tomar solo el mayor)
+    p.paragraph_format.space_after = Pt(8)
 
-    doc.add_paragraph('Antes de firmar nada', style='Heading 2')
-    doc.add_paragraph('Os proponemos una demo de 45 minutos en vuestro colegio, con una mañana real: una '
-                      'sustitución y un acta. Y, si queréis, analizamos gratis vuestros gastos para buscar '
-                      'ahorros. El informe es vuestro, firméis o no.')
-    doc.add_paragraph('Os llamaré en los próximos días para buscar una fecha. Si lo preferís, podéis '
-                      'escribirme a [correo@dominio.es] o llamarme al [teléfono].')
+    doc.add_paragraph('Si os surge cualquier duda, podéis escribirme a [correo@dominio.es] o llamarme al '
+                      '[teléfono]. La decisión es vuestra y no hay prisa.')  # «La» no queda a final de línea
 
     p = doc.add_paragraph('Un cordial saludo,')
     p.paragraph_format.space_before = Pt(4)

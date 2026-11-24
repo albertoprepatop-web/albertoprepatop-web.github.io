@@ -415,12 +415,17 @@ main:focus { outline: none; }
   justify-self: center;
   width: min(100%, 19rem);
   margin-inline: auto;
-  padding: 1.5rem 0 2rem;
+  padding: 1.75rem 0;   /* igual arriba y abajo: el centro de la figura es el del disco */
 }
+/* El anillo fino: un círculo de verdad (no un óvalo), un 8 % más ancho que el disco y con su mismo centro */
 .portada-imagen::before {
   content: "";
   position: absolute;
-  inset: -1% -4%;
+  left: -4%;
+  right: -4%;
+  top: 50%;
+  aspect-ratio: 1;
+  transform: translateY(-50%);
   border-radius: 50%;
   border: 1px solid var(--linea);
   pointer-events: none;
@@ -449,7 +454,7 @@ main:focus { outline: none; }
 @media (min-width: 60em) {
   .portada h1 { font-size: clamp(3rem, 5.2vw, 4.5rem); }
   .portada-rejilla { grid-template-columns: minmax(0, 1.22fr) minmax(0, .78fr); gap: clamp(2.5rem, 5vw, 5rem); }
-  .portada-imagen { width: min(100%, 30rem); padding: 2rem 0 2.5rem; }
+  .portada-imagen { width: min(100%, 30rem); padding: 2.25rem 0; }
   .chip-propone { left: -4%; top: 10%; }
   .chip-decidis { right: -4%; bottom: 8%; }
 }
@@ -589,12 +594,14 @@ main:focus { outline: none; }
 .manana li > p:last-child { margin-top: .375rem; font-size: .96875rem; line-height: 1.5; }
 
 @media (min-width: 62em) {
-  .manana { position: relative; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 1.75rem; margin-top: 2.5rem; }
+  .manana { --hueco: 1.75rem; position: relative; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--hueco); margin-top: 2.5rem; }
+  /* La línea va del centro del primer disco al del quinto. Los discos (6rem) van a la izquierda de su columna:
+     el del quinto queda a una columna menos medio disco del borde derecho. */
   .manana::before {
     content: "";
     position: absolute;
     left: 3rem;
-    right: 3rem;
+    right: calc((100% - 4 * var(--hueco)) / 5 - 3rem);
     top: 3rem;
     border-top: 1.5px dashed #9DB2AA;
   }

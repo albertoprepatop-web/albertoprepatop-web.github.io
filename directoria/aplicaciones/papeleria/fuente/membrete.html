@@ -6,7 +6,9 @@
 <link rel="stylesheet" href="../../../fuentes/fuentes.css">
 <style>
   /*
-    Membrete de DirectorIA en A4, con la misma carta de ejemplo que membrete.docx.
+    Membrete de DirectorIA en A4, con la misma carta de ejemplo que membrete.docx: una carta del día
+    a día (los pasos después de una demo), que no presenta DirectorIA. Las cartas que presentan
+    DirectorIA a un colegio o a las familias llevan el logotipo con eslogan (ver el README).
     Márgenes como en Word: 40 mm arriba, 28 mm abajo, 25 mm a los lados.
     El logotipo horizontal mide 36,9 mm de tinta (lo mismo que el PNG de 600 px colocado a 45 mm,
     que lleva 1 x de margen transparente por lado) y su tinta empieza en el margen izquierdo.
@@ -38,12 +40,20 @@
     font: 700 11.5pt/14pt 'Rubik', Arial, sans-serif; color: var(--pizarra);
     margin: 12pt 0 3pt;
   }
-  ul { list-style: none; margin: 0 0 8pt; padding: 0; }
+  ul, ol { list-style: none; margin: 0 0 8pt; padding: 0; }
   li { position: relative; padding-left: 5mm; margin: 0 0 4pt; }
-  li::before {
+  ul li::before {
     content: "•"; position: absolute; left: 0; top: 0;
     font-weight: 700; color: var(--chispa-texto);
   }
+  /* Lista con números, como en Word: el número en Rubik 700 y chispa-texto, el texto a 5 mm */
+  ol { counter-reset: paso; }
+  ol li { counter-increment: paso; }
+  ol li::before {
+    content: counter(paso) "."; position: absolute; left: 0; top: 0;
+    font-family: 'Rubik', Arial, sans-serif; font-weight: 700; color: var(--chispa-texto);
+  }
+  li strong { color: var(--pizarra); font-weight: 700; }
   .saludo { margin-top: 4pt !important; margin-bottom: 30pt !important; }
   .firma { margin: 0 !important; }
   .firma strong { color: var(--pizarra); font-weight: 700; }
@@ -62,25 +72,25 @@
     <p class="fecha">[Localidad], [fecha]</p>
     <p class="destinatario">[Nombre y apellidos]<br>[Directora / Director]<br>[Nombre del colegio]<br>[Dirección del colegio]<br>[Código postal y localidad]</p>
 
-    <h1>Una IA propia para [Nombre del colegio]</h1>
+    <h1>Próximos pasos después de la demo</h1>
 
     <p>[Estimada directora / Estimado director]:</p>
-    <p>Os escribo para presentaros DirectorIA. Instalamos en colegios privados y concertados una IA propia, en un servidor dentro del centro, que quita papeleo al equipo directivo y al claustro.</p>
+    <p>Gracias por recibirnos el [fecha] para la demo. Como quedamos, os confirmo por escrito los próximos pasos y lo que necesitamos de vosotros.</p>
 
-    <h2>Qué prepara para vuestro equipo</h2>
+    <h2>Qué haremos y cuándo</h2>
+    <ol>
+      <li><strong>Análisis de gastos gratuito.</strong> Analizamos vuestras facturas y contratos, y el [fecha] os entregamos un informe con el ahorro posible, partida por partida. El informe es vuestro, firméis o no.</li>
+      <li><strong>Propuesta por escrito.</strong> Antes del [fecha] os enviamos la propuesta para [Nombre del colegio]: qué incluye, cuánto cuesta y qué compromiso os pedimos, sin letra pequeña.</li>
+      <li><strong>Instalación y formación.</strong> Si decidís seguir, instalamos el servidor en un día, en la fecha que elijáis, y damos 6 horas de formación al claustro.</li>
+    </ol>
+
+    <h2>Qué necesitamos de vosotros</h2>
     <ul>
-      <li>Cuando falta un profesor, propone quién cubre cada hora, con un reparto de guardias equilibrado, y prepara la ficha para quien sustituye.</li>
-      <li>Saca los plazos de las circulares, redacta las actas a partir del dictado y propone respuestas al correo.</li>
-      <li>Envía a dirección un resumen del día a las 8:00 y guía paso a paso protocolos como los de acoso escolar y absentismo.</li>
-      <li>Cada docente tiene su propio asistente.</li>
+      <li>Las facturas y los contratos de los últimos 12 meses. Solo de empresas: nunca nóminas ni datos de personas. Al terminar el análisis, borramos los documentos.</li>
+      <li>El acuerdo de confidencialidad que va con esta carta, firmado.</li>
     </ul>
 
-    <h2>La IA propone. Vosotros decidís.</h2>
-    <p>Decidir, aprobar y firmar es siempre cosa de una persona del colegio. La IA nunca evalúa, puntúa ni clasifica a ningún alumno, y trata los datos de los alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos.</p>
-
-    <h2>Antes de firmar nada</h2>
-    <p>Os proponemos una demo de 45 minutos en vuestro colegio, con una mañana real: una sustitución y un acta. Y, si queréis, analizamos gratis vuestros gastos para buscar ahorros. El informe es vuestro, firméis o no.</p>
-    <p>Os llamaré en los próximos días para buscar una fecha. Si lo preferís, podéis escribirme a [correo@dominio.es] o llamarme al [teléfono].</p>
+    <p>Si os surge cualquier duda, podéis escribirme a [correo@dominio.es] o llamarme al [teléfono]. La&nbsp;decisión es vuestra y no hay prisa.</p>
 
     <p class="saludo">Un cordial saludo,</p>
     <p class="firma"><strong>[Tu nombre]</strong><br>[Cargo] · DirectorIA</p>
