@@ -2,29 +2,34 @@
 // Todo el texto va convertido a trazos con outline.mjs; solo se usan los colores de la marca.
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { C, P, add, sub, mul, norm, tick, circle, squircle, roundPoly, outline, transformPath, svgDoc, pathEl, write, n2 } from './lib.mjs';
+import { C, P, add, sub, mul, norm, tick, circle, squircle, rrect, roundPoly, outline, transformPath, svgDoc, pathEl, write, n2 } from './lib.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 
 // ---------------- parámetros ----------------
 export const base = {
-  // símbolo, en una baldosa de 100 × 100
-  tileR: 29,                  // longitud de la curva de esquina del «squircle»
-  vertex: [47, 66],           // vértice del visto
-  short: { len: 18, ang: 48 },// trazo corto: longitud y ángulo (grados bajo la horizontal, hacia el vértice)
-  long: { len: 45, ang: 49 }, // trazo largo: longitud y ángulo (grados sobre la horizontal)
-  radii: [7.6, 8.6, 7.0],     // medio grosor en arranque, vértice y final
-  dotR: 7.8, dotGap: 4.2,     // la chispa y su separación del arranque
-  optical: [0, 0],            // corrección óptica del grupo visto + chispa
+  // símbolo, en una pizarra de 100 × 100
+  tileShape: 'rrect',         // 'squircle' o 'rrect'
+  tileR: 18,                  // radio de las esquinas de la pizarra (o curva del «squircle»)
+  layout: 'diagonal',         // 'diagonal': chispa arriba a la izquierda y visto abajo a la derecha
+                              // 'start': chispa pegada al arranque del visto, grupo centrado (versión anterior)
+  dotC: [24.4, 24.4],         // centro de la chispa (layout diagonal)
+  vertex: [52.5, 77.5],       // vértice del visto
+  short: { len: 25.5, ang: 46 },// trazo corto: longitud y ángulo (grados bajo la horizontal, hacia el vértice)
+  long: { len: 48.5, ang: 51 }, // trazo largo: longitud y ángulo (grados sobre la horizontal)
+  radii: [9.3, 8.9, 5.9],     // medio grosor en arranque, vértice y final: arranque firme, final fino
+  dotR: 9.4, dotGap: 4.8,     // la chispa (y su separación del arranque en el layout 'start')
+  optical: [0, 0],            // corrección óptica del grupo
   // logotipo
   weight: 700, tracking: -0.005, size: 100,
   iStyle: 'serif',            // 'serif' = I con remates; 'plain' = I de Rubik
   serifW: 2.05, serifH: 0.7,  // ancho total del remate y grosor, en múltiplos del asta
   iaLight: C.chispaTexto, iaDark: C.chispa,
-  tileScale: 1.42,            // alto de la baldosa / altura de mayúsculas
+  tileScale: 1.32,            // alto de la baldosa / altura de mayúsculas
   tileDrop: 0,                // desplaza la baldosa hacia abajo (fracción de la altura de mayúsculas)
-  gap: 0.34,                  // separación símbolo–texto / alto de la baldosa
-  negTile: C.pizarra2,        // baldosa en negativo (null = sin baldosa: el fondo es la pizarra)
+  gap: 0.32,                  // separación símbolo–texto / alto de la baldosa
+  negTile: C.pizarraLinea,    // baldosa en negativo (null = sin baldosa: el fondo es la pizarra)
+  negPull: 0.10,              // en negativo sin baldosa, acerca el visto al texto (fracción de la baldosa)
 };
 
 const rad = d => d * Math.PI / 180;
@@ -35,19 +40,22 @@ export function symbolParts(o = base) {
   const p0 = add(V, P(-o.short.len * Math.cos(rad(o.short.ang)), -o.short.len * Math.sin(rad(o.short.ang))));
   const p2 = add(V, P(o.long.len * Math.cos(rad(o.long.ang)), -o.long.len * Math.sin(rad(o.long.ang))));
   const [r0, r1, r2] = o.radii;
-  const u = norm(sub(V, p0));
-  const dc = add(p0, mul(u, -(r0 + o.dotGap + o.dotR)));
-  // centra el grupo (visto + chispa) en la baldosa y aplica la corrección óptica
+  let dc;
+  if (o.layout === 'diagonal') dc = P(...o.dotC);
+  else { const u = norm(sub(V, p0)); dc = add(p0, mul(u, -(r0 + o.dotGap + o.dotR))); }
   const circles = [[p0, r0], [V, r1], [p2, r2], [dc, o.dotR]];
   const x1 = Math.min(...circles.map(([c, r]) => c.x - r)), x2 = Math.max(...circles.map(([c, r]) => c.x + r));
   const y1 = Math.min(...circles.map(([c, r]) => c.y - r)), y2 = Math.max(...circles.map(([c, r]) => c.y + r));
-  const sh = P(50 - (x1 + x2) / 2 + o.optical[0], 50 - (y1 + y2) / 2 + o.optical[1]);
+  // 'start': centra el grupo en la pizarra; 'diagonal': posiciones absolutas (+ corrección óptica)
+  const sh = o.layout === 'diagonal' ? P(o.optical[0], o.optical[1])
+    : P(50 - (x1 + x2) / 2 + o.optical[0], 50 - (y1 + y2) / 2 + o.optical[1]);
   const T = q => add(q, sh);
   return {
-    tile: squircle(0, 0, 100, 100, o.tileR),
+    tile: o.tileShape === 'rrect' ? rrect(0, 0, 100, 100, o.tileR) : squircle(0, 0, 100, 100, o.tileR),
     tick: tick([T(p0), T(V), T(p2)], [r0, r1, r2]),
     dot: circle(T(dc).x, T(dc).y, o.dotR),
     bbox: { x1: x1 + sh.x, y1: y1 + sh.y, x2: x2 + sh.x, y2: y2 + sh.y },
+    pts: { p0: T(p0), V: T(V), p2: T(p2), dc: T(dc) },
   };
 }
 
@@ -61,8 +69,10 @@ export function symbolBody(mode, o = base) {
   throw new Error(mode);
 }
 
-export function isotipo(mode, o = base, m = 3) {
-  return svgDoc([-m, -m, 100 + 2 * m, 100 + 2 * m], symbolBody(mode, o));
+// margen = 1/14 de la pizarra: a 16 px la pizarra ocupa 14 px exactos y sus bordes caen en píxel entero
+export function isotipo(mode, o = base, m = 100 / 14) {
+  const f = v => +v.toFixed(4);
+  return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="${f(-m)} ${f(-m)} ${f(100 + 2 * m)} ${f(100 + 2 * m)}">\n${symbolBody(mode, o)}\n</svg>\n`;
 }
 
 // ---------------- I con remates (proporciones de Rubik) ----------------
@@ -96,7 +106,7 @@ export function wordmark(o = base) {
     const over = (sI.W - stem) / 2;
     // la I con remates ocupa más: la separamos de la «r» y empujamos la «A»
     const lsb = ix1 - Ig.x, rsb = Ig.x + Ig.advance - ix2;
-    const left = Ig.x + lsb * 0.55;          // remate algo más cerca de la «r» que el asta original
+    const left = Ig.x + lsb * 0.85;          // el remate respeta el aire que la «r» deja arriba
     Id = transformPath(sI.d, { tx: left, ty: 0 });
     const iRight = left + sI.W;
     aShift = (iRight + rsb * 0.62) - (Ig.x + Ig.advance);
@@ -112,22 +122,7 @@ export function wordmark(o = base) {
 }
 
 // ---------------- logotipo horizontal ----------------
-export function horizontal(mode, o = base) {
-  const w = wordmark(o);
-  const H = w.cap * o.tileScale;                 // alto de la baldosa
-  const s = H / 100;
-  const yTop = -w.cap / 2 - H / 2 + o.tileDrop * w.cap; // centrada en la altura de mayúsculas
-  const gap = H * o.gap;
-  const tx = w.x1 - gap - H;                     // la baldosa a la izquierda del texto
-  const sym = `<g transform="translate(${n2(tx)} ${n2(yTop)}) scale(${n2(s * 1000) / 1000})">${symbolBody(mode === 'pos' ? 'pos' : mode === 'neg' ? 'neg' : mode, o)}</g>`;
-  const fg = mode === 'pos' || mode === 'mono' ? C.pizarra : C.tiza;
-  const ia = mode === 'pos' ? o.iaLight : mode === 'neg' ? o.iaDark : fg;
-  const words = pathEl(w.director, fg) + pathEl(w.I + w.A, ia);
-  const top = Math.min(yTop, w.y1), bottom = Math.max(yTop + H, w.y2);
-  const m = (bottom - top) * 0.06;
-  const vb = [tx - m, top - m, (w.x2 - tx) + 2 * m, (bottom - top) + 2 * m];
-  return svgDoc(vb, sym + '\n' + words);
-}
+export const horizontal = (mode, o = base) => horizontalFlat(mode, o);
 
 // Versión aplanada (sin <g transform>) para los archivos finales: escala los trazos del símbolo.
 export function horizontalFlat(mode, o = base) {
@@ -135,7 +130,8 @@ export function horizontalFlat(mode, o = base) {
   const H = w.cap * o.tileScale, s = H / 100;
   const yTop = -w.cap / 2 - H / 2 + o.tileDrop * w.cap;
   const gap = H * o.gap;
-  const tx = w.x1 - gap - H;
+  const bare = mode === 'neg' && !o.negTile;     // en negativo sin baldosa, el fondo hace de pizarra
+  const tx = w.x1 - gap - H + (bare ? o.negPull * H : 0);
   const sp = symbolParts(o);
   const X = d => transformPath(d, { sx: s, sy: s, tx, ty: yTop });
   let sym;
@@ -146,11 +142,9 @@ export function horizontalFlat(mode, o = base) {
   const fg = mode === 'pos' || mode === 'mono' ? C.pizarra : C.tiza;
   const ia = mode === 'pos' ? o.iaLight : mode === 'neg' ? o.iaDark : fg;
   const words = pathEl(w.director, fg) + pathEl(w.I + w.A, ia);
-  // si en negativo no hay baldosa, la caja se ajusta a la tinta del visto y la chispa
-  let left = tx, top = Math.min(yTop, w.y1), bottom = Math.max(yTop + H, w.y2);
-  if (mode === 'neg' && !o.negTile) {
-    left = tx + sp.bbox.x1 * s;
-  }
+  // misma altura de caja que en positivo (se pueden intercambiar); sin baldosa, se recorta a la tinta por la izquierda
+  const top = Math.min(yTop, w.y1), bottom = Math.max(yTop + H, w.y2);
+  const left = bare ? tx + sp.bbox.x1 * s : tx;
   const m = (bottom - top) * 0.06;
   const vb = [left - m, top - m, (w.x2 - left) + 2 * m, (bottom - top) + 2 * m];
   return svgDoc(vb, sym + '\n' + words);
