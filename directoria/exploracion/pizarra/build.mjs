@@ -11,15 +11,15 @@ export const base = {
   // símbolo, en una pizarra de 100 × 100
   tileShape: 'rrect',         // 'squircle' o 'rrect'
   tileR: 18,                  // radio de las esquinas de la pizarra (o curva del «squircle»)
-  layout: 'diagonal',         // 'diagonal': chispa arriba a la izquierda y visto abajo a la derecha
-                              // 'start': chispa pegada al arranque del visto, grupo centrado (versión anterior)
-  dotC: [24.4, 24.4],         // centro de la chispa (layout diagonal)
-  vertex: [52.5, 77.5],       // vértice del visto
-  short: { len: 25.5, ang: 46 },// trazo corto: longitud y ángulo (grados bajo la horizontal, hacia el vértice)
-  long: { len: 48.5, ang: 51 }, // trazo largo: longitud y ángulo (grados sobre la horizontal)
-  radii: [9.3, 8.9, 5.9],     // medio grosor en arranque, vértice y final: arranque firme, final fino
-  dotR: 9.4, dotGap: 4.8,     // la chispa (y su separación del arranque en el layout 'start')
-  optical: [0, 0],            // corrección óptica del grupo
+  layout: 'start',            // 'start': la chispa marca el arranque del visto y el grupo se centra en la pizarra
+                              // 'diagonal': chispa arriba-izq. y visto abajo-der. (descartada: a una tinta parece el icono de «imagen»)
+  dotC: [24.4, 24.4],         // centro de la chispa (solo layout diagonal)
+  vertex: [46, 66],           // vértice del visto (en 'start' el grupo se recentra)
+  short: { len: 23, ang: 46 },// trazo corto: longitud y ángulo (grados bajo la horizontal, hacia el vértice)
+  long: { len: 47, ang: 51 }, // trazo largo: longitud y ángulo (grados sobre la horizontal)
+  radii: [8.8, 8.4, 6.0],     // medio grosor en arranque, vértice y final: arranque firme, final fino
+  dotR: 8.8, dotGap: 5.0,     // la chispa y su separación del arranque del visto (en el eje del trazo corto)
+  optical: [1.5, -1],         // corrección óptica: el visto pesa abajo a la izquierda
   // logotipo
   weight: 700, tracking: -0.005, size: 100,
   iStyle: 'serif',            // 'serif' = I con remates; 'plain' = I de Rubik
