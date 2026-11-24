@@ -217,50 +217,65 @@ const tick = (x, y, color, w) => stroke(`M${x - 4} ${y}L${x - 1} ${y + 3.5}L${x 
 
 // ───────────────────────── lugares ─────────────────────────
 // Servidor: torre en pizarra con la chispa, dos bahías y un escudo con cerradura.
-{
+// Se dibuja con su esquina superior izquierda en (ox, oy) y a escala k; mide 84k × 162k con las patas.
+// El colegio con el servidor usa esta misma función a escala reducida, así son el mismo servidor.
+function serverTower(ox, oy, k = 1, { sparkR = 16 * k } = {}) {
+  const X = v => ox + v * k, Y = v => oy + v * k;
   let s = '';
-  s += rect(78, 38, 84, 156, R3, C.pizarra);
-  s += rect(89, 49, 62, 48, R2, C.pizarra2) + spark(120, 73, 16, C.chispa);
-  [108, 130].forEach(y => { s += rect(89, y, 62, 15, 5, C.pizarra2) + line(98, y + 7.5, 120, y + 7.5, C.tiza, 4) + circle(141, y + 7.5, 3, C.textoSuave); });
-  s += P('M120 151L136 157V167C136 176 129 182 120 186C111 182 104 176 104 167V157Z', C.tiza); // escudo
-  s += circle(120, 165, 4.2, C.pizarra) + P('M117.2 167L122.8 167L123.8 176L116.2 176Z', C.pizarra);
-  s += rect(88, 190, 16, 10, 3, C.pizarra) + rect(136, 190, 16, 10, 3, C.pizarra);   // patas
-  save('servidor', 'Servidor de DirectorIA, dentro del colegio', s);
+  s += rect(X(0), Y(0), 84 * k, 156 * k, R3 * k, C.pizarra);
+  s += rect(X(11), Y(11), 62 * k, 48 * k, R2 * k, C.pizarra2) + spark(X(42), Y(35), sparkR, C.chispa);
+  [70, 92].forEach(y => { s += rect(X(11), Y(y), 62 * k, 15 * k, 5 * k, C.pizarra2) + line(X(20), Y(y + 7.5), X(42), Y(y + 7.5), C.tiza, 4 * k) + circle(X(63), Y(y + 7.5), 3 * k, C.textoSuave); });
+  s += P(`M${X(42)} ${Y(113)}L${X(58)} ${Y(119)}V${Y(129)}C${X(58)} ${Y(138)} ${X(51)} ${Y(144)} ${X(42)} ${Y(148)}C${X(33)} ${Y(144)} ${X(26)} ${Y(138)} ${X(26)} ${Y(129)}V${Y(119)}Z`, C.tiza); // escudo
+  s += circle(X(42), Y(127), 4.2 * k, C.pizarra) + P(`M${X(39.2)} ${Y(129)}L${X(44.8)} ${Y(129)}L${X(45.8)} ${Y(138)}L${X(38.2)} ${Y(138)}Z`, C.pizarra);
+  s += rect(X(10), Y(152), 16 * k, 10 * k, 3 * k, C.pizarra) + rect(X(58), Y(152), 16 * k, 10 * k, 3 * k, C.pizarra); // patas
+  return s;
 }
+save('servidor', 'Servidor de DirectorIA, dentro del colegio', serverTower(78, 38));
 function clockFace(cx, cy, r) {
   const ah = 8 * Math.PI / 6;
   return circle(cx, cy, r, C.papel) + circle(cx, cy, r, 'none', { stroke: C.pizarra, 'stroke-width': 3 }) +
     stroke(`M${cx} ${cy}L${cx} ${cy - r * 0.62}M${cx} ${cy}L${n(cx + Math.sin(ah) * r * 0.45)} ${n(cy - Math.cos(ah) * r * 0.45)}`, C.pizarra, 2.6);
 }
-function school({ cut = false } = {}) {
+// El colegio: dos alas con tejado de pizarra y un cuerpo central con frontón curvo, reloj,
+// un ventanal grande y la puerta en arco debajo. Con server = true, por el ventanal se ve
+// el interior (pared del fondo, suelo y el grosor del muro) y, dentro, el servidor.
+const WIN = { x: 90, y: 54, w: 60, h: 102, t: 5 };                                       // ventanal (marco por fuera)
+function school({ server = false } = {}) {
   let s = '';
   const yg = 188, hw = Math.sqrt(D.r ** 2 - (yg - D.cy) ** 2);                       // patio
   s += P(`M${D.cx - hw} ${yg}H${D.cx + hw}A${D.r} ${D.r} 0 0 1 ${D.cx - hw} ${yg}Z`, C.salvia);
   s += P(roundPoly([[42, 114], [59, 98], [181, 98], [198, 114]], 3), C.pizarra);       // tejado de pizarra
   s += rect(48, 112, 144, 76, 0, C.papel);                                            // alas
-  const win = (x, y) => rect(x, y, 14, 22, 3, C.pizarraLinea) + line(x + 7, y + 3, x + 7, y + 19, C.tiza, 2);
-  [55, 72, 154, 171].forEach(x => { s += win(x, 122) + win(x, 152); });
-  s += P('M88 188V88A32 32 0 0 1 152 88V188Z', C.tiza);                               // cuerpo central
-  s += P('M83 90A37 37 0 0 1 157 90L151 90A31 31 0 0 0 89 90Z', C.pizarra);           // frontón curvo
-  s += clockFace(120, 86, 13);
-  if (!cut) {
-    s += win(99, 114) + win(127, 114);
-    s += P('M105 188V158A15 15 0 0 1 135 158V188Z', C.pizarra2);                      // puerta
-    s += line(120, 162, 120, 186, C.pizarraLinea, 2);
+  const win = (x, y) => rect(x, y, 12, 22, 3, C.pizarraLinea) + line(x + 6, y + 3, x + 6, y + 19, C.tiza, 2);
+  [52, 67, 161, 176].forEach(x => { s += win(x, 122) + win(x, 152); });
+  // cuerpo central: muros rectos y remate en arco rebajado
+  const bx = 82, bw = 76, top = 56, sag = 18, Rb = ((bw / 2) ** 2 + sag ** 2) / (2 * sag), cyb = top - sag + Rb;
+  s += P(`M${bx} 188V${top}A${n(Rb)} ${n(Rb)} 0 0 1 ${bx + bw} ${top}V188Z`, C.tiza);
+  const ro = Rb + 2.5, ri = Rb - 3.5, yc = top + 2;                                   // frontón curvo (cornisa)
+  const xo = Math.sqrt(ro ** 2 - (cyb - yc) ** 2), xi = Math.sqrt(ri ** 2 - (cyb - yc) ** 2);
+  s += P(`M${n(120 - xo)} ${yc}A${n(ro)} ${n(ro)} 0 0 1 ${n(120 + xo)} ${yc}L${n(120 + xi)} ${yc}A${n(ri)} ${n(ri)} 0 0 0 ${n(120 - xi)} ${yc}Z`, C.pizarra);
+  s += clockFace(120, 40, 11);
+  // ventanal
+  const { x, y, w, h, t } = WIN, ix = x + t, iy = y + t, iw = w - 2 * t, ih = h - 2 * t;
+  s += rect(x, y, w, h, 8, C.pizarraLinea);                                           // marco
+  if (!server) {
+    s += rect(ix, iy, iw, ih, 4, C.pizarraLinea);
+    s += line(ix + iw / 3, iy + 4, ix + iw / 3, iy + ih - 4, C.tiza, 2.5) + line(ix + 2 * iw / 3, iy + 4, ix + 2 * iw / 3, iy + ih - 4, C.tiza, 2.5);
+    s += line(ix + 4, iy + 24, ix + iw - 4, iy + 24, C.tiza, 2.5);
   } else {
-    // corte: dentro se ve el servidor con su chispa
-    s += P('M96 188V128A24 24 0 0 1 144 128V188Z', C.textoSuave);
-    s += rect(96, 180, 48, 8, 0, C.pizarraLinea);
-    s += rect(104, 120, 32, 60, 6, C.pizarra);
-    s += rect(108, 124, 24, 22, R1, C.pizarra2) + spark(120, 135, 8.5, C.chispa);
-    s += line(110, 156, 122, 156, C.tiza, 3) + line(110, 166, 122, 166, C.tiza, 3);
-    s += circle(129, 156, 1.8, C.textoSuave) + circle(129, 166, 1.8, C.textoSuave);
+    s += rect(ix, iy, iw, ih, 4, C.salvia);                                           // pared del fondo
+    s += P(rrectPath(ix, iy + ih - 9, iw, 9, [0, 0, 4, 4]), C.textoSuave);           // suelo
+    s += P(`M${ix + 4} ${iy}H${ix + iw - 4}A4 4 0 0 1 ${ix + iw} ${iy + 4}V${iy + 5}H${ix + 5}V${iy + ih - 9}H${ix}V${iy + 4}A4 4 0 0 1 ${ix + 4} ${iy}Z`, C.linea); // grosor del muro
+    const k = 0.5, sw = 84 * k, sh = 162 * k;
+    s += serverTower(120 - sw / 2, iy + ih - 4.5 - sh, k, { sparkR: 12 });
   }
+  s += P('M108 188V170A12 12 0 0 1 132 170V188Z', C.pizarra2);                        // puerta en arco
+  s += line(120, 164, 120, 186, C.pizarraLinea, 2);
   s += rect(44, 184, 152, 8, 3, C.pizarraLinea);                                      // zócalo
   return s;
 }
 save('colegio', 'Colegio', school());
-save('colegio-servidor', 'Colegio con el servidor de DirectorIA dentro', school({ cut: true }));
+save('colegio-servidor', 'Colegio con el servidor de DirectorIA dentro, a la vista por el ventanal', school({ server: true }));
 // Nube (módulo opcional): fuera del colegio; solo recibe peticiones de material didáctico (un libro abierto).
 {
   let s = '';
