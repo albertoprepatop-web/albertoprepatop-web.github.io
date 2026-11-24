@@ -1,0 +1,369 @@
+{
+ "v": 3,
+ "layout": "files",
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-11-24T20:38:05Z"
+ },
+ "title": "DirectorIA",
+ "namespace": "DirectorIA",
+ "libraries": [],
+ "sections": {},
+ "groups": [
+  "Logos",
+  "Ilustraciones",
+  "Laminas"
+ ],
+ "assetGroups": {
+  "Logos": {
+   "name": "Logos",
+   "tile": "m",
+   "order": [
+    "logo-horizontal.svg",
+    "logo-horizontal-negativo.svg",
+    "logo-horizontal-mono-pizarra.svg",
+    "logo-horizontal-mono-tiza.svg",
+    "logo-eslogan.svg",
+    "logo-eslogan-negativo.svg",
+    "logotipo.svg",
+    "logotipo-negativo.svg",
+    "logotipo-mono-pizarra.svg",
+    "logotipo-mono-tiza.svg",
+    "logo-vertical.svg",
+    "logo-vertical-negativo.svg",
+    "isotipo.svg",
+    "isotipo-negativo.svg",
+    "isotipo-mono-pizarra.svg",
+    "isotipo-mono-tiza.svg",
+    "favicon.svg",
+    "app-icon.svg",
+    "app-icon-512.png"
+   ],
+   "files": {
+    "logo-horizontal.svg": {
+     "name": "logo-horizontal.svg",
+     "blob": "346250f9384b981a9a81763d67f77579",
+     "size": 7470,
+     "type": "image/svg+xml"
+    },
+    "logo-horizontal-negativo.svg": {
+     "name": "logo-horizontal-negativo.svg",
+     "blob": "59e5a1b9b3750e3f62f902f9b2ae66c7",
+     "size": 7470,
+     "type": "image/svg+xml"
+    },
+    "logo-horizontal-mono-pizarra.svg": {
+     "name": "logo-horizontal-mono-pizarra.svg",
+     "blob": "102cd39162b0139d0cd8d47e895a9937",
+     "size": 7399,
+     "type": "image/svg+xml"
+    },
+    "logo-horizontal-mono-tiza.svg": {
+     "name": "logo-horizontal-mono-tiza.svg",
+     "blob": "de8519d0a42e5f7b0e692d0d104e3b85",
+     "size": 7399,
+     "type": "image/svg+xml"
+    },
+    "logo-eslogan.svg": {
+     "name": "logo-eslogan.svg",
+     "blob": "cb0e08d651b3cbc9951e4d578b7b6266",
+     "size": 20820,
+     "type": "image/svg+xml"
+    },
+    "logo-eslogan-negativo.svg": {
+     "name": "logo-eslogan-negativo.svg",
+     "blob": "27d08f9aad130d7d466069d71d6fee93",
+     "size": 20820,
+     "type": "image/svg+xml"
+    },
+    "logotipo.svg": {
+     "name": "logotipo.svg",
+     "blob": "d52eccb79e4c57b7a82a8e0f04e52699",
+     "size": 6978,
+     "type": "image/svg+xml"
+    },
+    "logotipo-negativo.svg": {
+     "name": "logotipo-negativo.svg",
+     "blob": "e41573387bb56634ca66eb2c0bf6225b",
+     "size": 6978,
+     "type": "image/svg+xml"
+    },
+    "logotipo-mono-pizarra.svg": {
+     "name": "logotipo-mono-pizarra.svg",
+     "blob": "aeae89ec59cc927da0b678240f21c84d",
+     "size": 6944,
+     "type": "image/svg+xml"
+    },
+    "logotipo-mono-tiza.svg": {
+     "name": "logotipo-mono-tiza.svg",
+     "blob": "b081fc8f12b9f5452dc9ae34248eb8ba",
+     "size": 6944,
+     "type": "image/svg+xml"
+    },
+    "logo-vertical.svg": {
+     "name": "logo-vertical.svg",
+     "blob": "0fb58d571944a267a99c7c29b7e98016",
+     "size": 7465,
+     "type": "image/svg+xml"
+    },
+    "logo-vertical-negativo.svg": {
+     "name": "logo-vertical-negativo.svg",
+     "blob": "4bbfe192b4f00a1161463995af56ee51",
+     "size": 7465,
+     "type": "image/svg+xml"
+    },
+    "isotipo.svg": {
+     "name": "isotipo.svg",
+     "blob": "6ade4b5dbb92983c8e7287ce052a4cba",
+     "size": 607,
+     "type": "image/svg+xml"
+    },
+    "isotipo-negativo.svg": {
+     "name": "isotipo-negativo.svg",
+     "blob": "201c08644f9418b82b1ccb2ea813179e",
+     "size": 607,
+     "type": "image/svg+xml"
+    },
+    "isotipo-mono-pizarra.svg": {
+     "name": "isotipo-mono-pizarra.svg",
+     "blob": "b7d51f8b82b7a4b85418adecefa3a40b",
+     "size": 542,
+     "type": "image/svg+xml"
+    },
+    "isotipo-mono-tiza.svg": {
+     "name": "isotipo-mono-tiza.svg",
+     "blob": "65f890ca1c8d9217d50deee616c770ad",
+     "size": 542,
+     "type": "image/svg+xml"
+    },
+    "favicon.svg": {
+     "name": "favicon.svg",
+     "blob": "b6736bcdf6eace758c1cafa12eba2dcf",
+     "size": 703,
+     "type": "image/svg+xml"
+    },
+    "app-icon.svg": {
+     "name": "app-icon.svg",
+     "blob": "67e988cff49cd1fb51d038921cb59271",
+     "size": 824,
+     "type": "image/svg+xml"
+    },
+    "app-icon-512.png": {
+     "name": "app-icon-512.png",
+     "blob": "d8648c6a8d8649b22ca2d25c18e89536",
+     "size": 11537,
+     "type": "image/png"
+    }
+   }
+  },
+  "Ilustraciones": {
+   "name": "Ilustraciones",
+   "tile": "s",
+   "order": [
+    "colegio-servidor.svg",
+    "servidor.svg",
+    "colegio.svg",
+    "nube-claude.svg",
+    "direccion.svg",
+    "jefatura.svg",
+    "secretaria.svg",
+    "docente.svg",
+    "orientacion.svg",
+    "sustituto.svg",
+    "familia.svg",
+    "documento-ia.svg",
+    "circular.svg",
+    "acta.svg",
+    "ficha.svg",
+    "correo.svg",
+    "calendario.svg",
+    "candado.svg",
+    "microfono.svg",
+    "reloj.svg",
+    "alerta.svg"
+   ],
+   "files": {
+    "colegio-servidor.svg": {
+     "name": "colegio-servidor.svg",
+     "blob": "1533aac0cc85320648d54234e466bfd5",
+     "size": 4458,
+     "type": "image/svg+xml"
+    },
+    "servidor.svg": {
+     "name": "servidor.svg",
+     "blob": "96624d95c7deca4068ab38370d12bb92",
+     "size": 1440,
+     "type": "image/svg+xml"
+    },
+    "colegio.svg": {
+     "name": "colegio.svg",
+     "blob": "0aa4416fc16771a0411c0832ec31c5eb",
+     "size": 3689,
+     "type": "image/svg+xml"
+    },
+    "nube-claude.svg": {
+     "name": "nube-claude.svg",
+     "blob": "a5183af0de51df628b4dfef42b36cc89",
+     "size": 1666,
+     "type": "image/svg+xml"
+    },
+    "direccion.svg": {
+     "name": "direccion.svg",
+     "blob": "3ac77ff19ccddd2266d526c2c9b2f037",
+     "size": 2552,
+     "type": "image/svg+xml"
+    },
+    "jefatura.svg": {
+     "name": "jefatura.svg",
+     "blob": "1ff19cd9c43bc9181067f59c9f0f0935",
+     "size": 2514,
+     "type": "image/svg+xml"
+    },
+    "secretaria.svg": {
+     "name": "secretaria.svg",
+     "blob": "e5a696d22f85d32ebcde2aa209ab8495",
+     "size": 2758,
+     "type": "image/svg+xml"
+    },
+    "docente.svg": {
+     "name": "docente.svg",
+     "blob": "de22295226ea00bae658e2176aaa59b5",
+     "size": 3386,
+     "type": "image/svg+xml"
+    },
+    "orientacion.svg": {
+     "name": "orientacion.svg",
+     "blob": "3e9c54c7fa5bb1a709ce0d36b2d4970a",
+     "size": 1249,
+     "type": "image/svg+xml"
+    },
+    "sustituto.svg": {
+     "name": "sustituto.svg",
+     "blob": "e79291334a25fa3fd837563378e5ea26",
+     "size": 2441,
+     "type": "image/svg+xml"
+    },
+    "familia.svg": {
+     "name": "familia.svg",
+     "blob": "ad7c29b7c39e14bb0a10bde65d23a5d4",
+     "size": 2251,
+     "type": "image/svg+xml"
+    },
+    "documento-ia.svg": {
+     "name": "documento-ia.svg",
+     "blob": "8b8a41f64e61cf2ebeaf160a95914d76",
+     "size": 1373,
+     "type": "image/svg+xml"
+    },
+    "circular.svg": {
+     "name": "circular.svg",
+     "blob": "923174c8ca0bacd86f443a83267f8c1c",
+     "size": 1704,
+     "type": "image/svg+xml"
+    },
+    "acta.svg": {
+     "name": "acta.svg",
+     "blob": "bbde6a6199e26e8d2f20df38e922825d",
+     "size": 1567,
+     "type": "image/svg+xml"
+    },
+    "ficha.svg": {
+     "name": "ficha.svg",
+     "blob": "c1d82bd422f2769f8259988d47b5bb1c",
+     "size": 2334,
+     "type": "image/svg+xml"
+    },
+    "correo.svg": {
+     "name": "correo.svg",
+     "blob": "7f99c55f18255cb563a56708bfda75f5",
+     "size": 518,
+     "type": "image/svg+xml"
+    },
+    "calendario.svg": {
+     "name": "calendario.svg",
+     "blob": "771e543d17c0297e3588a5213b5d5c08",
+     "size": 2030,
+     "type": "image/svg+xml"
+    },
+    "candado.svg": {
+     "name": "candado.svg",
+     "blob": "793375cc735c65d0af2a61e913170952",
+     "size": 528,
+     "type": "image/svg+xml"
+    },
+    "microfono.svg": {
+     "name": "microfono.svg",
+     "blob": "0ac003d5197c7ca2740e01a077591c6e",
+     "size": 1339,
+     "type": "image/svg+xml"
+    },
+    "reloj.svg": {
+     "name": "reloj.svg",
+     "blob": "e29584f5441b78059c323f90f13d19f9",
+     "size": 2144,
+     "type": "image/svg+xml"
+    },
+    "alerta.svg": {
+     "name": "alerta.svg",
+     "blob": "30ed2f90f878aaf6693068a123b61187",
+     "size": 787,
+     "type": "image/svg+xml"
+    }
+   }
+  },
+  "Laminas": {
+   "name": "Laminas",
+   "tile": "l",
+   "order": [
+    "construccion.png",
+    "usos-incorrectos.png",
+    "tablero.png",
+    "kit.png",
+    "vista-general.png"
+   ],
+   "files": {
+    "construccion.png": {
+     "name": "construccion.png",
+     "blob": "e5808ab894d901123311af4871238830",
+     "size": 447745,
+     "type": "image/png"
+    },
+    "usos-incorrectos.png": {
+     "name": "usos-incorrectos.png",
+     "blob": "e52c0d58777ab3e025ca6b2c31d9beb4",
+     "size": 276764,
+     "type": "image/png"
+    },
+    "tablero.png": {
+     "name": "tablero.png",
+     "blob": "bb2e2824f8f316b715b634e55d62cb00",
+     "size": 123981,
+     "type": "image/png"
+    },
+    "kit.png": {
+     "name": "kit.png",
+     "blob": "50b33bdede6e58891954cf6b0bd1bd6f",
+     "size": 235700,
+     "type": "image/png"
+    },
+    "vista-general.png": {
+     "name": "vista-general.png",
+     "blob": "daa7fc7b7529a4bc04c9cc4ff48d83ce",
+     "size": 637476,
+     "type": "image/png"
+    }
+   }
+  }
+ },
+ "blobs": {},
+ "docs": {
+  "readme": "project/README.md",
+  "sections": []
+ },
+ "lastChange": {
+  "by": "Claude",
+  "at": "2026-11-24T20:38:05Z",
+  "via": "Claude Code",
+  "note": "Primera versión del sistema de la marca DirectorIA"
+ }
+}

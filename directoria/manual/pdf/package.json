@@ -1,0 +1,8 @@
+{
+  "name": "directoria-manual-pdf",
+  "private": true,
+  "description": "Genera manual-de-marca.pdf a partir de las fuentes del sistema de diseño (../sistema/project).",
+  "type": "module",
+  "scripts": { "pdf": "node generar.mjs" },
+  "dependencies": { "marked": "12.0.2" }
+}
