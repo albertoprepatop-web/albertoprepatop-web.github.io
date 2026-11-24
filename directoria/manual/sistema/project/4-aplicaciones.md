@@ -5,7 +5,7 @@ Las piezas que ya existen, dónde están y qué hay que respetar en cada una. La
 ## Presentación comercial
 
 - **Dónde:** el mazo de Slides «DirectorIA · Presentación para equipos directivos», que se descarga como PowerPoint o PDF. Sus fuentes están en `presentacion/project/` y la hoja `vista-general.png` está en el grupo **Laminas**.
-- **Estructura (25 diapositivas):** por qué no vale cualquier IA con datos de alumnos; cómo funciona, con dibujos; qué cambia para cada cargo (dirección, jefatura, secretaría, docentes, orientación); dos casos en detalle (la ficha de sustitución y el protocolo de acoso paso a paso); qué no hace, el análisis de gastos, cómo empezar, precios y la oferta para el primer colegio.
+- **Estructura (27 diapositivas):** por qué no vale cualquier IA con datos de alumnos; cómo funciona, con dibujos; qué cambia para cada cargo (dirección, jefatura, secretaría, docentes, orientación); tres casos en detalle (la ficha de sustitución, el protocolo de acoso paso a paso y el banco de recursos del claustro); qué no hace, el análisis de gastos, cómo empezar, precios y la oferta para el primer colegio.
 - **Reglas:**
   - Estilos `diapo-*`, margen `diapo-margen` e isotipo de 56 px arriba a la derecha (salvo en portada, cierre y diapositivas enteras de color).
   - Portada y cierre en `pizarra`, con el logotipo horizontal en negativo y una ilustración grande.

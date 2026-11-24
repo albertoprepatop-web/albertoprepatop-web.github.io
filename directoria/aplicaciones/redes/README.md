@@ -9,11 +9,11 @@ Son PNG en sRGB, opacos (RGB de 8 bits, sin transparencia) y con la medida que r
 | Archivo | Medidas | Peso | Para qué |
 |---|---|---|---|
 | `avatar-400.png` | 400 × 400 px | 13 KB | Foto de perfil de la página de empresa en LinkedIn, de la cuenta de X y de cualquier red que recorte en círculo. |
-| `linkedin-banner.png` | 1584 × 396 px | 60 KB | Imagen de fondo del perfil personal de LinkedIn de quien presenta DirectorIA. |
+| `linkedin-banner.png` | 1584 × 396 px | 62 KB | Imagen de fondo del perfil personal de LinkedIn de quien presenta DirectorIA. |
 | `x-cabecera.png` | 1500 × 500 px | 65 KB | Cabecera de la cuenta de X. |
 | `compartir-1200x630.png` | 1200 × 630 px | 64 KB | Imagen apaisada para publicaciones y enlaces que no traen imagen propia. **No es la imagen de la web:** esa es `../../web/img/og.png`. |
 | `post-presentacion.png` | 1200 × 1200 px | 127 KB | Primera publicación en LinkedIn: «Vuestra IA, dentro del colegio». |
-| `post-sustituciones.png` | 1200 × 1200 px | 173 KB | Publicación de LinkedIn sobre las sustituciones y la ficha de quien sustituye. |
+| `post-sustituciones.png` | 1200 × 1200 px | 172 KB | Publicación de LinkedIn sobre las sustituciones y la ficha de quien sustituye. |
 | `html/` | — | — | El origen de cada imagen (una página HTML por imagen, `redes.css` y `generar.mjs`). Ver «Cómo cambiarlas». |
 
 Todas pesan menos de 200 KB, muy por debajo de los límites de LinkedIn y X.
@@ -32,6 +32,7 @@ Todas pesan menos de 200 KB, muy por debajo de los límites de LinkedIn y X.
 - En el perfil personal, editad la imagen de fondo (el lápiz sobre el fondo), subid el archivo y guardad sin recortar: mide justo lo que pide LinkedIn.
 - **Lo que tapa LinkedIn.** La foto de perfil queda abajo a la izquierda. El tercio izquierdo (hasta x = 560 px) va vacío a propósito. Se ha comprobado con la foto encima en escritorio (804 px de ancho) y en móvil (390 px).
 - **Lleva solo la palabra** (`logotipo-negativo.svg`, a 52 px de alto). En el móvil, LinkedIn muestra el fondo a 390 px de ancho, a una cuarta parte de su tamaño: la palabra mide ahí 12,8 px de alto, por encima de su mínimo de 12 px. El logotipo horizontal se quedaría en 14 px, por debajo de los 24 px que pide `../../logo/construccion.md`, y para llegar a 24 tendría que medir 98 px de alto: no cabría con el titular.
+- **La ilustración mide 392 px** (el disco, 340 px, a 66 px del borde derecho y a 28 px de arriba y de abajo). En el móvil se ve a 96,5 px, justo por encima del mínimo de 96 px del kit de ilustraciones (`../../ilustraciones/LEEME.md`). No la hagáis más pequeña.
 - **No es la portada de la página de empresa.** Esa mide 1128 × 191 y LinkedIn recortaría este archivo. Si hace falta, se saca de `html/linkedin-banner.html` con esa medida, también con la palabra sola (al lado ya está el avatar con el símbolo), y se vuelve a comprobar el tamaño del logotipo en el móvil.
 
 ### Cabecera de X · `x-cabecera.png`
@@ -39,6 +40,7 @@ Todas pesan menos de 200 KB, muy por debajo de los límites de LinkedIn y X.
 - «Editar perfil», cabecera, subir el archivo y aplicar sin mover el encuadre.
 - **Lo que tapa X.** El avatar tapa la esquina de abajo a la izquierda (x < 400 y y > 300 px), que va vacía. Además, X recorta hasta unos 60 px por arriba y por abajo según la pantalla, así que todo lo importante va entre y = 70 y y = 430. Se ha comprobado con el avatar encima en escritorio (600 px) y en móvil (390 px).
 - Lleva solo la palabra (`logotipo-negativo.svg`, a 50 px de alto): el avatar, justo al lado, ya muestra el símbolo, y así no se repite la D (`../../logo/construccion.md`). En el móvil, X muestra la cabecera a 390 px de ancho y la palabra mide 13 px de alto (mínimo, 12 px).
+- La ilustración mide 370 px: en el móvil, 96,2 px (mínimo, 96 px).
 
 ### Imagen para publicaciones y enlaces · `compartir-1200x630.png`
 
@@ -62,11 +64,11 @@ Todas pesan menos de 200 KB, muy por debajo de los límites de LinkedIn y X.
 
 Opción A (142 caracteres):
 
-> Vuestra IA, dentro del colegio. Sustituciones, guardias, actas y plazos para colegios privados y concertados. La IA propone; vosotros decidís.
+> Vuestra IA, dentro del colegio. Sustituciones, guardias, actas y plazos para colegios privados y concertados. La IA propone. Vosotros decidís.
 
 Opción B (154 caracteres):
 
-> IA para dirección y claustro, en un servidor dentro del colegio y sin transferencias internacionales de datos de alumnos. La IA propone; vosotros decidís.
+> IA para dirección y claustro, en un servidor dentro del colegio y sin transferencias internacionales de datos de alumnos. La IA propone. Vosotros decidís.
 
 Ubicación: Comunidad de Madrid · Web: [dominio.es]
 
@@ -77,16 +79,16 @@ Ubicación: Comunidad de Madrid · Web: [dominio.es]
 - **Sitio web:** https://[dominio.es] · **Sede:** Comunidad de Madrid
 - **«Acerca de» · Descripción general** (el texto largo de la identidad verbal, con la frase sobre los datos que usan la web y la papelería, y una línea de contacto al final):
 
-> DirectorIA, empresa de la Comunidad de Madrid, instala en colegios privados y concertados una IA propia: un servidor dentro del centro y un programa para el día a día escolar. Propone sustituciones y un reparto equilibrado de guardias, y prepara la ficha del sustituto. Saca los plazos de las circulares, sugiere respuestas al correo, redacta actas a partir del dictado y envía a dirección un resumen diario a las 8:00. Cada docente tiene su asistente, y un analista de gastos busca ahorros en facturas y contratos. Decide una persona: la IA propone y nunca evalúa, puntúa ni clasifica a los alumnos, y trata sus datos en el servidor del colegio, sin transferencias internacionales de esos datos. Se entrega llave en mano: servidor, instalación, borrador de la evaluación de impacto, formación y soporte.
+> DirectorIA, empresa de la Comunidad de Madrid, instala en colegios privados y concertados una IA propia: un servidor dentro del centro y un programa para el día a día escolar. Propone sustituciones y un reparto equilibrado de guardias, y prepara la ficha del sustituto. Saca los plazos de las circulares, sugiere respuestas al correo, redacta actas a partir del dictado y envía a dirección un resumen diario a las 8:00. Cada docente tiene su asistente, y un analista de gastos busca ahorros en facturas y contratos. Decide una persona: la IA propone y nunca evalúa, puntúa ni clasifica a los alumnos. La IA trata los datos de los alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos. Se entrega llave en mano: servidor, instalación, borrador de la evaluación de impacto, formación y soporte.
 >
-> ¿Os lo enseñamos funcionando en vuestro colegio? Escribidnos a [correo@dominio.es] o llamad al [teléfono].
+> ¿Os lo enseñamos en vuestro colegio? Escribidnos a [correo@dominio.es] o llamad al [teléfono].
 
 ### Perfil personal de LinkedIn (quien presenta DirectorIA)
 
 - **Titular:** [Cargo] en DirectorIA · Vuestra IA, dentro del colegio
 - **«Acerca de»** (el texto corto de la identidad verbal, con la misma frase sobre los datos):
 
-> En DirectorIA instalamos en colegios privados y concertados una IA propia, en un servidor dentro del centro. Prepara sustituciones y guardias, actas, respuestas de correo y avisos de plazos para dirección y claustro. Los datos de los alumnos los trata en ese servidor, sin transferencias internacionales de esos datos. La IA propone y una persona decide. Si queréis verlo funcionando en vuestro colegio, escribidme a [correo@dominio.es].
+> En DirectorIA instalamos en colegios privados y concertados una IA propia, en un servidor dentro del centro. Prepara sustituciones y guardias, actas, respuestas de correo y avisos de plazos para dirección y claustro. La IA trata los datos de los alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos. La IA propone y una persona decide. ¿Os lo enseño en vuestro colegio? Escribidme a [correo@dominio.es].
 
 ## Textos de las publicaciones
 
@@ -107,7 +109,7 @@ Y cada docente tiene su propio asistente.
 
 La IA propone y una persona decide. Nunca evalúa, puntúa ni clasifica a ningún alumno, y trata los datos de vuestros alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos.
 
-¿Os lo enseñamos funcionando en vuestro colegio? Escribidnos a [correo@dominio.es] y preparamos una demo con vuestros horarios. Y antes de firmar nada, os hacemos gratis un análisis de gastos.
+¿Os lo enseñamos en vuestro colegio? Escribidnos a [correo@dominio.es] y preparamos una demo de 45 minutos con una mañana de ejemplo, sin datos reales: una sustitución, su ficha y un acta. Y antes de firmar nada, os hacemos gratis un análisis de gastos.
 
 #DirectorIA #EquiposDirectivos #Colegios
 ```
@@ -123,11 +125,11 @@ Son las 8:05 y falta un profesor. Hay que cubrir sus horas, y quien entre en cad
 
 Cuando falta un profesor, DirectorIA propone quién cubre cada hora, con un reparto de guardias equilibrado. Jefatura de estudios revisa la propuesta y decide.
 
-Después prepara la ficha de quien sustituye: la tarea de la sesión, las adaptaciones, las alergias, quién puede recoger a cada alumno y los avisos de seguridad.
+Después, DirectorIA prepara la ficha de quien sustituye: la tarea de la sesión, las adaptaciones, las alergias, quién puede recoger a cada alumno y los avisos de seguridad.
 
 Ausencia cubierta, sustituto informado. Y la IA trata los datos de vuestros alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos.
 
-¿Lo probamos con vuestra próxima sustitución? Escribidnos a [correo@dominio.es].
+¿Os lo enseñamos en vuestro colegio? Escribidnos a [correo@dominio.es] y preparamos una demo de 45 minutos con una mañana de ejemplo, sin datos reales: una sustitución, su ficha y un acta.
 
 #DirectorIA #EquiposDirectivos #JefaturaDeEstudios
 ```
@@ -148,11 +150,13 @@ Texto alternativo de la imagen:
 - Al copiar el nombre, comprobad que es «DirectorIA» con i mayúscula y no con ele («DirectorlA»).
 - **Los datos de los alumnos.** Decid lo mismo que la sección «Privacidad» de la web y la papelería: «La IA trata los datos de vuestros alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos». No escribáis que los datos «no salen del colegio»: no se puede sostener, porque el correo, el resumen de las 8:00 y la ficha de quien sustituye se envían a personas, y además hay soporte remoto y un módulo opcional de Claude en la nube. Tampoco «riesgo cero» ni «cumplimiento garantizado».
 - **Al compartir el enlace de la web**, WhatsApp, Slack o Facebook enseñan junto a la imagen su descripción para redes (`og:description` en `../../web/index.html`). Ya usa la fórmula prudente: «La IA trata los datos de vuestros alumnos dentro del colegio».
+- **La demo.** Es de 45 minutos, en el colegio, con una mañana de ejemplo y sin datos reales: una sustitución, su ficha y un acta. La pregunta de cierre es «¿Os lo enseñamos en vuestro colegio?». No ofrezcáis probarla «con vuestros horarios» ni «con vuestra próxima sustitución»: serían datos reales del colegio antes de que haya contrato.
 - Si una publicación habla de precios o condiciones, se dicen enteros y sin asteriscos (identidad verbal). El compromiso mínimo es de dos cursos; el año de compromiso es solo para el colegio pionero, con su oferta propia.
 
 ## Qué reglas de la marca siguen
 
-- Logotipo en positivo sobre tiza y en negativo sobre pizarra, a partir de los SVG, sin recomponer. Un solo naranja por fondo: chispa `#E07A3A` sobre pizarra y chispa-texto `#B4531C` sobre claro, también en la barra de acento.
+- Logotipo en positivo sobre tiza y en negativo sobre pizarra, a partir de los SVG, sin recomponer. Un solo naranja por fondo: chispa `#E07A3A` sobre pizarra y chispa-texto `#B4531C` sobre claro.
+- El naranja es solo para la IA: la «IA» del logotipo y la chispa de las ilustraciones. Las publicaciones no llevan barras ni filetes de adorno; el titular empieza en el margen de 96 px, como el logotipo abajo.
 - **Tamaños mínimos, comprobados en el móvil y no solo en escritorio.** `../../logo/construccion.md` pide al menos 24 px de alto para el horizontal y 12 px para la palabra sola. Cada red reduce la imagen al ancho en que la muestra, así que se ha medido el logotipo a ese tamaño: en el móvil, a 390 px de ancho (y a unos 306 px en X, donde una imagen de publicación va en la columna del texto), y en escritorio, al ancho de cada red. Todos quedan por encima del mínimo:
 
   | Imagen | Logotipo en la imagen | En el móvil | En escritorio |
@@ -164,7 +168,9 @@ Texto alternativo de la imagen:
   | `post-sustituciones.png` | Horizontal, 80 px | 26 px (390 px, ×0,325) | 37 px (552 px) |
 
   Por debajo de 24 px no se usa el horizontal: por eso las dos cabeceras llevan la palabra sola.
-- **Área de respeto de 1 x** (la altura de la «I» de «IA»), medida desde la tinta en cada PNG. Entre el logotipo y lo más cercano hay 53 px en LinkedIn (1 x = 40 px), 54 px en X (1 x = 38,5 px), 66 px en la imagen para publicaciones y enlaces (1 x = 55 px), 58 px hasta el disco en la presentación y 61 px hasta el texto de los pasos en las sustituciones (1 x = 46 px en las dos). Ninguno toca el borde: el más cercano queda a 1,6 x.
+
+  Las ilustraciones tienen su propio mínimo, 96 px (`../../ilustraciones/LEEME.md`), también medido en el móvil: 96,5 px en el fondo de LinkedIn (392 px × 0,246), 96,2 px en la cabecera de X (370 px × 0,26) y unos 96 px cada paso de las sustituciones.
+- **Área de respeto de 1 x** (la altura de la «I» de «IA»), medida desde la tinta en cada PNG. Entre el logotipo y lo más cercano hay 53 px en LinkedIn (1 x = 40 px), 54 px en X (1 x = 38,5 px), 66 px en la imagen para publicaciones y enlaces (1 x = 55 px), 58 px hasta el disco en la presentación y 81 px hasta el texto de los pasos en las sustituciones (1 x = 46 px en las dos). Ninguno toca el borde: el más cercano queda a 1,6 x.
 - Ilustraciones del kit sin tocar, con su disco: `colegio-servidor` en las cabeceras, la imagen para publicaciones y enlaces y la presentación, y `jefatura`, `ficha` y `sustituto` en la historia de las sustituciones.
 - «DirectorIA» en el titular va en la misma fuente y el mismo color que el resto de la frase. Ningún estilo lo pasa a mayúsculas.
 - Verbos de personas para las personas: la IA propone y prepara; jefatura revisa y decide.

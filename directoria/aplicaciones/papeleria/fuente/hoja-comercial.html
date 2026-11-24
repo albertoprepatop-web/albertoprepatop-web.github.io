@@ -59,7 +59,7 @@
     text-transform: uppercase; color: var(--chispa-texto); margin-bottom: 1.6mm;
   }
   h2 { font: 600 15pt/18pt 'Rubik', Arial, sans-serif; color: var(--pizarra); margin-bottom: 3.6mm; }
-  section { margin-top: 8.5mm; }
+  section { margin-top: 7mm; }
 
   /* ---------------------------------------------------------------- página 1 */
   .portada {
@@ -94,20 +94,21 @@
   .vinetas li { position: relative; padding-left: 4.2mm; margin-bottom: 1.4mm; }
   .vinetas li:last-child { margin-bottom: 0; }
   .vinetas li::before {
-    content: "•"; position: absolute; left: 0; top: 0; font-weight: 700; color: var(--chispa-texto);
+    content: "•"; position: absolute; left: 0; top: 0; font-weight: 700; color: var(--pizarra-linea);
   }
 
   /* ---------------------------------------------------------------- página 2 */
   /* Pasos: cuatro columnas unidas por una línea, con el número en un círculo pizarra.
      Los títulos caben en una línea. Si alguno pasa a dos, la subrejilla (número, título, texto)
-     hace que los cuatro textos sigan empezando a la misma altura. */
+     hace que los cuatro textos sigan empezando a la misma altura. Con 4 mm entre columnas, el
+     texto más largo (el de la demo) cabe en cuatro líneas. */
   .pasos {
     position: relative; display: grid; grid-template-columns: repeat(4, 1fr);
-    grid-template-rows: auto auto auto; column-gap: 5mm; row-gap: 0;
+    grid-template-rows: auto auto auto; column-gap: 4mm; row-gap: 0;
   }
   .pasos::before {
-    /* del centro del círculo 1 al del 4: columnas de (182 − 3 × 5) / 4 = 41,75 mm */
-    content: ""; position: absolute; left: 3.5mm; right: 38.25mm; top: 3.5mm;
+    /* del centro del círculo 1 al del 4: columnas de (182 − 3 × 4) / 4 = 42,5 mm */
+    content: ""; position: absolute; left: 3.5mm; right: 39mm; top: 3.5mm;
     border-top: 0.8pt solid var(--linea);
   }
   .paso { position: relative; display: grid; grid-row: span 3; grid-template-rows: subgrid; align-content: start; }
@@ -142,14 +143,14 @@
     position: relative; padding: 0 0 0 5.2mm;
   }
   .no-hace li::before {
-    content: "–"; position: absolute; left: 0; top: 0; font-weight: 700; color: var(--chispa-texto);
+    content: "–"; position: absolute; left: 0; top: 0; font-weight: 700; color: var(--pizarra-linea);
   }
 
   .contacto {
     position: absolute; left: var(--m); right: var(--m); bottom: 21mm;
     background: var(--pizarra); border-radius: 5mm; color: var(--texto-suave);
     display: grid; grid-template-columns: 1fr 64mm; gap: 8mm; align-items: center;
-    padding: 8mm 10mm 8mm 11mm;
+    padding: 7mm 10mm 7mm 11mm;
   }
   .contacto h2 { color: var(--tiza); font-size: 17pt; line-height: 20.5pt; margin-bottom: 2.6mm; }
   .contacto .sub { font-size: 10.5pt; line-height: 15pt; max-width: 88mm; }
@@ -193,8 +194,8 @@
     <div>
       <h2>Privacidad, puertas adentro</h2>
       <ul class="vinetas">
-        <li>La IA trata los datos de los alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos.</li>
-        <li>El colegio sigue siendo el responsable del tratamiento. Os entregamos los borradores de la evaluación de impacto y del registro de actividades de tratamiento.</li>
+        <li>La IA trata los datos de vuestros alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos.</li>
+        <li>El colegio sigue siendo el responsable del tratamiento. Os entregamos los borradores de la evaluación de impacto y del registro de actividades: los revisa vuestro delegado de protección de datos y los aprueba el colegio.</li>
         <li>La IA propone y una persona decide. Nunca evalúa, puntúa ni clasifica a ningún alumno.</li>
         <li>El módulo opcional de Claude, en la nube, es solo para material didáctico, no para datos de alumnos.</li>
       </ul>
@@ -213,10 +214,10 @@
     <p class="antetitulo">Cómo empezamos</p>
     <h2>De la demo al uso diario, sin obras</h2>
     <div class="pasos">
-      <div class="paso"><div class="n">1</div><h3>Demo en el colegio</h3><p>45 minutos con una mañana real: una sustitución y un acta.</p></div>
-      <div class="paso"><div class="n">2</div><h3>Análisis de gastos</h3><p>Gratis y antes de firmar, sobre facturas y contratos. El&nbsp;informe es vuestro.</p></div>
+      <div class="paso"><div class="n">1</div><h3>Demo en el colegio</h3><p>45 minutos con una mañana de ejemplo, sin datos reales: una sustitución, su ficha y un acta.</p></div>
+      <div class="paso"><div class="n">2</div><h3>Análisis de gastos</h3><p>Gratis y antes de firmar, con facturas y contratos solo de empresas, sin nóminas. El&nbsp;informe es vuestro.</p></div>
       <div class="paso"><div class="n">3</div><h3>Instalación en un día</h3><p>El servidor llega montado. Cargamos los datos y creamos los usuarios.</p></div>
-      <div class="paso"><div class="n">4</div><h3>Formación y soporte</h3><p>6 horas de formación para el claustro y soporte en horario lectivo.</p></div>
+      <div class="paso"><div class="n">4</div><h3>Formación y soporte</h3><p>6 horas de formación al claustro y soporte en horario lectivo.</p></div>
     </div>
   </section>
 
@@ -243,7 +244,7 @@
         <p class="inicial-nota">Servidor e instalación</p>
       </div>
     </div>
-    <p class="condiciones"><b>Precios sin IVA. Compromiso mínimo de dos cursos escolares.</b> La cuota inicial se paga una vez. El módulo opcional de Claude no está incluido: si lo activáis, su uso se paga aparte, en la cuenta del colegio.</p>
+    <p class="condiciones"><b>Precios sin IVA. Compromiso mínimo de dos cursos escolares.</b> La suscripción incluye 6 horas de formación al claustro, soporte en horario lectivo, actualizaciones, una visita al año y el borrador de la evaluación de impacto. Claude es opcional. Si lo usáis, el colegio paga su uso directamente a Anthropic, con su propia cuenta.</p>
   </section>
 
   <section>
@@ -259,8 +260,8 @@
 
   <div class="contacto">
     <div>
-      <h2>¿Probamos con vuestra próxima sustitución?</h2>
-      <p class="sub">Os lo enseñamos funcionando en vuestro colegio, con vuestros horarios. Pedidnos una demo.</p>
+      <h2>¿Os lo enseñamos en&nbsp;vuestro colegio?</h2>
+      <p class="sub">Una demo de 45 minutos con una mañana de ejemplo, sin datos reales. Pedidnos una fecha.</p>
     </div>
     <div class="datos">
       <b>[Tu nombre]</b>

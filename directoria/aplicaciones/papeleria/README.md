@@ -12,11 +12,11 @@ Esta carpeta tiene la tarjeta de visita, la firma de correo, el membrete, la pro
 | `firma-correo.png` | 49 KB · 936 × 535 px | Vista previa de la firma, en Arial, que es como la verá la mayoría. |
 | `membrete.docx` | 46 KB · A4 | Membrete para Word, con los estilos de la marca y una carta de ejemplo a la dirección de un colegio: los próximos pasos después de una demo. |
 | `membrete.pdf` | 24 KB · A4, 1 página | El mismo membrete con la misma carta, en PDF. |
-| `membrete.png` | 214 KB · 1241 × 1754 px | Vista previa de `membrete.pdf`, a 150 ppp. |
+| `membrete.png` | 215 KB · 1241 × 1754 px | Vista previa de `membrete.pdf`, a 150 ppp. |
 | `propuesta-comercial.docx` | 136 KB · A4, unas 5 páginas | Plantilla de propuesta comercial: portada y ocho apartados, con los datos que hay que completar entre corchetes. |
-| `hoja-comercial.pdf` | 78 KB · A4, 2 páginas | Hoja comercial para enviar por correo o imprimir. |
-| `hoja-comercial-1.png` · `hoja-comercial-2.png` | 230 KB · 237 KB · 1241 × 1754 px | Vista previa de cada página, a 150 ppp. |
-| `fuente/` | 118 KB | Los archivos que generan todo lo anterior. Ver «Cómo regenerarlo todo». |
+| `hoja-comercial.pdf` | 79 KB · A4, 2 páginas | Hoja comercial para enviar por correo o imprimir. |
+| `hoja-comercial-1.png` · `hoja-comercial-2.png` | 236 KB · 252 KB · 1241 × 1754 px | Vista previa de cada página, a 150 ppp. |
+| `fuente/` | 121 KB | Los archivos que generan todo lo anterior. Ver «Cómo regenerarlo todo». |
 
 ## Antes de usar nada
 
@@ -98,11 +98,11 @@ Esta carpeta tiene la tarjeta de visita, la firma de correo, el membrete, la pro
   - Título 1: Rubik 15 pt.
   - Título 2: Rubik 11,5 pt.
   - Normal: Nunito Sans 10,5 pt, color texto `#41524D`.
-  - Lista con viñetas y Lista con números, con la viñeta o el número en chispa-texto.
-  - Propios: Antetítulo, Destacado, Nota, Tabla y Pie DirectorIA.
+  - Lista con viñetas y Lista con números, con la viñeta o el número en pizarra-linea `#2E5A50`. Los números de los apartados de la propuesta, también. El naranja es solo para la IA: no lo uséis en viñetas, números ni filetes.
+  - Propios: Antetítulo (mayúsculas espaciadas en chispa-texto), Antetítulo con nombre (sin mayúsculas: usadlo si el antetítulo lleva DirectorIA, para que no salga «DIRECTORIA»), Destacado (una frase sobre fondo salvia, sin filete de color a un lado), Nota, Tabla y Pie DirectorIA.
 - **Para usarlo.** Abridlo, cambiad los corchetes y escribid encima de la carta de ejemplo. Para tenerlo como plantilla: «Archivo» → «Guardar como» → «Plantilla de Word (*.dotx)».
-- **Carta de ejemplo.** Es una carta del día a día a la dirección de un colegio: los próximos pasos después de una demo, con una lista numerada y otra de viñetas. No presenta DirectorIA, así que no lleva el logotipo con eslogan.
-- **Cartas de presentación.** Las cartas que presentan DirectorIA a un colegio o a las familias llevan el logotipo con eslogan, como pide el manual del logotipo. En esas cartas:
+- **Carta de ejemplo.** Es una carta del día a día a la dirección de un colegio: los próximos pasos después de una demo, con una lista numerada y otra de viñetas. No presenta DirectorIA, así que no lleva el logotipo con eslogan. La instalación va «en la fecha que acordemos»: no prometáis la fecha que elija el colegio, porque en verano se instala un colegio al día.
+- **Cartas de presentación.** Las cartas que presentan DirectorIA a un colegio llevan el logotipo con eslogan, como pide el manual del logotipo. La información a las familias sobre DirectorIA la da el colegio, que es el responsable del tratamiento, con su propio membrete: DirectorIA le prepara el borrador y, si lleva la marca de DirectorIA, va detrás del escudo del colegio y más pequeña. En las cartas a un colegio:
   1. Borrad el logotipo de la cabecera e insertad en su lugar `logo/png/logo-eslogan-600.png`, a 55 mm de ancho como mínimo. Así su tinta mide 45 mm, el mínimo impreso.
   2. Poned la sangría izquierda de ese párrafo en −0,5 cm, para que la tinta quede alineada con el texto. Cabe en la cabecera sin mover la carta.
 - **El PDF.** `membrete.pdf` es el mismo diseño, hecho desde `fuente/membrete.html`. Sirve para imprimir o para verlo sin Word. `membrete.png` es su vista previa.
@@ -118,19 +118,25 @@ Esta carpeta tiene la tarjeta de visita, la firma de correo, el membrete, la pro
   - Centro, de 41 a 80 docentes: 9.000 € y 1.600 € al mes.
   - Grande, de 81 a 150 docentes: 14.000 € y 2.200 € al mes.
   - El compromiso mínimo es de dos cursos escolares.
+  - La cuota inicial incluye el servidor, que pasa a ser del colegio, y la instalación. Si el colegio lo prefiere, el servidor también se puede pagar mediante alquiler.
+  - La suscripción incluye 6 horas de formación al claustro, soporte en horario lectivo, actualizaciones, una visita al año y el borrador de la evaluación de impacto, que revisa el delegado de protección de datos del colegio y aprueba el colegio. Es la misma lista que en la hoja comercial, la web y la presentación: no añadáis ni quitéis nada en una sola pieza.
+  - Claude: «Claude es opcional. Si lo usáis, el colegio paga su uso directamente a Anthropic, con su propia cuenta.» Sin cifras estimadas de su coste en documentos para clientes.
   - Las condiciones van al mismo tamaño que el resto del texto, sin letra pequeña: no las paséis a una nota al pie.
 - **Privacidad.** Solo hay frases que se pueden demostrar:
-  - la IA trata los datos de los alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos;
+  - la IA trata los datos de vuestros alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos;
   - el colegio sigue siendo el responsable del tratamiento;
-  - DirectorIA entrega los borradores de la evaluación de impacto y del registro de actividades de tratamiento.
+  - DirectorIA entrega los borradores de la evaluación de impacto y del registro de actividades de tratamiento, para que el delegado de protección de datos del colegio los revise y el colegio los apruebe;
+  - el módulo opcional de Claude es solo para preparar material didáctico, no para datos de alumnos.
 
-  No añadáis «riesgo cero» ni «cumplimiento garantizado», y nada sobre el Reglamento europeo de IA sin una revisión legal.
+  No añadáis «riesgo cero» ni «cumplimiento garantizado», y nada sobre el Reglamento europeo de IA sin una revisión legal. Tampoco digáis que los datos «no salen» o «se quedan» en el colegio, ni que Claude «nunca recibe datos»: si hace falta explicarlo, Claude no tiene acceso a los datos del colegio y un filtro está pensado para bloquear datos personales; la norma de uso es no introducirlos.
+- **Próximos pasos.** La demo es de 45 minutos en el colegio, con una mañana de ejemplo y sin datos reales: una sustitución, su ficha y un acta. No la ofrezcáis «con vuestros horarios» ni con una sustitución real. La tabla de pasos no se parte entre dos páginas.
 
 ## Hoja comercial (`hoja-comercial.pdf`)
 
-- **Página 1:** qué es DirectorIA, el eslogan, la ilustración del colegio con su servidor, qué cambia para cada cargo (una línea por cargo) y la privacidad.
-- **Página 2:** cómo empezamos (demo en el colegio, análisis de gastos gratis y antes de firmar, instalación en un día, formación y soporte), los tres planes, lo que no hace y el contacto.
-- **Si cambiáis los pasos de «Cómo empezamos»,** que cada título quepa en una línea y no acabe en preposición. Si alguno pasa a dos líneas, los cuatro textos siguen empezando a la misma altura.
+- **Página 1:** qué es DirectorIA, el eslogan, la ilustración del colegio con su servidor, qué cambia para cada cargo (una línea por cargo) y la privacidad, con quién revisa y quién aprueba la evaluación de impacto.
+- **Página 2:** cómo empezamos (demo de 45 minutos con una mañana de ejemplo y sin datos reales; análisis de gastos gratis y antes de firmar, con facturas y contratos solo de empresas y sin nóminas; instalación en un día; formación y soporte), los tres planes con lo que incluye la suscripción y lo que se paga aparte (Claude, a Anthropic), lo que no hace y el contacto («¿Os lo enseñamos en vuestro colegio?»).
+- **Si cambiáis los pasos de «Cómo empezamos»,** que cada título quepa en una línea y no acabe en preposición, y que ningún texto pase de cuatro líneas: con los textos de ahora quedan unos 10 mm libres sobre el recuadro de contacto. Si alguno pasa a dos líneas, los cuatro textos siguen empezando a la misma altura.
+- **Viñetas y guiones** en pizarra-linea, como en el resto de la marca: el naranja queda para los antetítulos y la IA.
 - **Impresión.** Página blanca con márgenes de 14 mm y sin sangrado, para que salga bien en la impresora de la oficina.
 - **Vuestros datos de contacto:** cambiad los corchetes de `fuente/hoja-comercial.html` y volved a generarla.
 
@@ -156,9 +162,13 @@ Desde la carpeta de la papelería: `bash fuente/construir.sh`. En unos segundos 
 
 **Sin esas herramientas:** abrid el HTML en Chrome → «Imprimir» → destino «Guardar como PDF», márgenes «Ninguno» y «Gráficos de fondo» activado. Sale el mismo diseño, pero sin TrimBox ni BleedBox. Si es la tarjeta, decidle a la imprenta que la página ya incluye 3 mm de sangrado.
 
-## Datos que conviene confirmar
+## Datos fijados
 
-- **Datos sacados de la presentación comercial** (`presentacion/project/slides/`): los nombres y tamaños de los planes, las cuotas iniciales de Centro (9.000 €) y Grande (14.000 €), la demo de 45 minutos, las 6 horas de formación y el soporte en horario lectivo. Confirmadlos antes de enviar una propuesta.
-- **Tramos de los planes.** «Hasta 40», «de 41 a 80» y «de 81 a 150» docentes, igual que en la presentación y en la web, para que ningún colegio quede en dos planes a la vez.
-- **Compromiso.** El compromiso mínimo es de dos cursos escolares, como en la presentación, la web y la identidad verbal.
-- **Oferta para el primer colegio.** La de la presentación no está en estas plantillas.
+Son los mismos en todas las piezas (web, presentación, hoja comercial y propuesta). Si cambia alguno, cambiadlo en todas.
+
+- **Planes y precios, sin IVA.** Básico, hasta 40 docentes: 6.000 € y 1.200 € al mes. Centro, de 41 a 80: 9.000 € y 1.600 € al mes. Grande, de 81 a 150: 14.000 € y 2.200 € al mes. Los tramos no se solapan: ningún colegio queda en dos planes a la vez.
+- **Compromiso.** Mínimo de dos cursos escolares.
+- **La suscripción incluye** 6 horas de formación al claustro, soporte en horario lectivo, actualizaciones, una visita al año y el borrador de la evaluación de impacto (lo revisa el delegado de protección de datos del colegio y lo aprueba el colegio).
+- **Claude** es opcional y solo para material didáctico; si lo usan, el colegio paga su uso directamente a Anthropic, con su propia cuenta.
+- **Demo.** 45 minutos en el colegio, con una mañana de ejemplo y sin datos reales: una sustitución, su ficha y un acta.
+- **Oferta para el primer colegio** (solo el primero): servidor e instalación gratis y suscripción desde el tercer mes; sin compromiso los dos primeros meses y, si sigue, un año desde el tercer mes. No está en estas plantillas: si la ofrecéis, ponedla por escrito en la propuesta de ese colegio.

@@ -5,7 +5,7 @@ Lo usa generar_docx.py (membrete y propuesta comercial). Prepara:
     (+Títulos y +Cuerpo en el selector de fuentes de Word);
   - colores: los de directoria/tokens.json, también como colores del tema;
   - estilos: Normal, Title, Subtitle, Heading 1-3, List Bullet, List Number y algunos propios
-    (Antetítulo, Destacado, Nota, Pie DirectorIA, Tabla);
+    (Antetítulo, Antetítulo con nombre, Destacado, Nota, Pie DirectorIA, Tabla);
   - idioma: español de España (corrector y separadores).
 Si Rubik o Nunito Sans no están instaladas, Word las sustituye por otra fuente sin remates.
 
@@ -198,7 +198,15 @@ def configurar(doc, cuerpo_pt=10.5, interlineado=1.0):
     ant.paragraph_format.keep_with_next = True
     ant.next_paragraph_style = styles['Title']
 
-    # Destacado: una frase importante sobre fondo salvia, con filete chispa-texto a la izquierda
+    # Antetítulo con nombre: el mismo, sin mayúsculas, para los antetítulos que llevan «DirectorIA»
+    # (el nombre nunca se pasa a mayúsculas: «Por qué DirectorIA», no «POR QUÉ DIRECTORIA»)
+    antn = estilo_parrafo(doc, 'Antetítulo con nombre', base='Antetítulo')
+    antn.font.all_caps = False
+    interletraje(antn.element.get_or_add_rPr(), 0.3)
+    antn.next_paragraph_style = styles['Title']
+
+    # Destacado: una frase importante sobre fondo salvia, sin filetes de color (los bordes, del mismo salvia,
+    # solo dan aire alrededor del texto)
     dst = estilo_parrafo(doc, 'Destacado')
     fijar_fuente(dst.element.get_or_add_rPr(), TITULARES)
     dst.font.size = Pt(12)
@@ -212,7 +220,7 @@ def configurar(doc, cuerpo_pt=10.5, interlineado=1.0):
     pf.line_spacing = Pt(16)
     dppr = dst.element.get_or_add_pPr()
     insertar(dppr, sombra(SALVIA))
-    insertar(dppr, bordes_p(left=(CHISPA_TEXTO, 24, 9), top=(SALVIA, 4, 7), bottom=(SALVIA, 4, 7),
+    insertar(dppr, bordes_p(left=(SALVIA, 4, 9), top=(SALVIA, 4, 7), bottom=(SALVIA, 4, 7),
                             right=(SALVIA, 4, 9)))
 
     nota = estilo_parrafo(doc, 'Nota')
@@ -272,7 +280,7 @@ def numeraciones(doc):
             rpr = elemento('rPr')
             fijar_fuente(rpr, fuente)
             insertar(rpr, elemento('b'))
-            insertar(rpr, elemento('color', val=hexa(CHISPA_TEXTO)))
+            insertar(rpr, elemento('color', val=hexa(PIZARRA_LINEA)))  # el naranja es solo para la IA
             lvl.append(rpr)
             a.append(lvl)
         return a

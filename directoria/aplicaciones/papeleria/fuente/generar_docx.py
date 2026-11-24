@@ -84,8 +84,9 @@ def membrete():
     pie_legal(sec.footer.paragraphs[0])
 
     # Carta de ejemplo: una carta del día a día (los pasos después de una demo), no de presentación.
-    # Las cartas que presentan DirectorIA a un colegio o a las familias llevan el logotipo con eslogan
-    # (logo/construccion.md); ver el README.
+    # Las cartas que presentan DirectorIA a un colegio llevan el logotipo con eslogan (logo/construccion.md).
+    # La información a las familias sobre DirectorIA la da el colegio, que es el responsable del
+    # tratamiento; DirectorIA le prepara el borrador. Ver el README.
     p = doc.add_paragraph('[Localidad], [fecha]')
     p.paragraph_format.space_after = Pt(14)
 
@@ -109,7 +110,7 @@ def membrete():
              'Antes del [fecha] os enviamos la propuesta para [Nombre del colegio]: qué incluye, cuánto cuesta '
              'y qué compromiso os pedimos, sin letra pequeña.'),
             ('Instalación y formación.',
-             'Si decidís seguir, instalamos el servidor en un día, en la fecha que elijáis, y damos 6 horas de '
+             'Si decidís seguir, instalamos el servidor en un día, en la fecha que acordemos, y damos 6 horas de '
              'formación al claustro.')):
         con_entradilla(doc, entradilla, texto, estilo='List Number')
 
@@ -145,7 +146,7 @@ def membrete():
 
 def h1(doc, numero, texto):
     p = doc.add_paragraph(style='Heading 1')
-    m.run(p, '%d' % numero, color=m.CHISPA_TEXTO)
+    m.run(p, '%d' % numero, color=m.PIZARRA_LINEA)
     m.run(p, ' ' + texto)
     return p
 
@@ -295,8 +296,8 @@ def propuesta():
         ('Cada docente', [
             'Su propio asistente: dicta un correo y le llega redactado, listo para revisarlo y enviarlo.',
             'Sus plazos a la vista, con aviso antes de que venzan.',
-            'Opcional: el módulo de Claude, en la nube, para preparar material didáctico. Es solo para '
-            'material didáctico, no para datos de alumnos.']),
+            'Opcional: el módulo de Claude, en la nube, solo para preparar material didáctico, no para datos '
+            'de alumnos.']),
     ]
     for cargo, puntos in roles:
         doc.add_paragraph(cargo, style='Heading 2')
@@ -312,12 +313,12 @@ def propuesta():
     # ---------------------------------------------------------- 3. Privacidad
     h1(doc, 3, 'Privacidad y protección de datos')
     con_entradilla(doc, 'Dentro del colegio.',
-                   'La IA trata los datos de los alumnos en un servidor dentro del colegio, sin transferencias '
-                   'internacionales de esos datos.')
+                   'La IA trata los datos de vuestros alumnos en un servidor dentro del colegio, sin '
+                   'transferencias internacionales de esos datos.')
     con_entradilla(doc, 'El responsable es el colegio.',
                    'El colegio sigue siendo el responsable del tratamiento. DirectorIA os entrega los borradores '
                    'de la evaluación de impacto (EIPD) y del registro de actividades de tratamiento, para que '
-                   'vuestro delegado de protección de datos los revise.')
+                   'vuestro delegado de protección de datos los revise y el colegio los apruebe.')
     con_entradilla(doc, 'Decide una persona.',
                    'La IA propone y una persona del colegio decide. Nunca evalúa, puntúa ni clasifica a ningún '
                    'alumno.')
@@ -327,11 +328,13 @@ def propuesta():
 
     # ---------------------------------------------------------- 4. Instalación y formación
     h1(doc, 4, 'Instalación y formación')
-    con_entradilla(doc, 'Llave en mano.', 'La cuota inicial incluye el servidor y su instalación en el colegio.')
+    con_entradilla(doc, 'Llave en mano.',
+                   'La cuota inicial incluye el servidor, que pasa a ser vuestro, y su instalación en el colegio. '
+                   'Si lo preferís, el servidor también se puede pagar mediante alquiler.')
     con_entradilla(doc, 'Instalación en un día.',
                    'El servidor llega montado. Ese día lo instalamos, cargamos los datos del centro y creamos '
                    'los usuarios.')
-    con_entradilla(doc, 'Formación.', '6 horas de formación para el claustro.')
+    con_entradilla(doc, 'Formación.', '6 horas de formación al claustro.')
     con_entradilla(doc, 'Soporte.', 'En horario lectivo.')
     con_entradilla(doc, 'Fecha prevista de instalación:', '[fecha].')
 
@@ -355,8 +358,14 @@ def propuesta():
     p.paragraph_format.space_before = Pt(8)
     p.paragraph_format.keep_with_next = True
     m.run(p, 'Precios sin IVA. Compromiso mínimo de dos cursos escolares.', bold=True, color=m.PIZARRA)
-    doc.add_paragraph('La cuota inicial se paga una vez; la suscripción, cada mes. El módulo opcional de Claude '
-                      'no está incluido: si lo activáis, su uso se paga aparte, en la cuenta del colegio.')
+    m.run(p, ' La cuota inicial se paga una vez; la suscripción, cada mes.')
+    # Lo que incluye la suscripción: la misma lista en todas las piezas (web, presentación y hoja comercial)
+    con_entradilla(doc, 'La suscripción incluye',
+                   '6 horas de formación al claustro, soporte en horario lectivo, actualizaciones, una visita al '
+                   'año y el borrador de la evaluación de impacto, que revisa vuestro delegado de protección de '
+                   'datos y aprueba el colegio.')
+    doc.add_paragraph('Claude es opcional. Si lo usáis, el colegio paga su uso directamente a Anthropic, con su '
+                      'propia cuenta.')
     con_entradilla(doc, 'Plan propuesto para [Nombre del colegio]:',
                    '[Básico / Centro / Grande], para [n.º de docentes] docentes.')
 
@@ -376,14 +385,19 @@ def propuesta():
     # ---------------------------------------------------------- 7. Próximos pasos
     h1(doc, 7, 'Próximos pasos')
     pasos = [
-        ('1', 'Demo en vuestro colegio: 45 minutos con una mañana real, una sustitución y un acta.'),
+        ('1', 'Demo de 45 minutos en vuestro colegio con una mañana de ejemplo, sin datos reales: una '
+              'sustitución, su ficha y un acta.'),
         ('2', 'Análisis de gastos gratuito: nos pasáis facturas y contratos y os entregamos el informe.'),
         ('3', 'Firma de la propuesta y del contrato.'),
         ('4', 'Instalación en un día.'),
         ('5', 'Formación del claustro y puesta en marcha.'),
     ]
-    filas = [((n, {'bold': True, 'color': m.CHISPA_TEXTO, 'fuente': m.TITULARES}), q, '[fecha]') for n, q in pasos]
-    tabla_simple(doc, ['', 'Qué', 'Cuándo'], filas, [10, 120, 30], cabecera_oscura=False)
+    filas = [((n, {'bold': True, 'color': m.PIZARRA_LINEA, 'fuente': m.TITULARES}), q, '[fecha]') for n, q in pasos]
+    t = tabla_simple(doc, ['', 'Qué', 'Cuándo'], filas, [10, 120, 30], cabecera_oscura=False)
+    for row in t.rows[:-1]:  # los pasos no se parten entre dos páginas
+        for c in row.cells:
+            for q in c.paragraphs:
+                q.paragraph_format.keep_with_next = True
 
     # ---------------------------------------------------------- 8. Firma
     h1(doc, 8, 'Firma')

@@ -203,8 +203,8 @@
     },
     "nube-claude.svg": {
      "name": "nube-claude.svg",
-     "blob": "a5183af0de51df628b4dfef42b36cc89",
-     "size": 1666,
+     "blob": "b3b2686a8a75ebb75d2be1385100ff0e",
+     "size": 1698,
      "type": "image/svg+xml"
     },
     "direccion.svg": {
@@ -348,8 +348,8 @@
     },
     "vista-general.png": {
      "name": "vista-general.png",
-     "blob": "daa7fc7b7529a4bc04c9cc4ff48d83ce",
-     "size": 637476,
+     "blob": "06333c18e3230d782ecf712c5e485582",
+     "size": 705098,
      "type": "image/png"
     }
    }
@@ -362,8 +362,8 @@
  },
  "lastChange": {
   "by": "Claude",
-  "at": "2026-11-24T20:38:05Z",
+  "at": "2026-11-24T22:50:21Z",
   "via": "Claude Code",
-  "note": "Primera versión del sistema de la marca DirectorIA"
+  "note": "Presentación de 27 diapositivas, con el banco de recursos del claustro"
  }
 }

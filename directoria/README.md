@@ -13,7 +13,7 @@ Si vais a crear algo nuevo, empezad por el manual de marca (`manual/manual-de-ma
 | `ilustraciones/` | Las 21 ilustraciones de la marca en SVG y su generador. | `LEEME.md` · `kit.png` |
 | `fuentes/` | Rubik y Nunito Sans en woff2, con su licencia SIL OFL, para alojarlas en la web. | `fuentes.css` |
 | `tokens.json` | Los colores y las tipografías con sus usos. | — |
-| `presentacion/` | Las fuentes de la presentación comercial (25 diapositivas) y `vista-general.png`. La presentación se edita y se descarga en PowerPoint o PDF desde el mazo de Slides. | `vista-general.png` |
+| `presentacion/` | Las fuentes de la presentación comercial (27 diapositivas) y `vista-general.png`. La presentación se edita y se descarga en PowerPoint o PDF desde el mazo de Slides. | `vista-general.png` |
 | `web/` | La web: portada, privacidad y aviso legal, con favicon, iconos e imagen para compartir. Sin cookies ni fuentes externas. | `README.md` |
 | `aplicaciones/papeleria/` | Tarjeta de visita, firma de correo, membrete, propuesta comercial y hoja comercial, con sus generadores. | `README.md` |
 | `aplicaciones/redes/` | Avatar, banner de LinkedIn, cabecera de X, imagen para compartir y dos publicaciones, con sus fuentes HTML. | `README.md` |

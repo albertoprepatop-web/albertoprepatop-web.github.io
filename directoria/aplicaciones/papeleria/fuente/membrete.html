@@ -8,7 +8,9 @@
   /*
     Membrete de DirectorIA en A4, con la misma carta de ejemplo que membrete.docx: una carta del día
     a día (los pasos después de una demo), que no presenta DirectorIA. Las cartas que presentan
-    DirectorIA a un colegio o a las familias llevan el logotipo con eslogan (ver el README).
+    DirectorIA a un colegio llevan el logotipo con eslogan. La información a las familias sobre
+    DirectorIA la da el colegio, que es el responsable del tratamiento; DirectorIA le prepara el
+    borrador (ver el README).
     Márgenes como en Word: 40 mm arriba, 28 mm abajo, 25 mm a los lados.
     El logotipo horizontal mide 36,9 mm de tinta (lo mismo que el PNG de 600 px colocado a 45 mm,
     que lleva 1 x de margen transparente por lado) y su tinta empieza en el margen izquierdo.
@@ -19,7 +21,7 @@
     --pizarra: #17322C;
     --texto: #41524D;
     --linea: #D5DED9;
-    --chispa-texto: #B4531C;
+    --pizarra-linea: #2E5A50;
   }
   html, body { margin: 0; padding: 0; background: #FFFFFF; }
   body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
@@ -44,14 +46,15 @@
   li { position: relative; padding-left: 5mm; margin: 0 0 4pt; }
   ul li::before {
     content: "•"; position: absolute; left: 0; top: 0;
-    font-weight: 700; color: var(--chispa-texto);
+    font-weight: 700; color: var(--pizarra-linea);
   }
-  /* Lista con números, como en Word: el número en Rubik 700 y chispa-texto, el texto a 5 mm */
+  /* Lista con números, como en Word: el número en Rubik 700 y pizarra-linea, el texto a 5 mm.
+     Viñetas y números van en pizarra-linea: el naranja es solo para la IA. */
   ol { counter-reset: paso; }
   ol li { counter-increment: paso; }
   ol li::before {
     content: counter(paso) "."; position: absolute; left: 0; top: 0;
-    font-family: 'Rubik', Arial, sans-serif; font-weight: 700; color: var(--chispa-texto);
+    font-family: 'Rubik', Arial, sans-serif; font-weight: 700; color: var(--pizarra-linea);
   }
   li strong { color: var(--pizarra); font-weight: 700; }
   .saludo { margin-top: 4pt !important; margin-bottom: 30pt !important; }
@@ -81,7 +84,7 @@
     <ol>
       <li><strong>Análisis de gastos gratuito.</strong> Analizamos vuestras facturas y contratos, y el [fecha] os entregamos un informe con el ahorro posible, partida por partida. El informe es vuestro, firméis o no.</li>
       <li><strong>Propuesta por escrito.</strong> Antes del [fecha] os enviamos la propuesta para [Nombre del colegio]: qué incluye, cuánto cuesta y qué compromiso os pedimos, sin letra pequeña.</li>
-      <li><strong>Instalación y formación.</strong> Si decidís seguir, instalamos el servidor en un día, en la fecha que elijáis, y damos 6 horas de formación al claustro.</li>
+      <li><strong>Instalación y formación.</strong> Si decidís seguir, instalamos el servidor en un día, en la fecha que acordemos, y damos 6 horas de formación al claustro.</li>
     </ol>
 
     <h2>Qué necesitamos de vosotros</h2>
