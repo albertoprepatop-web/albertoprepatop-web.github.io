@@ -27,8 +27,8 @@ const C = { pizarra: '#17322C', tiza: '#F6F3EC', chispa: '#E07A3A', chispaTexto:
 // ---------- Parámetros del isotipo (unidades sobre una caja de 100) ----------
 export const SIM = {
   xn: 27,          // eje de la aguja
-  yT: 4.5, yB: 95.5, // puntas de la aguja (sobrepasan 1,8 u el cuenco una vez redondeadas: compensación óptica)
-  hw: 13,          // semiancho de la aguja en su centro (aguja de 26 × 91: legible a 16 px)
+  yT: 4.5, yB: 95.5, // puntas de la aguja (rebasan casi 2 u el cuenco una vez redondeadas: compensación óptica)
+  hw: 13,          // semiancho de la aguja en su centro (aguja visible de 26 × 88)
   tipR: 0.6,       // radio de las puntas
   yt: 8, yb: 92,   // alto exterior del cuenco
   xr: 88,          // lado derecho del cuenco
