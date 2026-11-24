@@ -9,7 +9,7 @@ Todos los archivos están en el grupo **Logos**. Las láminas `construccion.png`
 | Versión | Archivos | Cuándo |
 |---|---|---|
 | Horizontal | `logo-horizontal.svg` · `logo-horizontal-negativo.svg` | La principal: web, presentaciones, dossier y señalética. |
-| Con eslogan | `logo-eslogan.svg` · `logo-eslogan-negativo.svg` | Piezas institucionales: portada de la web, dossier, cartas que presentan DirectorIA a un colegio o a las familias, documentos para la Inspección. |
+| Con eslogan | `logo-eslogan.svg` · `logo-eslogan-negativo.svg` | Piezas institucionales: portada de la web, dossier, cartas que presentan DirectorIA a un colegio (la información a las familias la firma el colegio, con su escudo delante), documentos para la Inspección. |
 | Solo la palabra | `logotipo.svg` · `logotipo-negativo.svg` | Cartas y documentos del día a día, pies de página, firmas de correo y textos legales. También donde el símbolo ya está cerca, como en la app. |
 | Vertical | `logo-vertical.svg` · `logo-vertical-negativo.svg` | Formatos cuadrados o estrechos: portadas, carteles, lonas y perfiles. |
 | Isotipo | `isotipo.svg` · `isotipo-negativo.svg` | El símbolo solo, desde 32 px: sello, marca de agua, esquina de las diapositivas, cabecera de la app. |

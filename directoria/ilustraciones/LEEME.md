@@ -24,7 +24,7 @@ Veintiuna ilustraciones planas para contar, desde la primera diapositiva, cómo 
 | `colegio-servidor.svg` | **La imagen clave.** Es el mismo edificio que `colegio`, con la puerta en arco en su sitio. Por el ventanal del cuerpo central se ve una sala, con pared del fondo, paredes laterales y suelo, y en ella está el servidor: el mismo de `servidor.svg` a media escala (con el panel de la chispa un poco más alto, para que la chispa se vea bien a 96 px) y con su chispa naranja, el único naranja de la imagen. Es «Vuestra IA, dentro del colegio». |
 | `servidor.svg` | Una torre en pizarra con la chispa naranja en la ventana, dos bahías y un escudo con cerradura. Es el servidor que vive en el colegio y guarda los datos. |
 | `colegio.svg` | Un colegio español: alas con tejado de pizarra y ventanas altas, y un cuerpo central con frontón curvo, reloj a las ocho, un ventanal de cuarterones y la puerta en arco. |
-| `nube-claude.svg` | Una nube con un libro abierto, que representa el material didáctico. Es el módulo opcional, que está fuera del colegio y no lleva naranja. Solo recibe peticiones de material didáctico, sin datos personales. |
+| `nube-claude.svg` | Una nube con un libro abierto, que representa el material didáctico. Es el módulo opcional, que está fuera del colegio y no lleva naranja. Solo recibe peticiones de material didáctico, con un filtro pensado para bloquear datos personales. |
 
 ### Personas
 
@@ -69,7 +69,7 @@ Veintiuna ilustraciones planas para contar, desde la primera diapositiva, cómo 
   - alrededor, las personas del colegio (`direccion`, `jefatura`, `secretaria`, `docente`, `orientacion`, `sustituto`), unidas al centro con líneas finas en pizarra-linea;
   - sobre esas líneas, en pequeño, lo que les llega: `documento-ia` a dirección, `ficha` al sustituto, etc.;
   - más lejos, fuera del colegio, `familia`, que recibe `circular` o `correo`;
-  - `nube-claude` aparte, unida con una línea discontinua y la etiqueta «solo material didáctico, sin datos personales».
+  - `nube-claude` aparte, unida con una línea discontinua y la etiqueta «solo peticiones de material didáctico, con un filtro pensado para bloquear datos personales».
 - **Parejas que cuentan una función de un vistazo:**
   - `sustituto` + `ficha`: ausencia cubierta, sustituto informado;
   - `direccion` + `reloj` + `documento-ia`: el resumen del día a las ocho;

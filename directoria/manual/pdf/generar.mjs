@@ -85,7 +85,7 @@ const lamTipos = `<div class="ty">
 const escala = g => `<table class="esc"><thead><tr><th>Estilo</th><th>Tamaño</th><th>Peso · interlineado</th><th>Muestra</th></tr></thead><tbody>${g.styles.map(s => {
   const fam = (s.family || g.family) === 'titulares' ? 'var(--font-titulares)' : 'var(--font-texto)';
   const px = parseFloat(s.fontSize); const vista = Math.min(px, 30);
-  const may = /antetitulo/.test(s.name) ? 'text-transform:uppercase;' : '';
+  const may = /^(diapo|doc)-antetitulo$/.test(s.name) ? 'text-transform:uppercase;' : '';
   return `<tr><td><code>${s.name}</code></td><td>${s.fontSize}${px > 30 ? '<br><small>(muestra reducida)</small>' : ''}</td><td>${s.fontWeight} · ${s.lineHeight}</td><td><span style="font-family:${fam};font-size:${vista}px;font-weight:${s.fontWeight};line-height:1.2;${s.letterSpacing ? `letter-spacing:${s.letterSpacing};` : ''}${may}color:${C.pizarra}">${s.sample.replace('CÓMO FUNCIONA', 'Cómo funciona').replace('PROPUESTA', 'Propuesta')}</span></td></tr>`; }).join('')}</tbody></table>`;
 const lamEscalas = tk.type.groups.map(g => `<h3>Escala ${g.name.toLowerCase()}</h3>${escala(g)}`).join('');
 
@@ -177,14 +177,15 @@ code.tk i { display: inline-block; width: 7pt; height: 7pt; border-radius: 50%; 
 .ty-fam { font: 700 8pt "Nunito Sans", Arial, sans-serif !important; letter-spacing: .08em; text-transform: uppercase; color: ${C['chispa-texto']} !important; }
 .ty-abc { color: ${C.texto}; }
 table.esc td { vertical-align: middle; }
-.il-rej { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6pt; margin: 4pt 0 14pt; }
+.esc small { font-size: 7.5pt; }
+.il-rej { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6pt; margin: 4pt 0 14pt; }
 .il-rej figure { margin: 0; text-align: center; break-inside: avoid; }
 .il-rej img { width: 100%; aspect-ratio: 1; display: block; }
-.il-rej figcaption { font-size: 6.8pt; font-weight: 700; color: ${C.texto}; }
-.pz-rej { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; margin: 6pt 0 10pt; zoom: .62; }
+.il-rej figcaption { font-size: 7.5pt; font-weight: 700; color: ${C.texto}; }
+.pz-rej { display: grid; grid-template-columns: 1fr 1fr; gap: 10pt; margin: 6pt 0 10pt; zoom: .75; }
 .pz-rej.pz-2 { grid-template-columns: 1fr 1fr; } .pz-rej.pz-1 { grid-template-columns: 1fr; width: 60%; }
 .pz { margin: 0; break-inside: avoid; border: 1px solid ${C.linea}; border-radius: 10pt; overflow: hidden; background: ${C.tiza}; }
-.pz figcaption { font: 700 13px "Nunito Sans", Arial, sans-serif; color: ${C.texto}; padding: 8px 14px; border-top: 1px solid ${C.linea}; background: ${C.papel}; }
+.pz figcaption { font: 700 14px "Nunito Sans", Arial, sans-serif; color: ${C.texto}; padding: 8px 14px; border-top: 1px solid ${C.linea}; background: ${C.papel}; }
 .ap { margin: 6pt 0 12pt; break-inside: avoid; text-align: center; }
 .ap img { display: block; margin: 0 auto; width: auto; height: auto; max-height: 215mm; border-radius: 6pt; border: 1px solid ${C.linea}; }
 .ap-2 .ap img { max-height: 120mm; }

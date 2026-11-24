@@ -23,7 +23,7 @@ Veintiuna ilustraciones planas cuentan cómo funciona DirectorIA: un servidor de
 - **Sin retoques:** no se recolorean, no se deforman, no se giran y no se les quita el disco.
 - **Textos alternativos** que describen qué hace la persona o qué muestra el dibujo: «Profesor sustituto con su ficha», «Colegio con el servidor de DirectorIA dentro».
 - **Del colegio al servidor.** `colegio` y `colegio-servidor` son el mismo edificio. Una después de otra, el ventanal «se abre» y deja ver el servidor.
-- **«Así funciona».** `colegio-servidor` grande en el centro, sobre un halo `salvia`. Alrededor, las personas, unidas al centro con conectores `pizarra-linea` de 3 px. `familia` va más lejos, fuera del colegio, y `nube-claude` aparte, con una línea discontinua y la etiqueta «solo material didáctico, sin datos personales».
+- **«Así funciona».** `colegio-servidor` grande en el centro, sobre un halo `salvia`. Alrededor, las personas, unidas al centro con conectores `pizarra-linea` de 3 px. `familia` va más lejos, fuera del colegio, y `nube-claude` aparte, con una línea discontinua y la etiqueta «solo peticiones de material didáctico, con un filtro pensado para bloquear datos personales».
 - **Parejas que cuentan una función de un vistazo:**
   - `sustituto` y `ficha`: ausencia cubierta, sustituto informado.
   - `direccion`, `reloj` y `documento-ia`: el resumen del día a las ocho.

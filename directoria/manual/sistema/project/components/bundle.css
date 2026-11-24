@@ -22,6 +22,7 @@
 .tarjeta { display: grid; gap: 1rem; padding: clamp(1.25rem, .75rem + 2.5vw, 2.5rem); border: 1px solid var(--borde); border-radius: var(--radio-l); background: var(--superficie); }
 .tarjeta-ilustracion { display: block; width: 6rem; height: 6rem; }
 .tarjeta-nombre { margin: 0; font-family: var(--font-texto); font-size: .9375rem; font-weight: 700; color: var(--acento); }
+[data-theme="oscuro"] .tarjeta-nombre { color: var(--tinta); }   /* chispa sobre pizarra-2 se queda en 3,6:1: en oscuro, el nombre va en tinta */
 .tarjeta-titulo { margin: 0; font-family: var(--font-titulares); font-size: clamp(1.375rem, 1.2rem + .7vw, 1.75rem); font-weight: 600; line-height: 1.18; letter-spacing: -.01em; color: var(--tinta); text-wrap: balance; }
 .tarjeta-texto { margin: 0; font-family: var(--font-texto); font-size: 1.0625rem; line-height: 1.6; color: var(--cuerpo); }
 
@@ -54,8 +55,8 @@
 .ficha-origen { display: flex; align-items: center; gap: .5rem; margin-top: .375rem; font-size: .875rem; color: var(--texto); }
 .ficha-origen .insignia { width: 1.125rem; height: 1.125rem; box-shadow: none; }
 .ficha-datos { display: grid; gap: 1rem; margin-top: 1.125rem; }
-.ficha-datos dt { font-size: .8125rem; font-weight: 700; letter-spacing: .02em; color: var(--chispa-texto); }
+.ficha-datos dt { font-size: .875rem; font-weight: 700; letter-spacing: .02em; color: var(--chispa-texto); }
 .ficha-datos dd { margin-top: .125rem; font-size: .96875rem; line-height: 1.5; color: var(--pizarra); }
 .ficha-aviso { padding: .875rem 1rem; border-radius: var(--radio); background: var(--chispa-suave); }
 .ficha-aviso dt { color: var(--pizarra); }
-.ficha-pie { margin-top: 1.125rem; padding-top: .875rem; border-top: 1px solid var(--linea); font-size: .8125rem; color: var(--texto); }
+.ficha-pie { margin-top: 1.125rem; padding-top: .875rem; border-top: 1px solid var(--linea); font-size: .875rem; color: var(--texto); }

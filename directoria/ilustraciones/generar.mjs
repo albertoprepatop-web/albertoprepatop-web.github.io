@@ -349,7 +349,7 @@ save('colegio-servidor', 'Colegio con el servidor de DirectorIA dentro, a la vis
     s += stroke(`M${cx - 29} ${y}C${cx - 22} ${y - 3} ${cx - 15} ${y - 3} ${cx - 9} ${y}`, C.pizarraLinea, 3.2);
     s += stroke(`M${cx + 9} ${y}C${cx + 15} ${y - 3} ${cx + 22} ${y - 3} ${cx + 29} ${y}`, C.pizarraLinea, 3.2);
   });
-  save('nube-claude', 'Nube opcional, fuera del colegio: solo recibe peticiones de material didáctico, sin datos personales', s);
+  save('nube-claude', 'Nube opcional, fuera del colegio: solo recibe peticiones de material didáctico, con un filtro pensado para bloquear datos personales', s);
 }
 
 // ───────────────────────── documentos e iconos ─────────────────────────

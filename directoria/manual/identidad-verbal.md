@@ -8,7 +8,7 @@ Cómo habla DirectorIA: qué decimos, cómo lo decimos y cómo se escribe el nom
 
 **Descriptor:** IA para dirección y claustro
 
-**Por qué este eslogan.** Dice en cinco palabras qué es (una IA), de quién es (vuestra) y dónde está (dentro del colegio). Cuenta la privacidad con un hecho que cualquiera puede comprobar, no con una promesa legal, y una herramienta en la nube no puede decir lo mismo. Repite la «IA» del final del nombre, así que ayuda a leer DirectorIA como «Director» + «IA», y se dice bien en voz alta, de un tirón. Es la versión corta del titular de la portada de la presentación comercial («Vuestra propia IA, dentro del colegio»). Cuando haga falta una segunda línea: «La IA propone. Vosotros decidís».
+**Por qué este eslogan.** Dice en cinco palabras qué es (una IA), de quién es (vuestra) y dónde está (dentro del colegio). Cuenta la privacidad con un hecho que cualquiera puede comprobar, no con una promesa legal, y una herramienta en la nube no puede decir lo mismo. Repite la «IA» del final del nombre, así que ayuda a leer DirectorIA como «Director» + «IA», y se dice bien en voz alta, de un tirón. Es la versión corta del titular de la portada de la web («Vuestra propia IA, dentro del colegio»). Cuando haga falta una segunda línea: «La IA propone. Vosotros decidís».
 
 **Alternativas** para campañas y segundas líneas:
 
@@ -137,7 +137,7 @@ DirectorIA, empresa de la Comunidad de Madrid, instala en colegios privados y co
 
 5. **Llave en mano, sin letra pequeña**
 
-   Incluye servidor, instalación, borrador de la evaluación de impacto, formación y soporte. El compromiso mínimo es de dos cursos, por escrito y sin asteriscos. Para el primer colegio, el colegio pionero, hay una oferta propia: sin compromiso en los dos primeros meses y, si sigue, un año.
+   Incluye servidor, instalación, borrador de la evaluación de impacto, formación y soporte. El compromiso mínimo es de dos cursos, por escrito y sin asteriscos. Para el primer colegio, el colegio pionero, hay una oferta propia: servidor e instalación gratis y suscripción desde el tercer mes; si en los dos primeros meses no está contento, se va sin compromiso, y si sigue, se compromete un año desde el tercer mes. Hasta completarlo, el servidor sigue siendo de DirectorIA.
 
 ## Frases para la web
 

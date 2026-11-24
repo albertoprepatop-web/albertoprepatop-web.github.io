@@ -67,9 +67,9 @@ Es lo primero que pregunta un director, y su delegado de protección de datos re
 - **Sí:** «Os damos un borrador de la evaluación de impacto; la revisa vuestro delegado y la aprueba el colegio».
 - **Sí:** «Diseñado para quedar fuera de los usos de alto riesgo del Reglamento europeo de IA: no evalúa, puntúa ni clasifica a ningún alumno».
 - **No:** decir que ChatGPT, Gemini o Copilot están prohibidos en los colegios, ni que la ley obliga a tratar los datos en la Unión Europea. Las dos cosas son falsas: sus versiones de empresa o educativas pueden usarse con las garantías que pide la ley.
-- **No:** «los datos de vuestros alumnos no salen del colegio» como frase absoluta. El correo sale por la cuenta del colegio, el resumen y la ficha llegan a los dispositivos de cada persona y hay soporte técnico. Solo se podrá decir si el contrato y la descripción técnica lo garantizan por escrito.
+- **No:** «los datos de vuestros alumnos no salen del colegio» como frase absoluta. El correo sale por la cuenta del colegio, el resumen y la ficha llegan a los dispositivos de cada persona y hay soporte técnico. No se dice en ningún caso: usad la fórmula de arriba.
 - **No:** «cumplimiento garantizado», «riesgo cero», «certificado RGPD», ni citar multas a otros colegios.
-- **El módulo de Claude** es opcional y solo para material didáctico, sin datos personales. Lo contrata el colegio en su propia cuenta y lo paga a Anthropic.
+- **El módulo de Claude** es opcional y solo para material didáctico: no tiene acceso a los datos del colegio y un filtro está pensado para bloquear datos personales. Lo contrata el colegio con su propia cuenta comercial y lo paga a Anthropic. No digáis que «nunca recibe datos personales».
 
 ## Cómo se escribe DirectorIA
 

@@ -10,7 +10,7 @@ Sistema definitivo del logotipo de DirectorIA, a partir del concepto «Norte», 
 - **Una brújula orienta, pero no conduce.** Así se cuenta el símbolo: **«La IA orienta; vosotros decidís»**. Es la versión gráfica de la segunda línea de la marca, «La IA propone. Vosotros decidís».
 - **Lo que nunca se dice:** «la IA marca el rumbo», «la IA dirige» o «la IA decide». El rumbo lo marca el equipo directivo.
 - **El símbolo no cuenta que el servidor está en el colegio.** Eso lo dice el eslogan, «Vuestra IA, dentro del colegio». Por eso las piezas institucionales llevan la versión con eslogan.
-- **Líneas de campaña posibles** (no sustituyen al eslogan): «Un curso con norte» y «Orienta sin salir del colegio».
+- **Líneas de campaña posibles** (no sustituyen al eslogan): «Un curso con norte». Las demás están en la identidad verbal (`manual/identidad-verbal.md`).
 
 ## Qué cambia respecto a la propuesta del concurso
 
@@ -40,7 +40,7 @@ Son las mejoras que pidió el jurado, aplicadas sin cambiar la idea.
 | `logo-horizontal-mono-pizarra.svg` | A una tinta oscura: fotocopia, fax, sello, grabado. |
 | `logo-horizontal-mono-tiza.svg` | A una tinta clara: sobre fotos oscuras o fondos oscuros fuera de la paleta. |
 | `logo-vertical.svg` · `logo-vertical-negativo.svg` | Formatos cuadrados o estrechos: portadas, carteles, lonas, perfiles. |
-| `logo-eslogan.svg` · `logo-eslogan-negativo.svg` | Piezas institucionales: portada de la web, dossier, presentación comercial, carta de presentación a un colegio o a las familias, documentos para la Inspección. |
+| `logo-eslogan.svg` · `logo-eslogan-negativo.svg` | Piezas institucionales: portada de la web, dossier, presentación comercial, carta de presentación a un colegio, documentos para la Inspección. |
 | `logotipo.svg` · `logotipo-negativo.svg` · `logotipo-mono-pizarra.svg` · `logotipo-mono-tiza.svg` | Solo la palabra: cartas, documentos, pies de página, firmas de correo, textos legales, y donde el símbolo ya está presente (app, favicon). |
 | `isotipo.svg` · `isotipo-negativo.svg` · `isotipo-mono-pizarra.svg` · `isotipo-mono-tiza.svg` | El símbolo solo, desde 32 px: sello, marca de agua, cabecera de la app. |
 | `favicon.svg` | Pestañas del navegador y accesos directos, de 16 a 48 px. |
@@ -204,7 +204,7 @@ El kit de marca no fija equivalencias CMYK ni Pantone. Antes de la primera tirad
 - **Partir siempre de los archivos de esta carpeta**, sin redibujar ni recomponer. Las proporciones están medidas y las compensaciones ópticas no se ven a simple vista.
 - **Usar el positivo sobre claro y el negativo sobre pizarra.** Para fotocopia, sello, grabado o fotos, la versión a una tinta. Es lo que garantiza el contraste.
 - **Usar la palabra sola en las cartas y documentos del día a día, los pies de página y las firmas de correo.** Evita la lectura «D DirectorIA», no compite con el escudo del colegio y se lee mejor en pequeño.
-- **Usar la versión con eslogan en las piezas institucionales**, también en las cartas que presentan DirectorIA a un colegio o a las familias. El símbolo habla de orientarse, no de dónde están los datos: eso lo cuenta «Vuestra IA, dentro del colegio».
+- **Usar la versión con eslogan en las piezas institucionales**, también en las cartas que presentan DirectorIA a un colegio. La información a las familias la da el colegio con su membrete; si lleva la marca de DirectorIA, va detrás del escudo del colegio y más pequeña. El símbolo habla de orientarse, no de dónde están los datos: eso lo cuenta «Vuestra IA, dentro del colegio».
 - **Usar el símbolo solo donde la palabra no cabe o ya está cerca:** favicon, icono de la app, avatar, sello y marca de agua.
 - **Por debajo de 32 px, usar `favicon.svg`; por encima de 48 px, el isotipo o el icono de app.** Cada dibujo está pensado para su tamaño.
 - **Dejar que el colegio mande cuando aparece su escudo.** DirectorIA es su herramienta.
