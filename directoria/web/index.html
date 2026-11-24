@@ -111,7 +111,7 @@
 
       <div class="mapa">
         <svg class="mapa-lineas" viewBox="0 0 1200 760" preserveAspectRatio="none" aria-hidden="true" focusable="false">
-          <g stroke="#2E5A50" stroke-opacity="0.45" stroke-width="1.5" fill="none" vector-effect="non-scaling-stroke">
+          <g stroke="#2E5A50" stroke-width="3" fill="none" vector-effect="non-scaling-stroke">
             <line x1="430" y1="380" x2="150" y2="190" vector-effect="non-scaling-stroke"/>
             <line x1="430" y1="380" x2="430" y2="190" vector-effect="non-scaling-stroke"/>
             <line x1="430" y1="380" x2="710" y2="190" vector-effect="non-scaling-stroke"/>
@@ -119,7 +119,7 @@
             <line x1="430" y1="380" x2="430" y2="570" vector-effect="non-scaling-stroke"/>
             <line x1="430" y1="380" x2="710" y2="570" vector-effect="non-scaling-stroke"/>
           </g>
-          <line x1="430" y1="380" x2="1050" y2="230" stroke="#2E5A50" stroke-opacity="0.7" stroke-width="1.5" stroke-dasharray="6 7" vector-effect="non-scaling-stroke"/>
+          <line x1="430" y1="380" x2="1050" y2="230" stroke="#2E5A50" stroke-width="3" stroke-dasharray="6 7" vector-effect="non-scaling-stroke"/>
         </svg>
 
         <div class="mapa-dentro">
@@ -161,7 +161,7 @@
           <ul class="mapa-externos" role="list" aria-label="Fuera del colegio">
             <li class="mp mp-nube">
               <img src="img/ilustraciones/nube-claude.svg" alt="" width="96" height="96">
-              <p><strong>Módulo de Claude, opcional</strong> Solo peticiones de material didáctico, sin datos de alumnos</p>
+              <p><strong>Módulo de Claude, opcional</strong> Solo peticiones de material didáctico, con un filtro pensado para bloquear datos personales</p>
             </li>
             <li class="mp mp-familia">
               <img src="img/ilustraciones/familia.svg" alt="" width="96" height="96">
@@ -353,7 +353,7 @@
               </li>
               <li class="cambio">
                 <p class="antes"><span class="etiqueta-fila">Antes</span> Información delicada del alumnado dispersa en correos y carpetas.</p>
-                <p class="ahora"><span class="etiqueta-fila">Con DirectorIA</span> Lo que anotáis queda en el servidor del colegio, con acceso por cargo y registro de accesos.</p>
+                <p class="ahora"><span class="etiqueta-fila">Con DirectorIA</span> Lo que anotáis se guarda en el servidor del colegio, con acceso por cargo y registro de accesos.</p>
               </li>
             </ul>
           </div>
@@ -460,7 +460,7 @@
     <div class="contenedor privacidad-rejilla">
       <div class="privacidad-intro">
         <p class="antetitulo">Privacidad</p>
-        <h2 id="t-privacidad">Los datos de vuestros alumnos, en casa</h2>
+        <h2 id="t-privacidad">Los datos de vuestros alumnos, tratados en casa</h2>
         <p class="entradilla">La IA trata los datos de vuestros alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos. Es una decisión de diseño, y empieza por algo que podéis ver: el servidor está en vuestro edificio.</p>
         <div class="privacidad-imagenes">
           <img src="img/ilustraciones/servidor.svg" alt="" width="136" height="136">
@@ -478,7 +478,7 @@
         </li>
         <li>
           <h3>Claude, solo si lo activáis</h3>
-          <p>El módulo de Claude es opcional y solo sirve para preparar material didáctico, como «actividades de fracciones para 5.º». Un filtro está diseñado para bloquear datos personales, y la norma de uso es no introducirlos.</p>
+          <p>El módulo de Claude es opcional y solo sirve para preparar material didáctico, como «actividades de fracciones para 5.º». No tiene acceso a los datos del colegio y un filtro está pensado para bloquear datos personales; la norma de uso es no introducirlos.</p>
         </li>
       </ul>
     </div>
@@ -506,7 +506,7 @@
         </li>
         <li>
           <h3>No trata los datos de vuestros alumnos fuera del colegio.</h3>
-          <p>La IA los trata en un servidor dentro del colegio, sin transferencias internacionales de esos datos. El módulo opcional de Claude solo recibe peticiones de material didáctico, sin datos de alumnos.</p>
+          <p>La IA los trata en un servidor dentro del colegio, sin transferencias internacionales de esos datos. El módulo opcional de Claude solo recibe peticiones de material didáctico; no tiene acceso a los datos del colegio y un filtro está pensado para bloquear datos personales.</p>
         </li>
       </ul>
       <p class="no-hace-cierre">Diseñado para quedar fuera de los usos de alto riesgo del Reglamento europeo de IA. <a href="#pregunta-reglamento">Leer por qué</a>.</p>
@@ -526,7 +526,7 @@
             <span class="numero" aria-hidden="true">1</span>
             <div>
               <h3>Nos pasáis facturas y contratos</h3>
-              <p>Los de los últimos 12 meses, solo de empresas: nunca nóminas ni datos de personas. Antes firmamos un acuerdo de confidencialidad.</p>
+              <p>Los de los últimos 12 meses, solo de empresas: nunca nóminas ni documentos sobre alumnos, familias o personal. Antes firmamos un acuerdo de confidencialidad.</p>
             </div>
           </li>
           <li>
@@ -571,7 +571,7 @@
           <img src="img/ilustraciones/reloj.svg" alt="" width="96" height="96">
           <p class="paso-numero">Paso 1</p>
           <h3>Demo en vuestro colegio</h3>
-          <p>45 minutos con una mañana de ejemplo: una ausencia, su ficha y un acta.</p>
+          <p>45 minutos con una mañana de ejemplo, sin datos reales: una sustitución, su ficha y un acta.</p>
         </li>
         <li>
           <img src="img/ilustraciones/documento-ia.svg" alt="" width="96" height="96">
@@ -589,7 +589,7 @@
           <img src="img/ilustraciones/docente.svg" alt="" width="96" height="96">
           <p class="paso-numero">Paso 4</p>
           <h3>Formación y soporte</h3>
-          <p>6 horas de formación al claustro y soporte en horario lectivo.</p>
+          <p>6 horas de formación al claustro, soporte en horario lectivo, actualizaciones y una visita al año.</p>
         </li>
       </ol>
     </div>
@@ -652,9 +652,10 @@
           <h3>Los tres planes incluyen</h3>
           <ul class="lista-visto" role="list">
             <li>El servidor, que es vuestro, y la instalación en un día.</li>
-            <li>Un borrador de la evaluación de impacto y del registro de actividades.</li>
             <li>6 horas de formación al claustro.</li>
             <li>Soporte en horario lectivo.</li>
+            <li>Actualizaciones y una visita al año.</li>
+            <li>Un borrador de la evaluación de impacto y del registro de actividades: lo revisa vuestro delegado de protección de datos y lo aprueba el colegio.</li>
           </ul>
         </div>
         <div>
@@ -689,14 +690,14 @@
         <details id="pregunta-claude">
           <summary>¿Qué es el módulo de Claude y qué recibe?</summary>
           <div class="respuesta">
-            <p>Es un módulo opcional para preparar material didáctico: actividades, situaciones de aprendizaje o rúbricas. Solo recibe peticiones de ese tipo, como «actividades de fracciones para 5.º». Un filtro está diseñado para bloquear datos personales, y la norma de uso es no introducirlos.</p>
+            <p>Es un módulo opcional para preparar material didáctico: actividades, situaciones de aprendizaje o rúbricas. Solo recibe peticiones de ese tipo, como «actividades de fracciones para 5.º». No tiene acceso a los datos del colegio y un filtro está pensado para bloquear datos personales; la norma de uso es no introducirlos.</p>
             <p>Si lo activáis, el colegio usa su propia cuenta de Anthropic y paga su uso directamente. Anthropic recibe los datos de esa cuenta, como el nombre y el correo de quien la administra. Sin el módulo, todo lo demás funciona igual, con la IA del colegio.</p>
           </div>
         </details>
         <details id="pregunta-informatico">
           <summary>¿Necesitamos un informático en el colegio?</summary>
           <div class="respuesta">
-            <p>No. De lo técnico nos ocupamos nosotros: llevamos el servidor ya montado, lo instalamos en un día, cargamos los datos y creamos los usuarios. Después, el claustro recibe 6 horas de formación y tenéis soporte en horario lectivo.</p>
+            <p>No. De lo técnico nos ocupamos nosotros: llevamos el servidor ya montado, lo instalamos en un día, cargamos los datos y creamos los usuarios. Después, el claustro recibe 6 horas de formación y tenéis soporte en horario lectivo, actualizaciones y una visita al año.</p>
           </div>
         </details>
         <details id="pregunta-internet">
@@ -708,7 +709,7 @@
         <details id="pregunta-servidor">
           <summary>¿De quién es el servidor y qué pasa con él?</summary>
           <div class="respuesta">
-            <p>Es vuestro: va incluido en la cuota inicial. Nosotros lo instalamos y nos ocupamos del soporte en horario lectivo.</p>
+            <p>Es vuestro: va incluido en la cuota inicial. Nosotros lo instalamos y nos ocupamos del soporte en horario lectivo, de las actualizaciones y de una visita al año.</p>
             <p>Si un día dejáis DirectorIA, cerramos nuestros accesos y devolvemos o borramos cualquier copia que tengamos de vuestros datos. El servidor, y lo que guarda, sigue en vuestro colegio.</p>
           </div>
         </details>
@@ -740,10 +741,10 @@
     <div class="contenedor contacto-rejilla">
       <div>
         <p class="antetitulo">Pedir una demo</p>
-        <h2 id="t-contacto">¿Probamos con vuestra próxima sustitución?</h2>
-        <p class="entradilla">Os enseñamos DirectorIA funcionando en vuestro colegio, en 45 minutos. Escribidnos o llamadnos y buscamos una fecha que os venga bien.</p>
+        <h2 id="t-contacto">¿Os lo enseñamos en vuestro colegio?</h2>
+        <p class="entradilla">Una demo de 45 minutos con una mañana de ejemplo, sin datos reales: una sustitución, su ficha y un acta. Escribidnos o llamadnos y buscamos una fecha que os venga bien.</p>
         <div class="botones">
-          <a class="boton" href="mailto:correo@dominio.es?subject=Demo%20de%20DirectorIA%20en%20nuestro%20colegio&amp;body=Colegio%20y%20localidad%3A%20%0D%0AVuestro%20cargo%3A%20%0D%0AN%C3%BAmero%20de%20docentes%3A%20%0D%0ATel%C3%A9fono%20de%20contacto%3A%20%0D%0A">Pedir una demo en el colegio</a>
+          <a class="boton" href="mailto:correo@dominio.es?subject=Demo%20de%20DirectorIA%20en%20nuestro%20colegio&amp;body=Colegio%20y%20localidad%3A%20%0D%0ACargo%3A%20%0D%0AN%C3%BAmero%20de%20docentes%3A%20%0D%0ATel%C3%A9fono%20de%20contacto%3A%20%0D%0A">Pedir una demo en el colegio</a>
           <a class="boton boton-borde" href="mailto:correo@dominio.es?subject=An%C3%A1lisis%20de%20gastos%20gratis">Análisis de gastos gratis</a>
         </div>
       </div>
@@ -762,7 +763,7 @@
             <dd>Comunidad de Madrid</dd>
           </div>
         </dl>
-        <p class="contacto-nota">Usamos vuestros datos solo para responderos. Por favor, no incluyáis datos de alumnos en el mensaje. Más información en la <a href="privacidad.html">política de privacidad</a>.</p>
+        <p class="contacto-nota">Usamos vuestros datos solo para atender lo que nos pidáis: responderos, organizar la demo o el análisis de gastos y prepararos una propuesta. Por favor, no incluyáis datos de alumnos en el mensaje. Más información en la <a href="privacidad.html">política de privacidad</a>.</p>
       </div>
     </div>
   </section>
@@ -773,6 +774,7 @@
   <div class="contenedor pie-rejilla">
     <div class="pie-marca">
       <img src="img/logo/logo-eslogan-negativo.svg" alt="DirectorIA. Vuestra IA, dentro del colegio." width="258" height="69">
+      <img class="logo-impresion" src="img/logo/logo-horizontal.svg" alt="" width="214" height="40">
       <p>IA para dirección y claustro. Empresa de la Comunidad de Madrid.</p>
     </div>
     <nav class="pie-enlaces" aria-label="Información legal">

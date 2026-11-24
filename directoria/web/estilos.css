@@ -348,15 +348,9 @@ main:focus { outline: none; }
 }
 
 @media (min-width: 68.75em) {
-  .cabecera {
-    position: sticky;
-    top: 0;
-    background: rgb(246 243 236 / .94);
-    -webkit-backdrop-filter: saturate(1.1) blur(10px);
-    backdrop-filter: saturate(1.1) blur(10px);
-  }
-  html { scroll-padding-top: 5.5rem; }
-  .cabecera-fila { min-height: 4.75rem; gap: 2rem; }
+  .cabecera { position: sticky; top: 0; }   /* el fondo tiza opaco de la regla base: la marca es plana, sin cristal ni desenfoque */
+  html { scroll-padding-top: 6rem; }
+  .cabecera-fila { min-height: 5.125rem; gap: 2rem; }   /* 1 x (la I de «IA») de aire arriba y abajo del logotipo */
   .cabecera-marca img { width: 13.375rem; }   /* 214 × 40 px */
   .menu { display: block; margin-left: auto; }
   .menu ul { display: flex; gap: 1.75rem; }
@@ -474,7 +468,7 @@ main:focus { outline: none; }
   padding: 2.25rem 1rem 1.5rem;
 }
 .mapa-dentro { background: var(--papel); border: 1px solid var(--linea); }
-.mapa-fuera { margin-top: 1.75rem; border: 1.5px dashed #9DB2AA; }
+.mapa-fuera { margin-top: 1.75rem; border: 1.5px dashed var(--pizarra-linea); }
 
 .mapa-etiqueta {
   position: absolute;
@@ -489,7 +483,7 @@ main:focus { outline: none; }
   font-weight: 700;
   line-height: 1.3;
 }
-.mapa-fuera .mapa-etiqueta { background: var(--tiza); color: var(--pizarra); border: 1.5px dashed #9DB2AA; }
+.mapa-fuera .mapa-etiqueta { background: var(--tiza); color: var(--pizarra); border: 1.5px dashed var(--pizarra-linea); }
 
 .mapa-centro { position: relative; width: 12.5rem; margin: 0 auto 1.75rem; text-align: center; }
 .mapa-centro img { width: 100%; }
@@ -526,7 +520,7 @@ main:focus { outline: none; }
   .mapa-lineas { display: block; position: absolute; inset: 0; width: 100%; height: 100%; z-index: 1; }
   .mapa::before, .mapa::after { content: ""; position: absolute; top: 0; bottom: 0; border-radius: 2rem; }
   .mapa::before { left: 0; width: 71.6667%; background: var(--papel); border: 1px solid var(--linea); }
-  .mapa::after { right: 0; width: 25%; border: 1.5px dashed #9DB2AA; }
+  .mapa::after { right: 0; width: 25%; border: 1.5px dashed var(--pizarra-linea); }
 
   .mapa-dentro, .mapa-fuera { position: static; padding: 0; margin: 0; border: 0; background: none; }
   .mapa-etiqueta { z-index: 3; left: 2rem; }
@@ -602,8 +596,8 @@ main:focus { outline: none; }
     position: absolute;
     left: 3rem;
     right: calc((100% - 4 * var(--hueco)) / 5 - 3rem);
-    top: 3rem;
-    border-top: 1.5px dashed #9DB2AA;
+    top: calc(3rem - 1.5px);
+    border-top: 3px solid var(--pizarra-linea);   /* conector continuo: nada cruza la frontera del colegio */
   }
   .manana li { position: relative; grid-template-columns: minmax(0, 1fr); }
   .manana img { grid-row: auto; margin-bottom: 1.25rem; }
@@ -618,7 +612,7 @@ main:focus { outline: none; }
   align-items: center;
   min-height: 2.75rem;
   padding: .5rem 1rem;
-  border: 1px solid #C3D0CA;
+  border: 1px solid var(--linea);
   border-radius: 999px;
   background: var(--papel);
   font-size: .9375rem;
@@ -669,7 +663,7 @@ main:focus { outline: none; }
 .etiqueta-fila {
   display: block;
   margin-bottom: .125rem;
-  font-size: .8125rem;
+  font-size: .875rem;   /* 14 px: el mínimo de la web */
   font-weight: 700;
   letter-spacing: .02em;
   color: var(--texto);
@@ -685,7 +679,7 @@ main:focus { outline: none; }
     padding-bottom: .75rem;
     margin-bottom: 1.125rem;
     border-bottom: 1px solid var(--linea);
-    font-size: .8125rem;
+    font-size: .875rem;
     font-weight: 700;
     letter-spacing: .02em;
     color: var(--texto);
@@ -728,11 +722,11 @@ main:focus { outline: none; }
 .ficha-origen { display: flex; align-items: center; gap: .5rem; margin-top: .375rem; font-size: .875rem; color: var(--texto); }
 .ficha-origen .insignia { width: 1.125rem; height: 1.125rem; }
 .ficha-datos { display: grid; gap: 1rem; margin-top: 1.125rem; }
-.ficha-datos dt { font-size: .8125rem; font-weight: 700; letter-spacing: .02em; color: var(--chispa-texto); }
+.ficha-datos dt { font-size: .875rem; font-weight: 700; letter-spacing: .02em; color: var(--chispa-texto); }
 .ficha-datos dd { margin-top: .125rem; font-size: .96875rem; line-height: 1.5; color: var(--pizarra); }
 .ficha-aviso { padding: .875rem 1rem; border-radius: var(--radio); background: var(--chispa-suave); }
 .ficha-aviso dt { color: var(--pizarra); }   /* chispa-texto no llega a 4,5:1 sobre chispa-suave */
-.ficha-pie { margin-top: 1.125rem; padding-top: .875rem; border-top: 1px solid var(--linea); font-size: .8125rem; color: var(--texto); }
+.ficha-pie { margin-top: 1.125rem; padding-top: .875rem; border-top: 1px solid var(--linea); font-size: .875rem; color: var(--texto); }
 
 /* Ventana del protocolo */
 .ventana {
@@ -750,7 +744,7 @@ main:focus { outline: none; }
   padding: .75rem 1.25rem;
   background: var(--pizarra);
   color: var(--tiza);
-  font-size: .8125rem;
+  font-size: .875rem;
   font-weight: 700;
 }
 .ventana-reserva { color: var(--texto-suave); font-weight: 600; }
@@ -760,7 +754,7 @@ main:focus { outline: none; }
 .proto-pasos li {
   counter-increment: paso;
   display: grid;
-  grid-template-columns: 1.5rem minmax(0, 1fr) auto;
+  grid-template-columns: 1.75rem minmax(0, 1fr) auto;
   grid-template-areas: "n paso estado" "n meta estado";
   column-gap: .75rem;
   align-items: center;
@@ -774,22 +768,22 @@ main:focus { outline: none; }
   grid-area: n;
   display: grid;
   place-items: center;
-  width: 1.5rem;
-  height: 1.5rem;
+  width: 1.75rem;
+  height: 1.75rem;
   border-radius: 50%;
   border: 1.5px solid var(--pizarra-linea);
-  font-size: .75rem;
+  font-size: .875rem;
   font-weight: 700;
   color: var(--pizarra);
 }
 .proto-pasos .paso { grid-area: paso; font-weight: 700; color: var(--pizarra); }
-.proto-pasos .paso-meta { grid-area: meta; font-size: .8125rem; color: var(--texto); }
+.proto-pasos .paso-meta { grid-area: meta; font-size: .875rem; color: var(--texto); }
 .proto-pasos .estado {
   grid-area: estado;
   padding: .125rem .5rem;
   border-radius: 999px;
   border: 1px solid var(--linea);
-  font-size: .75rem;
+  font-size: .875rem;
   font-weight: 700;
   color: var(--texto);
   white-space: nowrap;
@@ -805,7 +799,7 @@ main:focus { outline: none; }
 .proto-docs { margin-top: 1rem; padding: .875rem 1rem; border-radius: var(--radio); background: var(--salvia); }
 .proto-docs-titulo { display: flex; align-items: center; gap: .5rem; font-size: .875rem; font-weight: 700; color: var(--pizarra); }
 .proto-docs-titulo .insignia { width: 1.125rem; height: 1.125rem; }
-.proto-docs ul { display: grid; gap: .25rem; margin-top: .5rem; font-size: .8125rem; line-height: 1.45; color: var(--texto); }
+.proto-docs ul { display: grid; gap: .25rem; margin-top: .5rem; font-size: .875rem; line-height: 1.45; color: var(--texto); }
 .proto-docs li { position: relative; padding-left: .875rem; }
 .proto-docs li::before { content: ""; position: absolute; left: 0; top: .55em; width: .3125rem; height: .3125rem; border-radius: 50%; background: var(--pizarra-linea); }
 
@@ -888,7 +882,7 @@ main:focus { outline: none; }
 .caja-titulo { font-family: var(--f-titulares); font-size: 1.5rem; font-weight: 600; line-height: 1.2; color: var(--tiza); }
 .caja-oscura .boton { margin-top: .75rem; }
 
-.gastos-despues { margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid #C3D0CA; max-width: 52rem; }
+.gastos-despues { margin-top: 2.5rem; padding-top: 2rem; border-top: 1px solid var(--linea); max-width: 52rem; }
 .gastos-despues h3 { font-size: 1.25rem; }
 .gastos-despues p { margin-top: .5rem; }
 
@@ -1017,7 +1011,7 @@ main:focus { outline: none; }
 .contacto-datos .dato-contacto { font-weight: 500; color: var(--tiza); }
 .contacto-nota { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid var(--pizarra-linea); font-size: .9375rem; line-height: 1.5; color: var(--texto-suave); }
 .contacto-nota a { color: var(--tiza); }
-.contacto-nota a:hover { color: var(--chispa); }
+.contacto-nota a:hover { color: var(--tiza); text-decoration-thickness: 2px; }   /* chispa sobre pizarra-2 solo vale desde 24 px */
 
 @media (min-width: 62em) {
   .contacto-rejilla { grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); gap: clamp(3rem, 6vw, 6rem); }
@@ -1032,7 +1026,8 @@ main:focus { outline: none; }
 }
 .pie-rejilla { display: grid; gap: 2rem; }
 .pie-marca img { width: 16.125rem; height: auto; }   /* 258 × 69 px: por encima del mínimo de 56 px de alto */
-.pie-marca p { margin-top: 1rem; }
+.pie-marca .logo-impresion { display: none; width: 13.375rem; }   /* el horizontal en positivo, solo al imprimir (214 × 40 px) */
+.pie-marca p { margin-top: 1.5rem; }   /* algo más de 1 x (la I de «IA») entre la tinta del logotipo y el texto */
 .pie-enlaces ul { display: flex; flex-wrap: wrap; gap: 0 1.75rem; }
 .pie-enlaces a { display: inline-flex; align-items: center; min-width: 2.75rem; min-height: 2.75rem; color: var(--tiza); font-weight: 700; }
 .pie-enlaces a:hover { color: var(--chispa); }
@@ -1070,8 +1065,7 @@ main:focus { outline: none; }
   gap: .375rem;
   margin-block: 1.75rem 2.25rem;
   padding: 1.25rem 1.5rem;
-  border-left: 4px solid var(--chispa-texto);
-  border-radius: var(--radio-s);
+  border-radius: var(--radio);   /* el radio de los avisos; sin filete de color a un lado */
   background: var(--chispa-suave);
   color: var(--pizarra);
 }
@@ -1088,10 +1082,17 @@ main:focus { outline: none; }
   *, *::before, *::after { transition-duration: 0s !important; animation-duration: 0s !important; animation-iteration-count: 1 !important; }
 }
 
+/* Al imprimir, los fondos no salen (es lo predeterminado): lo oscuro pasa a pizarra sobre blanco, con el logotipo en positivo */
 @media print {
-  .cabecera, .saltar, .menu-movil, .botones, .mapa-lineas { display: none !important; }
+  .cabecera, .saltar, .menu-movil, .botones, .mapa-lineas, .caja-oscura .boton { display: none !important; }
   body { background: #fff; }
-  .seccion-oscura, .pie, .caja-oscura { background: #fff; color: #000; --tinta: #000; --cuerpo: #000; }
+  .seccion-oscura, .pie, .caja-oscura { background: #fff; color: var(--pizarra); --tinta: var(--pizarra); --cuerpo: var(--texto); --acento: var(--chispa-texto); --foco: var(--chispa-texto); }
+  .privacidad-lista li, .contacto-datos { background: none; }
+  .privacidad-lista p, .contacto-datos dt, .contacto-datos dd, .contacto-datos .dato-contacto, .contacto-nota, .contacto-nota a, .pie-enlaces a, .caja-titulo { color: var(--pizarra); }
+  .privacidad-lista h3::before { background-image: var(--aguja); }
+  .mapa-etiqueta, .ventana { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .pie-marca img { display: none; }
+  .pie-marca .logo-impresion { display: block; }
   .seccion { padding-block: 1.5rem; }
   .preguntas details { break-inside: avoid; }
 }
