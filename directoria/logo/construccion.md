@@ -44,13 +44,42 @@ Son las mejoras que pidió el jurado, aplicadas sin cambiar la idea.
 | `logotipo.svg` · `logotipo-negativo.svg` · `logotipo-mono-pizarra.svg` · `logotipo-mono-tiza.svg` | Solo la palabra: cartas, documentos, pies de página, firmas de correo, textos legales, y donde el símbolo ya está presente (app, favicon). |
 | `isotipo.svg` · `isotipo-negativo.svg` · `isotipo-mono-pizarra.svg` · `isotipo-mono-tiza.svg` | El símbolo solo, desde 32 px: sello, marca de agua, cabecera de la app. |
 | `favicon.svg` | Pestañas del navegador y accesos directos, de 16 a 48 px. |
-| `app-icon.svg` · `app-icon-512.png` | Icono de la app, avatar en redes sociales e icono de acceso directo en móviles (`apple-touch-icon`). |
-| `logo-horizontal-1600.png` · `logo-horizontal-negativo-1600.png` | PNG con fondo y área de respeto incluida, para programas que no admiten SVG (Word, PowerPoint, correo). |
+| `app-icon.svg` · `png/app-icon-512.png` | Icono de la app, avatar en redes sociales e icono de acceso directo en móviles (`apple-touch-icon`). |
+| `png/` | Los PNG, con fondo transparente, para el correo, las redes sociales y las versiones antiguas de Office. Ver el apartado siguiente. |
 | `tablero.png` | Tablero de evaluación: positivo, negativo e isotipo de 256 a 16 px. |
 | `construccion.png` · `usos-incorrectos.png` | Esquemas de este documento. |
-| `build.mjs` | Generador de todos los SVG. Los parámetros están al principio del archivo. |
+| `build.mjs` · `outline.mjs` · `png.mjs` · `package.json` · `package-lock.json` | Generadores de los SVG (`build.mjs`, con los parámetros al principio del archivo) y de los PNG (`png.mjs`), con las versiones exactas de lo que usan. Ver «Cómo regenerar los archivos». |
 
 Todos los SVG están en trazos, sin `<text>`, con colores planos de la paleta y un `viewBox` ajustado con un margen pequeño e igual por los cuatro lados. Ese margen no es el área de respeto. La geometría del símbolo y de la palabra es idéntica en todas las versiones. La única excepción es el favicon, que tiene un dibujo propio para tamaños de 16 a 48 px.
+
+**SVG o PNG.** Word y PowerPoint actuales (Microsoft 365, antes Office 365, y Office 2019 o posteriores) insertan SVG. Usad el SVG, que se ve nítido a cualquier tamaño, también impreso. El PNG queda para el correo, las redes sociales, las versiones antiguas de Office y los programas que no acepten SVG. En Documentos y Presentaciones de Google, usad también el PNG.
+
+### PNG para el correo, las redes y Office antiguo
+
+Están en `png/` y salen de los SVG con `npm run png`. Todos tienen fondo transparente, salvo el negativo «con fondo».
+
+| Archivo | Medidas | Para qué |
+|---|---|---|
+| `logotipo-firma.png` | 118 × 20 px | Firma de correo (solo la palabra), ya a su tamaño final. |
+| `logotipo-firma-2x.png` | 236 × 40 px | La misma al doble, para pantallas de alta densidad. Se coloca a 118 × 20 px. |
+| `logotipo-600.png` · `logo-horizontal-600.png` · `logo-eslogan-600.png` | 600 px de ancho | Correos con cabecera, boletines y web. Colocados a la mitad (300 px de ancho) se ven nítidos. |
+| `logotipo-1600.png` · `logo-horizontal-1600.png` · `logo-eslogan-1600.png` | 1600 px de ancho | Documentos y presentaciones en versiones antiguas de Office, redes sociales e impresión de hasta 13,5 cm de ancho. |
+| Los mismos con `-negativo` (por ejemplo, `logotipo-negativo-600.png`) | 600 y 1600 px | Tiza y chispa sobre transparente, solo para fondos pizarra o pizarra-2: diapositivas y cabeceras oscuras. |
+| `logo-horizontal-negativo-fondo-1600.png` | 1600 × 506 px | El negativo con su fondo pizarra, para sitios donde no se puede poner un fondo oscuro detrás o que no admiten transparencia. |
+| `app-icon-512.png` | 512 × 512 px | Icono de la app y avatar. |
+
+- **Sin recuadro.** Con el fondo transparente, sobre una página o un correo blancos no aparece ningún recuadro alrededor del logotipo, y al imprimir no sale una mancha.
+- **Área de respeto incluida.** Los de 600 y 1600 llevan 1 x de margen transparente por cada lado. Se pueden colocar sin medir, y el texto de alrededor no se acerca más de la cuenta. Por eso el logotipo ocupa unas cuatro quintas partes del ancho de la imagen: para respetar los mínimos impresos, la imagen tiene que medir al menos 37 mm de ancho con el horizontal, 26 mm con la palabra sola y 55 mm con el eslogan.
+- **La firma no lleva ese margen** (solo 1 px), porque en la firma el espacio lo dan las líneas de alrededor. Con 1 x por cada lado, la palabra se quedaría por debajo de su mínimo.
+- **Los negativos parecen vacíos** en un visor de imágenes con fondo blanco, porque son tinta clara sobre transparente. Se ven al ponerlos sobre pizarra.
+- **Resolución anotada.** Los de 1600 llevan 300 ppp y suelen entrar en Word a 13,5 cm de ancho; los de 600 llevan 192 ppp (7,9 cm). Reducir un PNG no le quita calidad; ampliarlo, sí. Para algo más grande, el SVG.
+
+**Firma de correo.**
+
+1. **Solo la palabra.** El horizontal no va en la firma: ahí mediría menos de 24 px de alto.
+2. **A 118 × 20 px.** Si el programa de correo deja fijar el tamaño de la imagen, usad `logotipo-firma-2x.png` a esa medida, que se ve más nítida en pantallas de alta densidad. Word y el Outlook clásico suelen insertarla ya a ese tamaño, porque lleva anotados 192 ppp. Si el programa no deja fijarlo con exactitud, como Gmail, usad `logotipo-firma.png`, que ya mide eso.
+3. **Con texto alternativo y con el nombre escrito.** Si el programa lo permite, poned «DirectorIA» como texto alternativo de la imagen. En el texto de la firma, el nombre va también escrito, con la fuente y el color del resto de la firma.
+4. **Modo oscuro.** Algunos programas de correo ponen un fondo oscuro detrás de las imágenes transparentes. Ahí «Director» casi desaparece y solo se ve la «IA». Le pasa a cualquier logotipo oscuro con fondo transparente, y por eso el nombre va también escrito.
 
 ## Construcción
 
@@ -134,9 +163,9 @@ Se mide con dos unidades que se ven en el propio logotipo:
 | Favicon | De 16 a 48 px | No se imprime |
 | Icono de app | Desde 48 px | No se imprime |
 
-- **Medidas en pantalla.** Son del archivo tal cual, con su margen interno.
+- **Medidas en pantalla.** Son de los SVG tal cual, con su margen interno pequeño. En los PNG que llevan dentro el área de respeto se mide el logotipo, sin el margen transparente.
 - **Por qué esos mínimos.** En el mínimo del horizontal, los remates de la I miden 1,5 px y el hueco de la aguja, 1 px. Por debajo, la aguja se emborrona y la palabra pierde cuerpo.
-- **Por debajo de 24 px de alto** (pies de página, firmas de correo, barras de navegación estrechas), no se usa el horizontal: va **solo la palabra**.
+- **Por debajo de 24 px de alto** (pies de página, firmas de correo, barras de navegación estrechas), no se usa el horizontal: va **solo la palabra**. En la firma de correo, `png/logotipo-firma.png` o su versión 2x.
 - **Entre 16 y 31 px**, en lugar del isotipo va `favicon.svg`.
 - **En sellos de caucho, grabados y bordados**, se usa la versión a una tinta con el doble del mínimo impreso: isotipo de 12 mm y horizontal de 60 mm. Así el hueco de la aguja no se cierra.
 
@@ -214,10 +243,17 @@ El kit de marca no fija equivalencias CMYK ni Pantone. Antes de la primera tirad
 
 ## Cómo regenerar los archivos
 
-`build.mjs` genera todos los SVG a partir de los parámetros de su cabecera: el isotipo, la palabra, las composiciones, el favicon y el icono. Necesita paper.js y la herramienta `outline.mjs` de la marca, que pasa Rubik y Nunito Sans a trazos:
+Todo se genera en esta carpeta, con Node 18 o posterior. La primera vez, `npm ci` necesita conexión para descargar los paquetes:
 
 ```
-BRANDTOOLS=<carpeta con outline.mjs> PAPER_FROM=<carpeta con node_modules/paper> node build.mjs
+npm ci          # instala las versiones exactas de package-lock.json
+npm run build   # los 18 SVG (build.mjs)
+npm run png     # los PNG de png/, a partir de los SVG (png.mjs)
 ```
 
-Los PNG se generan aparte a partir de los SVG. `logo-horizontal-1600.png` y su negativo miden 1600 × 506, con 1 x de área de respeto, y el icono mide 512 × 512.
+- **`build.mjs`** genera todos los SVG a partir de los parámetros de su cabecera: el isotipo, la palabra, las composiciones, el favicon y el icono. Usa paper.js para las operaciones entre trazados y `outline.mjs`, que va a su lado y pasa Rubik y Nunito Sans a trazos con opentype.js.
+- **Versiones fijas.** `package.json` y `package-lock.json` fijan paper 0.12.18, opentype.js 1.3.4, @fontsource/rubik 5.3.0 y @fontsource/nunito-sans 5.3.0 (las fuentes vienen en esos paquetes, con licencia OFL), y @resvg/resvg-js 2.6.2 para los PNG. Con ellas, `npm run build` devuelve los 18 SVG idénticos byte a byte; se ha comprobado en una instalación limpia, con Node 18 y con Node 22. Con otras versiones de las fuentes, los trazos podrían cambiar.
+- **Si falta algo**, el script dice qué falta y cómo instalarlo, y se para. Si hay instalada otra versión, avisa.
+- **`png.mjs`** saca el juego completo de `png/`. También sirve para un PNG suelto de cualquier SVG, con el área de respeto como margen: `node png.mjs logo-vertical.svg --ancho 1600`. La opción `--sin-margen` lo quita y `--fondo "#17322C"` pone fondo.
+- `node_modules/` no se sube al repositorio.
+- `tablero.png`, `construccion.png` y `usos-incorrectos.png` son láminas de este documento y se hicieron aparte.

@@ -12,20 +12,45 @@
 // La geometría del símbolo y de la palabra es la misma en todas las versiones; solo el favicon
 // tiene un dibujo propio, simplificado y ajustado a la rejilla de píxeles de 16 y 32 px.
 //
-// Requisitos: paper.js (booleanas de trazados) y la herramienta outline.mjs de la marca
-// (texto a contornos con Rubik y Nunito Sans, SIL OFL):
-//   BRANDTOOLS=<carpeta con outline.mjs> PAPER_FROM=<carpeta con node_modules/paper> node build.mjs
+// Uso, en esta carpeta y con Node 18 o posterior:
+//   npm ci          instala las versiones exactas de package-lock.json: paper (booleanas de trazados),
+//                   opentype.js y las fuentes @fontsource/rubik y @fontsource/nunito-sans (SIL OFL)
+//   npm run build   regenera los 18 SVG (es «node build.mjs»)
+//   npm run png     regenera los PNG de la carpeta png/ a partir de los SVG (es «node png.mjs»)
+// Con esas versiones, los SVG salen idénticos byte a byte a los del repositorio.
+// outline.mjs (texto a trazos) va junto a este archivo.
 import { createRequire } from 'node:module';
-import { execFileSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import fs from 'node:fs';
 import path from 'node:path';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
-const SCRATCH = '/tmp/claude-0/-home-user-albertoprepatop-web-github-io/db30fac1-e41f-5e34-8ec7-ae08fc5fe643/scratchpad';
-const BRANDTOOLS = process.env.BRANDTOOLS || path.join(SCRATCH, 'brandtools');
-const PAPER_FROM = process.env.PAPER_FROM || path.join(SCRATCH, 'rumbo-work');
-const paper = createRequire(path.join(PAPER_FROM, 'x.js'))('paper');
+const require = createRequire(import.meta.url);
+
+// ---------- Dependencias: si falta algo, se dice qué y cómo arreglarlo ----------
+function falla(msg) { console.error(`\nDirectorIA · logotipo: ${msg}\n`); process.exit(1); }
+const INSTALAR = `Instálalas con «npm ci» en ${here}.`;
+if (+process.versions.node.split('.')[0] < 18) falla(`hace falta Node 18 o posterior; este es Node ${process.versions.node}.`);
+for (const f of ['outline.mjs', 'package.json']) {
+  if (!fs.existsSync(path.join(here, f))) falla(`falta ${f} junto a build.mjs, en ${here}. Está en el repositorio: recupéralo con «git checkout -- ${f}».`);
+}
+// Comprueba que están instaladas las versiones exactas de package.json. Si falta alguna, para;
+// si hay otra versión, avisa, porque los trazos podrían cambiar.
+export function comprobarDependencias(nombres) {
+  const fijadas = JSON.parse(fs.readFileSync(path.join(here, 'package.json'), 'utf8')).dependencies || {};
+  const faltan = [], otras = [];
+  for (const nombre of nombres) {
+    const dir = (require.resolve.paths(nombre) || []).map(d => path.join(d, nombre)).find(d => fs.existsSync(path.join(d, 'package.json')));
+    if (!dir) { faltan.push(nombre); continue; }
+    const v = JSON.parse(fs.readFileSync(path.join(dir, 'package.json'), 'utf8')).version;
+    if (fijadas[nombre] && v !== fijadas[nombre]) otras.push(`${nombre} ${v} (package.json fija ${fijadas[nombre]})`);
+  }
+  if (faltan.length) falla(`faltan dependencias: ${faltan.join(', ')}. ${INSTALAR}`);
+  if (otras.length) console.warn(`Aviso: hay versiones distintas de las fijadas: ${otras.join('; ')}. Los archivos pueden no salir idénticos; «npm ci» instala las fijadas.`);
+}
+comprobarDependencias(['paper', 'opentype.js', '@fontsource/rubik', '@fontsource/nunito-sans']);
+const paper = require('paper');
+const { outline: contornos } = await import('./outline.mjs');
 paper.setup(new paper.Size(2000, 2000));
 const { Point, Path, Segment, CompoundPath } = paper;
 
@@ -162,8 +187,7 @@ export function simbolo(p, apex) {
 
 // ---------- Texto a contornos ----------
 function outline(text, weight, font = 'rubik', size = 100) {
-  const out = execFileSync('node', [path.join(BRANDTOOLS, 'outline.mjs'), '--font', font, '--weight', String(weight), '--size', String(size), '--text', text], { encoding: 'utf8' });
-  return JSON.parse(out);
+  try { return contornos(text, { font, weight, size }); } catch (e) { falla(e.message); }
 }
 const fromD = d => new CompoundPath({ pathData: d, insert: false });
 // I con remates y cartela: x = borde izquierdo de los remates, línea base en y = 0
