@@ -147,8 +147,8 @@ Texto alternativo de la imagen:
 - Cambiad los marcadores [correo@dominio.es], [teléfono], [dominio.es] y [Cargo] por los datos reales.
 - Al copiar el nombre, comprobad que es «DirectorIA» con i mayúscula y no con ele («DirectorlA»).
 - **Los datos de los alumnos.** Decid lo mismo que la sección «Privacidad» de la web y la papelería: «La IA trata los datos de vuestros alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos». No escribáis que los datos «no salen del colegio»: no se puede sostener, porque el correo, el resumen de las 8:00 y la ficha de quien sustituye se envían a personas, y además hay soporte remoto y un módulo opcional de Claude en la nube. Tampoco «riesgo cero» ni «cumplimiento garantizado».
-- **Antes de compartir el enlace de la web**, comprobad que su descripción para redes (`og:description` en `../../web/index.html`) ya no dice que los datos «no salen del colegio»: es el texto que WhatsApp, Slack o Facebook enseñan junto a la imagen. Está pendiente en `../../web/README.md`, «Antes de publicar».
-- Si una publicación habla de precios o condiciones, se dicen enteros y sin asteriscos (identidad verbal). La identidad verbal habla de un año de compromiso y la presentación comercial, de dos cursos: hay que unificarlo antes de usar ese dato.
+- **Al compartir el enlace de la web**, WhatsApp, Slack o Facebook enseñan junto a la imagen su descripción para redes (`og:description` en `../../web/index.html`). Ya usa la fórmula prudente: «La IA trata los datos de vuestros alumnos dentro del colegio».
+- Si una publicación habla de precios o condiciones, se dicen enteros y sin asteriscos (identidad verbal). El compromiso mínimo es de dos cursos; el año de compromiso es solo para el colegio pionero, con su oferta propia.
 
 ## Qué reglas de la marca siguen
 

@@ -159,6 +159,6 @@ Desde la carpeta de la papelería: `bash fuente/construir.sh`. En unos segundos 
 ## Datos que conviene confirmar
 
 - **Datos sacados de la presentación comercial** (`presentacion/project/slides/`): los nombres y tamaños de los planes, las cuotas iniciales de Centro (9.000 €) y Grande (14.000 €), la demo de 45 minutos, las 6 horas de formación y el soporte en horario lectivo. Confirmadlos antes de enviar una propuesta.
-- **Tramos de los planes.** La presentación dice «40–80» y «80–150» docentes. Aquí pone «de 41 a 80» y «de 81 a 150», para que ningún colegio quede en dos planes a la vez.
-- **Compromiso.** Aquí el compromiso mínimo es de dos cursos escolares. La identidad verbal todavía dice «el compromiso es de un año» en el mensaje clave 5 y en un ejemplo, así que conviene alinearla.
+- **Tramos de los planes.** «Hasta 40», «de 41 a 80» y «de 81 a 150» docentes, igual que en la presentación y en la web, para que ningún colegio quede en dos planes a la vez.
+- **Compromiso.** El compromiso mínimo es de dos cursos escolares, como en la presentación, la web y la identidad verbal.
 - **Oferta para el primer colegio.** La de la presentación no está en estas plantillas.
