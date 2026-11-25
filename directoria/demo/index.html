@@ -31,6 +31,8 @@
   --chispa: #E07A3A;
   --chispa-texto: #B4531C;
   --chispa-suave: #FBE6D8;
+  /* Borde de los campos que se rellenan: 3,5:1 sobre papel y 3,2:1 sobre tiza (WCAG 1.4.11). No está en tokens.json. */
+  --borde-campo: #7A8C85;
 
   --fondo: var(--tiza);
   --superficie: var(--papel);
@@ -290,11 +292,12 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .opcion .pre { grid-column: 2; font-size: var(--t-s); color: var(--cuerpo); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .opcion:has(input:checked) { border-color: var(--pizarra); background: var(--tiza); }
 .editor { display: grid; gap: .625rem; margin-top: 1rem; }
-.editor .linea-campo { display: flex; gap: .5rem; font-size: var(--t-s); color: var(--cuerpo); }
-.editor .linea-campo b { color: var(--tinta); min-width: 3.75rem; }
+.editor .linea-campo { display: flex; align-items: baseline; gap: .5rem; font-size: var(--t-s); color: var(--cuerpo); }
+.editor .linea-campo b { flex: none; color: var(--tinta); min-width: 3.75rem; }
+.editor .linea-campo > span { min-width: 0; }
 .editor textarea, .area {
   width: 100%; min-height: 14rem; padding: .875rem 1rem; resize: vertical;
-  border: 1.5px solid var(--borde); border-radius: var(--radio); background: var(--papel); color: var(--tinta); line-height: 1.6;
+  border: 1.5px solid var(--borde-campo); border-radius: var(--radio); background: var(--papel); color: var(--tinta); line-height: 1.6;
 }
 .editor textarea:focus, .area:focus { border-color: var(--pizarra); outline: none; box-shadow: 0 0 0 3px rgb(180 83 28 / .25); }
 .acciones { display: flex; flex-wrap: wrap; gap: .625rem; align-items: center; }
@@ -322,7 +325,8 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .papel-doc .campo { display: grid; grid-template-columns: minmax(7rem, 10rem) 1fr; gap: .25rem 1rem; padding: .5rem 0; border-bottom: 1px dashed var(--borde); }
 .papel-doc .campo dt { font-size: var(--t-s); font-weight: 700; color: var(--chispa-texto); }
 .papel-doc .campo dd { margin: 0; color: var(--tinta); }
-.papel-doc[contenteditable="true"] { outline: 3px dashed var(--pizarra-linea); outline-offset: 4px; }
+.papel-doc .parrafo-edit { display: grid; gap: 1rem; padding: .5rem .625rem; margin: 0 -.625rem; border-radius: var(--radio-s); outline: 2px dashed var(--pizarra-linea); }
+.papel-doc .parrafo-edit:focus { outline: 3px solid var(--foco); }
 .piezas { list-style: none; display: grid; gap: .5rem; }
 .pieza { display: grid; grid-template-columns: 1fr auto; gap: .25rem 1rem; align-items: center; padding: .75rem 1rem; border: 1px solid var(--borde); border-radius: var(--radio); background: var(--papel); }
 .pieza .n { font-weight: 700; color: var(--tinta); }
@@ -336,7 +340,7 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .propuesta .cuando { font-family: var(--f-tit); font-weight: 600; color: var(--tinta); line-height: 1.3; }
 .propuesta .cuando small { display: block; font-family: var(--f-txt); font-weight: 600; color: var(--cuerpo); font-size: var(--t-s); }
 .propuesta .quien { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
-.propuesta select { min-height: 2.5rem; padding: .25rem 2rem .25rem .75rem; border: 1.5px solid var(--borde); border-radius: var(--radio-s); background: var(--papel); color: var(--tinta); font-weight: 700; }
+.propuesta select { min-height: 2.5rem; padding: .25rem 2rem .25rem .75rem; border: 1.5px solid var(--borde-campo); border-radius: var(--radio-s); background: var(--papel); color: var(--tinta); font-weight: 700; }
 .propuesta .motivo { grid-column: 2; font-size: var(--t-s); color: var(--cuerpo); display: flex; gap: .5rem; align-items: flex-start; }
 .propuesta .motivo .insignia { width: 1rem; height: 1rem; margin-top: .15rem; }
 .propuesta .lado { grid-column: 3; grid-row: 1 / span 2; display: grid; gap: .375rem; justify-items: end; }
@@ -380,7 +384,7 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .buscador { display: flex; gap: .5rem; align-items: center; padding: .375rem .375rem .375rem 1.125rem; border: 2px solid var(--pizarra); border-radius: 999px; background: var(--papel); }
 .buscador input { flex: 1; min-width: 0; border: 0; background: transparent; font-size: var(--t-l); font-weight: 600; color: var(--tinta); padding: .375rem 0; }
 .buscador input:focus { outline: none; }
-.buscador:focus-within { box-shadow: 0 0 0 3px rgb(180 83 28 / .25); }
+.buscador:focus-within { outline: 3px solid var(--foco); outline-offset: 3px; }
 .chips { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
 .chip { display: inline-flex; align-items: center; padding: .25rem .75rem; border: 1.5px solid var(--borde); border-radius: 999px; background: var(--tiza); color: var(--tinta); font-size: var(--t-s); font-weight: 600; }
 .chip.sel { background: var(--pizarra); border-color: var(--pizarra); color: var(--tiza); }
@@ -398,8 +402,8 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .formulario .campo-f { display: grid; gap: .375rem; padding-bottom: .875rem; border-bottom: 1px solid var(--borde); }
 .formulario label.etq, .formulario .etq { font-size: var(--t-s); font-weight: 700; color: var(--cuerpo); }
 .formulario .etq b { color: var(--pizarra-linea); }
-.formulario input[type="text"] { width: 100%; min-height: 2.75rem; padding: .5rem .875rem; border: 1.5px solid var(--borde); border-radius: var(--radio-s); background: var(--papel); color: var(--tinta); font-weight: 600; }
-.chip-boton { border: 1.5px solid var(--borde); background: var(--tiza); color: var(--tinta); border-radius: 999px; padding: .25rem .875rem; min-height: 2.25rem; font-size: var(--t-s); font-weight: 600; }
+.formulario input[type="text"] { width: 100%; min-height: 2.75rem; padding: .5rem .875rem; border: 1.5px solid var(--borde-campo); border-radius: var(--radio-s); background: var(--papel); color: var(--tinta); font-weight: 600; }
+.chip-boton { border: 1.5px solid var(--borde-campo); background: var(--tiza); color: var(--tinta); border-radius: 999px; padding: .25rem .875rem; min-height: 2.25rem; font-size: var(--t-s); font-weight: 600; }
 .chip-boton[aria-pressed="true"] { background: var(--pizarra); border-color: var(--pizarra); color: var(--tiza); }
 .impacto { display: grid; gap: .875rem; }
 .impacto .grande { font-family: var(--f-tit); font-size: 3rem; font-weight: 700; line-height: 1; color: var(--tinta); }
@@ -442,6 +446,7 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .espera { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; }
 .espera img { width: 6rem; height: 6rem; }
 .espera > div { flex: 1; min-width: min(100%, 16rem); display: grid; gap: .625rem; }
+.espera .ayuda { font-size: var(--t-s); color: var(--cuerpo); }
 
 /* Tabla */
 .tabla-caja { overflow-x: auto; border: 1px solid var(--borde); border-radius: var(--radio-l); background: var(--papel); }
@@ -473,15 +478,19 @@ td.importe, th.importe { text-align: right; font-variant-numeric: tabular-nums; 
 .version { display: grid; gap: .75rem; }
 .version p { color: var(--tinta); line-height: 1.7; }
 .version.facil p { font-size: var(--t-l); line-height: 1.75; }
+.version.facil .doc-sub { font-size: var(--t-s); line-height: 1.5; }
 
 /* Ventana de confirmación y avisos */
 dialog.confirmar { width: min(36rem, calc(100vw - 2rem)); max-height: calc(100vh - 2rem); padding: 0; border: 0; border-radius: var(--radio-l); background: var(--papel); color: var(--cuerpo); box-shadow: 0 24px 64px -16px rgb(23 50 44 / .45); }
 dialog.confirmar::backdrop { background: rgb(23 50 44 / .45); }
 .confirmar-dentro { display: grid; gap: 1rem; padding: 1.5rem; }
 .confirmar-dentro h2 { font-size: var(--t-xl); font-weight: 600; }
+#confirmar-titulo:focus { outline: none; }
 .vista-previa { max-height: 40vh; overflow: auto; padding: .875rem 1rem; border-radius: var(--radio); background: var(--tiza); border: 1px solid var(--borde); color: var(--tinta); display: grid; gap: .5rem; font-size: var(--t-s); }
+/* Los avisos no recogen toques: en el móvil quedan encima de lo último que se ha tocado (otro «Marcar como hecho»,
+   «Deshacer»…) y el toque tiene que llegar a lo de debajo. No llevan nada que pulsar. */
 .avisos-flotantes { position: fixed; z-index: 50; right: max(1rem, env(safe-area-inset-right, 0px)); bottom: max(1rem, env(safe-area-inset-bottom, 0px)); display: grid; gap: .5rem; width: min(26rem, calc(100vw - 2rem)); pointer-events: none; }
-.flotante { display: flex; gap: .75rem; align-items: flex-start; padding: .875rem 1rem; border-radius: var(--radio); background: var(--pizarra); color: var(--tiza); box-shadow: var(--sombra); font-size: var(--t-s); pointer-events: auto; animation: entra .25s ease-out; }
+.flotante { display: flex; gap: .75rem; align-items: flex-start; padding: .875rem 1rem; border-radius: var(--radio); background: var(--pizarra); color: var(--tiza); box-shadow: var(--sombra); font-size: var(--t-s); pointer-events: none; animation: entra .25s ease-out; }
 .flotante b { display: block; }
 .flotante .visto { margin-top: .1rem; }
 @keyframes entra { from { opacity: 0; transform: translateY(.5rem); } }
@@ -497,6 +506,9 @@ dialog.confirmar::backdrop { background: rgb(23 50 44 / .45); }
   .dos-columnas, .protocolo { grid-template-columns: minmax(0, 1fr); }
   .lateral { position: static; }
   .chip-hora { display: none; }
+  /* Al desplazar de lado una tabla con cabecera de fila (MODULOS.tabla), la columna del grupo se queda fija.
+     La tabla de gastos no tiene cabecera de fila: su primera columna se desplaza con las demás. */
+  .tabla-caja.columna-fija thead th:first-child, .tabla-caja.columna-fija tbody th { position: sticky; left: 0; z-index: 1; box-shadow: 1px 0 0 var(--borde); }
 }
 @media (max-width: 900px) {
   .acceso { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; grid-template-areas: "arriba" "perfiles" "abajo"; }
@@ -570,7 +582,7 @@ DEMO.rol({
         titulo: 'Quién falta',
         items: [
           {
-            texto: 'Sergio Prieto (tutor de 3.º B) no viene: tiene fiebre. Jefatura revisa la propuesta para cubrir 1.ª, 3.ª, 6.ª y el recreo.',
+            texto: 'Sergio Prieto (tutor de 3.º B) no viene hoy. Jefatura revisa la propuesta para cubrir 1.ª, 3.ª, 6.ª y el recreo.',
             estado: 'pendiente',
             bandera: 'guardias',
             textoSi: 'Jefatura ha confirmado quién cubre a Sergio Prieto: Pablo Sanz (1.ª y 6.ª), Rosa Medina (3.ª) y Teresa Gil (recreo). Quien entra en 3.º B ya tiene su ficha.',
@@ -664,6 +676,7 @@ DEMO.rol({
         },
         {
           titulo: 'Confirmar y enviar ya el dosier',
+          adjuntos: ['Dosier para la visita de inspección.pdf'],
           texto: 'Estimada inspectora:\n\nLe confirmo la visita del jueves 26 de noviembre a las 10:00. La recibiremos el jefe de estudios y yo.\n\nLe adjunto la documentación que nos pide: el plan de convivencia 2026-27, los horarios de 2.º ESO, las programaciones de Matemáticas de ESO y las actas de la evaluación inicial de ESO, salvo la de 2.º ESO A, que le enviaré antes del lunes 23.\n\nUn saludo cordial,\nElena Ruiz\nDirectora del Colegio Ejemplo',
         },
         {
@@ -703,7 +716,7 @@ DEMO.rol({
           texto: 'Estimados Ana y Óscar:\n\nGracias por escribirnos. Para estudiar bien su reclamación, ¿podrían indicarnos qué días se queda Carla al comedor y en cuáles no le ha dado tiempo a terminar? Lo comprobaremos con las monitoras del segundo turno.\n\nLes responderemos por escrito antes del viernes 27 de noviembre.\n\nAtentamente,\nElena Ruiz\nDirectora del Colegio Ejemplo',
         },
       ],
-      nota: 'DirectorIA la ha registrado como reclamación y te avisa el miércoles 25. Las respuestas propuestas no entran en el fondo: eso lo decides tú.',
+      nota: 'DirectorIA ha apuntado el plazo de respuesta y te avisa el miércoles 25. Las respuestas propuestas no entran en el fondo: eso lo decides tú.',
     },
     {
       id: 'c-fotocopiadoras',
@@ -784,7 +797,9 @@ DEMO.rol({
       adjuntos: ['Plano del corte de tráfico.pdf'],
       respuestas: [
         {
-          titulo: 'Avisar a las familias',
+          titulo: 'Circular para avisar a las familias',
+          para: 'Todas las familias del colegio',
+          asunto: 'Lunes 30: corte de la calle de la entrada por obras',
           texto: 'Estimadas familias:\n\nEl Ayuntamiento nos informa de que el lunes 30 de noviembre, de 7:00 a 19:00, la calle de la entrada principal estará cortada al tráfico por obras. Ese día no se podrá parar en coche delante del colegio, tampoco un momento para dejar a sus hijos.\n\nSe podrá llegar a pie a la puerta principal por un paso señalizado, y las entradas y salidas serán a la hora de siempre. Les recomendamos salir con tiempo, sobre todo a las familias de ESO: ese día empiezan los exámenes de la 1.ª evaluación.\n\nGracias por su colaboración.\n\nUn saludo cordial,\nElena Ruiz\nDirectora del Colegio Ejemplo',
         },
         {
@@ -792,7 +807,7 @@ DEMO.rol({
           texto: 'Buenos días:\n\nGracias por el aviso. Ese lunes el alumnado entra a las 8:15 y a las 9:00 y sale a las 14:45 y a las 16:00. Les pido que en esas franjas el paso peatonal hasta la entrada principal esté despejado y, si es posible, que haya un agente de Policía Municipal.\n\n¿Podrían confirmarnos la fecha unos días antes, para avisar a las familias con seguridad?\n\nAtentamente,\nElena Ruiz\nDirectora del Colegio Ejemplo',
         },
       ],
-      nota: 'No hace falta contestar. Ese día empiezan los exámenes de ESO; el aviso a las familias ya lo tiene en cuenta.',
+      nota: 'No hace falta contestar al Ayuntamiento. La primera propuesta es una circular para las familias: ese día empiezan los exámenes de ESO.',
     },
   ],
 
@@ -850,7 +865,7 @@ DEMO.rol({
         { nombre: 'Acta de la evaluación inicial de 2.º ESO A', estado: 'falta', detalle: 'No está en el archivo de actas. Decide si se la pides a jefatura.' },
         { nombre: 'Acta de la evaluación inicial de 2.º ESO B', estado: 'ok' },
         { nombre: 'Actas de la evaluación inicial de 3.º y 4.º ESO', estado: 'ok', detalle: 'Cuatro actas, de los grupos A y B' },
-        { nombre: 'Escrito de remisión a Inspección', estado: 'revisar', detalle: 'Borrador preparado con IA. Lo revisas y lo firmas tú.' },
+        { nombre: 'Escrito de remisión a Inspección', estado: 'revisar', detalle: 'Borrador preparado por DirectorIA con los datos de la visita. Lo revisas y lo firmas tú.' },
       ],
     },
     {
@@ -985,7 +1000,7 @@ DEMO.rol({
             ir: 'correo:c-daniel',
           },
           {
-            texto: 'La madre de Amira pregunta en inglés por el chándal de Educación Física, y mañana tiene clase. Las respuestas, en inglés y traducidas.',
+            texto: 'La madre de Amira pregunta en inglés por el chándal. Amira tiene Educación Física mañana. Las respuestas están en inglés y traducidas.',
             estado: 'hoy',
             ir: 'correo:c-amira',
           },
@@ -1089,7 +1104,7 @@ DEMO.rol({
         },
         {
           titulo: 'Pedirle la talla',
-          texto: 'Dear Nadia,\n\nAmira can wear her own sports clothes for now, and she has PE on Mondays and Thursdays.\n\nCould you tell me her size? I will ask the uniform shop next to the school office to keep a tracksuit (€42) and a T-shirt (€12) for her. It opens on Tuesdays and Thursdays from 16:00 to 17:30.\n\nBest wishes,\nLaura Sánchez\nClass teacher of 4.º A and PE teacher\n\n[En español: De momento, Amira puede venir con su ropa de deporte, y tiene Educación Física los lunes y los jueves. ¿Me dice su talla? Pediré a la tienda de uniformes, junto a secretaría, que le guarde un chándal (42 €) y una camiseta (12 €). Abre los martes y jueves de 16:00 a 17:30.]',
+          texto: 'Dear Nadia,\n\nAmira can wear her own sports clothes for now, and she has PE on Mondays and Thursdays.\n\nCould you tell me her size? I will ask the uniform shop next to the school office to keep a tracksuit (€42) and a T-shirt (€12) for her. It is open on Tuesdays and Thursdays from 16:00 to 17:30.\n\nBest wishes,\nLaura Sánchez\nClass teacher of 4.º A and PE teacher\n\n[En español: De momento, Amira puede venir con su ropa de deporte, y tiene Educación Física los lunes y los jueves. ¿Me dice su talla? Pediré a la tienda de uniformes, junto a secretaría, que le guarde un chándal (42 €) y una camiseta (12 €). Abre los martes y jueves de 16:00 a 17:30.]',
         },
       ],
       nota: 'Tienda y precios, de la guía para familias del colegio. La circular de la salida en inglés la está revisando orientación.',
@@ -1172,7 +1187,7 @@ DEMO.rol({
       original: 'Queridos compañeros de Primaria:\n\nComo acordamos en el claustro del lunes, a partir de enero dedicaremos 20 minutos diarios a la lectura en todos los cursos de Primaria. Así lo vamos a organizar:\n\nSerá cada día de 14:30 a 14:50, al volver de comer, en el aula y con quien tenga clase con el grupo a esa hora. También los especialistas.\n\nCada aula tendrá un lote de 30 libros de la biblioteca, que iremos cambiando cada trimestre. Los repartiremos la semana del 14 de diciembre. Si queréis títulos concretos para vuestro grupo, pedídselos a la biblioteca antes del viernes 4 de diciembre.\n\nNo se pone nota ni hay fichas: se trata de que lean por gusto.\n\nGracias por las ideas que salieron en el claustro.\n\nUn abrazo,\nElena Ruiz\nDirectora',
       adjuntos: ['Plan de lectura de Primaria.pdf'],
       respuestas: [],
-      nota: 'Solo para leer. DirectorIA ha añadido a tus plazos la petición de títulos para el lote de 4.º A, antes del vie 4 dic.',
+      nota: 'Solo para leer. DirectorIA ha añadido a tus plazos la petición de títulos para el lote de 4.º A, antes del viernes 4 de diciembre.',
       ir: 'plazos',
     },
   ],
@@ -1245,7 +1260,8 @@ DEMO.rol({
         curso: ['3.º de Primaria', '4.º de Primaria'],
         materia: ['Educación Física'],
         contenidos: ['Alimentación saludable', 'Hábitos de vida activa'],
-        casillas: ['Hecho con IA y revisado por mí', 'Sin fotos ni datos de alumnos', 'Es mío o puedo compartirlo'],
+        casillas: ['Sin fotos ni datos de alumnos', 'Es mío o puedo compartirlo'],
+        declaracion: 'Lo he hecho con IA y lo he revisado',
       },
       impacto: {
         texto: 'Tus 12 recursos se han usado 87 veces y 9 compañeros han dicho «Me ha servido».',
@@ -1266,7 +1282,7 @@ DEMO.rol({
       peticion: 'Situación de aprendizaje sobre alimentación saludable para 4.º de Primaria: tres sesiones de 45 minutos, una en el gimnasio, y una versión con tareas más cortas para quien lo necesite.',
       bloqueo: {
         intento: 'Situación de aprendizaje sobre alimentación saludable para 4.º de Primaria: tres sesiones, una en el gimnasio, y tareas más cortas para Daniel M., que necesita las instrucciones de una en una.',
-        mensaje: 'Lleva un nombre, «Daniel M.», y el módulo de Claude no recibe datos de alumnos. No ha salido nada. Quita el nombre y pídelo así: «para quien lo necesite».',
+        mensaje: 'Lleva un nombre, «Daniel M.», y en el módulo de Claude no se escriben datos de alumnos. No se ha enviado nada. Quita el nombre y pídelo así: «para quien lo necesite».',
       },
       respuesta: {
         titulo: 'Situación de aprendizaje · Almuerzos con energía (4.º de Primaria)',
@@ -1600,7 +1616,7 @@ DEMO.rol({
       respuestas: [
         {
           titulo: 'Aceptar el miércoles 2',
-          texto: 'Hola, Ramón:\n\nOs dejo el examen de 4.º ESO el miércoles 2, en los dos grupos. Ese día 4.º A tenía también Inglés, así que voy a proponer a Lenguas Extranjeras pasarlo al jueves 3, que el grupo tiene libre.\n\nPodéis decírselo ya a los alumnos. En cuanto lo cierre con ellos, publico el calendario completo para el claustro y las familias.\n\nUn abrazo,\nJavier Martín\nJefe de estudios',
+          texto: 'Hola, Ramón:\n\nOs dejo el examen de 4.º ESO el miércoles 2, en los dos grupos. Ese día 4.º A tenía también Inglés, así que voy a proponer a Lenguas Extranjeras pasarlo al jueves 3, que el grupo tiene libre.\n\nPodéis decírselo ya a los alumnos. En cuanto lo cierre con Lenguas Extranjeras, publico el calendario completo para el claustro y las familias.\n\nUn abrazo,\nJavier Martín\nJefe de estudios',
         },
         {
           titulo: 'Proponer el jueves 3',
@@ -1747,7 +1763,7 @@ DEMO.rol({
       menu: 'Exámenes',
       antetitulo: '1.ª evaluación · ESO',
       titulo: 'Calendario de exámenes del 30 de noviembre al 4 de diciembre',
-      entradilla: 'DirectorIA ha reunido las fechas que han dado los departamentos y ha comprobado que ningún grupo tenga dos exámenes el mismo día. Hay un choque: revisa la propuesta y aprueba el calendario.',
+      entradilla: 'DirectorIA ha reunido las fechas que han dado los departamentos y ha comprobado si algún grupo tiene dos exámenes el mismo día. Hay un choque: revisa la propuesta y aprueba el calendario.',
       columnas: ['Grupo', 'Lun 30', 'Mar 1', 'Mié 2', 'Jue 3', 'Vie 4'],
       filas: [
         ['1.º ESO A', 'Lengua', 'Biología y Geología', 'Geografía e Historia', 'Matemáticas', 'Inglés'],
@@ -1756,7 +1772,7 @@ DEMO.rol({
         ['2.º ESO B', 'Geografía e Historia', 'Inglés', 'Lengua', 'Física y Química', 'Matemáticas'],
         ['3.º ESO A', 'Física y Química', 'Lengua', 'Matemáticas', 'Inglés', 'Biología y Geología'],
         ['3.º ESO B', 'Lengua', 'Biología y Geología', 'Inglés', 'Matemáticas', 'Física y Química'],
-        ['4.º ESO A', 'Lengua', 'Geografía e Historia', 'Matemáticas e Inglés', '—', 'Física y Química'],
+        ['4.º ESO A', 'Lengua', 'Geografía e Historia', 'Matemáticas e Inglés', 'Propuesta: Inglés', 'Física y Química'],
         ['4.º ESO B', 'Geografía e Historia', 'Inglés', 'Matemáticas', 'Lengua', 'Física y Química'],
       ],
       marcas: [
@@ -1870,7 +1886,7 @@ DEMO.rol({
             estado: 'info',
             ir: 'pautas',
             bandera: 'guardias',
-            textoSi: 'Jefatura ha confirmado las guardias: Pablo Sanz verá la pauta de Mario en su ficha de la 6.ª hora. Queda registrado.',
+            textoSi: 'Jefatura ha confirmado las guardias: Pablo Sanz (1.ª y 6.ª) y Rosa Medina (3.ª) verán la pauta de Mario en sus fichas. Queda registrado.',
             estadoSi: 'hecho',
           },
           {
@@ -2010,7 +2026,7 @@ DEMO.rol({
       categoria: 'Claustro',
       etiqueta: { texto: 'Autorizaciones el vie 20', tipo: 'plazo' },
       resumen: [
-        'Laura Sánchez pide una versión en inglés de la circular de la salida al Jardín Botánico (vie 27) para la familia de Amira (4.º A).',
+        'Laura Sánchez pide una versión en inglés de la circular de la salida al Jardín Botánico del viernes 27 para la familia de Amira (4.º A).',
         'Si se puede, también en lectura fácil: la familia está aprendiendo español.',
         'Las autorizaciones firmadas se entregan antes del viernes 20.',
       ],
@@ -2019,7 +2035,7 @@ DEMO.rol({
       adjuntos: ['Circular de la salida al Jardín Botánico.pdf'],
       respuestas: [
         {
-          titulo: 'Confirmar que se las envío hoy',
+          titulo: 'Confirmar que se las envías hoy',
           texto: 'Hola, Laura:\n\nGracias por avisar. Ya tengo las dos versiones de la circular, en inglés y en lectura fácil. Las reviso esta mañana y se las envío hoy a la familia de Amira desde la cuenta del colegio, con el original en español. Te pongo en copia.\n\nAsí tienen tiempo de devolverte la autorización firmada antes del viernes 20.\n\nUn abrazo,\nAndrés Vidal\nOrientador',
         },
         {
@@ -2126,7 +2142,7 @@ DEMO.rol({
         { nombre: 'Citación a la familia de Alumno/a A · la firma la directora', estado: 'Pendiente de firma' },
         { nombre: 'Convocatoria de la reunión del mar 24 (Anexo III)', estado: 'Para revisar' },
       ],
-      pie: 'DirectorIA guía, recuerda y prepara los documentos con las plantillas del protocolo. Si hay acoso, y con qué medidas, lo decide el equipo del centro. Los datos del caso no pasan por la IA.',
+      pie: 'DirectorIA guía, recuerda y prepara los documentos con las plantillas del protocolo. Si hay acoso, y con qué medidas, lo decide el equipo del centro. El expediente del caso no pasa por la IA.',
     },
 
     // Pautas para el aula: qué hacer, para quién y quién la ve
@@ -2152,7 +2168,7 @@ DEMO.rol({
         { fila: 5, columna: 4, tipo: 'aviso' },
       ],
       avisos: [
-        { texto: 'Pablo Sanz verá la pauta de Mario en su ficha de la 6.ª hora; queda registrado.', estado: 'aviso' },
+        { texto: 'Pablo Sanz (1.ª y 6.ª hora) y Rosa Medina (3.ª hora) verán la pauta de Mario en sus fichas de 3.º B; queda registrado.', estado: 'aviso' },
         { texto: 'La pauta de 2.º ESO B es para todo el grupo y no nombra a nadie. Sale de la petición de Beatriz Romero y nadie la ve hasta que la apruebes.', estado: 'info' },
         { texto: 'Las pautas dicen qué hacer en el aula, no por qué: en las fichas no van diagnósticos ni informes.', estado: 'info' },
         { texto: 'DirectorIA lleva cada pauta solo a la ficha de quien entra en ese grupo, y la ficha se cierra al acabar la jornada.', estado: 'ok' },
@@ -2177,7 +2193,7 @@ DEMO.rol({
       versiones: [
         {
           idioma: 'Lectura fácil',
-          texto: 'Estimada familia:\n\nLa clase de Amira va de excursión al Jardín Botánico.\nEl Jardín Botánico es un parque grande con muchos árboles y plantas.\nUn guía les enseña los árboles y las plantas en otoño.\nVan todos los alumnos de 4.º de Primaria con sus profesores.\n\n¿Qué día?\nEl viernes 27 de noviembre.\n\n¿A qué hora?\nLos alumnos salen del colegio a las 9:15 de la mañana.\nVuelven al colegio a las 13:30, la una y media.\nLlegan a tiempo para la comida.\nVan en autobús.\n\n¿Qué tiene que llevar Amira?\nAlmuerzo: un bocadillo o una fruta para media mañana.\nUna botella de agua.\nUna gorra.\nRopa cómoda para andar.\n\n¿Cuánto cuesta?\n6 euros.\nCon este dinero se pagan la entrada y el autobús.\nEl colegio lo cobra en el recibo de diciembre.\nNo tienen que dar dinero a Amira.\n\n¿Qué tienen que hacer ustedes?\nFirmar la autorización.\nLa autorización es el papel para decir que Amira puede ir.\nDar la autorización a Laura Sánchez, la tutora de Amira.\nTienen que darla antes del viernes 20 de noviembre.\n\nSi tienen dudas, pregunten a Laura Sánchez.',
+          texto: 'Estimada familia:\n\nLa clase de Amira va de excursión al Jardín Botánico.\nEl Jardín Botánico es un parque grande con muchos árboles y plantas.\nUn guía enseña a los alumnos los árboles y las plantas en otoño.\nVan todos los alumnos de 4.º de Primaria con sus profesores.\n\n¿Qué día?\nEl viernes 27 de noviembre.\n\n¿A qué hora?\nLos alumnos salen del colegio a las 9:15 de la mañana.\nVuelven al colegio a las 13:30, la una y media.\nLlegan a tiempo para la comida.\nVan en autobús.\n\n¿Qué tiene que llevar Amira?\nAlmuerzo: un bocadillo o una fruta para media mañana.\nUna botella de agua.\nUna gorra.\nRopa cómoda para andar.\n\n¿Cuánto cuesta?\n6 euros.\nCon este dinero se pagan la entrada y el autobús.\nEl colegio lo cobra en el recibo de diciembre.\nNo tienen que dar dinero a Amira.\n\n¿Qué tienen que hacer ustedes?\nFirmar la autorización.\nLa autorización es el papel para decir que Amira puede ir.\nDar la autorización a Laura Sánchez, la tutora de Amira.\nTienen que darla antes del viernes 20 de noviembre.\n\nSi tienen dudas, pregunten a Laura Sánchez.',
         },
         {
           idioma: 'Inglés',
@@ -2437,7 +2453,7 @@ DEMO.rol({
       asunto: 'Nueva tarifa de comisiones de su cuenta desde el 1 de febrero',
       hora: 'lun 16',
       categoria: 'Proveedores',
-      etiqueta: { texto: 'Nueva tarifa el 1 de febrero', tipo: 'info' },
+      etiqueta: { texto: 'Nueva tarifa desde el lun 1 feb', tipo: 'info' },
       resumen: [
         'Desde el 1 de febrero, cada recibo devuelto costará 5 € (ahora 3,50 €) y cada transferencia en oficina, 6 € (ahora 4 €).',
         'La comisión de mantenimiento sigue en 46 € al mes. Las transferencias por banca en línea siguen sin coste.',
@@ -2689,7 +2705,7 @@ DEMO.rol({
   inicio: {
     antetitulo: 'Miércoles 18 de noviembre · 8:00',
     titulo: 'Buenos días, Pablo',
-    entradilla: 'Sergio Prieto no viene y hoy entras en 3.º B a 1.ª y a 6.ª. DirectorIA te ha preparado la jornada, las fichas y el correo. Nada se envía sin ti.',
+    entradilla: 'Sergio Prieto no viene y jefatura cuenta contigo para 3.º B a 1.ª y a 6.ª. DirectorIA te ha preparado la jornada, las fichas y el correo. Nada se envía sin ti.',
     bloques: [
       {
         titulo: 'Tu jornada',
@@ -2774,7 +2790,7 @@ DEMO.rol({
         'Las fichas te llegan cuando confirme las guardias. A las 16:00 haces tú la salida de 3.º B.',
       ],
       piden: 'Que entres en 3.º B a 1.ª y a 6.ª, leas antes las fichas y hagas la salida de las 16:00.',
-      original: 'Buenos días, Pablo:\n\nSergio Prieto está con fiebre y hoy no viene. Te adelanto lo que te va a llegar: cubres 3.º B a 1.ª hora, Lengua, en tu guardia, y a 6.ª, Matemáticas, en tu hora de preparación. Así el grupo empieza y acaba el día contigo, y tus apoyos no se tocan.\n\nAhora reviso la propuesta en DirectorIA y, en cuanto la confirme, te llegan las dos fichas con la tarea de su programación quincenal y lo que tienes que saber del grupo. Léete con calma la de 6.ª: la salida de las 16:00 la haces tú.\n\nRosa entra en 3.ª y Teresa se queda con su turno de patio.\n\nGracias por echar una mano.\n\nUn abrazo,\nJavier Martín\nJefe de estudios',
+      original: 'Buenos días, Pablo:\n\nSergio Prieto no viene hoy. Te adelanto lo que te va a llegar: cubres 3.º B a 1.ª hora, Lengua, en tu guardia, y a 6.ª, Matemáticas, en tu hora de preparación. Así el grupo empieza y acaba el día contigo, y tus apoyos no se tocan.\n\nAhora reviso la propuesta en DirectorIA y, en cuanto la confirme, te llegan las dos fichas con la tarea de su programación quincenal y lo que tienes que saber del grupo. Léete con calma la de 6.ª: la salida de las 16:00 la haces tú.\n\nRosa entra en 3.ª y Teresa se queda con su turno de patio.\n\nGracias por echar una mano.\n\nUn abrazo,\nJavier Martín\nJefe de estudios',
       respuestas: [
         {
           titulo: 'Confirmar y dejar nota a Sergio',
@@ -2782,7 +2798,7 @@ DEMO.rol({
         },
         {
           titulo: 'Ofrecerse también para mañana',
-          texto: 'Buenos días, Javier:\n\nCuenta conmigo para 1.ª y 6.ª con 3.º B.\n\nSi mañana Sergio sigue malo, puedo volver a entrar a 1.ª, que los jueves también tengo guardia: así el grupo empieza el día con alguien que ya conoce. El resto del jueves tengo apoyos y prefiero no moverlos.\n\nDime algo esta tarde, cuando sepas cómo está, y lo dejo preparado.\n\nUn abrazo,\nPablo Sanz\nMaestro de apoyo de Primaria',
+          texto: 'Buenos días, Javier:\n\nCuenta conmigo para 1.ª y 6.ª con 3.º B.\n\nSi mañana Sergio tampoco viene, puedo volver a entrar a 1.ª, que los jueves también tengo guardia: así el grupo empieza el día con alguien que ya conoce. El resto del jueves tengo apoyos y prefiero no moverlos.\n\nDime algo esta tarde, cuando sepas si viene, y lo dejo preparado.\n\nUn abrazo,\nPablo Sanz\nMaestro de apoyo de Primaria',
         },
         {
           titulo: 'Pedir las fichas antes de las 8:45',
@@ -2802,10 +2818,10 @@ DEMO.rol({
       etiqueta: { texto: 'Responder hoy', tipo: 'hoy' },
       resumen: [
         'Laura te pide 12 saquitos y 10 aros pequeños del aula de apoyo para su Educación Física con 4.º A del jueves, a 2.ª hora.',
-        'Si las tienes, también las tarjetas con dibujos de las estaciones. Le iría bien tenerlo hoy en el cuarto de material del gimnasio.',
+        'Si las tienes, también las tarjetas de las estaciones del circuito. Le iría bien tenerlo hoy en el cuarto de material del gimnasio.',
         'Hoy estás con 3.º B hasta la salida de las 16:00. Te lo devuelve el jueves en el recreo.',
       ],
-      piden: 'Dejarle hoy en el gimnasio 12 saquitos, 10 aros pequeños y, si puedes, las tarjetas de las estaciones.',
+      piden: 'Dejarle hoy en el gimnasio 12 saquitos, 10 aros pequeños y, si puedes, las tarjetas de las estaciones del circuito.',
       original: 'Hola, Pablo:\n\n¿Me puedes prestar para el jueves los saquitos y los aros pequeños del aula de apoyo? A 2.ª hora hago con 4.º A un circuito de lanzamientos y en el gimnasio solo quedan seis aros en buen estado. Con 12 saquitos y 10 aros me apaño.\n\nSi tienes a mano las tarjetas con dibujos para explicar las estaciones, mejor todavía: así lo entienden todos de un vistazo.\n\nSi te viene bien, déjamelo todo mañana en el cuarto de material del gimnasio, en la estantería de arriba. Te lo devuelvo el jueves en el recreo, que ya sé que por la tarde lo usas con los de 1.º.\n\n¡Gracias! Te debo un café.\n\nLaura',
       respuestas: [
         {
@@ -3019,7 +3035,7 @@ DEMO.rol({
 
   /* ---------- Estado ---------- */
   function estadoInicial() {
-    return { reloj: 0, banderas: {}, correo: {}, sel: {}, leyendo: {}, borrador: {}, aprob: {}, docs: {}, plazos: {}, tablas: {}, banco: {}, dictado: {}, material: {}, trad: {}, informe: {}, previa: {}, fichas: {} };
+    return { reloj: 0, banderas: {}, correo: {}, sel: {}, leyendo: {}, borrador: {}, aprob: {}, docs: {}, plazos: {}, tablas: {}, banco: {}, dictado: {}, material: {}, trad: {}, informe: {}, fichas: {} };
   }
   var S = cargar() || estadoInicial();
   function cargar() {
@@ -3104,15 +3120,16 @@ DEMO.rol({
   var dialogo = h('dialog', { class: 'confirmar', 'aria-labelledby': 'confirmar-titulo' });
   function confirmar(op) {
     dialogo.replaceChildren(h('form', { method: 'dialog', class: 'confirmar-dentro', onsubmit: function (e) { e.preventDefault(); } },
-      h('h2', { id: 'confirmar-titulo' }, op.titulo),
+      h('h2', { id: 'confirmar-titulo', tabindex: '-1' }, op.titulo),
       op.intro ? h('p', null, op.intro) : null,
       op.vista ? h('div', { class: 'vista-previa' }, op.vista) : null,
-      h('p', { class: 'con-insignia suave' }, svg(SVG_VISTO), 'Demo: no se envía nada de verdad.'),
+      op.sinNotaDemo ? null : h('p', { class: 'con-insignia suave' }, svg(SVG_VISTO), 'Demo: no se envía nada de verdad.'),
       h('div', { class: 'acciones' },
         boton(op.boton, function () { cerrarDialogo(); op.alAceptar(); }, { id: 'confirmar-si' }),
         boton(op.cancelar || 'Seguir revisando', cerrarDialogo, { cls: 'boton-borde' }))));
     if (typeof dialogo.showModal === 'function') dialogo.showModal(); else dialogo.setAttribute('open', '');
-    var si = document.getElementById('confirmar-si'); if (si) si.focus();
+    // El foco va al título, no al botón: un Intro por inercia no envía nada y el lector de pantalla empieza por lo que se va a enviar.
+    var tt = document.getElementById('confirmar-titulo'); if (tt) tt.focus();
   }
   function cerrarDialogo() { if (typeof dialogo.close === 'function' && dialogo.open) dialogo.close(); else dialogo.removeAttribute('open'); }
 
@@ -3150,6 +3167,10 @@ DEMO.rol({
     var focoK = !cambia && document.activeElement && document.activeElement.getAttribute('data-k');
     var y = window.scrollY;
     raiz.replaceChildren(r.rol ? vistaApp(r.rol, r.vista) : vistaAcceso());
+    // En el móvil el menú es una fila que se desplaza de lado: deja a la vista el apartado en el que estás.
+    var act = raiz.querySelector('.menu nav a[aria-current="page"]');
+    var barra = act && act.closest('nav');
+    if (barra && barra.scrollWidth > barra.clientWidth) barra.scrollLeft += act.getBoundingClientRect().left - barra.getBoundingClientRect().left - 16;
     ultimaRuta = clave;
     document.title = r.rol ? 'Demo de DirectorIA · ' + D.roles[r.rol].persona.cargo : 'Demo de DirectorIA';
     if (cambia) {
@@ -3165,12 +3186,12 @@ DEMO.rol({
 
   /* ---------- Acceso ---------- */
   var RECORRIDO = [
-    { rol: 'jefatura', vista: 'guardias', t: 'Falta un profesor', d: 'Jefatura de estudios confirma quién cubre cada hora.' },
+    { rol: 'jefatura', vista: 'guardias', t: 'Falta un profesor', d: 'Revisa quién cubre cada hora y lo confirma.' },
     { rol: 'sustituto', vista: 'ficha', t: 'La ficha de quien sustituye', d: 'Solo lo necesario, y solo para quien entra al aula.' },
-    { rol: 'direccion', vista: 'inicio', t: 'El resumen de las 8:00', d: 'La directora lo ve todo de un vistazo y responde a inspección.' },
+    { rol: 'direccion', vista: 'inicio', t: 'El resumen de las 8:00', d: 'Ve quién falta, qué vence y qué correos importan, y responde a inspección.' },
     { rol: 'docente', vista: 'dictado', t: 'Un correo dictado', d: 'La tutora dicta; el correo llega redactado para revisar.' },
     { rol: 'orientacion', vista: 'acoso', t: 'Un protocolo, con reserva', d: 'Paso a paso, con fechas, responsables y documentos.' },
-    { rol: 'secretaria', vista: 'gastos', t: 'El analista de gastos', d: 'Renovaciones, ahorros y papeles listos para firmar.' },
+    { rol: 'secretaria', vista: 'gastos', t: 'El analista de gastos', d: 'Facturas y contratos revisados, con avisos de renovaciones y ahorros.' },
   ];
   function vistaAcceso() {
     var arriba = h('header', { class: 'acceso-banda acceso-arriba marco' },
@@ -3212,9 +3233,16 @@ DEMO.rol({
       banda);
   }
   function reiniciar() {
-    S = estadoInicial(); guardar();
-    avisar('Demo reiniciada', 'Todo vuelve a como estaba a las 8:00.');
-    ir(null);
+    confirmar({
+      titulo: '¿Reiniciar la demo?',
+      intro: 'Todo vuelve a como estaba a las 8:00: las guardias, los correos enviados, los documentos y los plazos.',
+      boton: 'Reiniciar la demo', cancelar: 'Seguir con la demo', sinNotaDemo: true,
+      alAceptar: function () {
+        S = estadoInicial(); guardar();
+        avisar('Demo reiniciada', 'Todo vuelve a como estaba a las 8:00.');
+        ir(null);
+      },
+    });
   }
 
   /* ---------- App ---------- */
@@ -3279,8 +3307,10 @@ DEMO.rol({
     if (destino === 'correo') return 'Abrir el correo';
     if (destino.indexOf('correo:') === 0) return 'Leer el correo';
     var m = modulo(rol, destino);
-    return m ? 'Abrir ' + minuscula(m.menu) : 'Abrir';
+    return m ? irAModulo(m) : 'Abrir';
   }
+  // Los enlaces a funciones nombran el menú tal cual: «Ir a «Pendiente de firma»».
+  function irAModulo(m) { return 'Ir a «' + m.menu + '»'; }
 
   /* ---------- Correo ---------- */
   function vistaCorreo(rol) {
@@ -3303,11 +3333,11 @@ DEMO.rol({
           h('span', { class: 'asunto' }, c.asunto),
           h('span', { class: 'extracto' }, (c.resumen || [])[0] || ''),
           h('span', { class: 'fila3' },
-            e && e.estado === 'enviado' ? pastilla('hecho', 'Respondido ' + e.hora) : e && e.estado === 'archivado' ? pastilla('hecho', 'Archivado') : pastilla(c.etiqueta.tipo, c.etiqueta.texto),
+            e && e.estado === 'enviado' ? pastilla('hecho', (e.para ? 'Enviado ' : 'Respondido ') + e.hora) : e && e.estado === 'archivado' ? pastilla('hecho', 'Archivado') : pastilla(c.etiqueta.tipo, c.etiqueta.texto),
             h('span', { class: 'pastilla p-info' }, c.categoria))));
       })));
 
-    var cabeza = cabezaVista('Correo', 'Tu correo, resumido', n ? 'Tienes ' + n + (n === 1 ? ' correo' : ' correos') + ' con una respuesta propuesta. Revísala, cámbiala si hace falta y envíala tú: nada sale sin que lo envíes.' : 'Has respondido todo lo que pedía respuesta. Lo que queda es para leer.');
+    var cabeza = cabezaVista('Correo', 'Tu correo, resumido', n ? (n === 1 ? 'Tienes un correo con respuestas propuestas.' : 'Tienes ' + n + ' correos con respuestas propuestas.') + ' Elige una, cámbiala si hace falta y envíala tú: nada sale sin que lo envíes.' : 'No te queda ningún correo por responder.');
     return [cabeza, h('div', { class: 'correo' + (S.leyendo[rol] ? ' leyendo' : '') }, bandeja, actual ? lectura(rol, actual) : h('p', null, 'No hay correos.'))];
   }
 
@@ -3317,6 +3347,18 @@ DEMO.rol({
     var claveB = rol + ':' + c.id;
     var b = S.borrador[claveB] || (S.borrador[claveB] = { opcion: (c.respuestas || []).length ? 0 : -1, texto: (c.respuestas && c.respuestas[0]) ? c.respuestas[0].texto : '' });
     var m = c.ir ? modulo(rol, c.ir) : null;
+    // Cada respuesta propuesta va a quien escribió, con «Re:» y su asunto, salvo que traiga su propio «para» y «asunto»
+    // (por ejemplo, una circular para las familias). «adjuntos» es lo que va adjunto a esa respuesta.
+    var rSel = (c.respuestas || [])[b.opcion] || {};
+    var para = rSel.para || (c.de + (c.deDetalle ? ' (' + c.deDetalle + ')' : ''));
+    var asunto = rSel.asunto || 'Re: ' + c.asunto;
+    var adj = rSel.adjuntos || [];
+    // Archivar no lanza aviso flotante: el sello «Archivado a las…» ya lo dice, y en el móvil el aviso tapaba «Deshacer».
+    // El foco pasa a «Deshacer», que lleva el sello como descripción: así lo oye también quien usa lector de pantalla.
+    function archivar() {
+      bolsa('correo', rol)[c.id] = { estado: 'archivado', hora: ahora() }; repintar();
+      var x = raiz.querySelector('[data-k="deshacer-' + c.id + '"]'); if (x) x.focus();
+    }
 
     var partes = [
       h('button', { class: 'boton boton-borde boton-pequeno volver', type: 'button', onclick: function () { S.leyendo[rol] = false; repintar(); } }, 'Volver a la bandeja'),
@@ -3330,22 +3372,29 @@ DEMO.rol({
         h('ul', null, (c.resumen || []).map(function (s) { return h('li', null, s); })),
         c.piden ? h('p', { class: 'piden' }, h('b', null, 'Qué te piden'), c.piden) : null),
     ];
-    if (c.nota) partes.push(h('div', { class: 'nota-ia' }, h('div', null, h('p', null, c.nota), m ? h('button', { class: 'enlace', type: 'button', style: 'margin-top:.375rem', onclick: function () { ir(rol, m.id); } }, 'Abrir ' + minuscula(m.menu)) : null)));
-    else if (m) partes.push(h('div', null, h('button', { class: 'enlace', type: 'button', onclick: function () { ir(rol, m.id); } }, 'Abrir ' + minuscula(m.menu))));
+    if (c.nota) partes.push(h('div', { class: 'nota-ia' }, h('div', null, h('p', null, c.nota), m ? h('button', { class: 'enlace', type: 'button', style: 'margin-top:.375rem', onclick: function () { ir(rol, m.id); } }, irAModulo(m)) : null)));
+    else if (m) partes.push(h('div', null, h('button', { class: 'enlace', type: 'button', onclick: function () { ir(rol, m.id); } }, irAModulo(m))));
     partes.push(h('details', { class: 'original' }, h('summary', null, 'Ver el correo original'), h('div', { class: 'texto-original' }, parrafos(c.original))));
 
     if (e && e.estado === 'enviado') {
       partes.push(h('section', { class: 'tarjeta enviado' },
-        h('p', { class: 'sello' }, visto(), 'Respondido a las ' + e.hora + ' desde tu cuenta del colegio'),
+        h('p', { class: 'sello' }, visto(), (e.para ? 'Enviado a ' + minuscula(e.para) : 'Respondido') + ' a las ' + e.hora + ' desde tu cuenta del colegio'),
         h('div', { class: 'cuerpo-enviado' }, parrafos(e.texto))));
     } else if (e && e.estado === 'archivado') {
-      partes.push(h('p', { class: 'sello' }, visto(), 'Archivado a las ' + e.hora + '.'));
+      // Archivar no es definitivo: «Deshacer» devuelve el correo a la bandeja tal como estaba.
+      partes.push(h('div', { class: 'acciones' },
+        h('p', { class: 'sello', id: 'archivado-' + c.id }, visto(), 'Archivado a las ' + e.hora + '.'),
+        boton('Deshacer', function () {
+          delete S.correo[rol][c.id]; repintar();
+          var x = raiz.querySelector('[data-k="enviar-' + c.id + '"], [data-k="archivar-' + c.id + '"]'); if (x) x.focus();
+        }, { cls: 'boton-borde boton-pequeno', 'data-k': 'deshacer-' + c.id, 'aria-describedby': 'archivado-' + c.id })));
     } else if ((c.respuestas || []).length) {
       var area = h('textarea', { id: 'resp-' + c.id, 'data-k': 'area-' + c.id, 'aria-label': 'Texto de la respuesta', oninput: function (ev) { b.texto = ev.target.value; guardar(); } });
       area.value = b.texto;
       var opciones = h('div', { class: 'opciones', role: 'radiogroup', 'aria-label': 'Respuestas propuestas' }, c.respuestas.map(function (r, i) {
         return h('label', { class: 'opcion' },
-          h('input', { type: 'radio', name: 'op-' + c.id, checked: b.opcion === i, 'data-k': 'op-' + c.id + '-' + i, onchange: function () { b.opcion = i; b.texto = r.texto; repintar(); } }),
+          // Al cambiar de propuesta se guarda lo que has escrito en la que dejas, y vuelve si regresas a ella.
+          h('input', { type: 'radio', name: 'op-' + c.id, checked: b.opcion === i, 'data-k': 'op-' + c.id + '-' + i, onchange: function () { b.textos = b.textos || {}; b.textos[b.opcion] = b.texto; b.opcion = i; b.texto = b.textos[i] !== undefined ? b.textos[i] : r.texto; repintar(); } }),
           h('span', { class: 't' }, r.titulo),
           h('span', { class: 'pre' }, r.texto.replace(/\s+/g, ' ')));
       }));
@@ -3354,8 +3403,9 @@ DEMO.rol({
         h('p', { style: 'font-size:var(--t-s)' }, 'Elige una y cámbiala lo que quieras. Nada se envía hasta que pulses Enviar.'),
         opciones,
         h('div', { class: 'editor' },
-          h('p', { class: 'linea-campo' }, h('b', null, 'Para'), h('span', null, c.de + (c.deDetalle ? ' (' + c.deDetalle + ')' : ''))),
-          h('p', { class: 'linea-campo' }, h('b', null, 'Asunto'), h('span', null, 'Re: ' + c.asunto)),
+          h('p', { class: 'linea-campo' }, h('b', null, 'Para'), h('span', null, para)),
+          h('p', { class: 'linea-campo' }, h('b', null, 'Asunto'), h('span', null, asunto)),
+          adj.length ? h('div', { class: 'linea-campo' }, h('b', null, 'Adjuntos'), h('span', { class: 'adjuntos' }, adj.map(function (a) { return h('span', { class: 'adjunto' }, a); }))) : null,
           h('label', { class: 'sr', for: 'resp-' + c.id }, 'Texto de la respuesta'),
           area,
           h('div', { class: 'acciones' },
@@ -3364,19 +3414,23 @@ DEMO.rol({
               if (!texto) { avisar('La respuesta está vacía', 'Elige una respuesta propuesta o escribe la tuya.'); return; }
               confirmar({
                 titulo: '¿Enviar esta respuesta?',
-                vista: [h('p', null, h('b', null, 'Para: '), c.de), h('p', null, h('b', null, 'Asunto: '), 'Re: ' + c.asunto), parrafos(texto)],
+                vista: [
+                  h('p', null, h('b', null, 'Para: '), para),
+                  h('p', null, h('b', null, 'Asunto: '), asunto),
+                  adj.length ? h('p', null, h('b', null, 'Adjuntos: '), adj.join(', ')) : null,
+                  parrafos(texto)],
                 boton: 'Enviar desde mi cuenta del colegio',
                 alAceptar: function () {
                   var hora = ahora();
-                  bolsa('correo', rol)[c.id] = { estado: 'enviado', hora: hora, texto: texto };
+                  bolsa('correo', rol)[c.id] = { estado: 'enviado', hora: hora, texto: texto, para: rSel.para || null };
                   repintar();
-                  avisar('Respuesta enviada', 'Ha salido desde tu cuenta del colegio. (En la demo no se envía nada.)');
+                  avisar(rSel.para ? 'Correo enviado' : 'Respuesta enviada', 'Ha salido desde tu cuenta del colegio. (En la demo no se envía nada.)');
                 },
               });
             }, { 'data-k': 'enviar-' + c.id }),
-            boton('Archivar sin responder', function () { bolsa('correo', rol)[c.id] = { estado: 'archivado', hora: ahora() }; repintar(); avisar('Archivado', c.asunto); }, { cls: 'boton-borde' })))));
+            boton('Archivar sin responder', archivar, { cls: 'boton-borde', 'data-k': 'archivar-' + c.id })))));
     } else {
-      partes.push(h('div', { class: 'acciones' }, boton('Archivar', function () { bolsa('correo', rol)[c.id] = { estado: 'archivado', hora: ahora() }; repintar(); avisar('Archivado', c.asunto); }, { cls: 'boton-borde', 'data-k': 'archivar-' + c.id })));
+      partes.push(h('div', { class: 'acciones' }, boton('Archivar', archivar, { cls: 'boton-borde', 'data-k': 'archivar-' + c.id })));
     }
     return h('article', { class: 'lectura', 'aria-label': c.asunto }, partes);
   }
@@ -3409,7 +3463,7 @@ DEMO.rol({
       if (ya) avisar('Todo confirmado', m.alConfirmar);
     }
     var cab = [];
-    if (m.contexto) cab.push(h('section', { class: 'tarjeta contexto' }, ilus('sustituto', null, ''), h('div', null, h('b', null, m.contexto.titulo), h('p', null, m.contexto.texto))));
+    if (m.contexto) cab.push(h('section', { class: 'tarjeta contexto' }, ilus('calendario', null, ''), h('div', null, h('b', null, m.contexto.titulo), h('p', null, m.contexto.texto))));
     cab.push(h('div', { class: 'tarjeta-cabeza' },
       h('p', null, esIA(m) ? conInsignia('Propuesta de la IA · ' + hechos + ' de ' + m.items.length + ' confirmadas', true) : sinInsignia('Propuesta de DirectorIA, con las reglas del colegio · ' + hechos + ' de ' + m.items.length + ' confirmadas')),
       todos ? pastilla('hecho', 'Todo confirmado') : boton(m.botonTodo, function () { m.items.forEach(function (it) { var e = est[it.id] || (est[it.id] = {}); if (!e.hecho) { e.hecho = true; e.hora = ahora(); e.quien = e.quien || it.propuesta; } }); comprobarTodo(); }, { 'data-k': 'todo-' + m.id })));
@@ -3422,7 +3476,7 @@ DEMO.rol({
       return h('li', { class: 'propuesta' + (e.hecho ? ' hecha' : '') },
         h('div', { class: 'cuando' }, it.cuando, h('small', null, it.que)),
         h('div', { class: 'quien' }, h('label', { for: 'sel-' + m.id + '-' + it.id, class: 'sr' }, 'Quién cubre ' + it.cuando), sel),
-        h('p', { class: 'motivo' }, esIA(m) ? insignia() : null, elegido === it.propuesta ? it.motivo : 'Has elegido a otra persona. DirectorIA lo tendrá en cuenta para repartir las próximas guardias.'),
+        h('p', { class: 'motivo' }, esIA(m) ? insignia() : null, elegido === it.propuesta ? it.motivo : 'Has elegido a ' + elegido + '. DirectorIA lo tendrá en cuenta al proponer el reparto de las próximas guardias. En la demo, los otros perfiles siguen la propuesta inicial.'),
         h('div', { class: 'lado' },
           e.hecho ? pastilla('hecho', 'Confirmado ' + e.hora) : boton(m.boton, function () { confirmarUno(it); }, { cls: 'boton-pequeno', 'data-k': 'ok-' + it.id }),
           e.hecho && it.ficha ? h('span', { class: 'pastilla p-info' }, 'Ficha enviada a ' + elegido) : null));
@@ -3430,10 +3484,11 @@ DEMO.rol({
     return cab.concat([lista, todos ? h('div', { class: 'aviso ok' }, visto(), h('p', null, m.alConfirmar)) : h('p', { class: 'nota-ia' }, 'Nada cambia hasta que confirmes. Puedes elegir a otra persona en cada sesión.')]);
   };
 
-  function bloquesDoc(bloques) {
+  // ed: lo que la persona ha cambiado en cada párrafo (por número de bloque); editable: si los párrafos se pueden cambiar ahora.
+  function bloquesDoc(bloques, ed, editable) {
     var out = [];
     var campos = null;
-    bloques.forEach(function (b) {
+    bloques.forEach(function (b, i) {
       if (b.tipo === 'campo') {
         if (!campos) { campos = h('dl', null); out.push(campos); }
         campos.append(h('div', { class: 'campo' }, h('dt', null, b.etiqueta), h('dd', null, b.texto)));
@@ -3441,7 +3496,11 @@ DEMO.rol({
       }
       campos = null;
       if (b.tipo === 'titulo') out.push(h('h3', null, b.texto));
-      else if (b.tipo === 'parrafo') out.push.apply(out, parrafos(b.texto));
+      else if (b.tipo === 'parrafo') {
+        var txt = ed && ed[i] !== undefined ? ed[i] : b.texto;
+        if (editable) out.push(h('div', { class: 'parrafo-edit', contenteditable: 'true', role: 'textbox', 'aria-multiline': 'true', 'aria-label': 'Texto editable del documento', oninput: function (ev) { ed[i] = ev.target.innerText.replace(/\n{3,}/g, '\n\n').trim(); guardar(); } }, parrafos(txt)));
+        else out.push.apply(out, parrafos(txt));
+      }
       else if (b.tipo === 'lista') out.push(h('ul', null, b.items.map(function (x) { return h('li', null, x); })));
       else if (b.tipo === 'aviso') out.push(h('div', { class: 'aviso' }, h('p', null, b.texto)));
     });
@@ -3459,9 +3518,11 @@ DEMO.rol({
       h('ul', { class: 'piezas' }, m.documentos.map(function (d) {
         return h('li', { class: 'pieza' + (d.estado === 'falta' ? ' falta' : '') }, h('span', { class: 'n' }, d.nombre), d.detalle ? h('span', { class: 'd' }, d.detalle) : null, pastilla(d.estado));
       }))));
-    var doc = h('article', { class: 'papel-doc', 'aria-label': m.documento.titulo, 'data-k': 'doc-' + m.id, contenteditable: est.editando && !est.hecho ? 'true' : null },
+    // Lo que se cambia con «Editar el texto» se guarda en est.ed, así no se pierde al marcar casillas, dejar de editar ni dar el visto bueno.
+    est.ed = est.ed || {};
+    var doc = h('article', { class: 'papel-doc', 'aria-label': m.documento.titulo, 'data-k': 'doc-' + m.id },
       h('div', { class: 'doc-cabeza' }, h('h2', { class: 'doc-titulo' }, m.documento.titulo), m.documento.subtitulo ? h('p', { class: 'doc-sub' }, m.documento.subtitulo) : null),
-      bloquesDoc(m.documento.bloques),
+      bloquesDoc(m.documento.bloques, est.ed, est.editando && !est.hecho),
       est.hecho ? selloHecho('Revisado por ' + persona.nombre + ', ' + minuscula(persona.cargo) + ', hoy a las ' + est.hora) : null);
     var lateral = h('div', { class: 'lateral' },
       h('section', { class: 'tarjeta' }, h('h2', null, esIA(m) ? 'Lo ha rellenado la IA' : 'Lo ha preparado DirectorIA'), h('p', { style: 'font-size:var(--t-s);margin-top:.25rem' }, m.origen), esIA(m) ? h('ul', { class: 'lista-ia' }, m.rellenado.map(function (x) { return h('li', null, insignia(), h('span', null, x)); })) : h('ul', { class: 'lista-puntos', style: 'margin-top:.625rem' }, m.rellenado.map(function (x) { return h('li', null, x); }))),
@@ -3528,7 +3589,8 @@ DEMO.rol({
       });
       var adaptar = m.resultados.filter(function (r) { return r.adaptar; })[0];
       cuerpo = [
-        h('form', { class: 'buscador', role: 'search', onsubmit: function (ev) { ev.preventDefault(); est.buscado = true; repintar(); avisar('Búsqueda hecha', 'Ordenada por lo que más se parece a lo que pides.'); } },
+        // En la demo solo hay una búsqueda: si se escribe otra, se dice y se vuelve a la del ejemplo.
+        h('form', { class: 'buscador', role: 'search', onsubmit: function (ev) { ev.preventDefault(); if ((est.consulta || m.consulta).trim() !== m.consulta.trim()) { est.consulta = m.consulta; repintar(); avisar('En la demo hay una sola búsqueda', 'Te enseñamos la del ejemplo: «' + m.consulta + '».'); return; } est.buscado = true; repintar(); avisar('Búsqueda hecha', 'Ordenada por lo que más se parece a lo que pides.'); } },
           h('label', { class: 'sr', for: 'buscar-' + m.id }, 'Qué buscas'), entrada, h('button', { class: 'boton', type: 'submit' }, 'Buscar')),
         h('div', { class: 'chips' }, h('span', { class: 'con-insignia' }, insignia(), 'Entendido como'), m.entendido.map(function (c) { return h('span', { class: 'chip' }, c); })),
         h('div', { class: 'aviso' }, h('p', null, m.aviso)),
@@ -3557,10 +3619,14 @@ DEMO.rol({
         h('fieldset', { class: 'campo-f', style: 'border:0;margin:0;padding:0 0 .875rem' }, h('legend', { class: 'etq' }, 'Curso ', h('b', null, '· obligatorio')), h('div', { class: 'chips' }, CURSOS.map(function (c) { return h('button', { type: 'button', class: 'chip-boton', 'aria-pressed': est.cursos.indexOf(c) >= 0 ? 'true' : 'false', 'data-k': 'curso-' + c, onclick: function () { conmutar(est.cursos, c); } }, c); }))),
         h('fieldset', { class: 'campo-f', style: 'border:0;margin:0;padding:0 0 .875rem' }, h('legend', { class: 'etq' }, 'Materia ', h('b', null, '· obligatoria')), h('div', { class: 'chips' }, MATERIAS.map(function (c) { return h('button', { type: 'button', class: 'chip-boton', 'aria-pressed': est.materias.indexOf(c) >= 0 ? 'true' : 'false', 'data-k': 'materia-' + c, onclick: function () { conmutar(est.materias, c); } }, c); }))),
         h('div', { class: 'campo-f' }, h('span', { class: 'etq' }, 'Contenidos del currículo'), h('div', { class: 'chips' }, s.contenidos.map(function (c) { return h('span', { class: 'chip' }, c); }), h('span', { class: 'con-insignia suave' }, insignia(), 'sugeridos por la IA'))),
+        // Declarar que está hecho con IA es voluntario: no impide compartir. Si se marca, el recurso lleva la etiqueta.
+        s.declaracion ? h('div', { class: 'campo-f' }, h('span', { class: 'etq' }, 'Si lo has hecho con IA'),
+          h('label', { class: 'campo-casilla' }, h('input', { type: 'checkbox', checked: !!est.ia, disabled: est.compartido ? true : null, 'data-k': 'cas-ia', onchange: function (ev) { est.ia = ev.target.checked; repintar(); } }), h('span', null, s.declaracion)),
+          sinInsignia('Es voluntario. Si lo marcas, el recurso lleva la etiqueta «Hecho con IA y revisado».')) : null,
         h('fieldset', { style: 'border:0;margin:0;padding:0' }, h('legend', { class: 'etq' }, 'Antes de compartir, confirma'), s.casillas.map(function (x, i) {
-          return h('label', { class: 'campo-casilla' }, h('input', { type: 'checkbox', checked: !!est.cas[i], 'data-k': 'cas-' + i, onchange: function (ev) { est.cas[i] = ev.target.checked; repintar(); } }), h('span', null, x));
+          return h('label', { class: 'campo-casilla' }, h('input', { type: 'checkbox', checked: !!est.cas[i], disabled: est.compartido ? true : null, 'data-k': 'cas-' + i, onchange: function (ev) { est.cas[i] = ev.target.checked; repintar(); } }), h('span', null, x));
         })),
-        est.compartido ? selloHecho('Compartido con el claustro. Tu nombre queda como autora.') : h('div', { class: 'acciones' }, h('button', { class: 'boton', type: 'submit', disabled: listoSubir ? null : true, 'data-k': 'compartir' }, 'Compartir con el claustro'), !listoSubir ? h('span', { class: 'ayuda' }, 'El curso y la materia son obligatorios, y hay que marcar las tres casillas.') : null));
+        est.compartido ? selloHecho('Compartido con el claustro' + (s.declaracion && est.ia ? ', con la etiqueta «Hecho con IA y revisado»' : '') + '. Tu nombre queda como autora.') : h('div', { class: 'acciones' }, h('button', { class: 'boton', type: 'submit', disabled: listoSubir ? null : true, 'data-k': 'compartir' }, 'Compartir con el claustro'), !listoSubir ? h('span', { class: 'ayuda' }, 'El curso y la materia son obligatorios, y hay que marcar las casillas de «Antes de compartir».') : null));
     } else {
       var im = m.impacto;
       var nums = (im.meta.match(/(\d+)\s+de\s+(\d+)/) || []);
@@ -3584,7 +3650,8 @@ DEMO.rol({
         fase === 'inicio' ? boton('Empezar a dictar', function () { est.fase = 'escuchando'; repintar(); escribir(); }, { 'data-k': 'dictar' }) : null,
         fase === 'escuchando' ? h('span', { class: 'escuchando', role: 'status' }, h('i', { 'aria-hidden': 'true' }), 'Escuchando…') : null,
         fase === 'dictado' ? boton([insignia(), 'Redactar el correo'], function () { est.fase = 'borrador'; est.texto = est.texto || m.borrador; repintar(); }, { 'data-k': 'redactar' }) : null,
-        fase !== 'inicio' && fase !== 'enviado' ? boton('Volver a empezar', function () { est.fase = 'inicio'; est.texto = ''; repintar(); }, { cls: 'boton-borde boton-pequeno' }) : null),
+        // Con el borrador ya redactado, «Volver a empezar» no aparece aquí: un doble clic en «Redactar el correo» lo borraría.
+        fase === 'escuchando' || fase === 'dictado' ? boton('Volver a empezar', function () { est.fase = 'inicio'; est.texto = ''; repintar(); }, { cls: 'boton-borde boton-pequeno' }) : null),
       h('div', { class: 'transcripcion' + (fase === 'inicio' ? ' vacia' : ''), id: 'transcripcion', 'aria-live': 'polite' }, fase === 'inicio' ? 'Pulsa «Empezar a dictar» y habla como lo harías con un compañero. En la demo, el dictado es un ejemplo.' : (fase === 'escuchando' ? '' : m.transcripcion)))];
     if (fase === 'borrador' || fase === 'enviado') {
       if (fase === 'enviado') partes.push(h('section', { class: 'tarjeta enviado' }, h('p', { class: 'sello' }, visto(), 'Enviado a las ' + est.hora + ' desde tu cuenta del colegio'), h('div', { class: 'cuerpo-enviado' }, parrafos(est.texto))));
@@ -3600,7 +3667,7 @@ DEMO.rol({
             area,
             h('div', { class: 'acciones' }, boton('Revisar y enviar', function () {
               confirmar({ titulo: '¿Enviar este correo?', vista: [h('p', null, h('b', null, 'Para: '), m.para), h('p', null, h('b', null, 'Asunto: '), m.asunto), parrafos(est.texto)], boton: 'Enviar desde mi cuenta del colegio', alAceptar: function () { est.fase = 'enviado'; est.hora = ahora(); repintar(); avisar('Correo enviado', 'Lo has revisado y enviado tú. (En la demo no se envía nada.)'); } });
-            }, { 'data-k': 'enviar-dictado' }), h('span', { class: 'ayuda' }, 'Nunca sale sin que lo revises.')))));
+            }, { 'data-k': 'enviar-dictado' }), boton('Volver a dictar', function () { est.fase = 'inicio'; est.texto = ''; repintar(); }, { cls: 'boton-borde', 'data-k': 'volver-dictar' }), h('span', { class: 'ayuda' }, 'Nunca sale sin que lo revises.')))));
       }
     }
     function escribir() {
@@ -3619,6 +3686,17 @@ DEMO.rol({
     return partes;
   };
 
+  // Filtro de la demo: para la petición si lleva un nombre de pila habitual escrito con mayúscula.
+  // Es una muestra, no el filtro real: por eso, si la petición no es la del ejemplo, la respuesta lo dice.
+  var NOMBRES = ('Daniel Amira Mario Lucía Hugo Irene Nora Iker Sofía Adrián Gonzalo Carla Alba Óliver Oliver Samuel ' +
+    'María Martina Julia Paula Valeria Emma Daniela Sara Carmen Laura Lara Olivia Claudia Jimena Aitana Ana Elena Candela Alejandra Ainhoa Marta Carlota Noa Lola ' +
+    'Martín Lucas Mateo Alejandro Pablo Manuel Álvaro Diego David Marcos Álex Alex Javier Bruno Miguel Liam Carlos Juan Ángel Nicolás José Sergio Gabriel Jorge Darío Eric Héctor Rodrigo Jaime Rubén Iván Víctor Guillermo Luis Pedro Raúl Óscar Andrés Unai').split(' ');
+  function nombreEn(t) {
+    var re = /[A-ZÁÉÍÓÚÑ][a-záéíóúüñ]+/g, x;
+    while ((x = re.exec(t))) if (NOMBRES.indexOf(x[0]) >= 0) return x[0];
+    return null;
+  }
+
   MODULOS.material = function (rol, m) {
     var est = bolsa('material', rol, m.id);
     var area = h('textarea', { class: 'area', id: 'peticion-' + m.id, style: 'min-height:6rem', 'data-k': 'peticion', 'aria-label': 'Qué necesitas', oninput: function (ev) { est.peticion = ev.target.value; est.bloqueado = false; guardar(); } });
@@ -3627,18 +3705,20 @@ DEMO.rol({
       h('div', { class: 'nube' }, ilus('nube-claude', null, ''), h('div', null, h('p', { style: 'color:var(--tinta);font-weight:700' }, 'Módulo opcional con Claude, en la nube'), h('p', { style: 'font-size:var(--t-s)' }, m.aviso))),
       h('section', { class: 'tarjeta' },
         h('h2', { style: 'margin-bottom:.5rem' }, h('label', { for: 'peticion-' + m.id }, 'Qué necesitas')), area,
-        est.bloqueado ? h('div', { class: 'bloqueo', role: 'alert', style: 'margin-top:.75rem' }, ilus('candado', null, ''), h('div', null, h('p', { style: 'font-weight:700' }, 'El filtro ha parado la petición'), h('p', null, m.bloqueo.mensaje))) : null,
+        est.bloqueado ? h('div', { class: 'bloqueo', role: 'alert', style: 'margin-top:.75rem' }, ilus('candado', null, ''), h('div', null, h('p', { style: 'font-weight:700' }, 'El filtro ha parado la petición'),
+          h('p', null, est.nombre && est.peticion !== m.bloqueo.intento ? 'Lleva un nombre, «' + est.nombre + '», y en el módulo de Claude no se escriben datos de alumnos. No se ha enviado nada. Quita el nombre y pídelo sin datos personales.' : m.bloqueo.mensaje))) : null,
         h('div', { class: 'acciones', style: 'margin-top:.875rem' },
           boton('Pedir a Claude', function () {
             var t = (est.peticion !== undefined ? est.peticion : m.peticion);
-            if (t === m.bloqueo.intento) { est.bloqueado = true; repintar(); return; }
-            est.respuesta = true; est.bloqueado = false; repintar();
+            var nombre = nombreEn(t);
+            if (nombre || t === m.bloqueo.intento) { est.bloqueado = true; est.nombre = nombre; est.respuesta = false; repintar(); return; }
+            est.respuesta = true; est.otra = t.trim() !== m.peticion.trim(); est.bloqueado = false; repintar();
           }, { 'data-k': 'pedir' }),
-          boton('Probar el filtro con un nombre', function () { est.peticion = m.bloqueo.intento; est.bloqueado = true; est.respuesta = false; repintar(); }, { cls: 'boton-borde', 'data-k': 'probar-filtro' }),
-          est.bloqueado ? boton('Volver a la petición sin nombres', function () { est.peticion = m.peticion; est.bloqueado = false; repintar(); }, { cls: 'boton-borde boton-pequeno' }) : null)),
+          boton('Probar el filtro con un nombre', function () { est.peticion = m.bloqueo.intento; est.nombre = null; est.bloqueado = true; est.respuesta = false; repintar(); }, { cls: 'boton-borde', 'data-k': 'probar-filtro' }),
+          est.bloqueado ? boton('Volver a la petición sin nombres', function () { est.peticion = m.peticion; est.nombre = null; est.bloqueado = false; repintar(); }, { cls: 'boton-borde boton-pequeno' }) : null)),
     ];
     if (est.respuesta) partes.push(h('article', { class: 'papel-doc', 'aria-label': m.respuesta.titulo },
-      h('div', { class: 'doc-cabeza' }, h('h2', { class: 'doc-titulo' }, m.respuesta.titulo), h('p', { class: 'doc-sub' }, 'Preparado con Claude a partir de tu petición, sin datos de alumnos. Revísalo antes de usarlo.')),
+      h('div', { class: 'doc-cabeza' }, h('h2', { class: 'doc-titulo' }, m.respuesta.titulo), h('p', { class: 'doc-sub' }, (est.otra ? 'En la demo, Claude devuelve siempre este ejemplo. ' : 'Preparado con Claude a partir de tu petición, sin datos de alumnos. ') + 'Revísalo antes de usarlo.')),
       bloquesDoc(m.respuesta.bloques),
       est.guardado ? selloHecho('Guardado en tus recursos como borrador.') : h('div', { class: 'acciones' }, boton('Guardar como borrador', function () { est.guardado = true; repintar(); avisar('Guardado', 'Lo revisas y, si quieres, lo compartes en el banco.'); }, { 'data-k': 'guardar-material' }))));
     return partes;
@@ -3655,7 +3735,7 @@ DEMO.rol({
     }));
     var v = versiones[tab];
     var doc = h('article', { class: 'papel-doc version' + (/f[aá]cil/i.test(v.idioma) ? ' facil' : ''), lang: /ingl/i.test(v.idioma) ? 'en' : 'es' },
-      h('div', { class: 'doc-cabeza' }, h('h2', { class: 'doc-titulo' }, m.original.titulo), h('p', { class: 'doc-sub' }, (tab === 0 ? 'Circular original' : 'Versión preparada con IA: ' + minuscula(v.idioma)) + ' · para la ' + minuscula(m.para))),
+      h('div', { class: 'doc-cabeza' }, h('h2', { class: 'doc-titulo' }, m.original.titulo), h('p', { class: 'doc-sub con-insignia suave' }, tab === 0 ? null : insignia(), (tab === 0 ? 'Circular original' : 'Versión preparada con IA: ' + minuscula(v.idioma)) + ' · para la ' + minuscula(m.para))),
       parrafos(v.texto));
     var lateral = h('div', { class: 'lateral' },
       h('section', { class: 'tarjeta' }, h('h2', null, 'Antes de enviar, comprueba'),
@@ -3664,20 +3744,23 @@ DEMO.rol({
         })),
         est.hecho ? h('div', { style: 'margin-top:.75rem' }, selloHecho(m.alTerminar)) : h('div', { class: 'acciones', style: 'margin-top:.875rem' }, boton(m.boton, function () {
           confirmar({ titulo: '¿Enviarlo a la ' + minuscula(m.para) + '?', intro: 'Se envía desde la cuenta del colegio con las versiones que has revisado.', boton: m.boton, alAceptar: function () { est.hecho = true; est.hora = ahora(); repintar(); avisar('Enviado', m.alTerminar); } });
-        }, { disabled: listo ? null : true, 'data-k': 'enviar-trad' }))));
-    return [h('p', { class: 'con-insignia' }, insignia(), 'Para: ' + m.para), pest, h('div', { class: 'dos-columnas' }, doc, lateral)];
+        }, { disabled: listo ? null : true, 'data-k': 'enviar-trad' })),
+        !listo && !est.hecho ? h('p', { style: 'font-size:var(--t-s);margin-top:.5rem' }, 'Marca las comprobaciones para poder enviarlo.') : null));
+    // La insignia va en la versión, que es lo que prepara la IA; el destinatario lo pone el colegio.
+    return [h('p', { class: 'linea-campo', style: 'color:var(--tinta)' }, h('b', null, 'Para: '), m.para), pest, h('div', { class: 'dos-columnas' }, doc, lateral)];
   };
 
   MODULOS.ficha = function (rol, m) {
-    if (m.bandera && !S.banderas[m.bandera] && !S.previa[rol + ':' + m.id]) {
+    // Hasta que jefatura confirma las guardias, quien sustituye no ve ningún dato de la ficha.
+    // El botón es solo un atajo de la demo para cambiar de perfil: en el colegio, solo jefatura confirma.
+    if (m.bandera && !S.banderas[m.bandera]) {
       var j = D.roles.jefatura;
       var mod = j && (j.modulos || []).filter(function (x) { return x.tipo === 'aprobaciones'; })[0];
       return h('section', { class: 'tarjeta espera' }, ilus('reloj', null, ''), h('div', null,
         h('h2', null, 'Jefatura todavía no ha confirmado las guardias de hoy'),
         h('p', null, 'Tu ficha aparece aquí en cuanto jefatura de estudios confirma quién cubre cada sesión. Así nadie recibe una ficha que luego cambia.'),
-        h('div', { class: 'acciones' },
-          mod ? boton('Ir a jefatura para confirmarlas', function () { ir('jefatura', mod.id); }, { 'data-k': 'ir-jefatura' }) : null,
-          boton('Ver la ficha igualmente', function () { S.previa[rol + ':' + m.id] = true; repintar(); }, { cls: 'boton-borde' }))));
+        mod ? h('div', { class: 'acciones' }, boton('Cambiar al perfil de jefatura', function () { ir('jefatura', mod.id); }, { 'data-k': 'ir-jefatura' })) : null,
+        mod ? h('p', { class: 'ayuda' }, 'Atajo de la demo: en el colegio, solo jefatura confirma las guardias.') : null));
     }
     var partes = [h('div', { class: 'fichas' }, m.fichas.map(function (f) {
       return h('article', { class: 'ficha', 'aria-label': 'Ficha de ' + f.sesion },
@@ -3690,13 +3773,13 @@ DEMO.rol({
       var lineas = m.registro;
       if (m.bandera) {
         var acceso = bolsa('fichas', rol, m.id);
-        if (!acceso.hora) { acceso.hora = ahora(); acceso.previa = !S.banderas[m.bandera]; guardar(); }
+        // La hora que ya marca la cabecera: el reloj no avanza al pintar, solo al hacer algo.
+        if (!acceso.hora) { acceso.hora = horaActual(); guardar(); }
         var quien = (D.roles[rol] && D.roles[rol].persona) ? D.roles[rol].persona.nombre : 'ti';
-        lineas = [(acceso.previa ? 'Vista previa abierta por ' : 'Abierta por ') + quien + ' hoy a las ' + acceso.hora].concat(m.registro);
+        lineas = ['Abierta por ' + quien + ' hoy a las ' + acceso.hora].concat(m.registro);
       }
       partes.push(h('section', { class: 'tarjeta' }, h('h2', { style: 'margin-bottom:.5rem' }, 'Registro de accesos'), h('ul', { class: 'lista-puntos' }, lineas.map(function (x) { return h('li', null, x); }))));
     }
-    if (m.bandera && !S.banderas[m.bandera]) partes.unshift(h('div', { class: 'aviso' }, h('p', null, 'Vista previa: jefatura todavía no ha confirmado las guardias de hoy.')));
     return partes;
   };
 
@@ -3704,12 +3787,12 @@ DEMO.rol({
     var est = bolsa('tablas', rol, m.id);
     var marcas = {};
     (m.marcas || []).forEach(function (x) { marcas[x.fila + ':' + x.columna] = x.tipo; });
-    var tabla = h('div', { class: 'tabla-caja', role: 'region', 'aria-label': m.titulo, tabindex: '0' }, h('table', null,
+    var tabla = h('div', { class: 'tabla-caja columna-fija', role: 'region', 'aria-label': m.titulo, tabindex: '0' }, h('table', null,
       h('thead', null, h('tr', null, m.columnas.map(function (c) { return h('th', { scope: 'col' }, c); }))),
       h('tbody', null, m.filas.map(function (f, i) {
         return h('tr', null, f.map(function (c, j) {
           var t = marcas[i + ':' + j];
-          var celda = h(j === 0 ? 'th' : 'td', j === 0 ? { scope: 'row', style: 'text-transform:none;letter-spacing:0;font-size:var(--t-s);color:var(--tinta);background:transparent;white-space:normal' } : { class: t ? 'm-' + t : null });
+          var celda = h(j === 0 ? 'th' : 'td', j === 0 ? { scope: 'row', style: 'text-transform:none;letter-spacing:0;font-size:var(--t-s);color:var(--tinta);background:var(--papel);white-space:normal' } : { class: t ? 'm-' + t : null });
           if (t === 'aviso') celda.append(h('span', { class: 'marca-celda', 'aria-label': 'Aviso' }, '!'));
           if (t === 'ok') celda.append(visto());
           celda.append(document.createTextNode(' ' + c));
@@ -3721,7 +3804,7 @@ DEMO.rol({
     }));
     var partes = [avisos, tabla];
     if (m.boton) partes.push(est.hecho ? selloHecho(m.alTerminar + ' (' + personaDe(rol).nombre + ', hoy a las ' + est.hora + ')') :
-      h('div', { class: 'acciones' }, boton(m.boton, function () { est.hecho = true; est.hora = ahora(); repintar(); avisar(m.boton, m.alTerminar); }, { 'data-k': 'tabla-' + m.id }), h('span', { class: 'ayuda' }, 'Es una propuesta: decides tú.')));
+      h('div', { class: 'acciones' }, boton(m.boton, function () { est.hecho = true; est.hora = ahora(); repintar(); avisar(m.boton, m.alTerminar); }, { 'data-k': 'tabla-' + m.id }), h('span', { class: 'ayuda' }, 'Nada se envía ni se publica hasta que pulses el botón.')));
     return partes;
   };
 

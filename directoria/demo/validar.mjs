@@ -144,8 +144,15 @@ function validarRol(r) {
     if (c.adjuntos !== undefined) lista(d + '.adjuntos', c.adjuntos, 0, 4).forEach((a, i) => texto(`${d}.adjuntos[${i}]`, a, { max: 70 }));
     const resp = lista(d + '.respuestas', c.respuestas, 0, 3);
     resp.forEach((x, i) => {
-      texto(`${d}.respuestas[${i}].titulo`, x.titulo, { max: 40 });
-      texto(`${d}.respuestas[${i}].texto`, x.texto, { palabrasMin: 25, palabrasMax: 170 });
+      const dr = `${d}.respuestas[${i}]`;
+      texto(dr + '.titulo', x.titulo, { max: 40 });
+      texto(dr + '.texto', x.texto, { palabrasMin: 25, palabrasMax: 170 });
+      // Opcionales. Sin «para» ni «asunto», la respuesta va a quien escribió, con «Re:» y su asunto.
+      texto(dr + '.para', x.para, { max: 60, opcional: true });
+      if (esTexto(x.para) && !esTexto(x.asunto)) err(dr + '.asunto', 'falta: si la respuesta lleva «para», necesita su propio asunto (si no, saldría «Re:» en un correo nuevo)');
+      else texto(dr + '.asunto', x.asunto, { max: 90, opcional: true });
+      if (x.adjuntos !== undefined) lista(dr + '.adjuntos', x.adjuntos, 1, 4).forEach((s, j) => texto(`${dr}.adjuntos[${j}]`, s, { max: 70 }));
+      for (const k of Object.keys(x || {})) if (!['titulo', 'texto', 'para', 'asunto', 'adjuntos'].includes(k)) av(dr, `«${k}» no lo usa el motor (las respuestas admiten titulo, texto, para, asunto y adjuntos)`);
     });
     if (resp.length === 0 && !esTexto(c.nota)) err(d, 'si no hay respuestas propuestas, pon una nota');
     texto(d + '.nota', c.nota, { max: 160, opcional: true });
@@ -257,7 +264,12 @@ const VALIDA = {
     lista(d + '.subir.curso', s.curso, 1, 4);
     lista(d + '.subir.materia', s.materia, 1, 3);
     lista(d + '.subir.contenidos', s.contenidos, 1, 4);
-    lista(d + '.subir.casillas', s.casillas, 3, 3);
+    // Las casillas son obligatorias para compartir. Declarar que está hecho con IA es voluntario: va en «declaracion».
+    lista(d + '.subir.casillas', s.casillas, 2, 3).forEach((x, i) => {
+      texto(`${d}.subir.casillas[${i}]`, x, { max: 60 });
+      if (typeof x === 'string' && /\bIA\b/.test(x)) err(`${d}.subir.casillas[${i}]`, 'declarar que el recurso está hecho con IA es voluntario: ponlo en «declaracion», no en las casillas obligatorias');
+    });
+    texto(d + '.subir.declaracion', s.declaracion, { max: 80, opcional: true });
     const im = m.impacto || {};
     texto(d + '.impacto.texto', im.texto, { max: 160 });
     lista(d + '.impacto.insignias', im.insignias, 1, 4);

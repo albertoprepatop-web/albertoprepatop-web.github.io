@@ -49,12 +49,12 @@ La pantalla de entrada tiene este mismo recorrido, en «Recorrido para enseñarl
    - Laura lo cuenta como se lo contaría a un compañero y le llega el correo para la familia de Daniel ya redactado. Lo revisa y lo envía ella.
 5. **Un protocolo, con reserva** (Orientación → Protocolo de acoso).
    - El Caso 2026-07 paso a paso, con fechas, responsables y documentos preparados con las plantillas del protocolo.
-   - Qué decir: los datos del caso no pasan por la IA, y si hay acoso lo decide el equipo del centro.
+   - Qué decir: el expediente del caso no pasa por la IA (por correo solo va el número del caso), y si hay acoso lo decide el equipo del centro.
 6. **El analista de gastos** (Secretaría → Analista de gastos).
    - Facturas, contratos y extractos de octubre, con avisos de renovaciones y posibles ahorros.
    - Secretaría lo envía a dirección y a la titularidad, que son quienes deciden.
 
-El correo funciona igual en todos los perfiles. Cada mensaje llega resumido, con lo que piden y tres respuestas propuestas. Se elige una, se cambia si hace falta y se envía después de confirmar.
+El correo funciona igual en todos los perfiles. Cada mensaje llega resumido, con lo que piden y hasta tres respuestas propuestas. Se elige una, se cambia si hace falta y se envía después de confirmar. Los que solo informan se archivan sin responder.
 
 ## Qué lleva IA y qué no
 

@@ -153,9 +153,10 @@ Alumno/a A, 2.º ESO B. Lo comunicó la tutora (Beatriz Romero) el lunes 16 a la
 - solo lo ve el equipo del caso, con registro de accesos;
 - en el resumen de las 8:00 aparece solo «Caso 2026-07»;
 - en las fichas, solo instrucciones, nunca el caso;
-- los datos del caso nunca se envían a Claude.
+- los datos del caso nunca se envían a Claude;
+- el expediente del caso (anexos, guiones y citaciones) se prepara con las plantillas del protocolo y no pasa por la IA. Por correo, solo el número del caso.
 
-**Decisiones:** la IA guía, recuerda y redacta. Si hay acoso, y con qué medidas, lo decide el equipo del centro.
+**Decisiones:** DirectorIA guía, recuerda y prepara los documentos con las plantillas del protocolo. Si hay acoso, y con qué medidas, lo decide el equipo del centro.
 
 ### E4. Visita de inspección
 
@@ -255,7 +256,7 @@ Aviso: «Todavía no hay de Educación Física en 2.º ciclo. Te enseñamos lo m
 | Tarjetas de hábitos saludables | Educación Física · 2.º de Primaria · De Luis G. | «Misma materia, ciclo anterior» |
 | Juego: la pirámide de los alimentos | Ciencias de la Naturaleza · 4.º de Primaria · De Pilar S. | «Mismo curso, materia afín» |
 
-Al subir un recurso, el curso y la materia son obligatorios.
+Al subir un recurso, el curso y la materia son obligatorios. Declarar que está hecho con IA es voluntario: si se marca, el recurso lleva la etiqueta «Hecho con IA y revisado».
 
 La gamificación no tiene clasificaciones ni premios a la cantidad. Los datos de uso nunca sirven para evaluar a nadie.
 
@@ -388,16 +389,20 @@ inicio: {
     {
       titulo: 'Confirmar y enviar el dosier',  // ≤ 40 caracteres: lo que hace esta respuesta
       texto: 'Buenos días:\n\nLe confirmo...\n\nUn saludo,\nElena Ruiz\nDirectora del Colegio Ejemplo', // 40-130 palabras, firmado por la persona del perfil
+      adjuntos: ['Dosier para la visita de inspección.pdf'], // opcional, 1-4 de ≤ 70 caracteres: lo que va adjunto a esta respuesta
+      // para: 'Todas las familias del colegio', asunto: '...', // opcionales: solo si la respuesta no va a quien escribió (ver abajo)
     },
   ],
   nota: 'DirectorIA ha reunido los documentos en «Dosier para inspección».', // opcional, ≤ 140 caracteres
-  ir: 'dosier',                          // opcional: id de un módulo relacionado (botón «Abrir»)
+  ir: 'dosier',                          // opcional: id de un módulo relacionado (botón «Ir a» y el nombre del menú)
 }
 ```
 
 - Ordena los correos como en una bandeja: el más importante o el más reciente primero.
 - Al menos uno tiene que ser de una familia, salvo en `sustituto`.
 - Si un correo no pide respuesta, `respuestas: []` y una `nota`, por ejemplo: «Solo para leer. DirectorIA ha añadido la fecha a tus plazos».
+- Si una respuesta no va a quien escribió, por ejemplo una circular para las familias, lleva `para` (≤ 60 caracteres) y `asunto` (≤ 90); con `para`, el validador pide también `asunto`. Si no, va a quien escribió, con «Re: » y su asunto.
+- Si una respuesta lleva algo adjunto, como el dosier en la respuesta a Inspección, va en `adjuntos`. El editor y la ventana «¿Enviar esta respuesta?» enseñan el Para, el Asunto y los Adjuntos de la respuesta elegida.
 
 ### 6.4 Módulos
 
@@ -494,7 +499,7 @@ Cada tipo añade sus propios campos.
     secciones: [ { titulo: 'Entrevistas previstas', items: ['...'] } ], // 2-4 secciones
   },
   documentos: [ { nombre: 'Anexo II con los datos del caso', estado: 'Listo para los docentes' } ],
-  pie: 'La IA guía, recuerda y redacta; deciden las personas.',
+  pie: 'DirectorIA guía, recuerda y prepara los documentos con las plantillas del protocolo. Si hay acoso, y con qué medidas, lo decide el equipo del centro. El expediente del caso no pasa por la IA.', // ≤ 220 caracteres
 }
 ```
 
@@ -522,7 +527,8 @@ Cada tipo añade sus propios campos.
     curso: ['3.º de Primaria', '4.º de Primaria'],
     materia: ['Educación Física'],
     contenidos: ['Alimentación saludable', 'Hábitos de vida activa'],   // los sugiere la IA
-    casillas: ['Hecho con IA y revisado por mí', 'Sin fotos ni datos de alumnos', 'Es mío o puedo compartirlo'],
+    casillas: ['Sin fotos ni datos de alumnos', 'Es mío o puedo compartirlo'], // 2-3: obligatorias para compartir
+    declaracion: 'Lo he hecho con IA y lo he revisado', // opcional: casilla voluntaria; si se marca, el recurso lleva «Hecho con IA y revisado»
   },
   impacto: {                             // lo que ve en privado
     texto: 'Tus 12 recursos se han usado 87 veces y 9 compañeros han dicho «Me ha servido».',
@@ -550,7 +556,7 @@ Cada tipo añade sus propios campos.
 { tipo: 'material',
   aviso: 'Módulo opcional en la nube. Solo para material didáctico: no tiene acceso a los datos del colegio, y un filtro está pensado para bloquear datos personales.',
   peticion: 'Situación de aprendizaje sobre alimentación saludable para 4.º de Primaria, de tres sesiones.',
-  bloqueo: { intento: 'Adáptala para Daniel, que ...', mensaje: 'He quitado «Daniel»: el módulo de Claude no recibe datos de alumnos. Escríbelo sin nombres.' },
+  bloqueo: { intento: 'Adáptala para Daniel, que ...', mensaje: 'He quitado «Daniel»: en el módulo de Claude no se escriben datos de alumnos. Escríbelo sin nombres.' },
   respuesta: { titulo: '...', bloques: [ { tipo: 'titulo', texto: '...' }, { tipo: 'parrafo', texto: '...' }, { tipo: 'lista', items: ['...'] } ] },
 }
 ```
@@ -577,12 +583,12 @@ Cada tipo añade sus propios campos.
     {
       sesion: '3.º B · Matemáticas · 6.ª hora',
       hora: '15:15-16:00',
-      origen: 'Preparada con IA para Pablo Sanz',
+      origen: 'Preparada por DirectorIA para Pablo Sanz', // sin insignia: sale de reglas y plantillas (§4)
       datos: [ { dt: 'Tarea', dd: '...' }, { dt: 'Salud', dd: '...', aviso: true } ],
       pie: 'Se abre antes de la sesión y se cierra al acabar la jornada. Queda registrado quién la ve.',
     },
   ],
-  registro: ['Abierta por Pablo Sanz hoy a las 8:05'], // opcional
+  registro: ['Vista previa abierta por Javier Martín (jefatura) hoy a las 7:56'], // opcional: accesos anteriores. Con bandera, el motor añade antes «Abierta por <persona> hoy a las <hora>», con la hora de la demo
 }
 ```
 
@@ -665,7 +671,7 @@ Sirve para el calendario de exámenes, las programaciones, las autorizaciones de
 **Módulos:**
 
 - `guardias` (aprobaciones, `bandera: 'guardias'`): E1. Los items de 3.º B que llevan ficha, con `ficha: true`.
-- `fichas` (ficha, vista previa de lo que reciben quienes sustituyen): la de 6.ª y la de 1.ª.
+- `fichas` (ficha, vista previa de lo que reciben quienes sustituyen): la de 6.ª y la de 1.ª, de Pablo Sanz, y la de 3.ª, de Rosa Medina. Las tres llevan la pauta de Mario y la alergia de Lucía.
 - `examenes` (tabla): calendario de la 1.ª evaluación de ESO, del lun 30 nov al vie 4 dic. Un choque en 4.º ESO A el miércoles 2, con la propuesta de moverlo. Botón para aprobar.
 - `programaciones` (tabla): estado de las programaciones por departamento frente al modelo del centro. Dos con apartados que faltan; por ejemplo, «evaluación de la práctica docente».
 
@@ -727,7 +733,7 @@ Sirve para el calendario de exámenes, las programaciones, las autorizaciones de
 **Módulos:**
 
 - `acoso` (protocolo, `confidencial`): E3 completo.
-- `pautas` (tabla): pautas para el aula por grupo y alumno, con nombre de pila inventado, y quién las ve. Las de Mario, en la ficha de 3.º B: «Instrucciones por escrito y más tiempo». Añade un aviso: «Pablo Sanz verá la pauta de Mario en su ficha de la 6.ª hora; queda registrado».
+- `pautas` (tabla): pautas para el aula por grupo y alumno, con nombre de pila inventado, y quién las ve. Las de Mario, en la ficha de 3.º B: «Instrucciones por escrito y más tiempo». Añade un aviso: «Pablo Sanz (1.ª y 6.ª hora) y Rosa Medina (3.ª hora) verán la pauta de Mario en sus fichas de 3.º B; queda registrado».
 - `traduccion`: E11 para la familia de Amira: lectura fácil e inglés.
 
 ### `sustituto` · Pablo Sanz · orden 6

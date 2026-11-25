@@ -238,7 +238,7 @@ DEMO.rol({
       asunto: 'Nueva tarifa de comisiones de su cuenta desde el 1 de febrero',
       hora: 'lun 16',
       categoria: 'Proveedores',
-      etiqueta: { texto: 'Nueva tarifa el 1 de febrero', tipo: 'info' },
+      etiqueta: { texto: 'Nueva tarifa desde el lun 1 feb', tipo: 'info' },
       resumen: [
         'Desde el 1 de febrero, cada recibo devuelto costará 5 € (ahora 3,50 €) y cada transferencia en oficina, 6 € (ahora 4 €).',
         'La comisión de mantenimiento sigue en 46 € al mes. Las transferencias por banca en línea siguen sin coste.',

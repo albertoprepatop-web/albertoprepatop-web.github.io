@@ -13,7 +13,7 @@
 
   /* ---------- Estado ---------- */
   function estadoInicial() {
-    return { reloj: 0, banderas: {}, correo: {}, sel: {}, leyendo: {}, borrador: {}, aprob: {}, docs: {}, plazos: {}, tablas: {}, banco: {}, dictado: {}, material: {}, trad: {}, informe: {}, previa: {}, fichas: {} };
+    return { reloj: 0, banderas: {}, correo: {}, sel: {}, leyendo: {}, borrador: {}, aprob: {}, docs: {}, plazos: {}, tablas: {}, banco: {}, dictado: {}, material: {}, trad: {}, informe: {}, fichas: {} };
   }
   var S = cargar() || estadoInicial();
   function cargar() {
@@ -98,15 +98,16 @@
   var dialogo = h('dialog', { class: 'confirmar', 'aria-labelledby': 'confirmar-titulo' });
   function confirmar(op) {
     dialogo.replaceChildren(h('form', { method: 'dialog', class: 'confirmar-dentro', onsubmit: function (e) { e.preventDefault(); } },
-      h('h2', { id: 'confirmar-titulo' }, op.titulo),
+      h('h2', { id: 'confirmar-titulo', tabindex: '-1' }, op.titulo),
       op.intro ? h('p', null, op.intro) : null,
       op.vista ? h('div', { class: 'vista-previa' }, op.vista) : null,
-      h('p', { class: 'con-insignia suave' }, svg(SVG_VISTO), 'Demo: no se envía nada de verdad.'),
+      op.sinNotaDemo ? null : h('p', { class: 'con-insignia suave' }, svg(SVG_VISTO), 'Demo: no se envía nada de verdad.'),
       h('div', { class: 'acciones' },
         boton(op.boton, function () { cerrarDialogo(); op.alAceptar(); }, { id: 'confirmar-si' }),
         boton(op.cancelar || 'Seguir revisando', cerrarDialogo, { cls: 'boton-borde' }))));
     if (typeof dialogo.showModal === 'function') dialogo.showModal(); else dialogo.setAttribute('open', '');
-    var si = document.getElementById('confirmar-si'); if (si) si.focus();
+    // El foco va al título, no al botón: un Intro por inercia no envía nada y el lector de pantalla empieza por lo que se va a enviar.
+    var tt = document.getElementById('confirmar-titulo'); if (tt) tt.focus();
   }
   function cerrarDialogo() { if (typeof dialogo.close === 'function' && dialogo.open) dialogo.close(); else dialogo.removeAttribute('open'); }
 
@@ -144,6 +145,10 @@
     var focoK = !cambia && document.activeElement && document.activeElement.getAttribute('data-k');
     var y = window.scrollY;
     raiz.replaceChildren(r.rol ? vistaApp(r.rol, r.vista) : vistaAcceso());
+    // En el móvil el menú es una fila que se desplaza de lado: deja a la vista el apartado en el que estás.
+    var act = raiz.querySelector('.menu nav a[aria-current="page"]');
+    var barra = act && act.closest('nav');
+    if (barra && barra.scrollWidth > barra.clientWidth) barra.scrollLeft += act.getBoundingClientRect().left - barra.getBoundingClientRect().left - 16;
     ultimaRuta = clave;
     document.title = r.rol ? 'Demo de DirectorIA · ' + D.roles[r.rol].persona.cargo : 'Demo de DirectorIA';
     if (cambia) {
@@ -159,12 +164,12 @@
 
   /* ---------- Acceso ---------- */
   var RECORRIDO = [
-    { rol: 'jefatura', vista: 'guardias', t: 'Falta un profesor', d: 'Jefatura de estudios confirma quién cubre cada hora.' },
+    { rol: 'jefatura', vista: 'guardias', t: 'Falta un profesor', d: 'Revisa quién cubre cada hora y lo confirma.' },
     { rol: 'sustituto', vista: 'ficha', t: 'La ficha de quien sustituye', d: 'Solo lo necesario, y solo para quien entra al aula.' },
-    { rol: 'direccion', vista: 'inicio', t: 'El resumen de las 8:00', d: 'La directora lo ve todo de un vistazo y responde a inspección.' },
+    { rol: 'direccion', vista: 'inicio', t: 'El resumen de las 8:00', d: 'Ve quién falta, qué vence y qué correos importan, y responde a inspección.' },
     { rol: 'docente', vista: 'dictado', t: 'Un correo dictado', d: 'La tutora dicta; el correo llega redactado para revisar.' },
     { rol: 'orientacion', vista: 'acoso', t: 'Un protocolo, con reserva', d: 'Paso a paso, con fechas, responsables y documentos.' },
-    { rol: 'secretaria', vista: 'gastos', t: 'El analista de gastos', d: 'Renovaciones, ahorros y papeles listos para firmar.' },
+    { rol: 'secretaria', vista: 'gastos', t: 'El analista de gastos', d: 'Facturas y contratos revisados, con avisos de renovaciones y ahorros.' },
   ];
   function vistaAcceso() {
     var arriba = h('header', { class: 'acceso-banda acceso-arriba marco' },
@@ -206,9 +211,16 @@
       banda);
   }
   function reiniciar() {
-    S = estadoInicial(); guardar();
-    avisar('Demo reiniciada', 'Todo vuelve a como estaba a las 8:00.');
-    ir(null);
+    confirmar({
+      titulo: '¿Reiniciar la demo?',
+      intro: 'Todo vuelve a como estaba a las 8:00: las guardias, los correos enviados, los documentos y los plazos.',
+      boton: 'Reiniciar la demo', cancelar: 'Seguir con la demo', sinNotaDemo: true,
+      alAceptar: function () {
+        S = estadoInicial(); guardar();
+        avisar('Demo reiniciada', 'Todo vuelve a como estaba a las 8:00.');
+        ir(null);
+      },
+    });
   }
 
   /* ---------- App ---------- */
@@ -273,8 +285,10 @@
     if (destino === 'correo') return 'Abrir el correo';
     if (destino.indexOf('correo:') === 0) return 'Leer el correo';
     var m = modulo(rol, destino);
-    return m ? 'Abrir ' + minuscula(m.menu) : 'Abrir';
+    return m ? irAModulo(m) : 'Abrir';
   }
+  // Los enlaces a funciones nombran el menú tal cual: «Ir a «Pendiente de firma»».
+  function irAModulo(m) { return 'Ir a «' + m.menu + '»'; }
 
   /* ---------- Correo ---------- */
   function vistaCorreo(rol) {
@@ -297,11 +311,11 @@
           h('span', { class: 'asunto' }, c.asunto),
           h('span', { class: 'extracto' }, (c.resumen || [])[0] || ''),
           h('span', { class: 'fila3' },
-            e && e.estado === 'enviado' ? pastilla('hecho', 'Respondido ' + e.hora) : e && e.estado === 'archivado' ? pastilla('hecho', 'Archivado') : pastilla(c.etiqueta.tipo, c.etiqueta.texto),
+            e && e.estado === 'enviado' ? pastilla('hecho', (e.para ? 'Enviado ' : 'Respondido ') + e.hora) : e && e.estado === 'archivado' ? pastilla('hecho', 'Archivado') : pastilla(c.etiqueta.tipo, c.etiqueta.texto),
             h('span', { class: 'pastilla p-info' }, c.categoria))));
       })));
 
-    var cabeza = cabezaVista('Correo', 'Tu correo, resumido', n ? 'Tienes ' + n + (n === 1 ? ' correo' : ' correos') + ' con una respuesta propuesta. Revísala, cámbiala si hace falta y envíala tú: nada sale sin que lo envíes.' : 'Has respondido todo lo que pedía respuesta. Lo que queda es para leer.');
+    var cabeza = cabezaVista('Correo', 'Tu correo, resumido', n ? (n === 1 ? 'Tienes un correo con respuestas propuestas.' : 'Tienes ' + n + ' correos con respuestas propuestas.') + ' Elige una, cámbiala si hace falta y envíala tú: nada sale sin que lo envíes.' : 'No te queda ningún correo por responder.');
     return [cabeza, h('div', { class: 'correo' + (S.leyendo[rol] ? ' leyendo' : '') }, bandeja, actual ? lectura(rol, actual) : h('p', null, 'No hay correos.'))];
   }
 
@@ -311,6 +325,18 @@
     var claveB = rol + ':' + c.id;
     var b = S.borrador[claveB] || (S.borrador[claveB] = { opcion: (c.respuestas || []).length ? 0 : -1, texto: (c.respuestas && c.respuestas[0]) ? c.respuestas[0].texto : '' });
     var m = c.ir ? modulo(rol, c.ir) : null;
+    // Cada respuesta propuesta va a quien escribió, con «Re:» y su asunto, salvo que traiga su propio «para» y «asunto»
+    // (por ejemplo, una circular para las familias). «adjuntos» es lo que va adjunto a esa respuesta.
+    var rSel = (c.respuestas || [])[b.opcion] || {};
+    var para = rSel.para || (c.de + (c.deDetalle ? ' (' + c.deDetalle + ')' : ''));
+    var asunto = rSel.asunto || 'Re: ' + c.asunto;
+    var adj = rSel.adjuntos || [];
+    // Archivar no lanza aviso flotante: el sello «Archivado a las…» ya lo dice, y en el móvil el aviso tapaba «Deshacer».
+    // El foco pasa a «Deshacer», que lleva el sello como descripción: así lo oye también quien usa lector de pantalla.
+    function archivar() {
+      bolsa('correo', rol)[c.id] = { estado: 'archivado', hora: ahora() }; repintar();
+      var x = raiz.querySelector('[data-k="deshacer-' + c.id + '"]'); if (x) x.focus();
+    }
 
     var partes = [
       h('button', { class: 'boton boton-borde boton-pequeno volver', type: 'button', onclick: function () { S.leyendo[rol] = false; repintar(); } }, 'Volver a la bandeja'),
@@ -324,22 +350,29 @@
         h('ul', null, (c.resumen || []).map(function (s) { return h('li', null, s); })),
         c.piden ? h('p', { class: 'piden' }, h('b', null, 'Qué te piden'), c.piden) : null),
     ];
-    if (c.nota) partes.push(h('div', { class: 'nota-ia' }, h('div', null, h('p', null, c.nota), m ? h('button', { class: 'enlace', type: 'button', style: 'margin-top:.375rem', onclick: function () { ir(rol, m.id); } }, 'Abrir ' + minuscula(m.menu)) : null)));
-    else if (m) partes.push(h('div', null, h('button', { class: 'enlace', type: 'button', onclick: function () { ir(rol, m.id); } }, 'Abrir ' + minuscula(m.menu))));
+    if (c.nota) partes.push(h('div', { class: 'nota-ia' }, h('div', null, h('p', null, c.nota), m ? h('button', { class: 'enlace', type: 'button', style: 'margin-top:.375rem', onclick: function () { ir(rol, m.id); } }, irAModulo(m)) : null)));
+    else if (m) partes.push(h('div', null, h('button', { class: 'enlace', type: 'button', onclick: function () { ir(rol, m.id); } }, irAModulo(m))));
     partes.push(h('details', { class: 'original' }, h('summary', null, 'Ver el correo original'), h('div', { class: 'texto-original' }, parrafos(c.original))));
 
     if (e && e.estado === 'enviado') {
       partes.push(h('section', { class: 'tarjeta enviado' },
-        h('p', { class: 'sello' }, visto(), 'Respondido a las ' + e.hora + ' desde tu cuenta del colegio'),
+        h('p', { class: 'sello' }, visto(), (e.para ? 'Enviado a ' + minuscula(e.para) : 'Respondido') + ' a las ' + e.hora + ' desde tu cuenta del colegio'),
         h('div', { class: 'cuerpo-enviado' }, parrafos(e.texto))));
     } else if (e && e.estado === 'archivado') {
-      partes.push(h('p', { class: 'sello' }, visto(), 'Archivado a las ' + e.hora + '.'));
+      // Archivar no es definitivo: «Deshacer» devuelve el correo a la bandeja tal como estaba.
+      partes.push(h('div', { class: 'acciones' },
+        h('p', { class: 'sello', id: 'archivado-' + c.id }, visto(), 'Archivado a las ' + e.hora + '.'),
+        boton('Deshacer', function () {
+          delete S.correo[rol][c.id]; repintar();
+          var x = raiz.querySelector('[data-k="enviar-' + c.id + '"], [data-k="archivar-' + c.id + '"]'); if (x) x.focus();
+        }, { cls: 'boton-borde boton-pequeno', 'data-k': 'deshacer-' + c.id, 'aria-describedby': 'archivado-' + c.id })));
     } else if ((c.respuestas || []).length) {
       var area = h('textarea', { id: 'resp-' + c.id, 'data-k': 'area-' + c.id, 'aria-label': 'Texto de la respuesta', oninput: function (ev) { b.texto = ev.target.value; guardar(); } });
       area.value = b.texto;
       var opciones = h('div', { class: 'opciones', role: 'radiogroup', 'aria-label': 'Respuestas propuestas' }, c.respuestas.map(function (r, i) {
         return h('label', { class: 'opcion' },
-          h('input', { type: 'radio', name: 'op-' + c.id, checked: b.opcion === i, 'data-k': 'op-' + c.id + '-' + i, onchange: function () { b.opcion = i; b.texto = r.texto; repintar(); } }),
+          // Al cambiar de propuesta se guarda lo que has escrito en la que dejas, y vuelve si regresas a ella.
+          h('input', { type: 'radio', name: 'op-' + c.id, checked: b.opcion === i, 'data-k': 'op-' + c.id + '-' + i, onchange: function () { b.textos = b.textos || {}; b.textos[b.opcion] = b.texto; b.opcion = i; b.texto = b.textos[i] !== undefined ? b.textos[i] : r.texto; repintar(); } }),
           h('span', { class: 't' }, r.titulo),
           h('span', { class: 'pre' }, r.texto.replace(/\s+/g, ' ')));
       }));
@@ -348,8 +381,9 @@
         h('p', { style: 'font-size:var(--t-s)' }, 'Elige una y cámbiala lo que quieras. Nada se envía hasta que pulses Enviar.'),
         opciones,
         h('div', { class: 'editor' },
-          h('p', { class: 'linea-campo' }, h('b', null, 'Para'), h('span', null, c.de + (c.deDetalle ? ' (' + c.deDetalle + ')' : ''))),
-          h('p', { class: 'linea-campo' }, h('b', null, 'Asunto'), h('span', null, 'Re: ' + c.asunto)),
+          h('p', { class: 'linea-campo' }, h('b', null, 'Para'), h('span', null, para)),
+          h('p', { class: 'linea-campo' }, h('b', null, 'Asunto'), h('span', null, asunto)),
+          adj.length ? h('div', { class: 'linea-campo' }, h('b', null, 'Adjuntos'), h('span', { class: 'adjuntos' }, adj.map(function (a) { return h('span', { class: 'adjunto' }, a); }))) : null,
           h('label', { class: 'sr', for: 'resp-' + c.id }, 'Texto de la respuesta'),
           area,
           h('div', { class: 'acciones' },
@@ -358,19 +392,23 @@
               if (!texto) { avisar('La respuesta está vacía', 'Elige una respuesta propuesta o escribe la tuya.'); return; }
               confirmar({
                 titulo: '¿Enviar esta respuesta?',
-                vista: [h('p', null, h('b', null, 'Para: '), c.de), h('p', null, h('b', null, 'Asunto: '), 'Re: ' + c.asunto), parrafos(texto)],
+                vista: [
+                  h('p', null, h('b', null, 'Para: '), para),
+                  h('p', null, h('b', null, 'Asunto: '), asunto),
+                  adj.length ? h('p', null, h('b', null, 'Adjuntos: '), adj.join(', ')) : null,
+                  parrafos(texto)],
                 boton: 'Enviar desde mi cuenta del colegio',
                 alAceptar: function () {
                   var hora = ahora();
-                  bolsa('correo', rol)[c.id] = { estado: 'enviado', hora: hora, texto: texto };
+                  bolsa('correo', rol)[c.id] = { estado: 'enviado', hora: hora, texto: texto, para: rSel.para || null };
                   repintar();
-                  avisar('Respuesta enviada', 'Ha salido desde tu cuenta del colegio. (En la demo no se envía nada.)');
+                  avisar(rSel.para ? 'Correo enviado' : 'Respuesta enviada', 'Ha salido desde tu cuenta del colegio. (En la demo no se envía nada.)');
                 },
               });
             }, { 'data-k': 'enviar-' + c.id }),
-            boton('Archivar sin responder', function () { bolsa('correo', rol)[c.id] = { estado: 'archivado', hora: ahora() }; repintar(); avisar('Archivado', c.asunto); }, { cls: 'boton-borde' })))));
+            boton('Archivar sin responder', archivar, { cls: 'boton-borde', 'data-k': 'archivar-' + c.id })))));
     } else {
-      partes.push(h('div', { class: 'acciones' }, boton('Archivar', function () { bolsa('correo', rol)[c.id] = { estado: 'archivado', hora: ahora() }; repintar(); avisar('Archivado', c.asunto); }, { cls: 'boton-borde', 'data-k': 'archivar-' + c.id })));
+      partes.push(h('div', { class: 'acciones' }, boton('Archivar', archivar, { cls: 'boton-borde', 'data-k': 'archivar-' + c.id })));
     }
     return h('article', { class: 'lectura', 'aria-label': c.asunto }, partes);
   }
@@ -403,7 +441,7 @@
       if (ya) avisar('Todo confirmado', m.alConfirmar);
     }
     var cab = [];
-    if (m.contexto) cab.push(h('section', { class: 'tarjeta contexto' }, ilus('sustituto', null, ''), h('div', null, h('b', null, m.contexto.titulo), h('p', null, m.contexto.texto))));
+    if (m.contexto) cab.push(h('section', { class: 'tarjeta contexto' }, ilus('calendario', null, ''), h('div', null, h('b', null, m.contexto.titulo), h('p', null, m.contexto.texto))));
     cab.push(h('div', { class: 'tarjeta-cabeza' },
       h('p', null, esIA(m) ? conInsignia('Propuesta de la IA · ' + hechos + ' de ' + m.items.length + ' confirmadas', true) : sinInsignia('Propuesta de DirectorIA, con las reglas del colegio · ' + hechos + ' de ' + m.items.length + ' confirmadas')),
       todos ? pastilla('hecho', 'Todo confirmado') : boton(m.botonTodo, function () { m.items.forEach(function (it) { var e = est[it.id] || (est[it.id] = {}); if (!e.hecho) { e.hecho = true; e.hora = ahora(); e.quien = e.quien || it.propuesta; } }); comprobarTodo(); }, { 'data-k': 'todo-' + m.id })));
@@ -416,7 +454,7 @@
       return h('li', { class: 'propuesta' + (e.hecho ? ' hecha' : '') },
         h('div', { class: 'cuando' }, it.cuando, h('small', null, it.que)),
         h('div', { class: 'quien' }, h('label', { for: 'sel-' + m.id + '-' + it.id, class: 'sr' }, 'Quién cubre ' + it.cuando), sel),
-        h('p', { class: 'motivo' }, esIA(m) ? insignia() : null, elegido === it.propuesta ? it.motivo : 'Has elegido a otra persona. DirectorIA lo tendrá en cuenta para repartir las próximas guardias.'),
+        h('p', { class: 'motivo' }, esIA(m) ? insignia() : null, elegido === it.propuesta ? it.motivo : 'Has elegido a ' + elegido + '. DirectorIA lo tendrá en cuenta al proponer el reparto de las próximas guardias. En la demo, los otros perfiles siguen la propuesta inicial.'),
         h('div', { class: 'lado' },
           e.hecho ? pastilla('hecho', 'Confirmado ' + e.hora) : boton(m.boton, function () { confirmarUno(it); }, { cls: 'boton-pequeno', 'data-k': 'ok-' + it.id }),
           e.hecho && it.ficha ? h('span', { class: 'pastilla p-info' }, 'Ficha enviada a ' + elegido) : null));
@@ -424,10 +462,11 @@
     return cab.concat([lista, todos ? h('div', { class: 'aviso ok' }, visto(), h('p', null, m.alConfirmar)) : h('p', { class: 'nota-ia' }, 'Nada cambia hasta que confirmes. Puedes elegir a otra persona en cada sesión.')]);
   };
 
-  function bloquesDoc(bloques) {
+  // ed: lo que la persona ha cambiado en cada párrafo (por número de bloque); editable: si los párrafos se pueden cambiar ahora.
+  function bloquesDoc(bloques, ed, editable) {
     var out = [];
     var campos = null;
-    bloques.forEach(function (b) {
+    bloques.forEach(function (b, i) {
       if (b.tipo === 'campo') {
         if (!campos) { campos = h('dl', null); out.push(campos); }
         campos.append(h('div', { class: 'campo' }, h('dt', null, b.etiqueta), h('dd', null, b.texto)));
@@ -435,7 +474,11 @@
       }
       campos = null;
       if (b.tipo === 'titulo') out.push(h('h3', null, b.texto));
-      else if (b.tipo === 'parrafo') out.push.apply(out, parrafos(b.texto));
+      else if (b.tipo === 'parrafo') {
+        var txt = ed && ed[i] !== undefined ? ed[i] : b.texto;
+        if (editable) out.push(h('div', { class: 'parrafo-edit', contenteditable: 'true', role: 'textbox', 'aria-multiline': 'true', 'aria-label': 'Texto editable del documento', oninput: function (ev) { ed[i] = ev.target.innerText.replace(/\n{3,}/g, '\n\n').trim(); guardar(); } }, parrafos(txt)));
+        else out.push.apply(out, parrafos(txt));
+      }
       else if (b.tipo === 'lista') out.push(h('ul', null, b.items.map(function (x) { return h('li', null, x); })));
       else if (b.tipo === 'aviso') out.push(h('div', { class: 'aviso' }, h('p', null, b.texto)));
     });
@@ -453,9 +496,11 @@
       h('ul', { class: 'piezas' }, m.documentos.map(function (d) {
         return h('li', { class: 'pieza' + (d.estado === 'falta' ? ' falta' : '') }, h('span', { class: 'n' }, d.nombre), d.detalle ? h('span', { class: 'd' }, d.detalle) : null, pastilla(d.estado));
       }))));
-    var doc = h('article', { class: 'papel-doc', 'aria-label': m.documento.titulo, 'data-k': 'doc-' + m.id, contenteditable: est.editando && !est.hecho ? 'true' : null },
+    // Lo que se cambia con «Editar el texto» se guarda en est.ed, así no se pierde al marcar casillas, dejar de editar ni dar el visto bueno.
+    est.ed = est.ed || {};
+    var doc = h('article', { class: 'papel-doc', 'aria-label': m.documento.titulo, 'data-k': 'doc-' + m.id },
       h('div', { class: 'doc-cabeza' }, h('h2', { class: 'doc-titulo' }, m.documento.titulo), m.documento.subtitulo ? h('p', { class: 'doc-sub' }, m.documento.subtitulo) : null),
-      bloquesDoc(m.documento.bloques),
+      bloquesDoc(m.documento.bloques, est.ed, est.editando && !est.hecho),
       est.hecho ? selloHecho('Revisado por ' + persona.nombre + ', ' + minuscula(persona.cargo) + ', hoy a las ' + est.hora) : null);
     var lateral = h('div', { class: 'lateral' },
       h('section', { class: 'tarjeta' }, h('h2', null, esIA(m) ? 'Lo ha rellenado la IA' : 'Lo ha preparado DirectorIA'), h('p', { style: 'font-size:var(--t-s);margin-top:.25rem' }, m.origen), esIA(m) ? h('ul', { class: 'lista-ia' }, m.rellenado.map(function (x) { return h('li', null, insignia(), h('span', null, x)); })) : h('ul', { class: 'lista-puntos', style: 'margin-top:.625rem' }, m.rellenado.map(function (x) { return h('li', null, x); }))),
@@ -522,7 +567,8 @@
       });
       var adaptar = m.resultados.filter(function (r) { return r.adaptar; })[0];
       cuerpo = [
-        h('form', { class: 'buscador', role: 'search', onsubmit: function (ev) { ev.preventDefault(); est.buscado = true; repintar(); avisar('Búsqueda hecha', 'Ordenada por lo que más se parece a lo que pides.'); } },
+        // En la demo solo hay una búsqueda: si se escribe otra, se dice y se vuelve a la del ejemplo.
+        h('form', { class: 'buscador', role: 'search', onsubmit: function (ev) { ev.preventDefault(); if ((est.consulta || m.consulta).trim() !== m.consulta.trim()) { est.consulta = m.consulta; repintar(); avisar('En la demo hay una sola búsqueda', 'Te enseñamos la del ejemplo: «' + m.consulta + '».'); return; } est.buscado = true; repintar(); avisar('Búsqueda hecha', 'Ordenada por lo que más se parece a lo que pides.'); } },
           h('label', { class: 'sr', for: 'buscar-' + m.id }, 'Qué buscas'), entrada, h('button', { class: 'boton', type: 'submit' }, 'Buscar')),
         h('div', { class: 'chips' }, h('span', { class: 'con-insignia' }, insignia(), 'Entendido como'), m.entendido.map(function (c) { return h('span', { class: 'chip' }, c); })),
         h('div', { class: 'aviso' }, h('p', null, m.aviso)),
@@ -551,10 +597,14 @@
         h('fieldset', { class: 'campo-f', style: 'border:0;margin:0;padding:0 0 .875rem' }, h('legend', { class: 'etq' }, 'Curso ', h('b', null, '· obligatorio')), h('div', { class: 'chips' }, CURSOS.map(function (c) { return h('button', { type: 'button', class: 'chip-boton', 'aria-pressed': est.cursos.indexOf(c) >= 0 ? 'true' : 'false', 'data-k': 'curso-' + c, onclick: function () { conmutar(est.cursos, c); } }, c); }))),
         h('fieldset', { class: 'campo-f', style: 'border:0;margin:0;padding:0 0 .875rem' }, h('legend', { class: 'etq' }, 'Materia ', h('b', null, '· obligatoria')), h('div', { class: 'chips' }, MATERIAS.map(function (c) { return h('button', { type: 'button', class: 'chip-boton', 'aria-pressed': est.materias.indexOf(c) >= 0 ? 'true' : 'false', 'data-k': 'materia-' + c, onclick: function () { conmutar(est.materias, c); } }, c); }))),
         h('div', { class: 'campo-f' }, h('span', { class: 'etq' }, 'Contenidos del currículo'), h('div', { class: 'chips' }, s.contenidos.map(function (c) { return h('span', { class: 'chip' }, c); }), h('span', { class: 'con-insignia suave' }, insignia(), 'sugeridos por la IA'))),
+        // Declarar que está hecho con IA es voluntario: no impide compartir. Si se marca, el recurso lleva la etiqueta.
+        s.declaracion ? h('div', { class: 'campo-f' }, h('span', { class: 'etq' }, 'Si lo has hecho con IA'),
+          h('label', { class: 'campo-casilla' }, h('input', { type: 'checkbox', checked: !!est.ia, disabled: est.compartido ? true : null, 'data-k': 'cas-ia', onchange: function (ev) { est.ia = ev.target.checked; repintar(); } }), h('span', null, s.declaracion)),
+          sinInsignia('Es voluntario. Si lo marcas, el recurso lleva la etiqueta «Hecho con IA y revisado».')) : null,
         h('fieldset', { style: 'border:0;margin:0;padding:0' }, h('legend', { class: 'etq' }, 'Antes de compartir, confirma'), s.casillas.map(function (x, i) {
-          return h('label', { class: 'campo-casilla' }, h('input', { type: 'checkbox', checked: !!est.cas[i], 'data-k': 'cas-' + i, onchange: function (ev) { est.cas[i] = ev.target.checked; repintar(); } }), h('span', null, x));
+          return h('label', { class: 'campo-casilla' }, h('input', { type: 'checkbox', checked: !!est.cas[i], disabled: est.compartido ? true : null, 'data-k': 'cas-' + i, onchange: function (ev) { est.cas[i] = ev.target.checked; repintar(); } }), h('span', null, x));
         })),
-        est.compartido ? selloHecho('Compartido con el claustro. Tu nombre queda como autora.') : h('div', { class: 'acciones' }, h('button', { class: 'boton', type: 'submit', disabled: listoSubir ? null : true, 'data-k': 'compartir' }, 'Compartir con el claustro'), !listoSubir ? h('span', { class: 'ayuda' }, 'El curso y la materia son obligatorios, y hay que marcar las tres casillas.') : null));
+        est.compartido ? selloHecho('Compartido con el claustro' + (s.declaracion && est.ia ? ', con la etiqueta «Hecho con IA y revisado»' : '') + '. Tu nombre queda como autora.') : h('div', { class: 'acciones' }, h('button', { class: 'boton', type: 'submit', disabled: listoSubir ? null : true, 'data-k': 'compartir' }, 'Compartir con el claustro'), !listoSubir ? h('span', { class: 'ayuda' }, 'El curso y la materia son obligatorios, y hay que marcar las casillas de «Antes de compartir».') : null));
     } else {
       var im = m.impacto;
       var nums = (im.meta.match(/(\d+)\s+de\s+(\d+)/) || []);
@@ -578,7 +628,8 @@
         fase === 'inicio' ? boton('Empezar a dictar', function () { est.fase = 'escuchando'; repintar(); escribir(); }, { 'data-k': 'dictar' }) : null,
         fase === 'escuchando' ? h('span', { class: 'escuchando', role: 'status' }, h('i', { 'aria-hidden': 'true' }), 'Escuchando…') : null,
         fase === 'dictado' ? boton([insignia(), 'Redactar el correo'], function () { est.fase = 'borrador'; est.texto = est.texto || m.borrador; repintar(); }, { 'data-k': 'redactar' }) : null,
-        fase !== 'inicio' && fase !== 'enviado' ? boton('Volver a empezar', function () { est.fase = 'inicio'; est.texto = ''; repintar(); }, { cls: 'boton-borde boton-pequeno' }) : null),
+        // Con el borrador ya redactado, «Volver a empezar» no aparece aquí: un doble clic en «Redactar el correo» lo borraría.
+        fase === 'escuchando' || fase === 'dictado' ? boton('Volver a empezar', function () { est.fase = 'inicio'; est.texto = ''; repintar(); }, { cls: 'boton-borde boton-pequeno' }) : null),
       h('div', { class: 'transcripcion' + (fase === 'inicio' ? ' vacia' : ''), id: 'transcripcion', 'aria-live': 'polite' }, fase === 'inicio' ? 'Pulsa «Empezar a dictar» y habla como lo harías con un compañero. En la demo, el dictado es un ejemplo.' : (fase === 'escuchando' ? '' : m.transcripcion)))];
     if (fase === 'borrador' || fase === 'enviado') {
       if (fase === 'enviado') partes.push(h('section', { class: 'tarjeta enviado' }, h('p', { class: 'sello' }, visto(), 'Enviado a las ' + est.hora + ' desde tu cuenta del colegio'), h('div', { class: 'cuerpo-enviado' }, parrafos(est.texto))));
@@ -594,7 +645,7 @@
             area,
             h('div', { class: 'acciones' }, boton('Revisar y enviar', function () {
               confirmar({ titulo: '¿Enviar este correo?', vista: [h('p', null, h('b', null, 'Para: '), m.para), h('p', null, h('b', null, 'Asunto: '), m.asunto), parrafos(est.texto)], boton: 'Enviar desde mi cuenta del colegio', alAceptar: function () { est.fase = 'enviado'; est.hora = ahora(); repintar(); avisar('Correo enviado', 'Lo has revisado y enviado tú. (En la demo no se envía nada.)'); } });
-            }, { 'data-k': 'enviar-dictado' }), h('span', { class: 'ayuda' }, 'Nunca sale sin que lo revises.')))));
+            }, { 'data-k': 'enviar-dictado' }), boton('Volver a dictar', function () { est.fase = 'inicio'; est.texto = ''; repintar(); }, { cls: 'boton-borde', 'data-k': 'volver-dictar' }), h('span', { class: 'ayuda' }, 'Nunca sale sin que lo revises.')))));
       }
     }
     function escribir() {
@@ -613,6 +664,17 @@
     return partes;
   };
 
+  // Filtro de la demo: para la petición si lleva un nombre de pila habitual escrito con mayúscula.
+  // Es una muestra, no el filtro real: por eso, si la petición no es la del ejemplo, la respuesta lo dice.
+  var NOMBRES = ('Daniel Amira Mario Lucía Hugo Irene Nora Iker Sofía Adrián Gonzalo Carla Alba Óliver Oliver Samuel ' +
+    'María Martina Julia Paula Valeria Emma Daniela Sara Carmen Laura Lara Olivia Claudia Jimena Aitana Ana Elena Candela Alejandra Ainhoa Marta Carlota Noa Lola ' +
+    'Martín Lucas Mateo Alejandro Pablo Manuel Álvaro Diego David Marcos Álex Alex Javier Bruno Miguel Liam Carlos Juan Ángel Nicolás José Sergio Gabriel Jorge Darío Eric Héctor Rodrigo Jaime Rubén Iván Víctor Guillermo Luis Pedro Raúl Óscar Andrés Unai').split(' ');
+  function nombreEn(t) {
+    var re = /[A-ZÁÉÍÓÚÑ][a-záéíóúüñ]+/g, x;
+    while ((x = re.exec(t))) if (NOMBRES.indexOf(x[0]) >= 0) return x[0];
+    return null;
+  }
+
   MODULOS.material = function (rol, m) {
     var est = bolsa('material', rol, m.id);
     var area = h('textarea', { class: 'area', id: 'peticion-' + m.id, style: 'min-height:6rem', 'data-k': 'peticion', 'aria-label': 'Qué necesitas', oninput: function (ev) { est.peticion = ev.target.value; est.bloqueado = false; guardar(); } });
@@ -621,18 +683,20 @@
       h('div', { class: 'nube' }, ilus('nube-claude', null, ''), h('div', null, h('p', { style: 'color:var(--tinta);font-weight:700' }, 'Módulo opcional con Claude, en la nube'), h('p', { style: 'font-size:var(--t-s)' }, m.aviso))),
       h('section', { class: 'tarjeta' },
         h('h2', { style: 'margin-bottom:.5rem' }, h('label', { for: 'peticion-' + m.id }, 'Qué necesitas')), area,
-        est.bloqueado ? h('div', { class: 'bloqueo', role: 'alert', style: 'margin-top:.75rem' }, ilus('candado', null, ''), h('div', null, h('p', { style: 'font-weight:700' }, 'El filtro ha parado la petición'), h('p', null, m.bloqueo.mensaje))) : null,
+        est.bloqueado ? h('div', { class: 'bloqueo', role: 'alert', style: 'margin-top:.75rem' }, ilus('candado', null, ''), h('div', null, h('p', { style: 'font-weight:700' }, 'El filtro ha parado la petición'),
+          h('p', null, est.nombre && est.peticion !== m.bloqueo.intento ? 'Lleva un nombre, «' + est.nombre + '», y en el módulo de Claude no se escriben datos de alumnos. No se ha enviado nada. Quita el nombre y pídelo sin datos personales.' : m.bloqueo.mensaje))) : null,
         h('div', { class: 'acciones', style: 'margin-top:.875rem' },
           boton('Pedir a Claude', function () {
             var t = (est.peticion !== undefined ? est.peticion : m.peticion);
-            if (t === m.bloqueo.intento) { est.bloqueado = true; repintar(); return; }
-            est.respuesta = true; est.bloqueado = false; repintar();
+            var nombre = nombreEn(t);
+            if (nombre || t === m.bloqueo.intento) { est.bloqueado = true; est.nombre = nombre; est.respuesta = false; repintar(); return; }
+            est.respuesta = true; est.otra = t.trim() !== m.peticion.trim(); est.bloqueado = false; repintar();
           }, { 'data-k': 'pedir' }),
-          boton('Probar el filtro con un nombre', function () { est.peticion = m.bloqueo.intento; est.bloqueado = true; est.respuesta = false; repintar(); }, { cls: 'boton-borde', 'data-k': 'probar-filtro' }),
-          est.bloqueado ? boton('Volver a la petición sin nombres', function () { est.peticion = m.peticion; est.bloqueado = false; repintar(); }, { cls: 'boton-borde boton-pequeno' }) : null)),
+          boton('Probar el filtro con un nombre', function () { est.peticion = m.bloqueo.intento; est.nombre = null; est.bloqueado = true; est.respuesta = false; repintar(); }, { cls: 'boton-borde', 'data-k': 'probar-filtro' }),
+          est.bloqueado ? boton('Volver a la petición sin nombres', function () { est.peticion = m.peticion; est.nombre = null; est.bloqueado = false; repintar(); }, { cls: 'boton-borde boton-pequeno' }) : null)),
     ];
     if (est.respuesta) partes.push(h('article', { class: 'papel-doc', 'aria-label': m.respuesta.titulo },
-      h('div', { class: 'doc-cabeza' }, h('h2', { class: 'doc-titulo' }, m.respuesta.titulo), h('p', { class: 'doc-sub' }, 'Preparado con Claude a partir de tu petición, sin datos de alumnos. Revísalo antes de usarlo.')),
+      h('div', { class: 'doc-cabeza' }, h('h2', { class: 'doc-titulo' }, m.respuesta.titulo), h('p', { class: 'doc-sub' }, (est.otra ? 'En la demo, Claude devuelve siempre este ejemplo. ' : 'Preparado con Claude a partir de tu petición, sin datos de alumnos. ') + 'Revísalo antes de usarlo.')),
       bloquesDoc(m.respuesta.bloques),
       est.guardado ? selloHecho('Guardado en tus recursos como borrador.') : h('div', { class: 'acciones' }, boton('Guardar como borrador', function () { est.guardado = true; repintar(); avisar('Guardado', 'Lo revisas y, si quieres, lo compartes en el banco.'); }, { 'data-k': 'guardar-material' }))));
     return partes;
@@ -649,7 +713,7 @@
     }));
     var v = versiones[tab];
     var doc = h('article', { class: 'papel-doc version' + (/f[aá]cil/i.test(v.idioma) ? ' facil' : ''), lang: /ingl/i.test(v.idioma) ? 'en' : 'es' },
-      h('div', { class: 'doc-cabeza' }, h('h2', { class: 'doc-titulo' }, m.original.titulo), h('p', { class: 'doc-sub' }, (tab === 0 ? 'Circular original' : 'Versión preparada con IA: ' + minuscula(v.idioma)) + ' · para la ' + minuscula(m.para))),
+      h('div', { class: 'doc-cabeza' }, h('h2', { class: 'doc-titulo' }, m.original.titulo), h('p', { class: 'doc-sub con-insignia suave' }, tab === 0 ? null : insignia(), (tab === 0 ? 'Circular original' : 'Versión preparada con IA: ' + minuscula(v.idioma)) + ' · para la ' + minuscula(m.para))),
       parrafos(v.texto));
     var lateral = h('div', { class: 'lateral' },
       h('section', { class: 'tarjeta' }, h('h2', null, 'Antes de enviar, comprueba'),
@@ -658,20 +722,23 @@
         })),
         est.hecho ? h('div', { style: 'margin-top:.75rem' }, selloHecho(m.alTerminar)) : h('div', { class: 'acciones', style: 'margin-top:.875rem' }, boton(m.boton, function () {
           confirmar({ titulo: '¿Enviarlo a la ' + minuscula(m.para) + '?', intro: 'Se envía desde la cuenta del colegio con las versiones que has revisado.', boton: m.boton, alAceptar: function () { est.hecho = true; est.hora = ahora(); repintar(); avisar('Enviado', m.alTerminar); } });
-        }, { disabled: listo ? null : true, 'data-k': 'enviar-trad' }))));
-    return [h('p', { class: 'con-insignia' }, insignia(), 'Para: ' + m.para), pest, h('div', { class: 'dos-columnas' }, doc, lateral)];
+        }, { disabled: listo ? null : true, 'data-k': 'enviar-trad' })),
+        !listo && !est.hecho ? h('p', { style: 'font-size:var(--t-s);margin-top:.5rem' }, 'Marca las comprobaciones para poder enviarlo.') : null));
+    // La insignia va en la versión, que es lo que prepara la IA; el destinatario lo pone el colegio.
+    return [h('p', { class: 'linea-campo', style: 'color:var(--tinta)' }, h('b', null, 'Para: '), m.para), pest, h('div', { class: 'dos-columnas' }, doc, lateral)];
   };
 
   MODULOS.ficha = function (rol, m) {
-    if (m.bandera && !S.banderas[m.bandera] && !S.previa[rol + ':' + m.id]) {
+    // Hasta que jefatura confirma las guardias, quien sustituye no ve ningún dato de la ficha.
+    // El botón es solo un atajo de la demo para cambiar de perfil: en el colegio, solo jefatura confirma.
+    if (m.bandera && !S.banderas[m.bandera]) {
       var j = D.roles.jefatura;
       var mod = j && (j.modulos || []).filter(function (x) { return x.tipo === 'aprobaciones'; })[0];
       return h('section', { class: 'tarjeta espera' }, ilus('reloj', null, ''), h('div', null,
         h('h2', null, 'Jefatura todavía no ha confirmado las guardias de hoy'),
         h('p', null, 'Tu ficha aparece aquí en cuanto jefatura de estudios confirma quién cubre cada sesión. Así nadie recibe una ficha que luego cambia.'),
-        h('div', { class: 'acciones' },
-          mod ? boton('Ir a jefatura para confirmarlas', function () { ir('jefatura', mod.id); }, { 'data-k': 'ir-jefatura' }) : null,
-          boton('Ver la ficha igualmente', function () { S.previa[rol + ':' + m.id] = true; repintar(); }, { cls: 'boton-borde' }))));
+        mod ? h('div', { class: 'acciones' }, boton('Cambiar al perfil de jefatura', function () { ir('jefatura', mod.id); }, { 'data-k': 'ir-jefatura' })) : null,
+        mod ? h('p', { class: 'ayuda' }, 'Atajo de la demo: en el colegio, solo jefatura confirma las guardias.') : null));
     }
     var partes = [h('div', { class: 'fichas' }, m.fichas.map(function (f) {
       return h('article', { class: 'ficha', 'aria-label': 'Ficha de ' + f.sesion },
@@ -684,13 +751,13 @@
       var lineas = m.registro;
       if (m.bandera) {
         var acceso = bolsa('fichas', rol, m.id);
-        if (!acceso.hora) { acceso.hora = ahora(); acceso.previa = !S.banderas[m.bandera]; guardar(); }
+        // La hora que ya marca la cabecera: el reloj no avanza al pintar, solo al hacer algo.
+        if (!acceso.hora) { acceso.hora = horaActual(); guardar(); }
         var quien = (D.roles[rol] && D.roles[rol].persona) ? D.roles[rol].persona.nombre : 'ti';
-        lineas = [(acceso.previa ? 'Vista previa abierta por ' : 'Abierta por ') + quien + ' hoy a las ' + acceso.hora].concat(m.registro);
+        lineas = ['Abierta por ' + quien + ' hoy a las ' + acceso.hora].concat(m.registro);
       }
       partes.push(h('section', { class: 'tarjeta' }, h('h2', { style: 'margin-bottom:.5rem' }, 'Registro de accesos'), h('ul', { class: 'lista-puntos' }, lineas.map(function (x) { return h('li', null, x); }))));
     }
-    if (m.bandera && !S.banderas[m.bandera]) partes.unshift(h('div', { class: 'aviso' }, h('p', null, 'Vista previa: jefatura todavía no ha confirmado las guardias de hoy.')));
     return partes;
   };
 
@@ -698,12 +765,12 @@
     var est = bolsa('tablas', rol, m.id);
     var marcas = {};
     (m.marcas || []).forEach(function (x) { marcas[x.fila + ':' + x.columna] = x.tipo; });
-    var tabla = h('div', { class: 'tabla-caja', role: 'region', 'aria-label': m.titulo, tabindex: '0' }, h('table', null,
+    var tabla = h('div', { class: 'tabla-caja columna-fija', role: 'region', 'aria-label': m.titulo, tabindex: '0' }, h('table', null,
       h('thead', null, h('tr', null, m.columnas.map(function (c) { return h('th', { scope: 'col' }, c); }))),
       h('tbody', null, m.filas.map(function (f, i) {
         return h('tr', null, f.map(function (c, j) {
           var t = marcas[i + ':' + j];
-          var celda = h(j === 0 ? 'th' : 'td', j === 0 ? { scope: 'row', style: 'text-transform:none;letter-spacing:0;font-size:var(--t-s);color:var(--tinta);background:transparent;white-space:normal' } : { class: t ? 'm-' + t : null });
+          var celda = h(j === 0 ? 'th' : 'td', j === 0 ? { scope: 'row', style: 'text-transform:none;letter-spacing:0;font-size:var(--t-s);color:var(--tinta);background:var(--papel);white-space:normal' } : { class: t ? 'm-' + t : null });
           if (t === 'aviso') celda.append(h('span', { class: 'marca-celda', 'aria-label': 'Aviso' }, '!'));
           if (t === 'ok') celda.append(visto());
           celda.append(document.createTextNode(' ' + c));
@@ -715,7 +782,7 @@
     }));
     var partes = [avisos, tabla];
     if (m.boton) partes.push(est.hecho ? selloHecho(m.alTerminar + ' (' + personaDe(rol).nombre + ', hoy a las ' + est.hora + ')') :
-      h('div', { class: 'acciones' }, boton(m.boton, function () { est.hecho = true; est.hora = ahora(); repintar(); avisar(m.boton, m.alTerminar); }, { 'data-k': 'tabla-' + m.id }), h('span', { class: 'ayuda' }, 'Es una propuesta: decides tú.')));
+      h('div', { class: 'acciones' }, boton(m.boton, function () { est.hecho = true; est.hora = ahora(); repintar(); avisar(m.boton, m.alTerminar); }, { 'data-k': 'tabla-' + m.id }), h('span', { class: 'ayuda' }, 'Nada se envía ni se publica hasta que pulses el botón.')));
     return partes;
   };
 

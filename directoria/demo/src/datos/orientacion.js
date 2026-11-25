@@ -58,7 +58,7 @@ DEMO.rol({
             estado: 'info',
             ir: 'pautas',
             bandera: 'guardias',
-            textoSi: 'Jefatura ha confirmado las guardias: Pablo Sanz verá la pauta de Mario en su ficha de la 6.ª hora. Queda registrado.',
+            textoSi: 'Jefatura ha confirmado las guardias: Pablo Sanz (1.ª y 6.ª) y Rosa Medina (3.ª) verán la pauta de Mario en sus fichas. Queda registrado.',
             estadoSi: 'hecho',
           },
           {
@@ -198,7 +198,7 @@ DEMO.rol({
       categoria: 'Claustro',
       etiqueta: { texto: 'Autorizaciones el vie 20', tipo: 'plazo' },
       resumen: [
-        'Laura Sánchez pide una versión en inglés de la circular de la salida al Jardín Botánico (vie 27) para la familia de Amira (4.º A).',
+        'Laura Sánchez pide una versión en inglés de la circular de la salida al Jardín Botánico del viernes 27 para la familia de Amira (4.º A).',
         'Si se puede, también en lectura fácil: la familia está aprendiendo español.',
         'Las autorizaciones firmadas se entregan antes del viernes 20.',
       ],
@@ -207,7 +207,7 @@ DEMO.rol({
       adjuntos: ['Circular de la salida al Jardín Botánico.pdf'],
       respuestas: [
         {
-          titulo: 'Confirmar que se las envío hoy',
+          titulo: 'Confirmar que se las envías hoy',
           texto: 'Hola, Laura:\n\nGracias por avisar. Ya tengo las dos versiones de la circular, en inglés y en lectura fácil. Las reviso esta mañana y se las envío hoy a la familia de Amira desde la cuenta del colegio, con el original en español. Te pongo en copia.\n\nAsí tienen tiempo de devolverte la autorización firmada antes del viernes 20.\n\nUn abrazo,\nAndrés Vidal\nOrientador',
         },
         {
@@ -314,7 +314,7 @@ DEMO.rol({
         { nombre: 'Citación a la familia de Alumno/a A · la firma la directora', estado: 'Pendiente de firma' },
         { nombre: 'Convocatoria de la reunión del mar 24 (Anexo III)', estado: 'Para revisar' },
       ],
-      pie: 'DirectorIA guía, recuerda y prepara los documentos con las plantillas del protocolo. Si hay acoso, y con qué medidas, lo decide el equipo del centro. Los datos del caso no pasan por la IA.',
+      pie: 'DirectorIA guía, recuerda y prepara los documentos con las plantillas del protocolo. Si hay acoso, y con qué medidas, lo decide el equipo del centro. El expediente del caso no pasa por la IA.',
     },
 
     // Pautas para el aula: qué hacer, para quién y quién la ve
@@ -340,7 +340,7 @@ DEMO.rol({
         { fila: 5, columna: 4, tipo: 'aviso' },
       ],
       avisos: [
-        { texto: 'Pablo Sanz verá la pauta de Mario en su ficha de la 6.ª hora; queda registrado.', estado: 'aviso' },
+        { texto: 'Pablo Sanz (1.ª y 6.ª hora) y Rosa Medina (3.ª hora) verán la pauta de Mario en sus fichas de 3.º B; queda registrado.', estado: 'aviso' },
         { texto: 'La pauta de 2.º ESO B es para todo el grupo y no nombra a nadie. Sale de la petición de Beatriz Romero y nadie la ve hasta que la apruebes.', estado: 'info' },
         { texto: 'Las pautas dicen qué hacer en el aula, no por qué: en las fichas no van diagnósticos ni informes.', estado: 'info' },
         { texto: 'DirectorIA lleva cada pauta solo a la ficha de quien entra en ese grupo, y la ficha se cierra al acabar la jornada.', estado: 'ok' },
@@ -365,7 +365,7 @@ DEMO.rol({
       versiones: [
         {
           idioma: 'Lectura fácil',
-          texto: 'Estimada familia:\n\nLa clase de Amira va de excursión al Jardín Botánico.\nEl Jardín Botánico es un parque grande con muchos árboles y plantas.\nUn guía les enseña los árboles y las plantas en otoño.\nVan todos los alumnos de 4.º de Primaria con sus profesores.\n\n¿Qué día?\nEl viernes 27 de noviembre.\n\n¿A qué hora?\nLos alumnos salen del colegio a las 9:15 de la mañana.\nVuelven al colegio a las 13:30, la una y media.\nLlegan a tiempo para la comida.\nVan en autobús.\n\n¿Qué tiene que llevar Amira?\nAlmuerzo: un bocadillo o una fruta para media mañana.\nUna botella de agua.\nUna gorra.\nRopa cómoda para andar.\n\n¿Cuánto cuesta?\n6 euros.\nCon este dinero se pagan la entrada y el autobús.\nEl colegio lo cobra en el recibo de diciembre.\nNo tienen que dar dinero a Amira.\n\n¿Qué tienen que hacer ustedes?\nFirmar la autorización.\nLa autorización es el papel para decir que Amira puede ir.\nDar la autorización a Laura Sánchez, la tutora de Amira.\nTienen que darla antes del viernes 20 de noviembre.\n\nSi tienen dudas, pregunten a Laura Sánchez.',
+          texto: 'Estimada familia:\n\nLa clase de Amira va de excursión al Jardín Botánico.\nEl Jardín Botánico es un parque grande con muchos árboles y plantas.\nUn guía enseña a los alumnos los árboles y las plantas en otoño.\nVan todos los alumnos de 4.º de Primaria con sus profesores.\n\n¿Qué día?\nEl viernes 27 de noviembre.\n\n¿A qué hora?\nLos alumnos salen del colegio a las 9:15 de la mañana.\nVuelven al colegio a las 13:30, la una y media.\nLlegan a tiempo para la comida.\nVan en autobús.\n\n¿Qué tiene que llevar Amira?\nAlmuerzo: un bocadillo o una fruta para media mañana.\nUna botella de agua.\nUna gorra.\nRopa cómoda para andar.\n\n¿Cuánto cuesta?\n6 euros.\nCon este dinero se pagan la entrada y el autobús.\nEl colegio lo cobra en el recibo de diciembre.\nNo tienen que dar dinero a Amira.\n\n¿Qué tienen que hacer ustedes?\nFirmar la autorización.\nLa autorización es el papel para decir que Amira puede ir.\nDar la autorización a Laura Sánchez, la tutora de Amira.\nTienen que darla antes del viernes 20 de noviembre.\n\nSi tienen dudas, pregunten a Laura Sánchez.',
         },
         {
           idioma: 'Inglés',

@@ -16,6 +16,8 @@
   --chispa: #E07A3A;
   --chispa-texto: #B4531C;
   --chispa-suave: #FBE6D8;
+  /* Borde de los campos que se rellenan: 3,5:1 sobre papel y 3,2:1 sobre tiza (WCAG 1.4.11). No está en tokens.json. */
+  --borde-campo: #7A8C85;
 
   --fondo: var(--tiza);
   --superficie: var(--papel);
@@ -275,11 +277,12 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .opcion .pre { grid-column: 2; font-size: var(--t-s); color: var(--cuerpo); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .opcion:has(input:checked) { border-color: var(--pizarra); background: var(--tiza); }
 .editor { display: grid; gap: .625rem; margin-top: 1rem; }
-.editor .linea-campo { display: flex; gap: .5rem; font-size: var(--t-s); color: var(--cuerpo); }
-.editor .linea-campo b { color: var(--tinta); min-width: 3.75rem; }
+.editor .linea-campo { display: flex; align-items: baseline; gap: .5rem; font-size: var(--t-s); color: var(--cuerpo); }
+.editor .linea-campo b { flex: none; color: var(--tinta); min-width: 3.75rem; }
+.editor .linea-campo > span { min-width: 0; }
 .editor textarea, .area {
   width: 100%; min-height: 14rem; padding: .875rem 1rem; resize: vertical;
-  border: 1.5px solid var(--borde); border-radius: var(--radio); background: var(--papel); color: var(--tinta); line-height: 1.6;
+  border: 1.5px solid var(--borde-campo); border-radius: var(--radio); background: var(--papel); color: var(--tinta); line-height: 1.6;
 }
 .editor textarea:focus, .area:focus { border-color: var(--pizarra); outline: none; box-shadow: 0 0 0 3px rgb(180 83 28 / .25); }
 .acciones { display: flex; flex-wrap: wrap; gap: .625rem; align-items: center; }
@@ -307,7 +310,8 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .papel-doc .campo { display: grid; grid-template-columns: minmax(7rem, 10rem) 1fr; gap: .25rem 1rem; padding: .5rem 0; border-bottom: 1px dashed var(--borde); }
 .papel-doc .campo dt { font-size: var(--t-s); font-weight: 700; color: var(--chispa-texto); }
 .papel-doc .campo dd { margin: 0; color: var(--tinta); }
-.papel-doc[contenteditable="true"] { outline: 3px dashed var(--pizarra-linea); outline-offset: 4px; }
+.papel-doc .parrafo-edit { display: grid; gap: 1rem; padding: .5rem .625rem; margin: 0 -.625rem; border-radius: var(--radio-s); outline: 2px dashed var(--pizarra-linea); }
+.papel-doc .parrafo-edit:focus { outline: 3px solid var(--foco); }
 .piezas { list-style: none; display: grid; gap: .5rem; }
 .pieza { display: grid; grid-template-columns: 1fr auto; gap: .25rem 1rem; align-items: center; padding: .75rem 1rem; border: 1px solid var(--borde); border-radius: var(--radio); background: var(--papel); }
 .pieza .n { font-weight: 700; color: var(--tinta); }
@@ -321,7 +325,7 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .propuesta .cuando { font-family: var(--f-tit); font-weight: 600; color: var(--tinta); line-height: 1.3; }
 .propuesta .cuando small { display: block; font-family: var(--f-txt); font-weight: 600; color: var(--cuerpo); font-size: var(--t-s); }
 .propuesta .quien { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
-.propuesta select { min-height: 2.5rem; padding: .25rem 2rem .25rem .75rem; border: 1.5px solid var(--borde); border-radius: var(--radio-s); background: var(--papel); color: var(--tinta); font-weight: 700; }
+.propuesta select { min-height: 2.5rem; padding: .25rem 2rem .25rem .75rem; border: 1.5px solid var(--borde-campo); border-radius: var(--radio-s); background: var(--papel); color: var(--tinta); font-weight: 700; }
 .propuesta .motivo { grid-column: 2; font-size: var(--t-s); color: var(--cuerpo); display: flex; gap: .5rem; align-items: flex-start; }
 .propuesta .motivo .insignia { width: 1rem; height: 1rem; margin-top: .15rem; }
 .propuesta .lado { grid-column: 3; grid-row: 1 / span 2; display: grid; gap: .375rem; justify-items: end; }
@@ -365,7 +369,7 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .buscador { display: flex; gap: .5rem; align-items: center; padding: .375rem .375rem .375rem 1.125rem; border: 2px solid var(--pizarra); border-radius: 999px; background: var(--papel); }
 .buscador input { flex: 1; min-width: 0; border: 0; background: transparent; font-size: var(--t-l); font-weight: 600; color: var(--tinta); padding: .375rem 0; }
 .buscador input:focus { outline: none; }
-.buscador:focus-within { box-shadow: 0 0 0 3px rgb(180 83 28 / .25); }
+.buscador:focus-within { outline: 3px solid var(--foco); outline-offset: 3px; }
 .chips { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
 .chip { display: inline-flex; align-items: center; padding: .25rem .75rem; border: 1.5px solid var(--borde); border-radius: 999px; background: var(--tiza); color: var(--tinta); font-size: var(--t-s); font-weight: 600; }
 .chip.sel { background: var(--pizarra); border-color: var(--pizarra); color: var(--tiza); }
@@ -383,8 +387,8 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .formulario .campo-f { display: grid; gap: .375rem; padding-bottom: .875rem; border-bottom: 1px solid var(--borde); }
 .formulario label.etq, .formulario .etq { font-size: var(--t-s); font-weight: 700; color: var(--cuerpo); }
 .formulario .etq b { color: var(--pizarra-linea); }
-.formulario input[type="text"] { width: 100%; min-height: 2.75rem; padding: .5rem .875rem; border: 1.5px solid var(--borde); border-radius: var(--radio-s); background: var(--papel); color: var(--tinta); font-weight: 600; }
-.chip-boton { border: 1.5px solid var(--borde); background: var(--tiza); color: var(--tinta); border-radius: 999px; padding: .25rem .875rem; min-height: 2.25rem; font-size: var(--t-s); font-weight: 600; }
+.formulario input[type="text"] { width: 100%; min-height: 2.75rem; padding: .5rem .875rem; border: 1.5px solid var(--borde-campo); border-radius: var(--radio-s); background: var(--papel); color: var(--tinta); font-weight: 600; }
+.chip-boton { border: 1.5px solid var(--borde-campo); background: var(--tiza); color: var(--tinta); border-radius: 999px; padding: .25rem .875rem; min-height: 2.25rem; font-size: var(--t-s); font-weight: 600; }
 .chip-boton[aria-pressed="true"] { background: var(--pizarra); border-color: var(--pizarra); color: var(--tiza); }
 .impacto { display: grid; gap: .875rem; }
 .impacto .grande { font-family: var(--f-tit); font-size: 3rem; font-weight: 700; line-height: 1; color: var(--tinta); }
@@ -427,6 +431,7 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .espera { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; }
 .espera img { width: 6rem; height: 6rem; }
 .espera > div { flex: 1; min-width: min(100%, 16rem); display: grid; gap: .625rem; }
+.espera .ayuda { font-size: var(--t-s); color: var(--cuerpo); }
 
 /* Tabla */
 .tabla-caja { overflow-x: auto; border: 1px solid var(--borde); border-radius: var(--radio-l); background: var(--papel); }
@@ -458,15 +463,19 @@ td.importe, th.importe { text-align: right; font-variant-numeric: tabular-nums; 
 .version { display: grid; gap: .75rem; }
 .version p { color: var(--tinta); line-height: 1.7; }
 .version.facil p { font-size: var(--t-l); line-height: 1.75; }
+.version.facil .doc-sub { font-size: var(--t-s); line-height: 1.5; }
 
 /* Ventana de confirmación y avisos */
 dialog.confirmar { width: min(36rem, calc(100vw - 2rem)); max-height: calc(100vh - 2rem); padding: 0; border: 0; border-radius: var(--radio-l); background: var(--papel); color: var(--cuerpo); box-shadow: 0 24px 64px -16px rgb(23 50 44 / .45); }
 dialog.confirmar::backdrop { background: rgb(23 50 44 / .45); }
 .confirmar-dentro { display: grid; gap: 1rem; padding: 1.5rem; }
 .confirmar-dentro h2 { font-size: var(--t-xl); font-weight: 600; }
+#confirmar-titulo:focus { outline: none; }
 .vista-previa { max-height: 40vh; overflow: auto; padding: .875rem 1rem; border-radius: var(--radio); background: var(--tiza); border: 1px solid var(--borde); color: var(--tinta); display: grid; gap: .5rem; font-size: var(--t-s); }
+/* Los avisos no recogen toques: en el móvil quedan encima de lo último que se ha tocado (otro «Marcar como hecho»,
+   «Deshacer»…) y el toque tiene que llegar a lo de debajo. No llevan nada que pulsar. */
 .avisos-flotantes { position: fixed; z-index: 50; right: max(1rem, env(safe-area-inset-right, 0px)); bottom: max(1rem, env(safe-area-inset-bottom, 0px)); display: grid; gap: .5rem; width: min(26rem, calc(100vw - 2rem)); pointer-events: none; }
-.flotante { display: flex; gap: .75rem; align-items: flex-start; padding: .875rem 1rem; border-radius: var(--radio); background: var(--pizarra); color: var(--tiza); box-shadow: var(--sombra); font-size: var(--t-s); pointer-events: auto; animation: entra .25s ease-out; }
+.flotante { display: flex; gap: .75rem; align-items: flex-start; padding: .875rem 1rem; border-radius: var(--radio); background: var(--pizarra); color: var(--tiza); box-shadow: var(--sombra); font-size: var(--t-s); pointer-events: none; animation: entra .25s ease-out; }
 .flotante b { display: block; }
 .flotante .visto { margin-top: .1rem; }
 @keyframes entra { from { opacity: 0; transform: translateY(.5rem); } }
@@ -482,6 +491,9 @@ dialog.confirmar::backdrop { background: rgb(23 50 44 / .45); }
   .dos-columnas, .protocolo { grid-template-columns: minmax(0, 1fr); }
   .lateral { position: static; }
   .chip-hora { display: none; }
+  /* Al desplazar de lado una tabla con cabecera de fila (MODULOS.tabla), la columna del grupo se queda fija.
+     La tabla de gastos no tiene cabecera de fila: su primera columna se desplaza con las demás. */
+  .tabla-caja.columna-fija thead th:first-child, .tabla-caja.columna-fija tbody th { position: sticky; left: 0; z-index: 1; box-shadow: 1px 0 0 var(--borde); }
 }
 @media (max-width: 900px) {
   .acceso { grid-template-columns: minmax(0, 1fr); grid-template-rows: auto; grid-template-areas: "arriba" "perfiles" "abajo"; }

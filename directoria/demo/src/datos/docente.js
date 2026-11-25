@@ -41,7 +41,7 @@ DEMO.rol({
             ir: 'correo:c-daniel',
           },
           {
-            texto: 'La madre de Amira pregunta en inglés por el chándal de Educación Física, y mañana tiene clase. Las respuestas, en inglés y traducidas.',
+            texto: 'La madre de Amira pregunta en inglés por el chándal. Amira tiene Educación Física mañana. Las respuestas están en inglés y traducidas.',
             estado: 'hoy',
             ir: 'correo:c-amira',
           },
@@ -145,7 +145,7 @@ DEMO.rol({
         },
         {
           titulo: 'Pedirle la talla',
-          texto: 'Dear Nadia,\n\nAmira can wear her own sports clothes for now, and she has PE on Mondays and Thursdays.\n\nCould you tell me her size? I will ask the uniform shop next to the school office to keep a tracksuit (€42) and a T-shirt (€12) for her. It opens on Tuesdays and Thursdays from 16:00 to 17:30.\n\nBest wishes,\nLaura Sánchez\nClass teacher of 4.º A and PE teacher\n\n[En español: De momento, Amira puede venir con su ropa de deporte, y tiene Educación Física los lunes y los jueves. ¿Me dice su talla? Pediré a la tienda de uniformes, junto a secretaría, que le guarde un chándal (42 €) y una camiseta (12 €). Abre los martes y jueves de 16:00 a 17:30.]',
+          texto: 'Dear Nadia,\n\nAmira can wear her own sports clothes for now, and she has PE on Mondays and Thursdays.\n\nCould you tell me her size? I will ask the uniform shop next to the school office to keep a tracksuit (€42) and a T-shirt (€12) for her. It is open on Tuesdays and Thursdays from 16:00 to 17:30.\n\nBest wishes,\nLaura Sánchez\nClass teacher of 4.º A and PE teacher\n\n[En español: De momento, Amira puede venir con su ropa de deporte, y tiene Educación Física los lunes y los jueves. ¿Me dice su talla? Pediré a la tienda de uniformes, junto a secretaría, que le guarde un chándal (42 €) y una camiseta (12 €). Abre los martes y jueves de 16:00 a 17:30.]',
         },
       ],
       nota: 'Tienda y precios, de la guía para familias del colegio. La circular de la salida en inglés la está revisando orientación.',
@@ -228,7 +228,7 @@ DEMO.rol({
       original: 'Queridos compañeros de Primaria:\n\nComo acordamos en el claustro del lunes, a partir de enero dedicaremos 20 minutos diarios a la lectura en todos los cursos de Primaria. Así lo vamos a organizar:\n\nSerá cada día de 14:30 a 14:50, al volver de comer, en el aula y con quien tenga clase con el grupo a esa hora. También los especialistas.\n\nCada aula tendrá un lote de 30 libros de la biblioteca, que iremos cambiando cada trimestre. Los repartiremos la semana del 14 de diciembre. Si queréis títulos concretos para vuestro grupo, pedídselos a la biblioteca antes del viernes 4 de diciembre.\n\nNo se pone nota ni hay fichas: se trata de que lean por gusto.\n\nGracias por las ideas que salieron en el claustro.\n\nUn abrazo,\nElena Ruiz\nDirectora',
       adjuntos: ['Plan de lectura de Primaria.pdf'],
       respuestas: [],
-      nota: 'Solo para leer. DirectorIA ha añadido a tus plazos la petición de títulos para el lote de 4.º A, antes del vie 4 dic.',
+      nota: 'Solo para leer. DirectorIA ha añadido a tus plazos la petición de títulos para el lote de 4.º A, antes del viernes 4 de diciembre.',
       ir: 'plazos',
     },
   ],
@@ -301,7 +301,8 @@ DEMO.rol({
         curso: ['3.º de Primaria', '4.º de Primaria'],
         materia: ['Educación Física'],
         contenidos: ['Alimentación saludable', 'Hábitos de vida activa'],
-        casillas: ['Hecho con IA y revisado por mí', 'Sin fotos ni datos de alumnos', 'Es mío o puedo compartirlo'],
+        casillas: ['Sin fotos ni datos de alumnos', 'Es mío o puedo compartirlo'],
+        declaracion: 'Lo he hecho con IA y lo he revisado',
       },
       impacto: {
         texto: 'Tus 12 recursos se han usado 87 veces y 9 compañeros han dicho «Me ha servido».',
@@ -322,7 +323,7 @@ DEMO.rol({
       peticion: 'Situación de aprendizaje sobre alimentación saludable para 4.º de Primaria: tres sesiones de 45 minutos, una en el gimnasio, y una versión con tareas más cortas para quien lo necesite.',
       bloqueo: {
         intento: 'Situación de aprendizaje sobre alimentación saludable para 4.º de Primaria: tres sesiones, una en el gimnasio, y tareas más cortas para Daniel M., que necesita las instrucciones de una en una.',
-        mensaje: 'Lleva un nombre, «Daniel M.», y el módulo de Claude no recibe datos de alumnos. No ha salido nada. Quita el nombre y pídelo así: «para quien lo necesite».',
+        mensaje: 'Lleva un nombre, «Daniel M.», y en el módulo de Claude no se escriben datos de alumnos. No se ha enviado nada. Quita el nombre y pídelo así: «para quien lo necesite».',
       },
       respuesta: {
         titulo: 'Situación de aprendizaje · Almuerzos con energía (4.º de Primaria)',

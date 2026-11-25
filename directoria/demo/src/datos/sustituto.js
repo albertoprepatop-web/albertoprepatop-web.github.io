@@ -13,7 +13,7 @@ DEMO.rol({
   inicio: {
     antetitulo: 'Miércoles 18 de noviembre · 8:00',
     titulo: 'Buenos días, Pablo',
-    entradilla: 'Sergio Prieto no viene y hoy entras en 3.º B a 1.ª y a 6.ª. DirectorIA te ha preparado la jornada, las fichas y el correo. Nada se envía sin ti.',
+    entradilla: 'Sergio Prieto no viene y jefatura cuenta contigo para 3.º B a 1.ª y a 6.ª. DirectorIA te ha preparado la jornada, las fichas y el correo. Nada se envía sin ti.',
     bloques: [
       {
         titulo: 'Tu jornada',
@@ -98,7 +98,7 @@ DEMO.rol({
         'Las fichas te llegan cuando confirme las guardias. A las 16:00 haces tú la salida de 3.º B.',
       ],
       piden: 'Que entres en 3.º B a 1.ª y a 6.ª, leas antes las fichas y hagas la salida de las 16:00.',
-      original: 'Buenos días, Pablo:\n\nSergio Prieto está con fiebre y hoy no viene. Te adelanto lo que te va a llegar: cubres 3.º B a 1.ª hora, Lengua, en tu guardia, y a 6.ª, Matemáticas, en tu hora de preparación. Así el grupo empieza y acaba el día contigo, y tus apoyos no se tocan.\n\nAhora reviso la propuesta en DirectorIA y, en cuanto la confirme, te llegan las dos fichas con la tarea de su programación quincenal y lo que tienes que saber del grupo. Léete con calma la de 6.ª: la salida de las 16:00 la haces tú.\n\nRosa entra en 3.ª y Teresa se queda con su turno de patio.\n\nGracias por echar una mano.\n\nUn abrazo,\nJavier Martín\nJefe de estudios',
+      original: 'Buenos días, Pablo:\n\nSergio Prieto no viene hoy. Te adelanto lo que te va a llegar: cubres 3.º B a 1.ª hora, Lengua, en tu guardia, y a 6.ª, Matemáticas, en tu hora de preparación. Así el grupo empieza y acaba el día contigo, y tus apoyos no se tocan.\n\nAhora reviso la propuesta en DirectorIA y, en cuanto la confirme, te llegan las dos fichas con la tarea de su programación quincenal y lo que tienes que saber del grupo. Léete con calma la de 6.ª: la salida de las 16:00 la haces tú.\n\nRosa entra en 3.ª y Teresa se queda con su turno de patio.\n\nGracias por echar una mano.\n\nUn abrazo,\nJavier Martín\nJefe de estudios',
       respuestas: [
         {
           titulo: 'Confirmar y dejar nota a Sergio',
@@ -106,7 +106,7 @@ DEMO.rol({
         },
         {
           titulo: 'Ofrecerse también para mañana',
-          texto: 'Buenos días, Javier:\n\nCuenta conmigo para 1.ª y 6.ª con 3.º B.\n\nSi mañana Sergio sigue malo, puedo volver a entrar a 1.ª, que los jueves también tengo guardia: así el grupo empieza el día con alguien que ya conoce. El resto del jueves tengo apoyos y prefiero no moverlos.\n\nDime algo esta tarde, cuando sepas cómo está, y lo dejo preparado.\n\nUn abrazo,\nPablo Sanz\nMaestro de apoyo de Primaria',
+          texto: 'Buenos días, Javier:\n\nCuenta conmigo para 1.ª y 6.ª con 3.º B.\n\nSi mañana Sergio tampoco viene, puedo volver a entrar a 1.ª, que los jueves también tengo guardia: así el grupo empieza el día con alguien que ya conoce. El resto del jueves tengo apoyos y prefiero no moverlos.\n\nDime algo esta tarde, cuando sepas si viene, y lo dejo preparado.\n\nUn abrazo,\nPablo Sanz\nMaestro de apoyo de Primaria',
         },
         {
           titulo: 'Pedir las fichas antes de las 8:45',
@@ -126,10 +126,10 @@ DEMO.rol({
       etiqueta: { texto: 'Responder hoy', tipo: 'hoy' },
       resumen: [
         'Laura te pide 12 saquitos y 10 aros pequeños del aula de apoyo para su Educación Física con 4.º A del jueves, a 2.ª hora.',
-        'Si las tienes, también las tarjetas con dibujos de las estaciones. Le iría bien tenerlo hoy en el cuarto de material del gimnasio.',
+        'Si las tienes, también las tarjetas de las estaciones del circuito. Le iría bien tenerlo hoy en el cuarto de material del gimnasio.',
         'Hoy estás con 3.º B hasta la salida de las 16:00. Te lo devuelve el jueves en el recreo.',
       ],
-      piden: 'Dejarle hoy en el gimnasio 12 saquitos, 10 aros pequeños y, si puedes, las tarjetas de las estaciones.',
+      piden: 'Dejarle hoy en el gimnasio 12 saquitos, 10 aros pequeños y, si puedes, las tarjetas de las estaciones del circuito.',
       original: 'Hola, Pablo:\n\n¿Me puedes prestar para el jueves los saquitos y los aros pequeños del aula de apoyo? A 2.ª hora hago con 4.º A un circuito de lanzamientos y en el gimnasio solo quedan seis aros en buen estado. Con 12 saquitos y 10 aros me apaño.\n\nSi tienes a mano las tarjetas con dibujos para explicar las estaciones, mejor todavía: así lo entienden todos de un vistazo.\n\nSi te viene bien, déjamelo todo mañana en el cuarto de material del gimnasio, en la estantería de arriba. Te lo devuelvo el jueves en el recreo, que ya sé que por la tarde lo usas con los de 1.º.\n\n¡Gracias! Te debo un café.\n\nLaura',
       respuestas: [
         {

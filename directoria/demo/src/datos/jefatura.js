@@ -191,7 +191,7 @@ DEMO.rol({
       respuestas: [
         {
           titulo: 'Aceptar el miércoles 2',
-          texto: 'Hola, Ramón:\n\nOs dejo el examen de 4.º ESO el miércoles 2, en los dos grupos. Ese día 4.º A tenía también Inglés, así que voy a proponer a Lenguas Extranjeras pasarlo al jueves 3, que el grupo tiene libre.\n\nPodéis decírselo ya a los alumnos. En cuanto lo cierre con ellos, publico el calendario completo para el claustro y las familias.\n\nUn abrazo,\nJavier Martín\nJefe de estudios',
+          texto: 'Hola, Ramón:\n\nOs dejo el examen de 4.º ESO el miércoles 2, en los dos grupos. Ese día 4.º A tenía también Inglés, así que voy a proponer a Lenguas Extranjeras pasarlo al jueves 3, que el grupo tiene libre.\n\nPodéis decírselo ya a los alumnos. En cuanto lo cierre con Lenguas Extranjeras, publico el calendario completo para el claustro y las familias.\n\nUn abrazo,\nJavier Martín\nJefe de estudios',
         },
         {
           titulo: 'Proponer el jueves 3',
@@ -338,7 +338,7 @@ DEMO.rol({
       menu: 'Exámenes',
       antetitulo: '1.ª evaluación · ESO',
       titulo: 'Calendario de exámenes del 30 de noviembre al 4 de diciembre',
-      entradilla: 'DirectorIA ha reunido las fechas que han dado los departamentos y ha comprobado que ningún grupo tenga dos exámenes el mismo día. Hay un choque: revisa la propuesta y aprueba el calendario.',
+      entradilla: 'DirectorIA ha reunido las fechas que han dado los departamentos y ha comprobado si algún grupo tiene dos exámenes el mismo día. Hay un choque: revisa la propuesta y aprueba el calendario.',
       columnas: ['Grupo', 'Lun 30', 'Mar 1', 'Mié 2', 'Jue 3', 'Vie 4'],
       filas: [
         ['1.º ESO A', 'Lengua', 'Biología y Geología', 'Geografía e Historia', 'Matemáticas', 'Inglés'],
@@ -347,7 +347,7 @@ DEMO.rol({
         ['2.º ESO B', 'Geografía e Historia', 'Inglés', 'Lengua', 'Física y Química', 'Matemáticas'],
         ['3.º ESO A', 'Física y Química', 'Lengua', 'Matemáticas', 'Inglés', 'Biología y Geología'],
         ['3.º ESO B', 'Lengua', 'Biología y Geología', 'Inglés', 'Matemáticas', 'Física y Química'],
-        ['4.º ESO A', 'Lengua', 'Geografía e Historia', 'Matemáticas e Inglés', '—', 'Física y Química'],
+        ['4.º ESO A', 'Lengua', 'Geografía e Historia', 'Matemáticas e Inglés', 'Propuesta: Inglés', 'Física y Química'],
         ['4.º ESO B', 'Geografía e Historia', 'Inglés', 'Matemáticas', 'Lengua', 'Física y Química'],
       ],
       marcas: [

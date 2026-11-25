@@ -19,7 +19,7 @@ DEMO.rol({
         titulo: 'Quién falta',
         items: [
           {
-            texto: 'Sergio Prieto (tutor de 3.º B) no viene: tiene fiebre. Jefatura revisa la propuesta para cubrir 1.ª, 3.ª, 6.ª y el recreo.',
+            texto: 'Sergio Prieto (tutor de 3.º B) no viene hoy. Jefatura revisa la propuesta para cubrir 1.ª, 3.ª, 6.ª y el recreo.',
             estado: 'pendiente',
             bandera: 'guardias',
             textoSi: 'Jefatura ha confirmado quién cubre a Sergio Prieto: Pablo Sanz (1.ª y 6.ª), Rosa Medina (3.ª) y Teresa Gil (recreo). Quien entra en 3.º B ya tiene su ficha.',
@@ -113,6 +113,7 @@ DEMO.rol({
         },
         {
           titulo: 'Confirmar y enviar ya el dosier',
+          adjuntos: ['Dosier para la visita de inspección.pdf'],
           texto: 'Estimada inspectora:\n\nLe confirmo la visita del jueves 26 de noviembre a las 10:00. La recibiremos el jefe de estudios y yo.\n\nLe adjunto la documentación que nos pide: el plan de convivencia 2026-27, los horarios de 2.º ESO, las programaciones de Matemáticas de ESO y las actas de la evaluación inicial de ESO, salvo la de 2.º ESO A, que le enviaré antes del lunes 23.\n\nUn saludo cordial,\nElena Ruiz\nDirectora del Colegio Ejemplo',
         },
         {
@@ -152,7 +153,7 @@ DEMO.rol({
           texto: 'Estimados Ana y Óscar:\n\nGracias por escribirnos. Para estudiar bien su reclamación, ¿podrían indicarnos qué días se queda Carla al comedor y en cuáles no le ha dado tiempo a terminar? Lo comprobaremos con las monitoras del segundo turno.\n\nLes responderemos por escrito antes del viernes 27 de noviembre.\n\nAtentamente,\nElena Ruiz\nDirectora del Colegio Ejemplo',
         },
       ],
-      nota: 'DirectorIA la ha registrado como reclamación y te avisa el miércoles 25. Las respuestas propuestas no entran en el fondo: eso lo decides tú.',
+      nota: 'DirectorIA ha apuntado el plazo de respuesta y te avisa el miércoles 25. Las respuestas propuestas no entran en el fondo: eso lo decides tú.',
     },
     {
       id: 'c-fotocopiadoras',
@@ -233,7 +234,9 @@ DEMO.rol({
       adjuntos: ['Plano del corte de tráfico.pdf'],
       respuestas: [
         {
-          titulo: 'Avisar a las familias',
+          titulo: 'Circular para avisar a las familias',
+          para: 'Todas las familias del colegio',
+          asunto: 'Lunes 30: corte de la calle de la entrada por obras',
           texto: 'Estimadas familias:\n\nEl Ayuntamiento nos informa de que el lunes 30 de noviembre, de 7:00 a 19:00, la calle de la entrada principal estará cortada al tráfico por obras. Ese día no se podrá parar en coche delante del colegio, tampoco un momento para dejar a sus hijos.\n\nSe podrá llegar a pie a la puerta principal por un paso señalizado, y las entradas y salidas serán a la hora de siempre. Les recomendamos salir con tiempo, sobre todo a las familias de ESO: ese día empiezan los exámenes de la 1.ª evaluación.\n\nGracias por su colaboración.\n\nUn saludo cordial,\nElena Ruiz\nDirectora del Colegio Ejemplo',
         },
         {
@@ -241,7 +244,7 @@ DEMO.rol({
           texto: 'Buenos días:\n\nGracias por el aviso. Ese lunes el alumnado entra a las 8:15 y a las 9:00 y sale a las 14:45 y a las 16:00. Les pido que en esas franjas el paso peatonal hasta la entrada principal esté despejado y, si es posible, que haya un agente de Policía Municipal.\n\n¿Podrían confirmarnos la fecha unos días antes, para avisar a las familias con seguridad?\n\nAtentamente,\nElena Ruiz\nDirectora del Colegio Ejemplo',
         },
       ],
-      nota: 'No hace falta contestar. Ese día empiezan los exámenes de ESO; el aviso a las familias ya lo tiene en cuenta.',
+      nota: 'No hace falta contestar al Ayuntamiento. La primera propuesta es una circular para las familias: ese día empiezan los exámenes de ESO.',
     },
   ],
 
@@ -299,7 +302,7 @@ DEMO.rol({
         { nombre: 'Acta de la evaluación inicial de 2.º ESO A', estado: 'falta', detalle: 'No está en el archivo de actas. Decide si se la pides a jefatura.' },
         { nombre: 'Acta de la evaluación inicial de 2.º ESO B', estado: 'ok' },
         { nombre: 'Actas de la evaluación inicial de 3.º y 4.º ESO', estado: 'ok', detalle: 'Cuatro actas, de los grupos A y B' },
-        { nombre: 'Escrito de remisión a Inspección', estado: 'revisar', detalle: 'Borrador preparado con IA. Lo revisas y lo firmas tú.' },
+        { nombre: 'Escrito de remisión a Inspección', estado: 'revisar', detalle: 'Borrador preparado por DirectorIA con los datos de la visita. Lo revisas y lo firmas tú.' },
       ],
     },
     {
