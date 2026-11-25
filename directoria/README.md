@@ -14,6 +14,7 @@ Si vais a crear algo nuevo, empezad por el manual de marca (`manual/manual-de-ma
 | `fuentes/` | Rubik y Nunito Sans en woff2, con su licencia SIL OFL, para alojarlas en la web. | `fuentes.css` |
 | `tokens.json` | Los colores y las tipografías con sus usos. | — |
 | `presentacion/` | Las fuentes de la presentación comercial (27 diapositivas) y `vista-general.png`. La presentación se edita y se descarga en PowerPoint o PDF desde el mazo de Slides. | `vista-general.png` |
+| `demo/` | La demo para enseñar en los colegios. Se entra como directora, jefe de estudios, secretaria, docente, orientador o profesor que sustituye y se ve su panel. Es un solo HTML que funciona sin conexión; la carpeta trae también sus fuentes, el guion de datos y la guía para presentarla. | `README.md` |
 | `web/` | La web: portada, privacidad y aviso legal, con favicon, iconos e imagen para compartir. Sin cookies ni fuentes externas. | `README.md` |
 | `aplicaciones/papeleria/` | Tarjeta de visita, firma de correo, membrete, propuesta comercial y hoja comercial, con sus generadores. | `README.md` |
 | `aplicaciones/redes/` | Avatar, banner de LinkedIn, cabecera de X, imagen para compartir y dos publicaciones, con sus fuentes HTML. | `README.md` |
