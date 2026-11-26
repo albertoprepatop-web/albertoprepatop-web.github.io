@@ -260,9 +260,9 @@ def propuesta():
     doc.add_paragraph('[Nombre del colegio] quiere [lo que os contó el equipo directivo; por ejemplo, cubrir '
                       'las ausencias con menos esfuerzo y llevar los plazos al día].')
     doc.add_paragraph('DirectorIA instala en vuestro colegio una IA propia, en un servidor dentro del centro. '
-                      'Prepara sustituciones y guardias, actas, respuestas de correo y avisos de plazos para '
-                      'dirección y claustro, y cada docente tiene su asistente.')
-    doc.add_paragraph('La IA propone. Vosotros decidís.', style='Destacado')
+                      'Con las reglas del colegio prepara sustituciones, guardias y avisos de plazos; con IA, '
+                      'actas y respuestas de correo. Y cada docente tiene su asistente.')
+    doc.add_paragraph('DirectorIA propone. Vosotros decidís.', style='Destacado')
     con_entradilla(doc, 'Lo que os proponemos.',
                    'El plan [Básico / Centro / Grande], para [n.º de docentes] docentes: una cuota inicial de '
                    '[importe] € (servidor e instalación) y una suscripción de [importe] € al mes. Precios sin '
@@ -281,8 +281,8 @@ def propuesta():
             'El correo, resumido y con una respuesta propuesta que revisáis antes de enviarla.',
             'Las actas de claustro y de consejo escolar, a partir del dictado.']),
         ('Jefatura de estudios', [
-            'Cuando falta alguien, propone quién cubre cada hora, con un reparto de guardias equilibrado. '
-            'Jefatura lo revisa y lo confirma.',
+            'Cuando falta alguien, DirectorIA propone quién cubre cada hora, con las reglas del colegio y un '
+            'reparto de guardias equilibrado. Jefatura lo revisa y lo confirma.',
             'La ficha para quien sustituye: la tarea de la sesión, las pautas del alumnado con necesidades, '
             'las alergias y las recogidas.']),
         ('Secretaría y administración', [
@@ -312,16 +312,17 @@ def propuesta():
 
     # ---------------------------------------------------------- 3. Privacidad
     h1(doc, 3, 'Privacidad y protección de datos')
-    con_entradilla(doc, 'Dentro del colegio.',
-                   'La IA trata los datos de vuestros alumnos en un servidor dentro del colegio, sin '
-                   'transferencias internacionales de esos datos.')
+    con_entradilla(doc, 'Dónde están los datos.',
+                   'La IA trata los datos de vuestros alumnos en un servidor dentro del colegio. Las copias de '
+                   'seguridad van cifradas: una en el colegio y otra en un centro de datos de la UE. Los correos '
+                   'salen por la cuenta del propio colegio. El mantenimiento a distancia queda registrado.')
     con_entradilla(doc, 'El responsable es el colegio.',
                    'El colegio sigue siendo el responsable del tratamiento. DirectorIA os entrega los borradores '
                    'de la evaluación de impacto (EIPD) y del registro de actividades de tratamiento, para que '
                    'vuestro delegado de protección de datos los revise y el colegio los apruebe.')
     con_entradilla(doc, 'Decide una persona.',
-                   'La IA propone y una persona del colegio decide. Nunca evalúa, puntúa ni clasifica a ningún '
-                   'alumno.')
+                   'DirectorIA propone y una persona del colegio decide. Nunca evalúa, puntúa ni clasifica a '
+                   'ningún alumno.')
     con_entradilla(doc, 'Claude, solo si lo activáis.',
                    'El módulo opcional de Claude, en la nube, es solo para preparar material didáctico, no para '
                    'datos de alumnos.')

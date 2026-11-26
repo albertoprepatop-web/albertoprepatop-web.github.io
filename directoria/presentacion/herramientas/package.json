@@ -1,0 +1,7 @@
+{
+  "name": "directoria-presentacion-herramientas",
+  "private": true,
+  "description": "Vistas previas de las diapositivas y hoja de contactos de las ilustraciones (ver LEEME.md).",
+  "type": "module",
+  "dependencies": { "playwright": "1.63.0" }
+}

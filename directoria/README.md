@@ -1,6 +1,6 @@
 # DirectorIA · Kit de marca
 
-Todo lo que hace falta para presentar DirectorIA, la IA para dirección y claustro que funciona dentro del colegio. Eslogan: **«Vuestra IA, dentro del colegio»**. Segunda línea: **«La IA propone. Vosotros decidís»**.
+Todo lo que hace falta para presentar DirectorIA, la IA para dirección y claustro que funciona dentro del colegio. Eslogan: **«Vuestra IA, dentro del colegio»**. Segunda línea: **«DirectorIA propone. Vosotros decidís»**.
 
 Si vais a crear algo nuevo, empezad por el manual de marca (`manual/manual-de-marca.pdf`). La versión navegable está en el sistema de diseño de DirectorIA, publicado en claude.ai.
 
@@ -8,12 +8,12 @@ Si vais a crear algo nuevo, empezad por el manual de marca (`manual/manual-de-ma
 
 | Carpeta | Qué contiene | Empezad por |
 |---|---|---|
-| `manual/` | El manual de marca: el PDF de 38 páginas, la identidad verbal y las fuentes del sistema de diseño (`sistema/project/`). El PDF se regenera con `pdf/generar.mjs`. | `manual-de-marca.pdf` |
+| `manual/` | El manual de marca: el PDF de 39 páginas, la identidad verbal y las fuentes del sistema de diseño (`sistema/project/`). El PDF se regenera con `pdf/generar.mjs`. | `manual-de-marca.pdf` |
 | `logo/` | El logotipo «Norte» en SVG (positivo, negativo, a una tinta, vertical, con eslogan, palabra sola, isotipo, favicon e icono de app) y en PNG para correo y redes, con su generador. | `construccion.md` |
-| `ilustraciones/` | Las 21 ilustraciones de la marca en SVG y su generador. | `LEEME.md` · `kit.png` |
+| `ilustraciones/` | Las 22 ilustraciones de la marca en SVG y su generador. | `LEEME.md` · `kit.png` |
 | `fuentes/` | Rubik y Nunito Sans en woff2, con su licencia SIL OFL, para alojarlas en la web. | `fuentes.css` |
 | `tokens.json` | Los colores y las tipografías con sus usos. | — |
-| `presentacion/` | Las fuentes de la presentación comercial (27 diapositivas) y `vista-general.png`. La presentación se edita y se descarga en PowerPoint o PDF desde el mazo de Slides. | `vista-general.png` |
+| `presentacion/` | Las fuentes de la presentación comercial (27 diapositivas), `vista-general.png` y, en `herramientas/`, la vista previa de las diapositivas y lo que falta subir a claude.ai. La presentación se edita y se descarga en PowerPoint o PDF desde el mazo de Slides. | `vista-general.png` · `herramientas/LEEME.md` |
 | `demo/` | La demo para enseñar en los colegios. Se entra como directora, jefe de estudios, secretaria, docente, orientador o profesor que sustituye y se ve su panel. Es un solo HTML que funciona sin conexión; la carpeta trae también sus fuentes, el guion de datos y la guía para presentarla. | `README.md` |
 | `web/` | La web: portada, privacidad y aviso legal, con favicon, iconos e imagen para compartir. Sin cookies ni fuentes externas. | `README.md` |
 | `aplicaciones/papeleria/` | Tarjeta de visita, firma de correo, membrete, propuesta comercial y hoja comercial, con sus generadores. | `README.md` |

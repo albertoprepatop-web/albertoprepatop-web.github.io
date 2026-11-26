@@ -1,5 +1,7 @@
 # Escudo de casa
 
+> **Archivo.** Este concepto se exploró antes de elegir el logotipo, y sus frases no se han puesto al día. Algunas dicen que los datos del alumnado «no salen» del colegio o dan a la IA trabajo que hace DirectorIA con las reglas del colegio, como las sustituciones. Para escribir sobre DirectorIA, seguid `directoria/manual/identidad-verbal.md`.
+
 Territorio: **escudo-cole** · Marca: **DirectorIA**
 
 **La idea en una frase:** un escudo de colegio con tejado, mitad escudo y mitad edificio, que guarda dentro la chispa naranja: la IA vive en vuestro centro y de ahí no sale.

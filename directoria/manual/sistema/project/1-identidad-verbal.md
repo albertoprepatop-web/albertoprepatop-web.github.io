@@ -5,7 +5,7 @@ Cómo habla DirectorIA en la web, la presentación comercial, los correos y los 
 ## Eslogan y descriptor
 
 - **Eslogan:** Vuestra IA, dentro del colegio
-- **Segunda línea:** La IA propone. Vosotros decidís.
+- **Segunda línea:** DirectorIA propone. Vosotros decidís.
 - **Descriptor:** IA para dirección y claustro
 
 El eslogan dice en cinco palabras qué es (una IA), de quién es (vuestra) y dónde está (dentro del colegio). Cuenta la privacidad con un hecho que cualquiera puede comprobar, no con una promesa legal. Además repite la «IA» del final del nombre y ayuda a leer DirectorIA como «Director» + «IA».
@@ -44,7 +44,7 @@ El eslogan dice en cinco palabras qué es (una IA), de quién es (vuestra) y dó
 
 | Mal | Bien |
 |---|---|
-| DirectorIA revoluciona la gestión de vuestro centro con IA on-premise de última generación. | Cuando falta un profesor, DirectorIA propone quién cubre cada hora y prepara la ficha para quien sustituye. |
+| DirectorIA revoluciona la gestión de vuestro centro con IA on-premise de última generación. | Cuando falta un profesor, DirectorIA propone quién cubre cada hora, con las reglas del colegio, y prepara la ficha para quien sustituye. |
 | Con otras IA estáis incumpliendo la ley. Con DirectorIA, riesgo cero. | DirectorIA funciona en un servidor dentro de vuestro colegio: la IA trata ahí los datos de vuestros alumnos. |
 | La IA asigna las guardias automáticamente y detecta a los alumnos en riesgo. | DirectorIA propone un reparto de guardias equilibrado; jefatura lo revisa y lo aprueba. La IA nunca evalúa ni clasifica a ningún alumno. |
 | ¡Probadlo sin riesgo!* *Permanencia según condiciones. | El compromiso mínimo es de dos cursos, y lo tenéis por escrito antes de firmar. |
@@ -65,7 +65,7 @@ El eslogan dice en cinco palabras qué es (una IA), de quién es (vuestra) y dó
 Es lo primero que pregunta un director, y su delegado de protección de datos revisará cada palabra.
 
 - **Sí:** «La IA trata los datos de los alumnos en un servidor dentro del colegio. La copia de seguridad, cifrada, está en la UE. Los correos salen por la cuenta del propio colegio. El mantenimiento a distancia queda registrado». Es la fórmula de la web y de la papelería. Adaptadla al sitio sin alargarla: donde no cabe entera, basta la primera frase.
-- **Sí:** «Las copias de seguridad van cifradas: una en el colegio, en su NAS, y otra fuera, en un centro de datos de la UE». Nunca que «se guardan en el colegio» sin más.
+- **Sí:** «Las copias de seguridad van cifradas: una en el colegio, en un disco de copias aparte, y otra fuera, en un centro de datos de la UE». Nunca que «se guardan en el colegio» sin más.
 - **Sí:** «Con datos de alumnos no vale cualquier IA: una cuenta personal, gratuita o de pago, no incluye un contrato de encargo con el colegio».
 - **Sí:** «Os damos un borrador de la evaluación de impacto; la revisa vuestro delegado y la aprueba el colegio».
 - **Sí:** «Diseñado para quedar fuera de los usos de alto riesgo del Reglamento europeo de IA: no evalúa, puntúa ni clasifica a ningún alumno».
@@ -101,7 +101,7 @@ Es lo primero que pregunta un director, y su delegado de protección de datos re
 1. **La IA trata en casa los datos de vuestros alumnos.** DirectorIA funciona en un servidor dentro del colegio y la IA trata ahí los datos de los alumnos. La copia de seguridad, cifrada, está en la UE; los correos salen por la cuenta del propio colegio, y el mantenimiento a distancia queda registrado.
 2. **Ausencia cubierta, sustituto informado.** Si falta alguien, DirectorIA propone quién cubre cada hora, con las reglas del colegio, y quien sustituye recibe su ficha: tarea, adaptaciones, alergias, recogidas y avisos de seguridad.
 3. **Un asistente para cada cargo.** Resumen a las 8:00, correo con respuestas propuestas, actas dictadas, plazos de las circulares y protocolos paso a paso.
-4. **La IA propone. Vosotros decidís.** Decidir y firmar es siempre cosa de una persona.
+4. **DirectorIA propone. Vosotros decidís.** DirectorIA prepara borradores, propuestas y avisos; decidir y firmar es siempre cosa de una persona.
 5. **Llave en mano, sin letra pequeña.** Servidor, instalación, borrador de la evaluación de impacto, formación y soporte. Compromiso mínimo de dos cursos, por escrito.
 
 ## Frases de la web

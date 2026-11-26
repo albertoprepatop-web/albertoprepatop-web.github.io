@@ -1,7 +1,7 @@
 # Ilustraciones
 
-Veintiuna ilustraciones planas de 240 × 240, cada una sobre su disco `linea`. Se usan desde 96 px, sin recolorear, deformar, girar ni quitar el disco. El naranja (`chispa`, sobre pizarra) aparece solo donde actúa la IA: la luz del servidor y la insignia de lo que escribe (`documento-ia`). La ficha, la tableta de `direccion`, `alerta` y `calendario` van sin chispa, porque salen de las reglas del colegio. Las reglas y las parejas recomendadas están en la sección Ilustraciones.
+Veintidós ilustraciones planas de 240 × 240, cada una sobre su disco `linea`. Se usan desde 96 px, sin recolorear, deformar, girar ni quitar el disco. El naranja (`chispa`, sobre pizarra) aparece solo donde actúa la IA: la luz del servidor y la insignia de lo que escribe (`documento-ia`). La ficha, la tableta de `direccion`, `alerta`, `calendario` y `documento` (la hoja de lo que prepara DirectorIA, como un informe de gastos) van sin chispa, porque salen de las reglas y los datos del colegio. Las reglas y las parejas recomendadas están en la sección Ilustraciones.
 
 - **Lugares:** `colegio-servidor` (la imagen clave), `servidor`, `colegio`, `nube-claude`.
 - **Personas:** `direccion`, `jefatura`, `secretaria`, `docente`, `orientacion`, `sustituto`, `familia`.
-- **Documentos e iconos:** `documento-ia`, `circular`, `acta`, `ficha`, `correo`, `calendario`, `candado`, `microfono`, `reloj`, `alerta`.
+- **Documentos e iconos:** `documento-ia`, `documento`, `circular`, `acta`, `ficha`, `correo`, `calendario`, `candado`, `microfono`, `reloj`, `alerta`.

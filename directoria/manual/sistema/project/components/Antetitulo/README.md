@@ -1,6 +1,6 @@
 # Antetitulo
 
-El antetítulo dice de qué va un bloque antes del titular. Va siempre en `acento`, que es la voz de la IA.
+El antetítulo dice de qué va un bloque antes del titular. Va siempre en `acento`, el naranja de texto: es un detalle de color y no quiere decir que el bloque lo haga la IA (eso solo lo dice la chispa).
 
 - **Web:** `<p class="antetitulo">`, en minúsculas con mayúscula inicial y una raya de 24 px delante (estilo `web-antetitulo`). Debajo, el titular (`<h2 class="titular">`) y la entradilla (`<p class="entradilla">`).
 - **Presentaciones y documentos:** `<p class="antetitulo-mayus">`, en mayúsculas espaciadas y sin raya (estilos `diapo-antetitulo` y `doc-antetitulo`). Si contiene el nombre, añadid `sin-mayusculas` y escribid «Con DirectorIA»: el nombre nunca se pasa a mayúsculas.

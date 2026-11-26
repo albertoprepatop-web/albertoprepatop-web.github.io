@@ -80,6 +80,8 @@ ul.list.sm { font-size: 24px; }
 .left { width: 680px; flex-shrink: 0; display: flex; flex-direction: column; gap: 32px; }
 .mock { flex: 1; background: var(--card); border: 2px solid var(--line); border-radius: 20px; box-shadow: 0 12px 40px rgba(23, 50, 44, 0.14); padding: 40px; display: flex; flex-direction: column; gap: 20px; }
 .mock-head { font-family: 'Rubik', Arial, sans-serif; font-size: 30px; font-weight: 600; color: var(--ink); padding-bottom: 16px; border-bottom: 2px solid var(--line); }
+/* Quién prepara la ficha: DirectorIA, con las reglas del colegio. Sin la insignia de la IA. */
+.mock-origen { display: block; margin-top: 6px; font-family: 'Nunito Sans', Arial, sans-serif; font-size: 24px; font-weight: 400; color: var(--body); }
 .item { display: flex; flex-direction: column; gap: 4px; }
 .alert { background: var(--alert); border-radius: 12px; padding: 16px 20px; }
 .label { font-size: 24px; font-weight: 700; letter-spacing: 2px; text-transform: uppercase; color: var(--accent-ink); }
@@ -305,7 +307,6 @@ ul.list.sm { font-size: 24px; }
 /* 4 · funciona-datos: la zona del colegio y lo que cruza su borde */
 .fnd-at { position: absolute; }
 .fnd-legend { position: absolute; left: 40px; top: -22px; padding: 8px 22px; border-radius: 40px; background: var(--dark); color: var(--light); font-family: 'Rubik', Arial, sans-serif; font-size: 24px; font-weight: 600; line-height: 1.2; }
-.fnd-noill { display: block; flex-shrink: 0; width: 160px; height: 2px; }
 .fnd-pills { margin-top: 0; }
 /* Posiciones calculadas */
 .fnc-p1 { left: 44px; top: 2px; width: 506px; }
@@ -341,8 +342,8 @@ ul.list.sm { font-size: 24px; }
 .fnd-i4 { left: 466px; top: 154px; }
 .fnd-zt { left: 64.9px; top: 284px; width: 540px; }
 .fnd-o1 { left: 1014px; top: 0px; width: 650px; }
-.fnd-o2 { left: 1014px; top: 182px; width: 650px; }
-.fnd-o3 { left: 1014px; top: 329px; width: 650px; }
+.fnd-o2 { left: 1014px; top: 152px; width: 650px; }
+.fnd-o3 { left: 1014px; top: 304px; width: 650px; }
 .fnd-stage { height: 464px; margin: auto 0; }
 .fnd-tw { width: 468px; }
 /* ==== END bloque «cómo funciona» ==== */

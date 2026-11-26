@@ -7,7 +7,7 @@
 <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self' data:; style-src 'self'; font-src 'self'; script-src 'none'; connect-src 'none'; object-src 'none'; base-uri 'self'; form-action 'none'">
 <meta name="referrer" content="no-referrer">
 <title>DirectorIA · Vuestra propia IA, dentro del colegio</title>
-<meta name="description" content="Un servidor con IA dentro del colegio, para colegios privados y concertados. DirectorIA propone quién cubre cada ausencia con las reglas del colegio, y la IA redacta actas y correos.">
+<meta name="description" content="IA propia en un servidor dentro del colegio. DirectorIA propone quién cubre cada ausencia, con las reglas del colegio; la IA redacta actas y correos.">
 <!-- Antes de publicar con los datos reales: quitad la línea «robots» y poned la dirección definitiva en «canonical», «og:url» y las imágenes (ver README.md). -->
 <meta name="robots" content="noindex">
 <!-- <link rel="canonical" href="https://[dominio.es]/"> -->
@@ -23,7 +23,7 @@
 <meta property="og:locale" content="es_ES">
 <meta property="og:site_name" content="DirectorIA">
 <meta property="og:title" content="DirectorIA · Vuestra propia IA, dentro del colegio">
-<meta property="og:description" content="DirectorIA propone quién cubre cada ausencia, con las reglas del colegio, y os avisa de los plazos. La IA redacta actas y correos, y trata los datos de vuestros alumnos dentro del colegio. Vosotros decidís.">
+<meta property="og:description" content="DirectorIA propone quién cubre cada ausencia, con las reglas del colegio. La IA redacta actas y correos, y trata los datos de vuestros alumnos dentro del colegio.">
 <!-- <meta property="og:url" content="https://[dominio.es]/"> -->
 <!-- Las redes sociales necesitan la imagen con su dirección completa: https://[dominio.es]/img/og.png -->
 <meta property="og:image" content="img/og.png">
@@ -79,7 +79,7 @@
       <div class="portada-texto">
         <p class="antetitulo">IA para dirección y claustro</p>
         <h1 id="titulo-portada">Vuestra propia IA, dentro del colegio</h1>
-        <p class="entradilla">DirectorIA propone quién cubre cada ausencia, con las reglas del colegio, y os avisa de los plazos. La IA redacta actas y correos, y trata los datos de vuestros alumnos dentro del colegio. Vosotros decidís.</p>
+        <p class="entradilla">DirectorIA propone quién cubre cada ausencia, con las reglas del colegio, y os avisa de los plazos. La IA redacta actas y correos, y trata los datos de vuestros alumnos dentro del colegio. Vosotros&nbsp;decidís.</p>
         <div class="botones">
           <a class="boton" href="#contacto">Pedir una demo en el colegio</a>
           <a class="boton boton-borde" href="#gastos">Análisis de gastos gratis</a>
@@ -93,7 +93,7 @@
       <figure class="portada-imagen">
         <img src="img/ilustraciones/colegio-servidor.svg" alt="Ilustración: un colegio con el servidor de DirectorIA dentro, a la vista por el ventanal." width="480" height="480">
         <figcaption>
-          <span class="chip chip-propone"><span class="insignia" aria-hidden="true"></span>La IA propone.</span>
+          <span class="chip chip-propone"><span class="marca-propuesta" aria-hidden="true"></span>DirectorIA propone.</span>
           <span class="chip chip-decidis"><span class="marca-visto" aria-hidden="true"></span>Vosotros decidís.</span>
         </figcaption>
       </figure>
@@ -110,16 +110,17 @@
       </div>
 
       <div class="mapa">
-        <svg class="mapa-lineas" viewBox="0 0 1200 760" preserveAspectRatio="none" aria-hidden="true" focusable="false">
+        <svg class="mapa-lineas" viewBox="0 0 1200 800" preserveAspectRatio="none" aria-hidden="true" focusable="false">
           <g stroke="#2E5A50" stroke-width="3" fill="none" vector-effect="non-scaling-stroke">
-            <line x1="430" y1="380" x2="150" y2="190" vector-effect="non-scaling-stroke"/>
-            <line x1="430" y1="380" x2="430" y2="190" vector-effect="non-scaling-stroke"/>
-            <line x1="430" y1="380" x2="710" y2="190" vector-effect="non-scaling-stroke"/>
-            <line x1="430" y1="380" x2="150" y2="570" vector-effect="non-scaling-stroke"/>
-            <line x1="430" y1="380" x2="430" y2="570" vector-effect="non-scaling-stroke"/>
-            <line x1="430" y1="380" x2="710" y2="570" vector-effect="non-scaling-stroke"/>
+            <line x1="430" y1="400" x2="150" y2="200" vector-effect="non-scaling-stroke"/>
+            <line x1="430" y1="400" x2="430" y2="200" vector-effect="non-scaling-stroke"/>
+            <line x1="430" y1="400" x2="710" y2="200" vector-effect="non-scaling-stroke"/>
+            <line x1="430" y1="400" x2="150" y2="600" vector-effect="non-scaling-stroke"/>
+            <line x1="430" y1="400" x2="430" y2="600" vector-effect="non-scaling-stroke"/>
+            <line x1="430" y1="400" x2="710" y2="600" vector-effect="non-scaling-stroke"/>
           </g>
-          <line x1="430" y1="380" x2="1050" y2="230" stroke="#2E5A50" stroke-width="3" stroke-dasharray="6 7" vector-effect="non-scaling-stroke"/>
+          <line x1="430" y1="400" x2="1050" y2="104" stroke="#2E5A50" stroke-width="3" stroke-dasharray="6 7" vector-effect="non-scaling-stroke"/>
+          <line x1="430" y1="400" x2="1050" y2="364" stroke="#2E5A50" stroke-width="3" stroke-dasharray="6 7" vector-effect="non-scaling-stroke"/>
         </svg>
 
         <div class="mapa-dentro">
@@ -163,11 +164,16 @@
               <img src="img/ilustraciones/nube-claude.svg" alt="" width="96" height="96">
               <p><strong>Módulo de Claude, opcional</strong> Solo peticiones de material didáctico, con un filtro pensado para bloquear datos personales</p>
             </li>
+            <li class="mp mp-copia">
+              <img src="img/ilustraciones/candado.svg" alt="" width="96" height="96">
+              <p><strong>Copia de seguridad</strong> Cifrada, en un centro de datos de la UE</p>
+            </li>
             <li class="mp mp-familia">
               <img src="img/ilustraciones/familia.svg" alt="" width="96" height="96">
               <p><strong>Familias</strong> Reciben las circulares que enviáis vosotros</p>
             </li>
           </ul>
+          <p class="mapa-nota">Mantenimiento a distancia, con registro</p>
         </div>
       </div>
 
@@ -545,7 +551,7 @@
           </li>
         </ol>
         <div class="caja-oscura">
-          <img src="img/ilustraciones/documento-ia.svg" alt="" width="96" height="96">
+          <img src="img/ilustraciones/documento.svg" alt="" width="96" height="96">
           <p class="caja-titulo">Sin compromiso: el informe es vuestro.</p>
           <p>Al terminar, borramos vuestros documentos.</p>
           <a class="boton" href="mailto:correo@dominio.es?subject=An%C3%A1lisis%20de%20gastos%20gratis">Pedir el análisis de gastos</a>
@@ -574,7 +580,7 @@
           <p>45 minutos con una mañana de ejemplo, sin datos reales: una sustitución, su ficha y un acta.</p>
         </li>
         <li>
-          <img src="img/ilustraciones/documento-ia.svg" alt="" width="96" height="96">
+          <img src="img/ilustraciones/documento.svg" alt="" width="96" height="96">
           <p class="paso-numero">Paso 2</p>
           <h3>Análisis de gastos gratis</h3>
           <p>Con vuestras facturas de los últimos 12 meses, antes de firmar.</p>

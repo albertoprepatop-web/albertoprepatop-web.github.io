@@ -1,5 +1,7 @@
 # Dirección con chispa
 
+> **Archivo.** Este concepto se exploró antes de elegir el logotipo, y sus frases no se han puesto al día. Algunas dicen que los datos del alumnado «no salen» del colegio o dan a la IA trabajo que hace DirectorIA con las reglas del colegio, como las sustituciones. Para escribir sobre DirectorIA, seguid `directoria/manual/identidad-verbal.md`.
+
 **Territorio:** monograma D + chispa · **Tipografía:** Rubik 700 pasada a contornos, con una «I» de remates dibujada a medida.
 
 ## La idea en una frase

@@ -13,7 +13,7 @@ Son PNG en sRGB, opacos (RGB de 8 bits, sin transparencia) y con la medida que r
 | `x-cabecera.png` | 1500 × 500 px | 65 KB | Cabecera de la cuenta de X. |
 | `compartir-1200x630.png` | 1200 × 630 px | 64 KB | Imagen apaisada para publicaciones y enlaces que no traen imagen propia. **No es la imagen de la web:** esa es `../../web/img/og.png`. |
 | `post-presentacion.png` | 1200 × 1200 px | 127 KB | Primera publicación en LinkedIn: «Vuestra IA, dentro del colegio». |
-| `post-sustituciones.png` | 1200 × 1200 px | 172 KB | Publicación de LinkedIn sobre las sustituciones y la ficha de quien sustituye. |
+| `post-sustituciones.png` | 1200 × 1200 px | 170 KB | Publicación de LinkedIn sobre las sustituciones y la ficha de quien sustituye. |
 | `html/` | — | — | El origen de cada imagen (una página HTML por imagen, `redes.css` y `generar.mjs`). Ver «Cómo cambiarlas». |
 
 Todas pesan menos de 200 KB, muy por debajo de los límites de LinkedIn y X.
@@ -62,13 +62,13 @@ Todas pesan menos de 200 KB, muy por debajo de los límites de LinkedIn y X.
 
 ### Biografía (X y redes con límite de 160 caracteres)
 
-Opción A (142 caracteres):
+Opción A (147 caracteres):
 
-> Vuestra IA, dentro del colegio. Sustituciones, guardias, actas y plazos para colegios privados y concertados. La IA propone. Vosotros decidís.
+> Vuestra IA, dentro del colegio. Sustituciones, guardias, actas y plazos para colegios privados y concertados. DirectorIA propone. Vosotros decidís.
 
-Opción B (154 caracteres):
+Opción B (144 caracteres):
 
-> IA para dirección y claustro, en un servidor dentro del colegio y sin transferencias internacionales de datos de alumnos. La IA propone. Vosotros decidís.
+> IA para dirección y claustro, en un servidor dentro del colegio: la IA trata ahí los datos de los alumnos. DirectorIA propone. Vosotros decidís.
 
 Ubicación: Comunidad de Madrid · Web: [dominio.es]
 
@@ -79,7 +79,7 @@ Ubicación: Comunidad de Madrid · Web: [dominio.es]
 - **Sitio web:** https://[dominio.es] · **Sede:** Comunidad de Madrid
 - **«Acerca de» · Descripción general** (el texto largo de la identidad verbal, con la frase sobre los datos que usan la web y la papelería, y una línea de contacto al final):
 
-> DirectorIA, empresa de la Comunidad de Madrid, instala en colegios privados y concertados una IA propia: un servidor dentro del centro y un programa para el día a día escolar. Propone sustituciones y un reparto equilibrado de guardias, y prepara la ficha del sustituto. Saca los plazos de las circulares, sugiere respuestas al correo, redacta actas a partir del dictado y envía a dirección un resumen diario a las 8:00. Cada docente tiene su asistente, y un analista de gastos busca ahorros en facturas y contratos. Decide una persona: la IA propone y nunca evalúa, puntúa ni clasifica a los alumnos. La IA trata los datos de los alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos. Se entrega llave en mano: servidor, instalación, borrador de la evaluación de impacto, formación y soporte.
+> DirectorIA, empresa de la Comunidad de Madrid, instala en colegios privados y concertados una IA propia: un servidor dentro del centro y un programa para el día a día escolar. Con las reglas del colegio, propone sustituciones y un reparto equilibrado de guardias, prepara la ficha del sustituto y envía a dirección un resumen diario a las 8:00. Con IA, saca los plazos de las circulares, sugiere respuestas al correo y redacta actas a partir del dictado. Cada docente tiene su asistente, y un analista de gastos busca ahorros en facturas y contratos. Decide una persona: DirectorIA propone y nunca evalúa, puntúa ni clasifica a los alumnos. La IA trata sus datos en un servidor dentro del colegio, y la copia de seguridad, cifrada, está en la UE. Se entrega llave en mano: servidor, instalación, borrador de la evaluación de impacto, formación y soporte.
 >
 > ¿Os lo enseñamos en vuestro colegio? Escribidnos a [correo@dominio.es] o llamad al [teléfono].
 
@@ -88,7 +88,7 @@ Ubicación: Comunidad de Madrid · Web: [dominio.es]
 - **Titular:** [Cargo] en DirectorIA · Vuestra IA, dentro del colegio
 - **«Acerca de»** (el texto corto de la identidad verbal, con la misma frase sobre los datos):
 
-> En DirectorIA instalamos en colegios privados y concertados una IA propia, en un servidor dentro del centro. Prepara sustituciones y guardias, actas, respuestas de correo y avisos de plazos para dirección y claustro. La IA trata los datos de los alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos. La IA propone y una persona decide. ¿Os lo enseño en vuestro colegio? Escribidme a [correo@dominio.es].
+> En DirectorIA instalamos en colegios privados y concertados una IA propia, en un servidor dentro del centro. Con las reglas del colegio, DirectorIA prepara sustituciones, guardias y avisos de plazos; con IA, actas y respuestas de correo. La IA trata los datos de los alumnos en un servidor dentro del colegio, y la copia de seguridad, cifrada, está en la UE. DirectorIA propone y una persona decide. ¿Os lo enseño en vuestro colegio? Escribidme a [correo@dominio.es].
 
 ## Textos de las publicaciones
 
@@ -99,7 +99,7 @@ Vuestra IA, dentro del colegio.
 
 DirectorIA instala en colegios privados y concertados una IA propia, en un servidor dentro del centro. Cada día quita papeleo a dirección y al claustro:
 
-· Cuando falta un profesor, propone quién cubre cada hora y prepara la ficha de quien sustituye.
+· Cuando falta un profesor, propone quién cubre cada hora, con las reglas del colegio, y prepara la ficha de quien sustituye.
 · Saca los plazos de las circulares y os los recuerda.
 · Redacta actas a partir de vuestro dictado y propone respuestas al correo.
 · Os guía paso a paso en protocolos como el de acoso o el de absentismo.
@@ -107,7 +107,7 @@ DirectorIA instala en colegios privados y concertados una IA propia, en un servi
 
 Y cada docente tiene su propio asistente.
 
-La IA propone y una persona decide. Nunca evalúa, puntúa ni clasifica a ningún alumno, y trata los datos de vuestros alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos.
+DirectorIA propone y una persona decide. Nunca evalúa, puntúa ni clasifica a ningún alumno. La IA trata los datos de vuestros alumnos en un servidor dentro del colegio, y la copia de seguridad, cifrada, está en la UE.
 
 ¿Os lo enseñamos en vuestro colegio? Escribidnos a [correo@dominio.es] y preparamos una demo de 45 minutos con una mañana de ejemplo, sin datos reales: una sustitución, su ficha y un acta. Y antes de firmar nada, os hacemos gratis un análisis de gastos.
 
@@ -123,11 +123,11 @@ Texto alternativo de la imagen:
 ```
 Son las 8:05 y falta un profesor. Hay que cubrir sus horas, y quien entre en cada clase tiene que saber qué hacer.
 
-Cuando falta un profesor, DirectorIA propone quién cubre cada hora, con un reparto de guardias equilibrado. Jefatura de estudios revisa la propuesta y decide.
+Cuando falta un profesor, DirectorIA propone quién cubre cada hora, con las reglas del colegio y un reparto de guardias equilibrado. Jefatura de estudios revisa la propuesta y decide.
 
 Después, DirectorIA prepara la ficha de quien sustituye: la tarea de la sesión, las adaptaciones, las alergias, quién puede recoger a cada alumno y los avisos de seguridad.
 
-Ausencia cubierta, sustituto informado. Y la IA trata los datos de vuestros alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos.
+Ausencia cubierta, sustituto informado. Y todo sale de las reglas y los datos de vuestro colegio.
 
 ¿Os lo enseñamos en vuestro colegio? Escribidnos a [correo@dominio.es] y preparamos una demo de 45 minutos con una mañana de ejemplo, sin datos reales: una sustitución, su ficha y un acta.
 
@@ -148,8 +148,8 @@ Texto alternativo de la imagen:
 
 - Cambiad los marcadores [correo@dominio.es], [teléfono], [dominio.es] y [Cargo] por los datos reales.
 - Al copiar el nombre, comprobad que es «DirectorIA» con i mayúscula y no con ele («DirectorlA»).
-- **Los datos de los alumnos.** Decid lo mismo que la sección «Privacidad» de la web y la papelería: «La IA trata los datos de vuestros alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos». No escribáis que los datos «no salen del colegio»: no se puede sostener, porque el correo, el resumen de las 8:00 y la ficha de quien sustituye se envían a personas, y además hay soporte remoto y un módulo opcional de Claude en la nube. Tampoco «riesgo cero» ni «cumplimiento garantizado».
-- **Al compartir el enlace de la web**, WhatsApp, Slack o Facebook enseñan junto a la imagen su descripción para redes (`og:description` en `../../web/index.html`). Ya usa la fórmula prudente: «La IA trata los datos de vuestros alumnos dentro del colegio».
+- **Los datos de los alumnos.** Decid lo mismo que la sección «Privacidad» de la web y la papelería: «La IA trata los datos de vuestros alumnos en un servidor dentro del colegio. La copia de seguridad, cifrada, está en la UE. Los correos salen por la cuenta del propio colegio. El mantenimiento a distancia queda registrado.» Si no cabe entera, basta la primera frase. No escribáis que los datos «no salen del colegio»: no se puede sostener, porque hay una copia de seguridad cifrada en un centro de datos de la UE, el correo, el resumen de las 8:00 y la ficha de quien sustituye se envían a personas, y además hay mantenimiento a distancia y un módulo opcional de Claude en la nube. Tampoco «riesgo cero» ni «cumplimiento garantizado».
+- **Al compartir el enlace de la web**, WhatsApp, Slack o Facebook enseñan junto a la imagen su descripción para redes (`og:description` en `../../web/index.html`). Ya usa la forma corta: la IA «trata los datos de vuestros alumnos dentro del colegio».
 - **La demo.** Es de 45 minutos, en el colegio, con una mañana de ejemplo y sin datos reales: una sustitución, su ficha y un acta. La pregunta de cierre es «¿Os lo enseñamos en vuestro colegio?». No ofrezcáis probarla «con vuestros horarios» ni «con vuestra próxima sustitución»: serían datos reales del colegio antes de que haya contrato.
 - Si una publicación habla de precios o condiciones, se dicen enteros y sin asteriscos (identidad verbal). El compromiso mínimo es de dos cursos; el año de compromiso es solo para el colegio pionero, con su oferta propia.
 
@@ -173,7 +173,8 @@ Texto alternativo de la imagen:
 - **Área de respeto de 1 x** (la altura de la «I» de «IA»), medida desde la tinta en cada PNG. Entre el logotipo y lo más cercano hay 53 px en LinkedIn (1 x = 40 px), 54 px en X (1 x = 38,5 px), 66 px en la imagen para publicaciones y enlaces (1 x = 55 px), 58 px hasta el disco en la presentación y 81 px hasta el texto de los pasos en las sustituciones (1 x = 46 px en las dos). Ninguno toca el borde: el más cercano queda a 1,6 x.
 - Ilustraciones del kit sin tocar, con su disco: `colegio-servidor` en las cabeceras, la imagen para publicaciones y enlaces y la presentación, y `jefatura`, `ficha` y `sustituto` en la historia de las sustituciones.
 - «DirectorIA» en el titular va en la misma fuente y el mismo color que el resto de la frase. Ningún estilo lo pasa a mayúsculas.
-- Verbos de personas para las personas: la IA propone y prepara; jefatura revisa y decide.
+- Verbos de personas para las personas: DirectorIA propone y prepara; jefatura revisa y decide.
+- **Con IA y sin IA.** Las guardias y la ficha salen de las reglas y los datos del colegio, sin IA: «DirectorIA propone quién cubre cada hora, con las reglas del colegio». Por eso `ficha` va sin la insignia de la IA; la chispa solo va en lo que escribe la IA.
 - Ningún dato inventado: ni cifras, ni nombres, ni testimonios.
 
 ## Cómo cambiarlas

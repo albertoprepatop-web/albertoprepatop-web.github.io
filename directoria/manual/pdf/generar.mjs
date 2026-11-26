@@ -78,8 +78,8 @@ const lamTipos = `<div class="ty">
 <p style="font:700 30px/1.15 var(--font-titulares);color:${C.pizarra}">700 · Vuestra IA, dentro del colegio</p>
 <p class="ty-abc" style="font:600 22px/1.3 var(--font-titulares)">ABCDEFGHIJKLMNÑOPQRSTUVWXYZ<br>abcdefghijklmnñopqrstuvwxyz · áéíóú ü ¿? ¡! 0123456789 € %</p></div>
 <div class="ty-b"><p class="ty-fam">Nunito Sans · texto</p>
-<p style="font:400 17px/1.55 var(--font-texto);color:${C.texto}">400 · Cuando falta un profesor, DirectorIA propone quién cubre cada hora y prepara la ficha para quien sustituye: la tarea, las adaptaciones, las alergias y quién puede recoger a cada alumno.</p>
-<p style="font:600 17px/1.55 var(--font-texto);color:${C.texto}">600 · La IA propone. Vosotros decidís.</p>
+<p style="font:400 17px/1.55 var(--font-texto);color:${C.texto}">400 · Cuando falta un profesor, DirectorIA propone quién cubre cada hora, con las reglas del colegio, y prepara la ficha para quien sustituye: la tarea, las adaptaciones, las alergias y quién puede recoger a cada alumno.</p>
+<p style="font:600 17px/1.55 var(--font-texto);color:${C.texto}">600 · DirectorIA propone. Vosotros decidís.</p>
 <p style="font:700 17px/1.55 var(--font-texto);color:${C.texto}">700 · Pedir una demo en el colegio</p>
 <p class="ty-abc" style="font:400 17px/1.4 var(--font-texto)">ABCDEFGHIJKLMNÑOPQRSTUVWXYZ · abcdefghijklmnñopqrstuvwxyz · 0123456789</p></div></div>`;
 const escala = g => `<table class="esc"><thead><tr><th>Estilo</th><th>Tamaño</th><th>Peso · interlineado</th><th>Muestra</th></tr></thead><tbody>${g.styles.map(s => {
@@ -89,11 +89,23 @@ const escala = g => `<table class="esc"><thead><tr><th>Estilo</th><th>Tamaño</t
   return `<tr><td><code>${s.name}</code></td><td>${s.fontSize}${px > 30 ? '<br><small>(muestra reducida)</small>' : ''}</td><td>${s.fontWeight} · ${s.lineHeight}</td><td><span style="font-family:${fam};font-size:${vista}px;font-weight:${s.fontWeight};line-height:1.2;${s.letterSpacing ? `letter-spacing:${s.letterSpacing};` : ''}${may}color:${C.pizarra}">${s.sample.replace('CÓMO FUNCIONA', 'Cómo funciona').replace('PROPUESTA', 'Propuesta')}</span></td></tr>`; }).join('')}</tbody></table>`;
 const lamEscalas = tk.type.groups.map(g => `<h3>Escala ${g.name.toLowerCase()}</h3>${escala(g)}`).join('');
 
-const ilus = ['colegio-servidor', 'servidor', 'colegio', 'nube-claude', 'direccion', 'jefatura', 'secretaria', 'docente', 'orientacion', 'sustituto', 'familia', 'documento-ia', 'circular', 'acta', 'ficha', 'correo', 'calendario', 'candado', 'microfono', 'reloj', 'alerta'];
+const ilus = ['colegio-servidor', 'servidor', 'colegio', 'nube-claude', 'direccion', 'jefatura', 'secretaria', 'docente', 'orientacion', 'sustituto', 'familia', 'documento-ia', 'documento', 'circular', 'acta', 'ficha', 'correo', 'calendario', 'candado', 'microfono', 'reloj', 'alerta'];
 const lamIlus = `<div class="il-rej">${ilus.map(n => `<figure><img src="${ilu(n)}" alt=""><figcaption>${n}</figcaption></figure>`).join('')}</div>`;
 
 const pieza = (nombre, cuerpo) => `<figure class="pz"><div class="pz-v">${cuerpo}</div><figcaption>${nombre}</figcaption></figure>`;
-const prev = n => leer(`components/${n}/preview.html`).replace(/^<!--.*-->\n/, '').replace(/\/_blob\/1ff19cd9c43bc9181067f59c9f0f0935/g, ilu('jefatura')).replace(/\/_blob\/8b8a41f64e61cf2ebeaf160a95914d76/g, ilu('documento-ia'));
+// Las piezas citan las imágenes subidas al sistema (/_blob/<id>); design-system.json dice qué archivo es cada una.
+const blobs = {};
+for (const [grupo, g] of Object.entries(JSON.parse(leer('design-system.json')).assetGroups)) for (const f of Object.values(g.files)) {
+  const local = grupo === 'Ilustraciones' ? `ilustraciones/${f.name}` : grupo === 'Logos' ? (f.name.endsWith('.png') ? `logo/png/${f.name}` : `logo/${f.name}`) : null;
+  if (local && fs.existsSync(path.join(DIR, local))) blobs[f.blob] = url(local);
+}
+// Una ilustración aún sin subir se cita como /_blob/pendiente-<nombre> (ver presentacion/herramientas/blobs.mjs).
+const prev = n => leer(`components/${n}/preview.html`).replace(/^<!--.*-->\n/, '')
+  .replace(/\/_blob\/pendiente-([a-z0-9-]+)/g, (m, nombre) => ilu(nombre))
+  .replace(/\/_blob\/([0-9a-f]{32})/g, (m, id) => {
+    if (!blobs[id]) throw new Error(`components/${n}/preview.html cita ${m}, que no está en design-system.json`);
+    return blobs[id];
+  });
 const lamPiezas = `<div class="pz-rej">${pieza('Boton', prev('Boton'))}${pieza('Antetitulo', prev('Antetitulo'))}${pieza('Insignia', prev('Insignia'))}${pieza('Listas', prev('Listas'))}</div>
 <div class="pz-rej pz-2">${pieza('Tarjeta', prev('Tarjeta'))}${pieza('CajaOscura', prev('CajaOscura'))}</div>
 <div class="pz-rej pz-1">${pieza('FichaSustitucion', prev('FichaSustitucion'))}</div>`;
@@ -112,9 +124,9 @@ const caps = [
   { t: 'La marca', lead: 'Qué es DirectorIA y las reglas que no se saltan nunca.', il: 'colegio-servidor', html: md(readme._intro) + md(readme['Lo esencial']) },
   { t: 'Identidad verbal', lead: 'Cómo habla la marca: eslogan, valores, tono y cómo se escribe el nombre.', il: 'microfono', html: md(sinTitulo(leer('1-identidad-verbal.md'))) },
   { t: 'Logotipo', lead: 'La aguja de brújula: la IA orienta; vosotros decidís.', il: 'direccion', html: lamLogos + md(sinTitulo(leer('2-logotipo.md'))) + img('logo/construccion.png', 'Construcción y área de respeto') + img('logo/usos-incorrectos.png', 'Usos incorrectos') },
-  { t: 'Color', lead: 'La pizarra, la tiza y el papel de un aula, con la chispa naranja de la IA.', il: 'calendario', html: lamColor + md(readme['Color'].replace(/\| Token \| Valor[\s\S]*?\n\n/, '')).replace(/<h2>Color<\/h2>/, '') + '<h3>Tokens semánticos</h3>' + lamSemanticos },
+  { t: 'Color', lead: 'La pizarra, la tiza y el papel de un aula, con la chispa naranja de la IA.', il: 'servidor', html: lamColor + md(readme['Color'].replace(/\| Token \| Valor[\s\S]*?\n\n/, '')).replace(/<h2>Color<\/h2>/, '') + '<h3>Tokens semánticos</h3>' + lamSemanticos },
   { t: 'Tipografía', lead: 'Rubik para titular, Nunito Sans para leer.', il: 'acta', html: lamTipos + md(readme['Tipografía']).replace(/<h2>Tipografía<\/h2>/, '') + lamEscalas },
-  { t: 'Ilustraciones', lead: 'Veintiuna ilustraciones planas, cada una sobre su disco.', il: 'docente', html: lamIlus + md(sinTitulo(leer('3-ilustraciones.md'))) },
+  { t: 'Ilustraciones', lead: 'Veintidós ilustraciones planas, cada una sobre su disco.', il: 'docente', html: lamIlus + md(sinTitulo(leer('3-ilustraciones.md'))) },
   { t: 'Composición y piezas', lead: 'Cómo se ordena una página, una diapositiva y un diagrama.', il: 'ficha', html: md(readme['Composición'] + readme['Diagramas']) + '<h2>Piezas</h2><p>Las piezas de la web, tal como están en el sistema de diseño. Cambian solas entre el tema claro y el oscuro.</p>' + lamPiezas + md(readme['Iconografía'] + readme['Movimiento'] + readme['Accesibilidad']) },
   { t: 'Aplicaciones', lead: 'La presentación, la web, la papelería y las redes.', il: 'sustituto', html: md(sinTitulo(leer('4-aplicaciones.md'))) + '<h2 style="break-before:page;margin-top:0">Así quedan</h2>' + lamAplic },
 ];

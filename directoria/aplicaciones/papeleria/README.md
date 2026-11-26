@@ -15,7 +15,7 @@ Esta carpeta tiene la tarjeta de visita, la firma de correo, el membrete, la pro
 | `membrete.png` | 215 KB · 1241 × 1754 px | Vista previa de `membrete.pdf`, a 150 ppp. |
 | `propuesta-comercial.docx` | 136 KB · A4, unas 5 páginas | Plantilla de propuesta comercial: portada y ocho apartados, con los datos que hay que completar entre corchetes. |
 | `hoja-comercial.pdf` | 79 KB · A4, 2 páginas | Hoja comercial para enviar por correo o imprimir. |
-| `hoja-comercial-1.png` · `hoja-comercial-2.png` | 236 KB · 252 KB · 1241 × 1754 px | Vista previa de cada página, a 150 ppp. |
+| `hoja-comercial-1.png` · `hoja-comercial-2.png` | 247 KB · 252 KB · 1241 × 1754 px | Vista previa de cada página, a 150 ppp. |
 | `fuente/` | 121 KB | Los archivos que generan todo lo anterior. Ver «Cómo regenerarlo todo». |
 
 ## Antes de usar nada
@@ -123,12 +123,12 @@ Esta carpeta tiene la tarjeta de visita, la firma de correo, el membrete, la pro
   - Claude: «Claude es opcional. Si lo usáis, el colegio paga su uso directamente a Anthropic, con su propia cuenta.» Sin cifras estimadas de su coste en documentos para clientes.
   - Las condiciones van al mismo tamaño que el resto del texto, sin letra pequeña: no las paséis a una nota al pie.
 - **Privacidad.** Solo hay frases que se pueden demostrar:
-  - la IA trata los datos de vuestros alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos;
+  - la IA trata los datos de vuestros alumnos en un servidor dentro del colegio; las copias de seguridad van cifradas, una en el colegio y otra en un centro de datos de la UE; los correos salen por la cuenta del propio colegio, y el mantenimiento a distancia queda registrado;
   - el colegio sigue siendo el responsable del tratamiento;
   - DirectorIA entrega los borradores de la evaluación de impacto y del registro de actividades de tratamiento, para que el delegado de protección de datos del colegio los revise y el colegio los apruebe;
   - el módulo opcional de Claude es solo para preparar material didáctico, no para datos de alumnos.
 
-  No añadáis «riesgo cero» ni «cumplimiento garantizado», y nada sobre el Reglamento europeo de IA sin una revisión legal. Tampoco digáis que los datos «no salen» o «se quedan» en el colegio, ni que Claude «nunca recibe datos»: si hace falta explicarlo, Claude no tiene acceso a los datos del colegio y un filtro está pensado para bloquear datos personales; la norma de uso es no introducirlos.
+  No añadáis «riesgo cero» ni «cumplimiento garantizado», y nada sobre el Reglamento europeo de IA sin una revisión legal. Tampoco digáis que los datos «no salen» o «se quedan» en el colegio, que las copias «se guardan en el colegio» sin más, ni que Claude «nunca recibe datos»: si hace falta explicarlo, Claude no tiene acceso a los datos del colegio y un filtro está pensado para bloquear datos personales; la norma de uso es no introducirlos.
 - **Próximos pasos.** La demo es de 45 minutos en el colegio, con una mañana de ejemplo y sin datos reales: una sustitución, su ficha y un acta. No la ofrezcáis «con vuestros horarios» ni con una sustitución real. La tabla de pasos no se parte entre dos páginas.
 
 ## Hoja comercial (`hoja-comercial.pdf`)
@@ -170,5 +170,7 @@ Son los mismos en todas las piezas (web, presentación, hoja comercial y propues
 - **Compromiso.** Mínimo de dos cursos escolares.
 - **La suscripción incluye** 6 horas de formación al claustro, soporte en horario lectivo, actualizaciones, una visita al año y el borrador de la evaluación de impacto (lo revisa el delegado de protección de datos del colegio y lo aprueba el colegio).
 - **Claude** es opcional y solo para material didáctico; si lo usan, el colegio paga su uso directamente a Anthropic, con su propia cuenta.
+- **Con IA y sin IA.** Guardias, sustituciones, horarios, la ficha de sustitución, plazos de jefatura, protocolos, certificados y dosier los hace DirectorIA con las reglas y los datos del colegio, sin IA: «DirectorIA propone quién cubre cada hora, con las reglas del colegio». «La IA» solo para lo que escribe la IA: resúmenes y respuestas de correo, actas a partir del dictado, traducciones y lectura fácil, plazos sacados de circulares.
+- **Los datos.** «La IA trata los datos de vuestros alumnos en un servidor dentro del colegio. La copia de seguridad, cifrada, está en la UE. Los correos salen por la cuenta del propio colegio. El mantenimiento a distancia queda registrado.»
 - **Demo.** 45 minutos en el colegio, con una mañana de ejemplo y sin datos reales: una sustitución, su ficha y un acta.
 - **Oferta para el primer colegio** (solo el primero): servidor e instalación gratis y suscripción desde el tercer mes; sin compromiso los dos primeros meses y, si sigue, un año desde el tercer mes. No está en estas plantillas: si la ofrecéis, ponedla por escrito en la propuesta de ese colegio.

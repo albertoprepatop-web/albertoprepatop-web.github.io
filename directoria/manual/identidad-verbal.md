@@ -8,11 +8,11 @@ Cómo habla DirectorIA: qué decimos, cómo lo decimos y cómo se escribe el nom
 
 **Descriptor:** IA para dirección y claustro
 
-**Por qué este eslogan.** Dice en cinco palabras qué es (una IA), de quién es (vuestra) y dónde está (dentro del colegio). Cuenta la privacidad con un hecho que cualquiera puede comprobar, no con una promesa legal, y una herramienta en la nube no puede decir lo mismo. Repite la «IA» del final del nombre, así que ayuda a leer DirectorIA como «Director» + «IA», y se dice bien en voz alta, de un tirón. Es la versión corta del titular de la portada de la web («Vuestra propia IA, dentro del colegio»). Cuando haga falta una segunda línea: «La IA propone. Vosotros decidís».
+**Por qué este eslogan.** Dice en cinco palabras qué es (una IA), de quién es (vuestra) y dónde está (dentro del colegio). Cuenta la privacidad con un hecho que cualquiera puede comprobar, no con una promesa legal, y una herramienta en la nube no puede decir lo mismo. Repite la «IA» del final del nombre, así que ayuda a leer DirectorIA como «Director» + «IA», y se dice bien en voz alta, de un tirón. Es la versión corta del titular de la portada de la web («Vuestra propia IA, dentro del colegio»). Cuando haga falta una segunda línea: «DirectorIA propone. Vosotros decidís». Dice «DirectorIA» y no «la IA» porque lo que se propone (las guardias, la ficha, los avisos) sale de las reglas del colegio.
 
 **Alternativas** para campañas y segundas líneas:
 
-- La IA propone. Vosotros decidís.
+- DirectorIA propone. Vosotros decidís.
 - El papeleo, preparado. La decisión, vuestra.
 - Menos despacho, más colegio
 - IA de puertas adentro
@@ -58,7 +58,7 @@ Cómo habla DirectorIA: qué decimos, cómo lo decimos y cómo se escribe el nom
 2. DirectorIA prepara, resume, propone y avisa. Decidir, aprobar, firmar y evaluar son verbos de personas, y así lo escribimos siempre.
 3. «La IA» solo para lo que escribe la IA: resúmenes de correos, respuestas propuestas, dictados y actas, traducciones y lectura fácil, plazos sacados de circulares, búsqueda por significado y adaptación de recursos. Guardias, sustituciones, horarios, la ficha de sustitución, plazos de jefatura, protocolos, certificados y dosier salen de las reglas y los datos del colegio, sin IA: decimos «DirectorIA propone quién cubre cada hora, con las reglas del colegio», nunca «La IA propone quién cubre…». La insignia de la IA y «Preparado con IA» siguen la misma regla. La ficha lleva «Preparada por DirectorIA · confirmada por jefatura», sin insignia.
 4. Primero el ejemplo, después la idea: «propone quién cubre cada hora» dice más que «gestión inteligente de sustituciones».
-5. De privacidad contamos lo que hace DirectorIA, con esta forma: «La IA trata los datos de los alumnos en un servidor dentro del colegio. La copia de seguridad, cifrada, está en la UE. Los correos salen por la cuenta del propio colegio. El mantenimiento a distancia queda registrado.» Donde no hay sitio, basta la primera frase. Nunca decimos que los datos «no salen del colegio» ni nada parecido: las copias de seguridad van cifradas, una en el colegio (en el NAS) y otra en un centro de datos de la UE; el correo sale por la cuenta del colegio; el resumen y la ficha llegan a los dispositivos de cada persona, y hay mantenimiento a distancia. Sin «riesgo cero», sin «cumplimiento garantizado», sin meter miedo y sin señalar a otras herramientas.
+5. De privacidad contamos lo que hace DirectorIA, con esta forma: «La IA trata los datos de los alumnos en un servidor dentro del colegio. La copia de seguridad, cifrada, está en la UE. Los correos salen por la cuenta del propio colegio. El mantenimiento a distancia queda registrado.» Donde no hay sitio, basta la primera frase. Nunca decimos que los datos «no salen del colegio» ni nada parecido: las copias de seguridad van cifradas, una en el colegio, en un disco de copias aparte, y otra en un centro de datos de la UE; el correo sale por la cuenta del colegio; el resumen y la ficha llegan a los dispositivos de cada persona, y hay mantenimiento a distancia. Sin «riesgo cero», sin «cumplimiento garantizado», sin meter miedo y sin señalar a otras herramientas.
 6. Ninguna cifra, estudio ni testimonio que no podamos enseñar. Precios y condiciones se dicen enteros, sin asteriscos ni letra pequeña.
 7. Frases cortas, voz activa y vocabulario de colegio (guardia, claustro, jefatura, acta), sin anglicismos ni siglas sin explicar.
 
@@ -66,7 +66,7 @@ Cómo habla DirectorIA: qué decimos, cómo lo decimos y cómo se escribe el nom
 
 | Mal | Bien |
 |---|---|
-| DirectorIA revoluciona la gestión de vuestro centro con IA on-premise de última generación. | Cuando falta un profesor, DirectorIA propone quién cubre cada hora y prepara la ficha para quien sustituye. |
+| DirectorIA revoluciona la gestión de vuestro centro con IA on-premise de última generación. | Cuando falta un profesor, DirectorIA propone quién cubre cada hora, con las reglas del colegio, y prepara la ficha para quien sustituye. |
 | Con otras IA estáis incumpliendo la ley. Con DirectorIA, riesgo cero. | DirectorIA funciona en un servidor dentro de vuestro colegio: la IA trata ahí los datos de vuestros alumnos. |
 | La IA asigna las guardias automáticamente y detecta a los alumnos en riesgo de abandono. | DirectorIA propone un reparto de guardias equilibrado; jefatura de estudios lo revisa y lo aprueba. Y la IA nunca evalúa ni clasifica a ningún alumno. |
 | ¡Probadlo sin riesgo!\* \*Permanencia mínima según condiciones generales. | El compromiso mínimo es de dos cursos, y lo tenéis por escrito antes de firmar. |
@@ -133,9 +133,9 @@ DirectorIA, empresa de la Comunidad de Madrid, instala en colegios privados y co
 
    Dirección, jefatura y secretaría tienen el suyo: resumen a las 8:00, correo con respuestas propuestas, actas dictadas, plazos de las circulares y protocolos paso a paso. Y cada docente, también.
 
-4. **La IA propone. Vosotros decidís.**
+4. **DirectorIA propone. Vosotros decidís.**
 
-   DirectorIA prepara borradores, propuestas y avisos. Decidir y firmar es siempre cosa de una persona, y la IA nunca evalúa, puntúa ni clasifica a ningún alumno.
+   DirectorIA prepara borradores, propuestas y avisos. Decidir y firmar es siempre cosa de una persona, y DirectorIA nunca evalúa, puntúa ni clasifica a ningún alumno.
 
 5. **Llave en mano, sin letra pequeña**
 

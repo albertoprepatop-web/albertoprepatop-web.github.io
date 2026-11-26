@@ -1,0 +1,28 @@
+{
+ "nota": "Lo que falta subir a los artifacts de claude.ai. Lo gestiona blobs.mjs: no lo editéis a mano salvo para añadir algo nuevo.",
+ "presentacion": {
+  "url": "https://claude.ai/artifact/9x2eLc8Y7yPi2XKvhJwiFN",
+  "subir": {
+   "ficha": "ilustraciones/ficha.svg",
+   "alerta": "ilustraciones/alerta.svg",
+   "direccion": "ilustraciones/direccion.svg",
+   "calendario": "ilustraciones/calendario.svg",
+   "documento": "ilustraciones/documento.svg"
+  },
+  "antiguos": {
+   "ficha": "/_blob/da775a64000fc3ca228fba6f940cac3c"
+  }
+ },
+ "sistema": {
+  "url": "https://claude.ai/artifact/FF3BxQXTHnNnQjXp86JjUd",
+  "subir": {
+   "Ilustraciones/ficha.svg": "ilustraciones/ficha.svg",
+   "Ilustraciones/alerta.svg": "ilustraciones/alerta.svg",
+   "Ilustraciones/direccion.svg": "ilustraciones/direccion.svg",
+   "Ilustraciones/calendario.svg": "ilustraciones/calendario.svg",
+   "Ilustraciones/documento.svg": "ilustraciones/documento.svg",
+   "Laminas/kit.png": "ilustraciones/kit.png",
+   "Laminas/vista-general.png": "presentacion/vista-general.png"
+  }
+ }
+}

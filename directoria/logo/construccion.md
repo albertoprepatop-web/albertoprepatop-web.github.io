@@ -7,7 +7,7 @@ Sistema definitivo del logotipo de DirectorIA, a partir del concepto «Norte», 
 ## Qué dice el símbolo y cómo contarlo
 
 - **Dirección tiene dos sentidos.** En español, «dirección» es el equipo directivo y es también el rumbo. «No perder el norte» lo entiende cualquier director sin que nadie se lo explique.
-- **Una brújula orienta, pero no conduce.** Así se cuenta el símbolo: **«La IA orienta; vosotros decidís»**. Es la versión gráfica de la segunda línea de la marca, «La IA propone. Vosotros decidís».
+- **Una brújula orienta, pero no conduce.** Así se cuenta el símbolo: **«La IA orienta; vosotros decidís»**. Es la misma idea que la segunda línea de la marca, «DirectorIA propone. Vosotros decidís», contada con un dibujo.
 - **Lo que nunca se dice:** «la IA marca el rumbo», «la IA dirige» o «la IA decide». El rumbo lo marca el equipo directivo.
 - **El símbolo no cuenta que el servidor está en el colegio.** Eso lo dice el eslogan, «Vuestra IA, dentro del colegio». Por eso las piezas institucionales llevan la versión con eslogan.
 - **Líneas de campaña posibles** (no sustituyen al eslogan): «Un curso con norte». Las demás están en la identidad verbal (`manual/identidad-verbal.md`).

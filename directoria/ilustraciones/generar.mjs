@@ -1,4 +1,4 @@
-// Kit de ilustraciones de DirectorIA: genera los 21 SVG de esta carpeta.
+// Kit de ilustraciones de DirectorIA: genera los 22 SVG de esta carpeta.
 // Uso: node generar.mjs [carpeta de salida]   (por defecto, la carpeta de este archivo)
 // Todo se dibuja con formas planas y solo con los colores de la marca (directoria/tokens.json).
 import fs from 'node:fs';
@@ -105,10 +105,8 @@ const hand = (x, y) => ellipse(x, y, 7, 10, SKIN);
 // Brazo levantado: la manga es un trazo redondeado del color de la ropa y acaba en la mano.
 const arm = (x1, y1, x2, y2, fill, w = 16) => stroke(`M${x1} ${y1}L${x2} ${y2}`, fill, w);
 
-// La chispa (la IA): naranja y siempre sobre pizarra.
+// La chispa (la IA): naranja y siempre sobre pizarra. Solo en lo que escribe la IA (`documento-ia`).
 const aiBadge = (cx, cy, r = 23) => circle(cx, cy, r, C.pizarra) + spark(cx, cy, r * 0.66, C.chispa);
-// La misma insignia con un aro del color del disco que la separa de lo que tiene debajo.
-const aiBadgeCut = (cx, cy, r, gap = 4) => circle(cx, cy, r + gap, C.linea) + aiBadge(cx, cy, r);
 
 // Hoja de papel con esquina doblada (todas las hojas del kit comparten medidas).
 const SHEET = { x: 66, y: 40, w: 108, h: 150, fold: 28 };
@@ -362,6 +360,18 @@ save('colegio-servidor', 'Colegio con el servidor de DirectorIA dentro, a la vis
   s += aiBadge(164, 172);
   save('documento-ia', 'Documento preparado por la IA', s);
 }
+// La misma hoja sin insignia: lo que prepara DirectorIA con las reglas, las plantillas y los datos del colegio
+// (un informe de gastos, un borrador de la evaluación de impacto). El gráfico de barras la distingue de `acta` y `circular`.
+{
+  const { x, y, w } = SHEET;
+  let s = sheet();
+  s += titleLine(x + 18, x + 62, y + 30);
+  for (let i = 0; i < 2; i++) s += textLine(x + 18, x + w - 18 - (i === 1 ? 34 : 0), y + 52 + i * 16);
+  const base = y + 132, bw = 12, gap = 8, hs = [26, 44, 34, 56];                     // cuatro barras entre los márgenes del texto
+  hs.forEach((h, i) => { s += P(rrectPath(x + 18 + i * (bw + gap), base - h, bw, h, [R1, R1, 0, 0]), i === 3 ? C.pizarra : C.pizarraLinea); });
+  s += line(x + 14, base + 1.5, x + w - 14, base + 1.5, C.textoSuave, 3);
+  save('documento', 'Documento preparado por DirectorIA, con un gráfico de barras', s);
+}
 {
   const { x, y, w } = SHEET;
   let s = sheet();
@@ -418,7 +428,7 @@ save('colegio-servidor', 'Colegio con el servidor de DirectorIA dentro, a la vis
   s += rect(82, 48, 10, 22, 5, C.texto) + rect(148, 48, 10, 22, 5, C.texto);
   for (let r = 0; r < 4; r++) for (let c = 0; c < 5; c++) {
     const cx = 74 + c * 23, cy = 108 + r * 22;
-    if (r === 2 && c === 3) s += circle(cx, cy, 11, C.pizarra) + circle(cx, cy, 4.5, C.papel); // el plazo, marcado (sin chispa: los plazos salen de las reglas del colegio)
+    if (r === 2 && c === 3) s += circle(cx, cy, 11, C.pizarra) + circle(cx, cy, 4.5, C.papel); // el plazo, marcado (sin chispa: los avisos de plazos salen de las reglas del colegio)
     else s += rect(cx - 7, cy - 7, 14, 14, 3, C.linea);
   }
   save('calendario', 'Calendario con un plazo marcado', s);

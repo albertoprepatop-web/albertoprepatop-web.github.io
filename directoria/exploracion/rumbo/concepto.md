@@ -1,5 +1,7 @@
 # Norte
 
+> **Archivo.** Es el concepto que ganó («Norte»), tal como se presentó, y sus frases no se han puesto al día. Dice que los datos de los alumnos «no salen» del colegio y usa una segunda línea antigua. El logotipo definitivo y cómo contarlo están en `directoria/logo/construccion.md`; cómo escribir sobre DirectorIA, en `directoria/manual/identidad-verbal.md`.
+
 **Territorio:** rumbo · **Tipografía:** Rubik SemiBold (600) pasada a contornos, con una «I» de remates dibujada a medida. No lleva Nunito Sans: esa queda para el texto corrido.
 
 ## La idea en una frase

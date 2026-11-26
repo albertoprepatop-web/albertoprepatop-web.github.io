@@ -34,9 +34,12 @@
 .caja-oscura .boton { margin-top: .75rem; }
 .caja-oscura .boton:hover { background: var(--tiza); border-color: var(--tiza); color: var(--pizarra); }
 
-.insignia, .marca-visto { display: inline-block; flex: none; width: 1.25rem; height: 1.25rem; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='12' fill='%2317322C'/%3E%3Cpath d='M12 4.2 14.6 12 12 19.8 9.4 12z' fill='%23E07A3A'/%3E%3C/svg%3E") center / contain no-repeat; vertical-align: middle; }
+.insignia, .marca-propuesta, .marca-visto { display: inline-block; flex: none; width: 1.25rem; height: 1.25rem; background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='12' fill='%2317322C'/%3E%3Cpath d='M12 4.2 14.6 12 12 19.8 9.4 12z' fill='%23E07A3A'/%3E%3C/svg%3E") center / contain no-repeat; vertical-align: middle; }
 .marca-visto { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='12' fill='%2317322C'/%3E%3Cpath d='M7.2 12.4l3.2 3.2 6.4-6.6' fill='none' stroke='%23F6F3EC' stroke-width='2.2' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E"); }
 [data-theme="oscuro"] .insignia, [data-theme="oscuro"] .marca-visto { box-shadow: 0 0 0 1.5px var(--texto-suave); border-radius: 50%; }
+/* La propuesta de DirectorIA: un aro, sin chispa. Sale de las reglas del colegio, no de la IA. */
+.marca-propuesta { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10.8' fill='none' stroke='%2317322C' stroke-width='2.4'/%3E%3C/svg%3E"); }
+[data-theme="oscuro"] .marca-propuesta { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Ccircle cx='12' cy='12' r='10.8' fill='none' stroke='%23F6F3EC' stroke-width='2.4'/%3E%3C/svg%3E"); }
 .con-insignia { display: flex; align-items: center; gap: .5rem; font-family: var(--font-texto); font-size: .875rem; color: var(--cuerpo); }
 
 .lista-puntos, .lista-visto { display: grid; gap: .625rem; margin: 0; padding: 0; list-style: none; font-family: var(--font-texto); font-size: 1.0625rem; line-height: 1.6; color: var(--cuerpo); }
@@ -53,7 +56,6 @@
 .ficha-cabeza { padding-bottom: 1rem; border-bottom: 1px solid var(--linea); }
 .ficha-sesion { font-family: var(--font-titulares); font-weight: 600; font-size: 1.25rem; color: var(--pizarra); }
 .ficha-origen { display: flex; align-items: center; gap: .5rem; margin-top: .375rem; font-size: .875rem; color: var(--texto); }
-.ficha-origen .insignia { width: 1.125rem; height: 1.125rem; box-shadow: none; }
 .ficha-datos { display: grid; gap: 1rem; margin-top: 1.125rem; }
 .ficha-datos dt { font-size: .875rem; font-weight: 700; letter-spacing: .02em; color: var(--chispa-texto); }
 .ficha-datos dd { margin-top: .125rem; font-size: .96875rem; line-height: 1.5; color: var(--pizarra); }

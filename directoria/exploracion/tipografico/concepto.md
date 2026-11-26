@@ -1,5 +1,7 @@
 # Dentro · concepto tipográfico para DirectorIA
 
+> **Archivo.** Este concepto se exploró antes de elegir el logotipo, y sus frases no se han puesto al día. Algunas dicen que los datos del alumnado «no salen» del colegio o dan a la IA trabajo que hace DirectorIA con las reglas del colegio, como las sustituciones. Para escribir sobre DirectorIA, seguid `directoria/manual/identidad-verbal.md`.
+
 **La idea en una frase:** la I de «IA» lleva remates para que nunca se lea «DirectorlA», y en el símbolo esa misma I está dentro de la D, como vuestra IA está dentro del colegio.
 
 ![Tablero de evaluación](tablero.png)

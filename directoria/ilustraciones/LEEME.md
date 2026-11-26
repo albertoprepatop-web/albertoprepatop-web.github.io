@@ -1,6 +1,6 @@
 # Ilustraciones de DirectorIA
 
-Veintiuna ilustraciones planas para contar, desde la primera diapositiva, cómo funciona DirectorIA. Hay un servidor dentro del colegio y, a su alrededor, las personas que lo usan, lo que DirectorIA prepara para ellas y, aparte, la nube opcional. `kit.png` las reúne todas en una hoja.
+Veintidós ilustraciones planas para contar, desde la primera diapositiva, cómo funciona DirectorIA. Hay un servidor dentro del colegio y, a su alrededor, las personas que lo usan, lo que DirectorIA prepara para ellas y, aparte, la nube opcional. `kit.png` las reúne todas en una hoja.
 
 ## Cómo son
 
@@ -12,7 +12,9 @@ Veintiuna ilustraciones planas para contar, desde la primera diapositiva, cómo 
   - la luz del servidor (`servidor`, `colegio-servidor`);
   - la insignia de lo que escribe la IA, un círculo pizarra con la chispa (`documento-ia`): resúmenes y respuestas de correo, actas dictadas, traducciones, plazos sacados de circulares.
 
-  Lo que sale de las reglas y los datos del colegio va sin chispa, porque lo hace DirectorIA sin IA: la ficha de sustitución (`ficha`), el resumen de las 8:00 (la tableta de `direccion`, con el ✓ de «al día»), los avisos (`alerta`) y los plazos (`calendario`). El naranja no es un color de aviso ni de peligro: los avisos (`alerta` y el aviso de `ficha`) van en pizarra. Las personas no llevan naranja. Tampoco lo llevan lo que firman o aprueban las personas (`acta`, `circular`) ni la nube. Chispa-suave y chispa-texto no se usan en las ilustraciones.
+  Lo que prepara DirectorIA con una plantilla y los datos del colegio usa la misma hoja sin insignia (`documento`).
+
+  Lo que sale de las reglas y los datos del colegio va sin chispa, porque lo hace DirectorIA sin IA: la ficha de sustitución (`ficha`), el resumen de las 8:00 (la tableta de `direccion`, con el ✓ de «al día»), los avisos (`alerta`) y los avisos de plazos (`calendario`). El naranja no es un color de aviso ni de peligro: los avisos (`alerta` y el aviso de `ficha`) van en pizarra. Las personas no llevan naranja. Tampoco lo llevan lo que firman o aprueban las personas (`acta`, `circular`) ni la nube. Chispa-suave y chispa-texto no se usan en las ilustraciones.
 - **Se leen a 96 px.** Están comprobadas a ese tamaño sobre tiza, salvia, papel y pizarra.
 
 ## Archivos
@@ -43,11 +45,12 @@ Veintiuna ilustraciones planas para contar, desde la primera diapositiva, cómo 
 | Archivo | Qué muestra |
 |---|---|
 | `documento-ia.svg` | Una hoja con la insignia de la IA (la chispa naranja sobre un círculo pizarra) en la esquina de abajo: este texto lo ha escrito la IA (un resumen, una respuesta, un acta dictada, una traducción). Solo para eso: no para la ficha, un informe de gastos ni un documento que rellena DirectorIA con una plantilla. |
+| `documento.svg` | La misma hoja, sin insignia y con un pequeño gráfico de barras: lo que prepara DirectorIA con las reglas, las plantillas y los datos del colegio. Es la del análisis y el informe de gastos, la evaluación de impacto y los documentos de un protocolo. |
 | `circular.svg` | Una circular con sello oficial, un aro con un pequeño edificio institucional. |
 | `acta.svg` | Un acta con dos firmas. |
 | `ficha.svg` | La ficha de sustitución: una lista de tareas con un aviso (alergias, necesidades o recogidas) en un triángulo pizarra del tamaño de las casillas. No lleva la insignia de la IA: la prepara DirectorIA con las reglas y los datos del colegio («Preparada por DirectorIA · confirmada por jefatura»). |
 | `correo.svg` | Un sobre. |
-| `calendario.svg` | Un calendario con un plazo marcado: un círculo pizarra con un punto claro, sin chispa, porque los plazos y sus avisos salen de las reglas del colegio. |
+| `calendario.svg` | Un calendario con un plazo marcado: un círculo pizarra con un punto claro, sin chispa, porque los avisos de plazos salen de las reglas del colegio. (Lo que sí hace la IA es sacar los plazos de una circular: para eso, `documento-ia`.) |
 | `candado.svg` | Un candado: la privacidad. |
 | `microfono.svg` | Un micrófono: el dictado por voz, «del dictado al acta». |
 | `reloj.svg` | Un reloj a las ocho, cuando llega el resumen del día, antes de las clases. |
@@ -56,7 +59,7 @@ Veintiuna ilustraciones planas para contar, desde la primera diapositiva, cómo 
 ### Otros
 
 - `kit.png`: hoja de contactos con todo el kit sobre tiza y el nombre de cada archivo.
-- `generar.mjs`: el programa que dibuja los 21 SVG (ver «Para cambiarlas»).
+- `generar.mjs`: el programa que dibuja los 22 SVG (ver «Para cambiarlas»).
 
 ## Cómo usarlas
 
@@ -74,6 +77,7 @@ Veintiuna ilustraciones planas para contar, desde la primera diapositiva, cómo 
   - `sustituto` + `ficha`: ausencia cubierta, sustituto informado;
   - `direccion` + `reloj`: el resumen del día a las ocho;
   - `direccion` + `correo` + `documento-ia`: cada correo, resumido por la IA y con una respuesta propuesta;
+  - `secretaria` + `documento`: el informe de gastos;
   - `docente` + `microfono` + `acta`: del dictado al acta;
   - `jefatura` + `calendario` + `alerta`: plazos y choques avisados;
   - `secretaria` + `circular` + `correo` + `familia`: circulares a las familias;
@@ -81,10 +85,14 @@ Veintiuna ilustraciones planas para contar, desde la primera diapositiva, cómo 
 
 ## Para cambiarlas
 
-- `node generar.mjs` vuelve a dibujar los 21 SVG en esta carpeta. Necesita Node 18 o superior y nada más. Los colores, los radios, el disco, la chispa y la insignia de la IA están definidos al principio del archivo, y cada ilustración es un bloque comentado. `servidor` y `colegio-servidor` dibujan el servidor con la misma función (`serverTower`).
+- `node generar.mjs` vuelve a dibujar los 22 SVG en esta carpeta. Necesita Node 18 o superior y nada más. Los colores, los radios, el disco, la chispa y la insignia de la IA están definidos al principio del archivo, y cada ilustración es un bloque comentado. `servidor` y `colegio-servidor` dibujan el servidor con la misma función (`serverTower`).
 - La chispa es la aguja del logotipo «Norte». Si algún día cambia el logo, basta con cambiar la función `spark` de `generar.mjs` y volver a generar.
 - Datos técnicos de cada SVG:
   - `viewBox="0 0 240 240"`, fondo transparente y formas planas;
   - sin textos, imágenes ni referencias externas;
   - un `<title>` en español para los lectores de pantalla;
   - pesan entre 0,5 y 4,1 KB.
+- **Después de regenerarlas:**
+  - copiad las que cambien a la web (`../web/img/ilustraciones/`), que lleva su propia copia;
+  - rehaced `kit.png` desde esta carpeta, con las herramientas de `../presentacion/herramientas/` (Node 18 y Playwright con Chromium): `bash ../presentacion/herramientas/kit.sh`. Dibuja cada SVG a 240 px y los pone en una hoja de 5 columnas sobre tiza, en el orden de `generar.mjs`;
+  - si la ilustración sale en la presentación o en el sistema de diseño, hay que subirla otra vez a ese artifact: el archivo nuevo tiene otra dirección `/_blob/…` (ver `../presentacion/herramientas/LEEME.md`).

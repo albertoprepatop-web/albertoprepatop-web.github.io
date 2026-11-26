@@ -1,5 +1,7 @@
 # Visto bueno
 
+> **Archivo.** Este concepto se exploró antes de elegir el logotipo, y sus frases no se han puesto al día. Algunas dicen que los datos del alumnado «no salen» del colegio o dan a la IA trabajo que hace DirectorIA con las reglas del colegio, como las sustituciones. Para escribir sobre DirectorIA, seguid `directoria/manual/identidad-verbal.md`.
+
 **Territorio:** pizarra · **Marca:** DirectorIA · **Tipografía del logotipo:** Rubik 700 (SIL OFL), convertida en trazos, con una I de remates dibujada a medida
 
 **La idea en una frase:** sobre una pizarra, la chispa naranja marca el punto de partida (la IA propone) y una persona traza el visto de tiza (decide). Es el trabajo del equipo directivo, hecho y en orden.
