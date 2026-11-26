@@ -108,10 +108,12 @@ DEMO.rol({
           sigue: 'guardias', verbo: 'Enviadas', si: { detalle: 'Quien cubre en 3.º B ya tiene su ficha. Se cierra al acabar la jornada.' },
         },
         {
-          // Choque: la guardia que Laura ofrece devolver el viernes 27 cae en la salida de 4.º (en docente, el mismo choque).
-          grupo: 'Hoy', icono: 'correo', titulo: 'Laura Sánchez pide cambiar su guardia de mañana',
-          detalle: 'La vuelta que ofrece, el viernes 27 a 3.ª hora, coincide con la salida de 4.º al Jardín Botánico.',
-          estado: 'hoy', choque: true, ir: 'correo:c-laura', sigue: 'correo:c-laura',
+          // Sale del correo de Laura (lleva la insignia). No propone a nadie: quién cubre su guardia lo decides tú, con la
+          // propuesta de DirectorIA que va en la nota del correo. El choque de su guardia del viernes 27 con la salida no sale
+          // del correo, sino de su horario: va en la agenda, sin insignia.
+          grupo: 'Hoy', icono: 'correo', titulo: 'Laura Sánchez pide que cubran su guardia de mañana',
+          detalle: 'A 4.ª hora tiene una tutoría con una familia de 4.º A. Quién la cubre lo decides tú.',
+          estado: 'hoy', ir: 'correo:c-laura', sigue: 'correo:c-laura',
         },
         { grupo: 'Esta semana', icono: 'familia', titulo: 'Una familia de 2.º ESO A pide cambiar de optativa', detalle: 'De Francés a Tecnología. El plazo del centro terminó el 30 de septiembre.', estado: 'pendiente', ir: 'correo:c-optativa', sigue: 'correo:c-optativa' },
         { grupo: 'Para saber', icono: 'info', titulo: 'Consejería: instrucciones de las sesiones de evaluación', detalle: 'Calificaciones en Raíces antes del viernes 18 de diciembre. Las sesiones del 9 al 11 encajan en ese plazo.', estado: 'info', ir: 'correo:c-consejeria', sigue: 'correo:c-consejeria' },
@@ -136,6 +138,15 @@ DEMO.rol({
           aMedias: { sigue: 'correo:c-matematicas', detalle: 'Le has preguntado a Matemáticas. La fecha, antes de este día.' },
         },
         { fecha: '2026-11-27', hora: '9:15', tipo: 'evento', titulo: 'Salida de 4.º al Jardín Botánico', detalle: 'Vuelven a las 13:30. Laura Sánchez va con 4.º A.' },
+        {
+          // Choque que detecta DirectorIA cruzando el horario de Laura con la salida: reglas y fechas, sin fuente ni insignia
+          // (en docente, el mismo choque). Las dos respuestas a Laura le dicen que esa guardia también la cubre otra persona
+          // (#0,1): el detalle cambia, pero no pasa a ✓, porque falta decidir quién, y pierde el enlace (ir: null), porque en su
+          // correo, ya respondido, no se decide nada. Si archivas su correo, no cambia.
+          fecha: '2026-11-27', tipo: 'aviso', choque: true, titulo: 'La guardia de 3.ª de Laura Sánchez y la salida',
+          detalle: 'Tiene guardia a 3.ª hora y estará en la salida con 4.º A: hay que cubrirla.', ir: 'correo:c-laura',
+          sigue: 'correo:c-laura#0,1', si: { detalle: 'Ya le has dicho a Laura que la cubre otra persona. Quién la cubre lo decides ese día, en «Guardias de hoy».', estado: 'pendiente', ir: null },
+        },
         { fecha: '2026-11-30', tipo: 'evento', titulo: 'Empiezan los exámenes de ESO', detalle: '1.ª evaluación, hasta el viernes 4 de diciembre.', ir: 'examenes' },
         {
           // Choque del calendario de exámenes: lo resuelve el calendario aprobado (módulo «Exámenes»).
@@ -212,30 +223,36 @@ DEMO.rol({
       ],
     },
     {
+      // Laura pide que otra persona cubra su guardia del jueves, sin proponer a nadie: lo decide jefatura. La nota es de
+      // DirectorIA (reglas, sin insignia): su propuesta para el jueves (primero quien tiene guardia a esa hora; si no hay,
+      // quien tiene hora libre; entre varios, quien lleva menos guardias este mes) y el choque del viernes 27 con la salida.
+      // A 4.ª no hay nadie más de guardia y Rosa Medina es la única con esa hora libre: no hace falta mirar cuántas guardias
+      // lleva (hoy DirectorIA también la propone para la 3.ª de 3.º B). Las dos respuestas dicen quién la cubre el jueves y
+      // que la del viernes 27 también la cubre otra persona.
       id: 'c-laura',
       de: 'Laura Sánchez',
       deDetalle: 'Tutora de 4.º A de Primaria',
-      asunto: 'Cambio de guardia del jueves',
+      asunto: 'Mi guardia del jueves coincide con una tutoría',
       hora: 'ayer',
       categoria: 'Claustro',
       etiqueta: { texto: 'Responder hoy', tipo: 'hoy' },
       resumen: [
-        'Laura Sánchez pide cambiar su guardia del jueves 19 a 4.ª hora: tiene tutoría con una familia de 4.º A.',
-        'Rosa Medina la hace por ella y Laura le devuelve la del viernes 27 a 3.ª hora.',
+        'Laura Sánchez tiene guardia el jueves 19 a 4.ª hora, y una familia de su tutoría de 4.º A solo puede venir a esa hora.',
+        'Pide que cubra su guardia otra persona, la que tú decidas, y que lo dejes en el cuadrante.',
       ],
-      piden: 'Aprobar el cambio de guardia y anotarlo en el cuadrante.',
-      original: 'Hola, Javier:\n\n¿Te importa si cambio mi guardia de este jueves a 4.ª hora? Una familia de mi tutoría solo puede venir a esa hora y no quiero dejarlo para después de la evaluación.\n\nLo he hablado con Rosa y me la hace ella. A cambio, yo le hago la suya del viernes 27 a 3.ª hora.\n\nSi te parece bien, ¿lo cambias en el cuadrante para que no haya líos?\n\nGracias,\nLaura',
+      piden: 'Decidir quién cubre su guardia del jueves 19 a 4.ª hora y dejarlo en el cuadrante.',
+      original: 'Hola, Javier:\n\nEste jueves 19 tengo guardia a 4.ª hora, y una familia de mi tutoría solo puede venir a esa hora. No quiero dejarlo para después de la evaluación.\n\n¿Puede cubrir mi guardia otra persona? Quien tú veas. Si te parece bien, ¿lo dejas en el cuadrante para que no haya líos?\n\nGracias,\nLaura',
       respuestas: [
         {
-          titulo: 'Aprobar y cambiar el día de vuelta',
-          texto: 'Hola, Laura:\n\nPor mi parte, de acuerdo: el jueves 19 a 4.ª hora hace la guardia Rosa. Lo que no puede ser es la vuelta del viernes 27, porque ese día estás en la salida al Jardín Botánico hasta las 13:30.\n\nTe propongo que le hagas la del lunes 30 a 3.ª hora: Rosa tiene guardia y tú estás libre. Si a ella le viene bien, lo dejo así en el cuadrante.\n\nQue vaya bien la tutoría.\n\nUn abrazo,\nJavier Martín\nJefe de estudios',
+          titulo: 'Decirle que la cubre Rosa',
+          texto: 'Hola, Laura:\n\nSin problema: el jueves 19 a 4.ª hora cubre tu guardia Rosa Medina, que tiene esa hora libre. Lo dejo así en el cuadrante.\n\nY otra cosa: el viernes 27 tienes guardia a 3.ª hora y estarás en la salida al Jardín Botánico. Esa guardia también la cubre otra persona; tú no tienes que hacer nada.\n\nQue vaya bien la tutoría.\n\nUn abrazo,\nJavier Martín\nJefe de estudios',
         },
         {
-          titulo: 'Pedir otro día para la vuelta',
-          texto: 'Hola, Laura:\n\nEl cambio del jueves está aprobado: a 4.ª hora hace la guardia Rosa. Pero el viernes 27 estás en la salida al Jardín Botánico, de 9:15 a 13:30, así que ese día no puedes devolvérsela.\n\n¿Podéis mirar entre las dos otro día? Cuando me lo digáis, lo cambio en el cuadrante.\n\nGracias,\nJavier Martín\nJefe de estudios',
+          titulo: 'Explicarle por qué la cubre Rosa',
+          texto: 'Hola, Laura:\n\nLo he mirado: a 4.ª hora no hay nadie más de guardia, y Rosa Medina es la única que tiene esa hora libre. Así que el jueves 19 tu guardia la cubre ella. Lo dejo en el cuadrante.\n\nTe aviso también de que el viernes 27 tu guardia de 3.ª hora cae en la salida al Jardín Botánico, de 9:15 a 13:30. Esa también la cubre otra persona: cuando cierre las guardias de ese día, te digo quién.\n\nGracias por avisar con tiempo,\nJavier Martín\nJefe de estudios',
         },
       ],
-      nota: 'Ojo: el viernes 27 Laura está en la salida al Jardín Botánico (9:15-13:30). La vuelta que propone no puede ser.',
+      nota: 'DirectorIA propone a Rosa Medina, la única con la 4.ª libre. Ojo: el viernes 27 Laura está en la salida y hay que cubrir su guardia de 3.ª.',
     },
     {
       id: 'c-matematicas',

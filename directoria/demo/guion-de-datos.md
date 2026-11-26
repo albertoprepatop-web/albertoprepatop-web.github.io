@@ -87,6 +87,10 @@ A las 7:45 avisa por la app de que tiene fiebre y no viene. DirectorIA propone c
 
 Las sesiones 2.ª, 4.ª y 5.ª de 3.º B las dan especialistas: Inglés, Educación Física y Música.
 
+**Quién cubre una guardia o una clase.** Lo decide jefatura. DirectorIA lo propone con las reglas del colegio, sin IA: primero, quien tiene guardia a esa hora; si no hay, quien tiene hora libre; entre varios, quien lleva menos guardias este mes. Lo mismo vale para la guardia del jueves 19 de Laura Sánchez, que tiene una tutoría a esa hora: a 4.ª no hay nadie más de guardia y Rosa Medina es la única con esa hora libre, así que la propuesta es ella sin mirar cuántas guardias lleva (ver `jefatura` y `docente` en §7).
+
+**Las guardias no se devuelven.** Quien cubre una guardia no recupera esa hora más tarde, y nadie le debe una guardia a nadie: en la demo no hay «vuelta», ni nada «a cambio», ni intercambios entre docentes. `validar.mjs` falla si una pieza que habla de una guardia (una fila, una marca, un correo con sus respuestas, un plazo…) dice que se devuelve, habla de su «vuelta», de algo «a cambio», de un intercambio o de un «cambio de guardia», o dice que alguien le debe una guardia a otro («le debo una guardia», «te la debo»). La hora de regreso de una salida («Vuelta a las 13:30») no cuenta, aunque la pieza nombre una guardia.
+
 **Estado al empezar la demo:** la propuesta está pendiente de que jefatura la confirme. Cuando jefatura la confirma en la demo, cambian dos cosas:
 
 - el resumen de la directora;
@@ -592,8 +596,9 @@ inicio: {
   // Lo pendiente va arriba; lo hecho baja al final del grupo, con su verbo y su hora («Firmada a las 8:05»). Sin «verbo»:
   //   «Respondido» o «Enviado» si sigue un correo, «Enviado» si sigue un dictado y, si no, «Hecho»; «Archivado» si el correo
   //   se archivó.
-  // si: lo que cambia cuando lo seguido está hecho (titulo, detalle y estado, que por defecto es «hecho»). Hecha sin
-  //   «si.detalle», la fila no repite su detalle, que suele decir lo que había que hacer («Revísala y fírmala»).
+  // si: lo que cambia cuando lo seguido está hecho (titulo, detalle, estado, que por defecto es «hecho», e ir). Hecha sin
+  //   «si.detalle», la fila no repite su detalle, que suele decir lo que había que hacer («Revísala y fírmala»). ir: null
+  //   quita el enlace cuando lo que se sigue ya está respondido y ahí no queda nada por hacer (en las marcas, igual).
   // siDictado: lo que cambia mientras el dictado que se sigue está dictado y por revisar. siOtra, siConfirmada y aMedias:
   //   ver arriba (en las filas cambian titulo, detalle, estado, ir, icono y, en siOtra y siConfirmada, también sigue y verbo).
   // choque: en el lector de pantalla, «Choque.» va como frase aparte (el título puede llevar sus propios dos puntos).
@@ -610,7 +615,10 @@ inicio: {
         sigue: 'correo:c-fotocopiadoras#1', verbo: 'Preaviso enviado',
         aMedias: { sigue: 'correo:c-fotocopiadoras', detalle: 'Has respondido sin el preaviso. Si no avisas, se renueva solo el 1 de diciembre.' } },
       { fecha: '2026-11-26', hora: '10:00', tipo: 'evento', titulo: 'Visita de inspección', detalle: '...', fuente: 'correo', ir: 'correo:c-inspeccion' },
-      { fecha: '2026-11-27', tipo: 'aviso', choque: true, titulo: 'Tu guardia de 3.ª hora y la salida', detalle: '...', fuente: 'correo', ir: 'plazos', sigue: 'plazos#6' },
+      // Sin fuente: el choque lo detecta DirectorIA cruzando el horario con la salida (reglas y fechas), así que va sin insignia.
+      // Lo resuelven las respuestas de jefatura al correo de Laura (#0,1); si lo archiva, no cambia.
+      { fecha: '2026-11-27', tipo: 'aviso', choque: true, titulo: 'Tu guardia de 3.ª hora y la salida', detalle: '...', ir: 'plazos',
+        sigue: 'jefatura/correo:c-laura#0,1', verbo: 'Confirmado', si: { detalle: '...' } },
       // Un «si» con estado 'pendiente' cambia el texto sin dar la marca por hecha (lo que contesta otro perfil, por ejemplo).
       { fecha: '2026-11-19', hora: '11:45', tipo: 'evento', titulo: '...', detalle: '...', sigue: 'jefatura/correo:c-laura', si: { detalle: '...', estado: 'pendiente' } },
       // Una lista en «sigue»: hecho cuando lo están todas (el visto bueno y la respuesta que adjunta el dosier). Aun así no pasa
@@ -962,13 +970,13 @@ Sirve para el calendario de exámenes, las programaciones, las autorizaciones de
   - Programaciones de ESO: «2 incompletas», Educación Física y Música. Pasa a «Ya lo has pedido» al pedir lo que falta.
 - **Quién cubre 3.º B hoy:** el mismo carril que dirección, pero siguiendo su propio módulo (`guardias#g1`…`g4`). Mientras falten guardias, una línea recuerda que en «Guardias de hoy» se puede elegir a otra persona para cada sesión antes de confirmar. Si jefatura elige a otra persona en el desplegable, la celda la enseña ya antes de confirmar («Elección: Rosa Medina») y, después, «Cubre Rosa Medina · Confirmada a las 8:01». «Confirmar todas» deja todas a la misma hora. Como lo confirma él, los globos le hablan de tú: «Falta que la confirmes», «Has elegido a Rosa Medina. Falta que lo confirmes» y «La has confirmado a las 8:01». Si confirma una a una, la línea dice «Has confirmado 2 de 4. Hasta que confirmes las demás, no se avisa a quien las cubre.» (`parcial`).
 - **Lo que te necesita:**
-  - Hoy: las fichas de 1.ª, 3.ª y 6.ª hora de 3.º B, que pasan a «Enviadas» al confirmar las guardias, y el cambio de guardia que pide Laura Sánchez. Va como choque: la vuelta que ofrece, el viernes 27 a 3.ª hora, coincide con la salida de 4.º (en docente, el mismo choque).
+  - Hoy: las fichas de 1.ª, 3.ª y 6.ª hora de 3.º B, que pasan a «Enviadas» al confirmar las guardias, y la petición de Laura Sánchez: «Laura Sánchez pide que cubran su guardia de mañana», con «A 4.ª hora tiene una tutoría con una familia de 4.º A. Quién la cubre lo decides tú.». Resume su correo, así que lleva «Resumido con IA». No va como choque: el choque de su guardia del viernes 27 va en la agenda.
   - Esta semana: la familia de 2.º ESO A que pide cambiar de optativa.
   - Para saber: la nota de la Consejería. Las calificaciones, en Raíces antes del viernes 18 de diciembre.
 - **Lo que viene:**
   - jue 19 y vie 20: «Caso 2026-07: entrevistas», del equipo del caso (solo el número);
   - vie 20: contestar a Matemáticas con la fecha del examen de 4.º ESO («Respóndele a Ramón Esteban antes de este día: quieren decírselo a los alumnos esta semana.»), sacado del correo. Lo cumplen las dos respuestas que dan fecha (`correo:c-matematicas#0,1`); la que pregunta antes si el examen es de una sesión no la da: «Le has preguntado a Matemáticas. La fecha, antes de este día.»;
-  - vie 27: la salida de 4.º al Jardín Botánico a las 9:15, con Laura Sánchez;
+  - vie 27: la salida de 4.º al Jardín Botánico a las 9:15, con Laura Sánchez, y el choque de su guardia de 3.ª con la salida: «La guardia de 3.ª de Laura Sánchez y la salida», con «Tiene guardia a 3.ª hora y estará en la salida con 4.º A: hay que cubrirla.». Lo detecta DirectorIA cruzando el horario de Laura con la salida (reglas y fechas), así que va sin insignia (en docente, el mismo choque). Sigue a las respuestas a Laura (`correo:c-laura#0,1`), que le dicen que esa guardia también la cubre otra persona: entonces dice «Ya le has dicho a Laura que la cubre otra persona. Quién la cubre lo decides ese día, en «Guardias de hoy».», no pasa a ✓ (un `si` con estado `pendiente`) y pierde el enlace (`ir: null`), porque en su correo, ya respondido, no se decide nada. Si se archiva su correo, no cambia;
   - lun 30: empiezan los exámenes de ESO;
   - mié 2 dic: el choque de 4.º ESO A, con Matemáticas e Inglés el mismo día. Al aprobar el calendario pasa a ✓: «Inglés de 4.º ESO A, al jueves 3».
 
@@ -977,7 +985,7 @@ Sirve para el calendario de exámenes, las programaciones, las autorizaciones de
 1. Sergio Prieto, a las 7:45: «No voy a poder ir hoy». Respuestas: «Recupérate; tu clase está cubierta» y otras.
 2. La familia de un alumno de 2.º ESO pide cambiar de optativa, de Francés a Tecnología. Respuesta propuesta según el plazo del centro.
 3. El Departamento de Matemáticas propone fecha para el examen de 4.º ESO; enlaza con exámenes.
-4. Laura Sánchez pide cambiar su guardia del jueves.
+4. Laura Sánchez: «Mi guardia del jueves coincide con una tutoría». El jueves 19 tiene guardia a 4.ª hora y una familia de su tutoría solo puede venir a esa hora; pide que cubra su guardia otra persona y no propone a nadie: lo decide jefatura. La nota es de DirectorIA, sin insignia: «DirectorIA propone a Rosa Medina, la única con la 4.ª libre. Ojo: el viernes 27 Laura está en la salida y hay que cubrir su guardia de 3.ª.» (a 4.ª no hay nadie más de guardia, así que va quien tiene hora libre; como solo la tiene Rosa, no hace falta mirar cuántas guardias lleva, aunque hoy DirectorIA también la propone para la 3.ª de 3.º B). Las dos respuestas propuestas le dicen que el jueves la cubre Rosa Medina y que la del viernes 27 también la cubre otra persona, sin pedirle nada: «Decirle que la cubre Rosa» y «Explicarle por qué la cubre Rosa», que cuenta la regla («Rosa Medina es la única que tiene esa hora libre») y promete decirle quién cubre el viernes cuando cierre las guardias de ese día.
 5. La Consejería avisa de las instrucciones sobre las sesiones de evaluación. Informativo.
 
 **Módulos:**
@@ -1044,12 +1052,11 @@ Sirve para el calendario de exámenes, las programaciones, las autorizaciones de
   Bajo el título va «Hoy no viene Sergio Prieto, el tutor de 3.º B: tu Educación Física con ellos no cambia.», y en la 4.ª, con 3.º B, el aviso «Falta su tutor».
 - **Lo que te necesita:**
   - Hoy: las dos familias (resumidas con IA) y la tutoría: «Dicta el correo y te llega redactado para revisar.»; ya dictada, «Ya lo has dictado. Te queda revisar el correo y enviarlo.».
-  - Esta semana: el choque de la guardia del viernes 27 con la salida. Sale de su correo a jefatura del martes 17, como en «Tus plazos» («Sacado con IA»), así que lleva la insignia. Su texto vale antes y después de que jefatura conteste (las dos respuestas piden otro día para la vuelta): «Es la que ofreciste a Rosa Medina a cambio de la de mañana. Cierra con ella y con jefatura qué día se la devuelves.».
-  - Para saber: el plan de lectura.
+  - Para saber: el choque de su guardia del viernes 27 a 3.ª hora con la salida y el plan de lectura. El choque, «Tu guardia del viernes 27 coincide con la salida», con «Estarás en el Jardín Botánico de 9:15 a 13:30, así que la cubre otra persona. Jefatura ya lo sabe.», va primero. Lo detecta DirectorIA cruzando su horario con la salida (reglas y fechas, no sale de ningún correo), así que va sin insignia (`ia: false`). Va en «Para saber» (`estado: 'info'`) y no en «Esta semana»: es la semana que viene y Laura no tiene que hacer nada. Sigue a las respuestas de jefatura a su correo (`jefatura/correo:c-laura#0,1`), que le dicen que esa guardia también la cubre otra persona: entonces pasa a «Confirmado a las…», con «Jefatura te ha confirmado que la cubre otra persona.». Si jefatura archiva su correo, no cambia. Sin «Esta semana», la lista va en dos columnas: «Hoy», con tres filas, y «Para saber», con dos.
 - **Lo que viene,** de «Tus plazos»:
-  - jue 19: la tutoría de las 11:45, que coincide con su guardia: «Coincide con tu guardia. Pediste a jefatura que la haga Rosa Medina y aún no te ha contestado.». Sigue al correo de Laura en jefatura (`jefatura/correo:c-laura`): cuando jefatura lo responde (las dos respuestas aprueban el cambio del jueves), dice «Coincide con tu guardia. Jefatura ya ha aprobado que la haga Rosa Medina.»; si lo archiva, sigue sin contestar;
+  - jue 19: la tutoría de las 11:45, que coincide con su guardia (sacada de su correo a jefatura, con la insignia): «Coincide con tu guardia. Has pedido a jefatura que la cubra otra persona y aún no te ha contestado.». Sigue al correo de Laura en jefatura (`jefatura/correo:c-laura`): cuando jefatura lo responde (las dos respuestas le dicen que la cubre Rosa Medina), dice «Coincide con tu guardia. Jefatura te ha contestado: la cubre Rosa Medina.»; si lo archiva, sigue sin contestar;
   - vie 20: la programación quincenal y las autorizaciones. Al marcarlas en «Tus plazos», «Entregada a las…» y «Entregadas a las…»;
-  - vie 27: la salida a las 9:15 y el choque con su guardia de 3.ª hora (sacado del correo): «Cierra con Rosa Medina y con jefatura qué día se la devuelves.»;
+  - vie 27: la salida a las 9:15 y el choque con su guardia de 3.ª hora, sin insignia: «Estarás en la salida, así que la cubre otra persona. Jefatura ya lo sabe.». Como la fila de «Lo que te necesita», pasa a ✓ («Confirmado a las…») cuando jefatura le contesta, y no cambia si archiva su correo;
   - vie 4 dic: los títulos para el lote de lectura. Al marcarlo, «Pedidos a las…».
 
 **Correo (5):**
@@ -1065,7 +1072,7 @@ Sirve para el calendario de exámenes, las programaciones, las autorizaciones de
 - `dictado`: correo a la familia de Daniel M.: lleva una semana sin traer los deberes y se le ve cansado; propone una tutoría.
 - `banco`: E12.
 - `material`: E13, una situación de aprendizaje sobre alimentación saludable.
-- `plazos`: tus plazos y entregas.
+- `plazos`: tus plazos y entregas. La tutoría del jueves 19 sale de su correo a jefatura («Sacado con IA de: Tu correo a jefatura del martes 17»), con «Es a 4.ª hora, en tu guardia. Has pedido a jefatura que la cubra otra persona.». No dice si jefatura ha contestado, porque «Tus plazos» no cambia cuando jefatura actúa: eso lo dice la marca del jueves 19 en el Inicio. Su guardia del viernes 27 no va como plazo aparte, porque Laura no tiene nada que entregar: la nombra la salida («Jefatura organiza quién cubre esa clase y tu guardia de 3.ª.», de «Acuerdo del claustro del lunes 16», sin insignia), y el choque va en el Inicio. La fila y la marca del choque llevan a «Tus plazos», a esa salida.
 
 ### `orientacion` · Andrés Vidal · orden 5
 
@@ -1125,7 +1132,7 @@ Sirve para el calendario de exámenes, las programaciones, las autorizaciones de
   - esas celdas dicen «Por confirmar · Elección: Rosa Medina» y, confirmadas, pasan a aviso: «Ya no la cubres · La cubre Rosa Medina». Salen de su recuento («1 de 1 confirmadas»);
   - sin la 1.ª, su primera sesión es el apoyo de 2.ª: «9:45», «Apoyo de lectoescritura con 1.º B. Jefatura ha elegido a otra persona para la 1.ª.», con «Ver tu jornada»;
   - las fichas: «1 por llegar», con la nota que dice cuál y para cuál ha elegido jefatura a otra persona («Ya la tienes» al confirmar). Sin ninguna de las dos, «Ninguna», sin darse por hecha y con «Ver tu jornada» (`siNinguna`);
-  - la línea del carril dice qué ha elegido jefatura y qué le queda por confirmar o ha confirmado: «Para la 1.ª, jefatura ha elegido a otra persona. Ha confirmado que cubres la 6.ª y la salida.» (con la 3.ª, si jefatura se la da a él, en un intercambio);
+  - la línea del carril dice qué ha elegido jefatura y qué le queda por confirmar o ha confirmado: «Para la 1.ª, jefatura ha elegido a otra persona. Ha confirmado que cubres la 6.ª y la salida.» (y la 3.ª, si jefatura se la da a él);
   - sin la 1.ª ni la 6.ª, y sin nada para lo que jefatura lo haya elegido (`siNinguna`), el detalle del carril es «Cuatro apoyos. En 3.º B no cubres nada.» y la línea, con el triángulo, «Jefatura ha elegido a otra persona para la 1.ª y para la 6.ª de 3.º B. Tus apoyos no cambian.»;
   - sin la 6.ª, la fila de la salida pasa a «16:00: la salida de 3.º B ya no es tuya», para saber, sin enlace y sin sumar en el recuento.
 - **Si jefatura lo elige para la 3.ª (g2) o para el recreo (g3)** (`siElegido`), que DirectorIA proponía a Rosa Medina y a Teresa Gil:

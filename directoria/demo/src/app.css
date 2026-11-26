@@ -1,31 +1,66 @@
 /* DirectorIA · demo para enseñar en el colegio.
    Composición: acceso con una banda pizarra (la marca y el recorrido) y las tarjetas de perfil;
    dentro, cabecera en papel, menú lateral en salvia y el trabajo sobre tiza, en tarjetas de papel.
-   Un solo aspecto, claro, a propósito: es la pantalla de la app tal como la ve el colegio. */
+   Un solo aspecto, claro, a propósito: es la pantalla de la app tal como la ve el colegio.
+   Color: las superficies grandes siguen en tiza y papel, y la chispa es solo de la IA (la insignia) y de la raya del
+   antetítulo. El color va en acentos: el disco y el aro de los iconos y de las marcas de la agenda, los puntos del menú,
+   del correo y de los títulos, las marcas del calendario y las etiquetas, con la paleta de apoyo y un tono por tipo de
+   trabajo (data-cat; ver «Colores de la app» en el README). Sin filos ni bordes de color a un lado. Ningún color fuera
+   de estas variables. */
 /*FUENTES*/
 :root {
-  --pizarra: #17322C;
-  --pizarra-2: #21433B;
-  --pizarra-linea: #2E5A50;
-  --tiza: #F6F3EC;
-  --salvia: #E7EEE9;
-  --papel: #FFFDF8;
-  --linea: #D5DED9;
-  --texto: #41524D;
-  --texto-suave: #C9DAD4;
-  --chispa: #E07A3A;
-  --chispa-texto: #B4531C;
-  --chispa-suave: #FBE6D8;
+  /* Marca (tokens.json) */
+  --pizarra: #17322C;        /* fondo oscuro, títulos y lo confirmado */
+  --pizarra-2: #21433B;      /* tarjetas sobre pizarra */
+  --pizarra-linea: #2E5A50;  /* bordes sobre pizarra, viñetas y rótulos sobre salvia */
+  --tiza: #F6F3EC;           /* fondo claro principal */
+  --salvia: #E7EEE9;         /* fondo claro secundario: menú, lo hecho y lo que es para saber */
+  --papel: #FFFDF8;          /* tarjetas */
+  --linea: #D5DED9;          /* bordes y separadores decorativos */
+  --texto: #41524D;          /* texto de lectura sobre claro */
+  --texto-suave: #C9DAD4;    /* texto de lectura sobre pizarra */
+  --chispa: #E07A3A;         /* la IA sobre oscuro: punta de la insignia y foco sobre pizarra */
+  --chispa-texto: #B4531C;   /* la IA sobre claro: antetítulo y anillo de foco */
+  --chispa-suave: #FBE6D8;   /* fondo de los avisos y los choques (estado, no categoría) */
   /* Borde de los campos que se rellenan: 3,5:1 sobre papel y 3,2:1 sobre tiza (WCAG 1.4.11). No está en tokens.json. */
   --borde-campo: #7A8C85;
 
-  --fondo: var(--tiza);
-  --superficie: var(--papel);
-  --borde: var(--linea);
-  --tinta: var(--pizarra);
-  --cuerpo: var(--texto);
-  --acento: var(--chispa-texto);
-  --foco: var(--chispa-texto);
+  /* Paleta de apoyo (solo en la aplicación; propuesta en tokens-apoyo.json). Cinco tonos que casan con la pizarra y la
+     chispa: ni azules ni morados (regla 8 de la marca: nada de la «IA de moda») ni naranjas (el naranja es de la IA).
+     Cada uno en tres pasos: tinte (fondo claro: el disco de los iconos y de las marcas de la agenda, a 4 o más de la
+     salvia salvo el granate, que no cabe en sRGB), medio (el aro de los iconos, los puntos y los bordes: 3:1 o más sobre
+     papel, tiza y su tinte) y tinta (texto y marcas del calendario: 4,5:1 o más sobre papel, tiza y su tinte; también
+     sobre salvia, 6:1 o más, y sobre linea, 5:1 o más). Los medios están validados como paleta categórica
+     (validate_palette.js), también con todos los pares a la vez. El correo y la comunicación no tienen tono. */
+  --turquesa-tinte: #CEFAFE;  /* personas, guardias y el día: fondo del icono */
+  --turquesa-medio: #0398A1;  /* 3,4:1 sobre papel; 3,2:1 sobre tiza; 3,1:1 sobre su tinte */
+  --turquesa-tinta: #026167;  /* 7,1:1 sobre papel; 6,4:1 sobre su tinte */
+  --granate-tinte: #FDE8EE;   /* documentos y firmas: fondo del icono. Rosa muy claro: a 4,4 del tinte rosa */
+  --granate-medio: #84383D;   /* 7,9:1 sobre papel; 6,9:1 sobre su tinte. Rojo vino apagado: ni rojo de error ni chispa */
+  --granate-tinta: #70252C;   /* 10,4:1 sobre papel; 9,0:1 sobre su tinte */
+  --mostaza-tinte: #FAF4CD;   /* plazos y calendario: fondo del icono */
+  --mostaza-medio: #9D8B09;   /* 3,4:1 sobre papel; 3,1:1 sobre su tinte y sobre tiza. Amarillo, no naranja */
+  --mostaza-tinta: #615604;   /* 7,3:1 sobre papel; 6,6:1 sobre su tinte */
+  --rosa-tinte: #FDD6DC;      /* protocolos y casos, confidencial: fondo del icono, el más rosado */
+  --rosa-medio: #CB5672;      /* 4,0:1 sobre papel; 3,1:1 sobre su tinte */
+  --rosa-tinta: #86374B;      /* 7,8:1 sobre papel; 5,9:1 sobre su tinte */
+  --verde-tinte: #E0FBDC;     /* las funciones de recursos (gastos, banco y material): fondo del icono */
+  --verde-medio: #0B7B00;     /* 5,4:1 sobre papel; 4,9:1 sobre su tinte. Verde hoja: lejos de la pizarra */
+  --verde-tinta: #2C6427;     /* 7,0:1 sobre papel; 6,4:1 sobre su tinte */
+
+  /* Transparencias de la marca, para no dejar colores sueltos en las reglas */
+  --tiza-velo: rgb(246 243 236 / .16);   /* tramo vacío de un medidor sobre pizarra */
+  --foco-halo: rgb(180 83 28 / .25);     /* halo del campo de texto con el foco (chispa-texto) */
+  --velo: rgb(23 50 44 / .45);           /* fondo detrás de la ventana de confirmación (pizarra) */
+
+  /* Papeles de la marca (manual: tokens semánticos del tema claro) */
+  --fondo: var(--tiza);           /* fondo de la página */
+  --superficie: var(--papel);     /* tarjetas y ventanas */
+  --borde: var(--linea);          /* bordes decorativos */
+  --tinta: var(--pizarra);        /* títulos, nombres y datos */
+  --cuerpo: var(--texto);         /* texto de lectura */
+  --acento: var(--chispa-texto);  /* el antetítulo, la voz de la IA */
+  --foco: var(--chispa-texto);    /* anillo de foco: 3,8:1 o más sobre papel, tiza, salvia, chispa-suave y los tintes */
 
   --f-tit: 'Rubik', 'Segoe UI', system-ui, -apple-system, sans-serif;
   --f-txt: 'Nunito Sans', 'Segoe UI', system-ui, -apple-system, sans-serif;
@@ -41,12 +76,30 @@
   --radio-s: .5rem;
   --radio: .875rem;
   --radio-l: 1.25rem;
-  --sombra: 0 1px 2px rgb(23 50 44 / .05), 0 14px 36px -12px rgb(23 50 44 / .18);
-  --sombra-suave: 0 1px 2px rgb(23 50 44 / .04), 0 6px 18px -10px rgb(23 50 44 / .16);
+  --sombra: 0 1px 2px rgb(23 50 44 / .05), 0 14px 36px -12px rgb(23 50 44 / .18);        /* sombra de pizarra: papel, ficha y globo */
+  --sombra-suave: 0 1px 2px rgb(23 50 44 / .04), 0 6px 18px -10px rgb(23 50 44 / .16);  /* sombra de pizarra al pasar el ratón */
   --cabecera: 4rem;
   --menu: 15.5rem;
   color-scheme: light;
 }
+
+/* ---------- Color por significado ----------
+   Un tono por tipo de trabajo, el mismo en toda la app y nunca por posición. El motor pone data-cat: el color dice adónde
+   lleva una pieza (su función; si es de un caso confidencial, protocolos) y el icono, de qué trata. Lo que lleva al correo
+   («comunicacion») o a ningún sitio va sin tono, en los colores de la marca. En la pantalla de acceso, data-perfil: el tono
+   de la función principal de cada perfil (jefatura y quien sustituye comparten la turquesa: las guardias y la ficha).
+   Cada pieza pinta con --cat-tinte, --cat-medio y --cat-tinta; sin tono, con los colores de la marca. Los estados (hecho,
+   pendiente, aviso, para saber) no usan estos tonos: van en pizarra, salvia y chispa-suave, siempre con icono y texto.
+   El panel del día es de personas y guardias. «Lo que te necesita» y «Lo que viene» mezclan tipos: su cabecera va sin
+   tono, y cada fila y cada marca llevan el de la función a la que llevan. */
+[data-cat="personas"], [data-perfil="jefatura"], [data-perfil="sustituto"], .panel-dia { --cat-tinte: var(--turquesa-tinte); --cat-medio: var(--turquesa-medio); --cat-tinta: var(--turquesa-tinta); }
+[data-cat="documentos"], [data-perfil="direccion"] { --cat-tinte: var(--granate-tinte); --cat-medio: var(--granate-medio); --cat-tinta: var(--granate-tinta); }
+[data-cat="plazos"], [data-perfil="docente"] { --cat-tinte: var(--mostaza-tinte); --cat-medio: var(--mostaza-medio); --cat-tinta: var(--mostaza-tinta); }
+[data-cat="protocolos"], [data-perfil="orientacion"] { --cat-tinte: var(--rosa-tinte); --cat-medio: var(--rosa-medio); --cat-tinta: var(--rosa-tinta); }
+[data-cat="recursos"], [data-perfil="secretaria"] { --cat-tinte: var(--verde-tinte); --cat-medio: var(--verde-medio); --cat-tinta: var(--verde-tinta); }
+/* Sin tono: el correo y la comunicación (donde escribe la IA: su único color es la chispa) y los estados de la lista y de
+   la agenda (lo hecho y los choques van con el icono de su estado). No heredan el tono de lo que los rodea. */
+[data-cat="comunicacion"], .fila.hecha, .fila.choque, .ag-item.hecha, .ag-item.choque { --cat-tinte: initial; --cat-medio: initial; --cat-tinta: initial; }
 
 *, *::before, *::after { box-sizing: border-box; }
 html, body { height: 100%; }
@@ -104,19 +157,34 @@ button { cursor: pointer; }
 .tarjeta { background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio-l); padding: 1.25rem 1.375rem; min-width: 0; }
 .tarjeta > h2, .tarjeta > h3 { font-size: var(--t-l); font-weight: 600; line-height: 1.25; }
 .tarjeta-cabeza { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .5rem 1rem; margin-bottom: .875rem; }
+/* Acento de cabecera de las tarjetas: un punto del tono delante del título, como los del menú. Sin filos ni bordes de
+   color a un lado (componente Tarjeta de la marca). En el Inicio solo lo lleva el día (personas y guardias): «Lo que te
+   necesita» y «Lo que viene» mezclan tipos y van sin punto. En una función, sus tarjetas, salvo las del correo y la
+   comunicación (sin tono) y las que llevan la insignia de la IA: ahí el único color es la chispa. */
+.panel-dia > .panel-cabeza > h2::before,
+main[data-cat]:not([data-cat="comunicacion"]) .tarjeta:not(:has(.insignia)) > :is(h2, h3)::before,
+main[data-cat]:not([data-cat="comunicacion"]) .tarjeta:not(:has(.insignia)) > .tarjeta-cabeza > :is(h2, h3)::before,
+main[data-cat]:not([data-cat="comunicacion"]) .principal-dentro > section:not(.tarjeta) > h2::before {
+  content: ""; display: inline-block; width: .625rem; height: .625rem; margin-right: .5rem; border-radius: 50%;
+  background: var(--cat-medio); vertical-align: .06em;
+}
 
 .pastilla { display: inline-flex; align-items: center; gap: .375rem; padding: .125rem .625rem; border-radius: 999px; font-size: var(--t-xs); font-weight: 700; line-height: 1.5; white-space: nowrap; }
+/* Estados, en los colores de la marca y siempre con su glifo: hoy (reloj), pendiente o plazo (borde, «…» o banderín),
+   para saber («i»), hecho (✓) y aviso o falta (triángulo, en chispa-suave). Ninguno usa un tono de categoría. */
+.pastilla .glifo { width: .8125rem; height: .8125rem; }
 .p-hoy { background: var(--pizarra); color: var(--tiza); }
-.p-plazo, .p-pendiente, .p-pronto { background: transparent; color: var(--tinta); box-shadow: inset 0 0 0 1.5px var(--pizarra-linea); }
+.p-plazo, .p-pendiente, .p-pronto, .p-revisar, .p-curso { background: transparent; color: var(--tinta); box-shadow: inset 0 0 0 1.5px var(--pizarra-linea); }
 .p-info, .p-despues { background: var(--salvia); color: var(--tinta); }
 .p-hecho, .p-ok { background: var(--salvia); color: var(--tinta); }
-.p-aviso, .p-falta, .p-revisar { background: var(--chispa-suave); color: var(--pizarra); }
+.p-aviso, .p-falta { background: var(--chispa-suave); color: var(--pizarra); --hueco: var(--chispa-suave); }
 .visto { display: inline-block; flex: none; width: 1.125rem; height: 1.125rem; }
 .p-hecho .visto, .p-ok .visto { width: .95rem; height: .95rem; }
 
-.aviso { display: flex; gap: .75rem; align-items: flex-start; padding: .875rem 1rem; border-radius: var(--radio); background: var(--chispa-suave); color: var(--pizarra); }
-.aviso.info { background: var(--salvia); }
-.aviso.ok { background: var(--salvia); }
+.aviso { display: flex; gap: .75rem; align-items: flex-start; padding: .875rem 1rem; border-radius: var(--radio); background: var(--chispa-suave); color: var(--pizarra); --hueco: var(--chispa-suave); }
+.aviso > .glifo { width: 1.125rem; height: 1.125rem; margin-top: .2rem; }
+.aviso.info { background: var(--salvia); --hueco: var(--salvia); }
+.aviso.ok { background: var(--salvia); --hueco: var(--salvia); }
 .aviso strong { font-weight: 700; }
 
 .nota-ia { display: flex; gap: .625rem; align-items: flex-start; padding: .75rem .875rem; border-radius: var(--radio); background: var(--salvia); color: var(--tinta); font-size: var(--t-s); }
@@ -150,9 +218,13 @@ button { cursor: pointer; }
 }
 .recorrido button:hover { border-color: var(--texto-suave); }
 .recorrido button:focus-visible { outline-color: var(--chispa); }
+/* El número del paso, en el tono de su perfil: disco del tinte con su aro y la cifra en la tinta. Sobre la banda oscura
+   (pizarra-2), el aro va entre dos bandas del tinte, como el icono de la urgente: la primera sombra se pinta encima, así
+   que quedan 2 px de tinte por fuera, 2,5 px de aro y el tinte dentro. */
 .recorrido button::before {
   content: counter(paso); display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%;
-  background: var(--tiza); color: var(--pizarra); font-family: var(--f-tit); font-weight: 600; font-size: var(--t-s);
+  background: var(--cat-tinte, var(--tiza)); color: var(--cat-tinta, var(--pizarra)); font-family: var(--f-tit); font-weight: 600; font-size: var(--t-s);
+  box-shadow: inset 0 0 0 2px var(--cat-tinte, var(--tiza)), inset 0 0 0 4.5px var(--cat-medio, var(--tiza));
 }
 .recorrido b { display: block; color: var(--tiza); font-weight: 700; }
 .recorrido span { display: block; font-size: var(--t-s); line-height: 1.45; }
@@ -167,6 +239,9 @@ button { cursor: pointer; }
 .acceso-perfiles h2 { font-size: var(--t-3xl); font-weight: 600; line-height: 1.12; letter-spacing: -.015em; }
 .chip-demo { display: inline-flex; align-items: center; gap: .5rem; width: fit-content; padding: .25rem .75rem; border-radius: 999px; background: var(--salvia); color: var(--tinta); font-size: var(--t-s); font-weight: 700; }
 .perfiles { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 15.5rem), 1fr)); gap: 1rem; max-width: 64rem; }
+/* Cada perfil, con su tono (data-perfil): un punto delante del cargo, la persona en su tinta y el subrayado de «Entrar
+   en su panel». La ilustración va tal cual, sobre su disco linea (sin halo: la marca no retoca las ilustraciones), y la
+   tarjeta, sin filo de color. El mismo tono numera su paso en el recorrido. */
 .perfil {
   width: 100%; height: 100%; display: grid; grid-template-rows: auto auto 1fr auto; gap: .375rem; text-align: left;
   padding: 1.25rem; border: 1px solid var(--borde); border-radius: var(--radio-l); background: var(--superficie);
@@ -175,10 +250,11 @@ button { cursor: pointer; }
 .perfil:hover { border-color: var(--pizarra-linea); box-shadow: var(--sombra); transform: translateY(-2px); }
 .perfil img { width: 5.5rem; height: 5.5rem; margin-bottom: .375rem; }
 .perfil .cargo { font-family: var(--f-tit); font-weight: 600; font-size: var(--t-xl); color: var(--tinta); line-height: 1.2; }
-.perfil .quien { font-size: var(--t-s); font-weight: 700; color: var(--acento); }
+.perfil .cargo::before { content: ""; display: inline-block; width: .75rem; height: .75rem; margin-right: .5rem; border-radius: 50%; background: var(--cat-medio, var(--pizarra-linea)); vertical-align: .06em; }
+.perfil .quien { font-size: var(--t-s); font-weight: 700; color: var(--cat-tinta, var(--tinta)); }
 .perfil .que { font-size: var(--t-s); line-height: 1.45; color: var(--cuerpo); }
-.perfil .entrar { margin-top: .5rem; font-weight: 700; color: var(--tinta); text-decoration: underline; text-decoration-color: var(--linea); text-decoration-thickness: 2px; text-underline-offset: 3px; }
-.perfil:hover .entrar { text-decoration-color: var(--pizarra); }
+.perfil .entrar { margin-top: .5rem; font-weight: 700; color: var(--tinta); text-decoration: underline; text-decoration-color: var(--cat-medio, var(--linea)); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+.perfil:hover .entrar { text-decoration-color: var(--cat-tinta, var(--pizarra)); }
 .acceso-nota { max-width: 46rem; font-size: var(--t-s); color: var(--cuerpo); }
 
 /* ---------- App ---------- */
@@ -205,12 +281,19 @@ button { cursor: pointer; }
 .menu { background: var(--salvia); border-right: 1px solid var(--borde); padding: 1.25rem .875rem 1.5rem; display: flex; flex-direction: column; gap: 1rem; }
 .menu nav ul { list-style: none; display: grid; gap: .25rem; }
 .menu nav a {
-  display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+  display: flex; align-items: center; justify-content: space-between; gap: .625rem;
   min-height: 2.75rem; padding: .5rem .875rem; border-radius: var(--radio);
   color: var(--tinta); font-weight: 600; text-decoration: none;
 }
+/* Un punto de color por función (su tipo de trabajo), con un filo en la tinta de su tono: sobre salvia, la mostaza y la
+   turquesa no llegan a 3:1 (2,90 y 2,96), y el filo da 6:1 o más. El Inicio y el correo, sin tono, no llevan punto:
+   dejan su hueco para que los nombres queden alineados. En la que está abierta, el punto lleva además un aro de tiza. */
+.menu nav a::before { content: ""; flex: none; width: .625rem; height: .625rem; border-radius: 50%; background: var(--cat-medio, transparent); box-shadow: inset 0 0 0 1.5px var(--cat-tinta, transparent); }
+.menu nav a:not([data-cat])::before, .menu nav a[data-cat="comunicacion"]::before { visibility: hidden; }
+.menu nav a > span:first-of-type { flex: 1; min-width: 0; }
 .menu nav a:hover { background: var(--papel); }
 .menu nav a[aria-current="page"] { background: var(--pizarra); color: var(--tiza); }
+.menu nav a[aria-current="page"]::before { box-shadow: inset 0 0 0 1.5px var(--cat-tinta, transparent), 0 0 0 2px var(--tiza); }
 .menu nav a[aria-current="page"] .contador { background: var(--tiza); color: var(--pizarra); }
 .contador { min-width: 1.5rem; padding: 0 .4rem; border-radius: 999px; background: var(--papel); color: var(--tinta); font-size: var(--t-xs); font-weight: 700; text-align: center; line-height: 1.6; }
 .menu .grupo { padding: 0 .875rem; font-size: var(--t-xs); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--pizarra-linea); }
@@ -221,6 +304,11 @@ button { cursor: pointer; }
 .principal { min-width: 0; padding-block: 2rem 4rem; }
 .principal-dentro { max-width: 76rem; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
 .cabeza-vista { display: grid; grid-template-columns: minmax(0, 1fr); gap: .125rem; }
+/* Cabecera de una función: el icono de color de su tipo de trabajo delante del título, del alto de su primera línea */
+.cabeza-vista.con-icono { grid-template-columns: auto minmax(0, 1fr); column-gap: .875rem; }
+.cabeza-vista.con-icono > * { grid-column: 1 / -1; }
+.cabeza-vista.con-icono > .ico { grid-column: 1; align-self: start; margin-top: .5rem; font-size: var(--t-3xl); width: 1.12em; height: 1.12em; }
+.cabeza-vista.con-icono > .titulo-vista { grid-column: 2; }
 [data-foco]:focus { outline: none; }
 html:has(.principal-inicio) { scroll-padding-top: calc(var(--cabecera) + env(safe-area-inset-top, 0px) + .75rem); }
 /* Si una pantalla no se puede pintar */
@@ -234,7 +322,8 @@ html:has(.principal-inicio) { scroll-padding-top: calc(var(--cabecera) + env(saf
 .items { list-style: none; display: grid; gap: .25rem; }
 .item { display: grid; grid-template-columns: auto 1fr; gap: .25rem .75rem; align-items: start; padding: .625rem 0; border-top: 1px solid var(--borde); }
 .item:first-child { border-top: 0; padding-top: 0; }
-.item .pastilla { margin-top: .125rem; min-width: 5.25rem; justify-content: center; }
+/* Con su glifo, «Para saber» mide unos 6,75rem: todas las pastillas de la columna, igual de anchas */
+.item .pastilla { margin-top: .125rem; min-width: 6.75rem; justify-content: center; }
 .item .texto { color: var(--tinta); line-height: 1.5; }
 .item .ir { grid-column: 2; justify-self: start; font-size: var(--t-s); }
 .origen-inicio { margin-top: .75rem; }
@@ -262,8 +351,13 @@ html:has(.principal-inicio) { scroll-padding-top: calc(var(--cabecera) + env(saf
 @media (min-width: 1500px) { .cabeza-ilus { width: 8.5rem; height: 8.5rem; } }
 
 .panel { display: grid; gap: 1.25rem; min-width: 0; container: panel / inline-size; }
-.ico { display: inline-block; flex: none; width: 2.25rem; height: 2.25rem; }
-.ico-fondo { fill: var(--salvia); }
+/* Los iconos de interfaz siguen la marca: trazo redondo en pizarra (Iconografía). El tono de su tipo de trabajo va en el
+   disco: relleno del tinte y un aro del medio de 2,25 unidades de 24 (3 px en un icono de 32). El trazo del aro va
+   centrado en el borde del círculo y el icono se recorta en círculo (clip-path), no en el cuadrado del SVG: así el disco
+   queda redondo y el aro, igual de ancho en todo el borde. 3:1 o más sobre el tinte, la tiza y el papel. Sin tono, o si
+   son un estado (✓ hecho, «i» para saber, triángulo de un choque), trazo pizarra sobre salvia, sin aro. */
+.ico { display: inline-block; flex: none; width: 2.25rem; height: 2.25rem; clip-path: circle(50%); }
+.ico-fondo { fill: var(--cat-tinte, var(--salvia)); stroke: var(--cat-medio, none); stroke-width: 4.5; }
 .ico-trazo { fill: none; stroke: var(--pizarra); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
 .ico-trazo .f { fill: var(--pizarra); stroke: none; }
 .flecha { width: 1rem; height: 1rem; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
@@ -311,6 +405,11 @@ html:has(.principal-inicio) { scroll-padding-top: calc(var(--cabecera) + env(saf
   transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
 }
 .indicador:hover { border-color: var(--pizarra-linea); box-shadow: var(--sombra-suave); }
+/* Cada cifra, con el tono de la función a la que lleva: el disco y el aro de su icono y el subrayado de su acción. Los
+   medidores y las cuentas atrás siguen en pizarra: son magnitudes, y su forma (lleno, con borde, discontinuo) dice el
+   estado. La urgente, en pizarra. */
+.indicador[data-cat]:not(.es-hoy) .indicador-accion > span { text-decoration-color: var(--cat-medio, var(--linea)); }
+.indicador[data-cat]:not(.es-hoy):hover .indicador-accion > span { text-decoration-color: currentColor; }
 .indicador-cabeza { display: flex; align-items: center; gap: .625rem; min-width: 0; color: var(--tinta); font-size: var(--t-s); font-weight: 700; line-height: 1.25; }
 .indicador-cabeza .ico { width: 2rem; height: 2rem; }
 .indicador-etiqueta { min-width: 0; overflow-wrap: anywhere; hyphens: auto; }
@@ -348,14 +447,21 @@ html:has(.principal-inicio) { scroll-padding-top: calc(var(--cabecera) + env(saf
 .indicador.es-hoy .indicador-nota, .indicador.es-hoy .marca-ia { color: var(--texto-suave); }
 .indicador.es-hoy .indicador-accion > span { text-decoration-color: var(--pizarra-linea); }
 .indicador.es-hoy:hover .indicador-accion > span { text-decoration-color: currentColor; }
-.indicador.es-hoy .ico-fondo { fill: var(--pizarra-linea); }
-.indicador.es-hoy .ico-trazo { stroke: var(--tiza); }
-.indicador.es-hoy .ico-trazo .f { fill: var(--tiza); }
+/* La urgente sigue en pizarra; solo su icono lleva el tono de su tipo de trabajo (disco del tinte con su aro y trazo
+   pizarra, como en las demás). Sobre pizarra, y sobre pizarra-2 con el ratón encima, el medio del granate, del verde y
+   del rosa apenas se separa del fondo: el aro va entre dos bandas del tinte. El fondo del icono es el tinte, y el círculo
+   con su aro se encoge al 80 %: una banda de 1,2 unidades fuera, el aro (2,4) y el tinte dentro. Sin tono, disco
+   pizarra-linea y trazo tiza. */
+.indicador.es-hoy[data-cat]:not([data-cat="comunicacion"]) .ico { background: var(--cat-tinte); }
+.indicador.es-hoy[data-cat]:not([data-cat="comunicacion"]) .ico-fondo { stroke-width: 3; transform: scale(.8); transform-origin: 12px 12px; }
+.indicador.es-hoy:not([data-cat]) .ico-fondo, .indicador.es-hoy[data-cat="comunicacion"] .ico-fondo { fill: var(--pizarra-linea); }
+.indicador.es-hoy:not([data-cat]) .ico-trazo, .indicador.es-hoy[data-cat="comunicacion"] .ico-trazo { stroke: var(--tiza); }
+.indicador.es-hoy:not([data-cat]) .ico-trazo .f, .indicador.es-hoy[data-cat="comunicacion"] .ico-trazo .f { fill: var(--tiza); }
 .indicador.es-hoy .p-hoy { background: var(--tiza); color: var(--pizarra); }
 /* En pizarra: lo hecho, en tiza; lo actual, con borde de tiza; lo pendiente, un tono apagado con un filo claro (en el
    medidor y en los pasos del dictado), para que «0 de 4» y «Revisar · Enviar» se vean en el proyector (3:1) */
-.indicador.es-hoy .medidor i { background: rgb(246 243 236 / .16); box-shadow: inset 0 0 0 1px var(--texto-suave); }
-.indicador.es-hoy .tramos > span::before { background: rgb(246 243 236 / .16); box-shadow: inset 0 0 0 1px var(--texto-suave); }
+.indicador.es-hoy .medidor i { background: var(--tiza-velo); box-shadow: inset 0 0 0 1px var(--texto-suave); }
+.indicador.es-hoy .tramos > span::before { background: var(--tiza-velo); box-shadow: inset 0 0 0 1px var(--texto-suave); }
 .indicador.es-hoy .medidor i.lleno, .indicador.es-hoy .tramos .hecho::before, .indicador.es-hoy .tramos .queda::before { background: var(--tiza); box-shadow: none; }
 .indicador.es-hoy .medidor i.revisar, .indicador.es-hoy .medidor i.actual { background: transparent; box-shadow: inset 0 0 0 2px var(--tiza); }
 .indicador.es-hoy .medidor i.falta, .indicador.es-hoy .medidor i.condicional { background: transparent; box-shadow: none; border-color: var(--tiza); }
@@ -369,6 +475,8 @@ html:has(.principal-inicio) { scroll-padding-top: calc(var(--cabecera) + env(saf
   .indicador-cabeza .ico { width: 1.875rem; height: 1.875rem; }
   .indicadores > li:not(.entera) .accion-larga.con-corta { display: none; }
   .indicadores > li:not(.entera) .accion-corta { display: inline; }
+  /* En media tarjeta no cabe el reloj de «Hoy» junto a la cifra («10:15»): queda la palabra, en la tarjeta pizarra */
+  .indicadores > li:not(.entera) .p-hoy .glifo { display: none; }
 }
 /* Lo hecho en media tarjeta («Al día», «Visto bueno dado»): un poco más pequeño, para que no se salga */
 @container panel (width < 52rem) {
@@ -508,6 +616,8 @@ a.fila-dentro:hover .fila-texto b, a.ag-dentro:hover .fila-texto b { text-decora
 .fila-texto > .marca-ia { margin-top: .125rem; font-size: var(--t-xs); }
 .fila-dentro .flecha, .ag-dentro .flecha { color: var(--pizarra-linea); }
 .fila.hecha .fila-texto b, .ag-item.hecha .fila-texto b { color: var(--cuerpo); }
+/* Lo hecho y los choques son estados: su icono (✓, triángulo) va en los colores de la marca, no en el de su categoría
+   (ver «Color por significado», arriba). */
 .chip-fecha { padding: .125rem .5rem; border-radius: 999px; box-shadow: inset 0 0 0 1.5px var(--pizarra-linea); color: var(--tinta); font-size: var(--t-xs); font-weight: 700; white-space: nowrap; }
 /* Un choque: tarjeta de aviso en chispa suave, con el triángulo y la palabra «Choque» */
 .fila.choque, .fila.choque + .fila { border-top: 0; }
@@ -515,7 +625,7 @@ a.fila-dentro:hover .fila-texto b, a.ag-dentro:hover .fila-texto b { text-decora
 .fila.choque a.fila-dentro:hover, .ag-item.choque a.ag-dentro:hover { background: var(--chispa-suave); box-shadow: inset 0 0 0 2px var(--pizarra); }
 .fila.choque .ico-fondo { fill: var(--papel); }
 .etiqueta-choque { font-size: var(--t-xs); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--pizarra); }
-.ag-item.choque .glifo { --hueco: var(--chispa-suave); }
+.ag-item.choque .ag-forma { background: var(--papel); --hueco: var(--papel); }
 .ag-item.choque, .ag-item.choque + .ag-item { border-top: 0; }
 
 /* Lo que viene: el calendario al lado de la agenda; con sitio, la agenda en dos columnas */
@@ -560,8 +670,23 @@ a.fila-dentro:hover .fila-texto b, a.ag-dentro:hover .fila-texto b { text-decora
 .ag-cuando { font-family: var(--f-txt); font-size: var(--t-xs); font-weight: 700; line-height: 1.3; letter-spacing: .02em; color: var(--pizarra-linea); }
 .ag-items { list-style: none; display: grid; }
 .ag-item + .ag-item { border-top: 1px solid var(--borde); }
-.ag-dentro { display: grid; grid-template-columns: 1rem minmax(0, 1fr) auto; align-items: center; gap: .25rem .625rem; min-height: 2.75rem; padding: .375rem .5rem; margin: 0 -.5rem; border-radius: var(--radio); color: var(--cuerpo); text-decoration: none; }
-.ag-forma { display: inline-flex; align-self: start; margin-top: .1875rem; color: var(--tinta); }
+.ag-dentro { display: grid; grid-template-columns: 1.625rem minmax(0, 1fr) auto; align-items: center; gap: .25rem .625rem; min-height: 2.75rem; padding: .375rem .5rem; margin: 0 -.5rem; border-radius: var(--radio); color: var(--cuerpo); text-decoration: none; }
+/* Las marcas de la agenda: su forma dice qué es (banderín, calendario, triángulo, ✓) y su color, el tipo de trabajo de la
+   función a la que llevan. Van dentro de un disco de su tono, como los iconos de las filas: el tinte, un aro del medio
+   (3:1 o más sobre su tinte; los medios son los validados como paleta categórica) y la forma en la tinta (6:1 o más).
+   Si llevan al correo o a ningún sitio, y si son un estado (lo hecho), disco salvia sin aro y forma en la tinta de la
+   marca; el choque, disco papel sobre su fondo de aviso. */
+.ag-forma {
+  display: inline-grid; place-items: center; align-self: start; width: 1.625rem; height: 1.625rem; margin-top: -.125rem; border-radius: 50%;
+  background: var(--cat-tinte, var(--salvia)); box-shadow: inset 0 0 0 2.5px var(--cat-medio, transparent); color: var(--cat-tinta, var(--tinta));
+  --hueco: var(--cat-tinte, var(--salvia));
+}
+.ag-forma .glifo { width: .8125rem; height: .8125rem; }
+/* En el calendario, las marcas van en la tinta de su tono (6:1 o más sobre salvia y 5:1 o más sobre linea, con el ratón
+   encima: son glifos de 12 px). Ahí el color solo separa lo que tiene tono de lo que no: el tipo de trabajo se lee en la
+   agenda, al lado (ver «Límites» en el README). */
+.minical .glifo[data-cat] { color: var(--cat-tinta, var(--tinta)); }
+.minical .glifo.forma-aviso, .minical .glifo.forma-hecho { color: var(--tinta); }
 @container panel (min-width: 66rem) {
   .agenda { display: block; columns: 2; column-gap: 2.25rem; }
   .ag-dia { break-inside: avoid; margin-bottom: .875rem; }
@@ -600,12 +725,26 @@ a.fila-dentro:hover .fila-texto b, a.ag-dentro:hover .fila-texto b { text-decora
   border-left: 4px solid transparent;
 }
 .bandeja li:first-child .mensaje { border-top: 0; }
+/* La bandeja recorta lo que se sale (overflow): el anillo del foco va por dentro del mensaje, entero (4,2:1 sobre salvia) */
+.mensaje:focus-visible { outline-offset: -3px; }
 .mensaje:hover { background: var(--tiza); }
+/* El abierto, en salvia y con la barra pizarra (un estado, no un tono: ningún filo de color) */
 .mensaje[aria-current="true"] { background: var(--salvia); border-left-color: var(--pizarra); }
 .mensaje .fila1 { display: flex; justify-content: space-between; gap: .5rem; align-items: baseline; }
 .mensaje .de { flex: 1; min-width: 0; font-weight: 700; color: var(--tinta); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .mensaje .hora { flex: none; font-size: var(--t-xs); color: var(--cuerpo); }
 .mensaje .asunto { font-weight: 600; color: var(--tinta); font-size: var(--t-s); }
+/* Lo que lleva a una función toma su tono (regla 1 del README): el correo que lleva a una función con tono lleva su punto
+   delante del asunto, como en el menú, y en la lectura, el enlace «Ir a «…»» con el punto y el subrayado del medio. El
+   punto, con un filo de la tinta (sobre salvia, la mostaza y la turquesa no llegan a 3:1). Lo que ha escrito la IA (el
+   resumen, las respuestas) sigue sin tono: su único color es la chispa. */
+.mensaje[data-cat]:not([data-cat="comunicacion"]) .asunto::before,
+.enlace[data-cat]:not([data-cat="comunicacion"])::before {
+  content: ""; display: inline-block; width: .625rem; height: .625rem; margin-right: .5rem; border-radius: 50%;
+  background: var(--cat-medio); box-shadow: inset 0 0 0 1.5px var(--cat-tinta); vertical-align: .06em;
+}
+.enlace[data-cat]:not([data-cat="comunicacion"]) { text-decoration-color: var(--cat-medio); }
+.enlace[data-cat]:not([data-cat="comunicacion"]):hover { text-decoration-color: var(--cat-tinta); }
 .mensaje .extracto { font-size: var(--t-s); color: var(--cuerpo); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
 .mensaje .fila3 { display: flex; flex-wrap: wrap; gap: .375rem; margin-top: .25rem; align-items: center; }
 .mensaje.hecho .de, .mensaje.hecho .asunto { color: var(--cuerpo); font-weight: 600; }
@@ -619,9 +758,9 @@ a.fila-dentro:hover .fila-texto b, a.ag-dentro:hover .fila-texto b { text-decora
 .adjunto { display: inline-flex; align-items: center; gap: .375rem; padding: .25rem .75rem; border: 1px solid var(--borde); border-radius: var(--radio-s); background: var(--papel); font-size: var(--t-xs); font-weight: 700; color: var(--tinta); }
 .resumen-ia ul { list-style: none; display: grid; gap: .5rem; margin-top: .75rem; }
 .resumen-ia li { position: relative; padding-left: 1.125rem; color: var(--tinta); }
-.resumen-ia li::before { content: ""; position: absolute; left: 0; top: .62em; width: .4375rem; height: .4375rem; border-radius: 50%; background: var(--pizarra-linea); }
+.resumen-ia li::before { content: ""; position: absolute; left: 0; top: .62em; width: .4375rem; height: .4375rem; border-radius: 50%; background: var(--cat-medio, var(--pizarra-linea)); }
 .piden { margin-top: .875rem; padding-top: .875rem; border-top: 1px solid var(--borde); color: var(--tinta); }
-.piden b { display: block; font-size: var(--t-xs); letter-spacing: .06em; text-transform: uppercase; color: var(--pizarra-linea); margin-bottom: .125rem; }
+.piden b { display: block; font-size: var(--t-xs); letter-spacing: .06em; text-transform: uppercase; color: var(--cat-tinta, var(--pizarra-linea)); margin-bottom: .125rem; }
 details.original { border: 1px solid var(--borde); border-radius: var(--radio); background: var(--papel); }
 details.original summary { padding: .75rem 1rem; font-weight: 700; color: var(--tinta); cursor: pointer; }
 details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75rem; color: var(--cuerpo); }
@@ -640,7 +779,7 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
   width: 100%; min-height: 14rem; padding: .875rem 1rem; resize: vertical;
   border: 1.5px solid var(--borde-campo); border-radius: var(--radio); background: var(--papel); color: var(--tinta); line-height: 1.6;
 }
-.editor textarea:focus, .area:focus { border-color: var(--pizarra); outline: none; box-shadow: 0 0 0 3px rgb(180 83 28 / .25); }
+.editor textarea:focus, .area:focus { border-color: var(--pizarra); outline: none; box-shadow: 0 0 0 3px var(--foco-halo); }
 .acciones { display: flex; flex-wrap: wrap; gap: .625rem; align-items: center; }
 .acciones .ayuda { font-size: var(--t-s); color: var(--cuerpo); }
 .enviado { display: grid; gap: .5rem; }
@@ -664,7 +803,8 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .papel-doc p, .papel-doc li { color: var(--tinta); line-height: 1.65; }
 .papel-doc ul { display: grid; gap: .375rem; padding-left: 1.25rem; }
 .papel-doc .campo { display: grid; grid-template-columns: minmax(7rem, 10rem) 1fr; gap: .25rem 1rem; padding: .5rem 0; border-bottom: 1px dashed var(--borde); }
-.papel-doc .campo dt { font-size: var(--t-s); font-weight: 700; color: var(--chispa-texto); }
+/* Las etiquetas de los campos, en la tinta del tipo de trabajo (la chispa es solo de la IA) */
+.papel-doc .campo dt { font-size: var(--t-s); font-weight: 700; color: var(--cat-tinta, var(--pizarra-linea)); }
 .papel-doc .campo dd { margin: 0; color: var(--tinta); }
 .papel-doc .parrafo-edit { display: grid; gap: 1rem; padding: .5rem .625rem; margin: 0 -.625rem; border-radius: var(--radio-s); outline: 2px dashed var(--pizarra-linea); }
 .papel-doc .parrafo-edit:focus { outline: 3px solid var(--foco); }
@@ -678,7 +818,7 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 /* Aprobaciones */
 .propuestas { list-style: none; display: grid; gap: .75rem; }
 .propuesta { display: grid; grid-template-columns: minmax(8rem, 11rem) minmax(0, 1fr) auto; gap: .75rem 1.25rem; align-items: center; padding: 1rem 1.125rem; border: 1px solid var(--borde); border-radius: var(--radio-l); background: var(--papel); }
-.propuesta .cuando { font-family: var(--f-tit); font-weight: 600; color: var(--tinta); line-height: 1.3; }
+.propuesta .cuando { font-family: var(--f-tit); font-weight: 600; color: var(--cat-tinta, var(--tinta)); line-height: 1.3; }
 .propuesta .cuando small { display: block; font-family: var(--f-txt); font-weight: 600; color: var(--cuerpo); font-size: var(--t-s); }
 .propuesta .quien { display: flex; flex-wrap: wrap; gap: .5rem; align-items: center; }
 .propuesta select { min-height: 2.5rem; padding: .25rem 2rem .25rem .75rem; border: 1.5px solid var(--borde-campo); border-radius: var(--radio-s); background: var(--papel); color: var(--tinta); font-weight: 700; }
@@ -693,7 +833,7 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 /* Plazos */
 .plazos { list-style: none; display: grid; gap: .625rem; }
 .plazo { display: grid; grid-template-columns: 6.5rem minmax(0, 1fr) auto; gap: .375rem 1rem; align-items: start; padding: 1rem 1.125rem; border: 1px solid var(--borde); border-radius: var(--radio-l); background: var(--papel); }
-.plazo .fecha { font-family: var(--f-tit); font-weight: 600; color: var(--tinta); line-height: 1.25; }
+.plazo .fecha { font-family: var(--f-tit); font-weight: 600; color: var(--cat-tinta, var(--tinta)); line-height: 1.25; }
 .plazo .t { font-weight: 700; color: var(--tinta); }
 .plazo .d { font-size: var(--t-s); color: var(--cuerpo); margin-top: .125rem; }
 .plazo .meta { display: flex; flex-wrap: wrap; gap: .375rem .75rem; margin-top: .5rem; font-size: var(--t-xs); color: var(--cuerpo); align-items: center; }
@@ -719,7 +859,7 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .secciones h4 { font-size: var(--t-m); font-weight: 600; margin-bottom: .5rem; }
 .lista-puntos { list-style: none; display: grid; gap: .375rem; }
 .lista-puntos li { position: relative; padding-left: 1.125rem; font-size: var(--t-s); color: var(--tinta); }
-.lista-puntos li::before { content: ""; position: absolute; left: 0; top: .6em; width: .375rem; height: .375rem; border-radius: 50%; background: var(--pizarra-linea); }
+.lista-puntos li::before { content: ""; position: absolute; left: 0; top: .6em; width: .375rem; height: .375rem; border-radius: 50%; background: var(--cat-medio, var(--pizarra-linea)); }
 
 /* Banco */
 .buscador { display: flex; gap: .5rem; align-items: center; padding: .375rem .375rem .375rem 1.125rem; border: 2px solid var(--pizarra); border-radius: 999px; background: var(--papel); }
@@ -731,10 +871,11 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .chip.sel { background: var(--pizarra); border-color: var(--pizarra); color: var(--tiza); }
 .resultados { list-style: none; display: grid; gap: .625rem; }
 .resultado { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .375rem 1rem; align-items: center; padding: 1rem 1.125rem; border: 1.5px solid var(--borde); border-radius: var(--radio-l); background: var(--papel); }
-.resultado.primero { border-color: var(--pizarra-linea); }
+/* El primer resultado, con el borde del medio y el fondo del tinte de su tono */
+.resultado.primero { border-color: var(--cat-medio, var(--pizarra-linea)); background: var(--cat-tinte, var(--papel)); }
 .resultado .t { font-family: var(--f-tit); font-weight: 600; color: var(--tinta); font-size: var(--t-l); line-height: 1.3; }
 .resultado .m { font-size: var(--t-s); color: var(--cuerpo); }
-.resultado .cerca { font-size: var(--t-s); font-weight: 700; color: var(--pizarra-linea); text-align: right; }
+.resultado .cerca { font-size: var(--t-s); font-weight: 700; color: var(--cat-tinta, var(--pizarra-linea)); text-align: right; }
 .resultado .lado { display: grid; gap: .5rem; justify-items: end; grid-row: 1 / span 2; grid-column: 2; }
 .adaptado { display: grid; gap: .75rem; }
 .adaptado ol { list-style: none; display: grid; grid-template-columns: repeat(auto-fill, minmax(min(100%, 13rem), 1fr)); gap: .625rem; }
@@ -749,23 +890,23 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .impacto { display: grid; gap: .875rem; }
 .impacto .grande { font-family: var(--f-tit); font-size: 3rem; font-weight: 700; line-height: 1; color: var(--tinta); }
 .insignias { display: flex; flex-wrap: wrap; gap: .5rem; }
-.insignia-logro { padding: .25rem .75rem; border: 1.5px solid var(--pizarra-linea); border-radius: var(--radio-s); background: var(--tiza); color: var(--tinta); font-size: var(--t-s); font-weight: 700; }
+.insignia-logro { padding: .25rem .75rem; border: 1.5px solid var(--cat-medio, var(--pizarra-linea)); border-radius: var(--radio-s); background: var(--cat-tinte, var(--tiza)); color: var(--cat-tinta, var(--tinta)); font-size: var(--t-s); font-weight: 700; }
 .barra { height: .75rem; border-radius: 999px; background: var(--salvia); overflow: hidden; }
-.barra span { display: block; height: 100%; border-radius: 999px; background: var(--pizarra-linea); }
+.barra span { display: block; height: 100%; border-radius: 999px; background: var(--cat-medio, var(--pizarra-linea)); }
 .nota-oscura { padding: 1rem 1.25rem; border-radius: var(--radio-l); background: var(--pizarra); color: var(--tiza); font-family: var(--f-tit); font-weight: 500; font-size: var(--t-l); }
 
 /* Dictado */
 .dictado-panel { display: grid; gap: 1rem; }
 .microfono { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
 .microfono img { width: 4.5rem; height: 4.5rem; }
-.transcripcion { min-height: 6rem; padding: 1rem 1.125rem; border-radius: var(--radio); background: var(--tiza); border: 1px dashed var(--pizarra-linea); color: var(--tinta); font-style: italic; line-height: 1.6; }
+.transcripcion { min-height: 6rem; padding: 1rem 1.125rem; border-radius: var(--radio); background: var(--tiza); border: 1px dashed var(--cat-medio, var(--pizarra-linea)); color: var(--tinta); font-style: italic; line-height: 1.6; }
 .transcripcion.vacia { color: var(--cuerpo); font-style: normal; }
 .escuchando { display: inline-flex; align-items: center; gap: .5rem; font-weight: 700; color: var(--tinta); font-size: var(--t-s); }
-.escuchando i { width: .625rem; height: .625rem; border-radius: 50%; background: var(--pizarra-linea); animation: latido 1s ease-in-out infinite; }
+.escuchando i { width: .625rem; height: .625rem; border-radius: 50%; background: var(--cat-medio, var(--pizarra-linea)); animation: latido 1s ease-in-out infinite; }
 @keyframes latido { 50% { transform: scale(1.6); opacity: .5; } }
 
 /* Material */
-.nube { display: flex; gap: 1rem; align-items: center; padding: 1rem 1.125rem; border-radius: var(--radio-l); border: 1.5px dashed var(--pizarra-linea); background: var(--papel); }
+.nube { display: flex; gap: 1rem; align-items: center; padding: 1rem 1.125rem; border-radius: var(--radio-l); border: 1.5px dashed var(--cat-medio, var(--pizarra-linea)); background: var(--papel); }
 .nube img { width: 4rem; height: 4rem; flex: none; }
 .bloqueo { display: flex; gap: .75rem; align-items: flex-start; padding: .875rem 1rem; border-radius: var(--radio); background: var(--chispa-suave); color: var(--pizarra); }
 .bloqueo img { width: 2.5rem; height: 2.5rem; flex: none; }
@@ -779,10 +920,13 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .ficha-origen { display: flex; align-items: center; gap: .5rem; margin-top: .5rem; font-size: var(--t-s); color: var(--texto); }
 .ficha-origen .insignia { width: 1.125rem; height: 1.125rem; }
 .ficha-datos { display: grid; gap: 1rem; margin: 1.125rem 0 0; }
-.ficha-datos dt { font-size: var(--t-s); font-weight: 700; letter-spacing: .02em; color: var(--chispa-texto); }
+/* Como el componente de la marca, salvo las etiquetas: en la app van en la tinta de su tipo de trabajo, porque el
+   naranja es solo de la IA y la ficha la prepara DirectorIA con reglas */
+.ficha-datos dt { font-size: var(--t-s); font-weight: 700; letter-spacing: .02em; color: var(--cat-tinta, var(--pizarra-linea)); }
 .ficha-datos dd { margin: .125rem 0 0; font-size: .96875rem; line-height: 1.5; color: var(--pizarra); }
-.ficha-aviso { padding: .875rem 1rem; border-radius: var(--radio); background: var(--chispa-suave); }
-.ficha-aviso dt { color: var(--pizarra); }
+.ficha-aviso { padding: .875rem 1rem; border-radius: var(--radio); background: var(--chispa-suave); --hueco: var(--chispa-suave); }
+/* El aviso lleva el triángulo delante de su título, como los demás avisos: no se distingue solo por el fondo */
+.ficha-aviso dt { display: flex; align-items: center; gap: .375rem; color: var(--pizarra); }
 .ficha-pie { margin-top: 1.125rem; padding-top: .875rem; border-top: 1px solid var(--linea); font-size: var(--t-s); color: var(--texto); }
 .espera { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; }
 .espera img { width: 6rem; height: 6rem; }
@@ -793,7 +937,7 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .tabla-caja { overflow-x: auto; border: 1px solid var(--borde); border-radius: var(--radio-l); background: var(--papel); }
 table { width: 100%; border-collapse: collapse; font-size: var(--t-s); }
 th, td { padding: .75rem .875rem; text-align: left; border-bottom: 1px solid var(--borde); vertical-align: top; color: var(--tinta); }
-th { font-weight: 700; color: var(--pizarra-linea); font-size: var(--t-xs); letter-spacing: .04em; text-transform: uppercase; background: var(--tiza); white-space: nowrap; }
+th { font-weight: 700; color: var(--cat-tinta, var(--pizarra-linea)); font-size: var(--t-xs); letter-spacing: .04em; text-transform: uppercase; background: var(--tiza); white-space: nowrap; }
 tr:last-child td { border-bottom: 0; }
 td:first-child { font-weight: 700; }
 td.m-aviso { background: var(--chispa-suave); }
@@ -812,7 +956,7 @@ tbody th { white-space: nowrap; }
 .aviso-informe { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: .25rem .875rem; padding: 1rem 1.125rem; border: 1px solid var(--borde); border-radius: var(--radio-l); background: var(--papel); }
 .aviso-informe .t { font-weight: 700; color: var(--tinta); }
 .aviso-informe .d { grid-column: 2; font-size: var(--t-s); color: var(--cuerpo); }
-.aviso-informe .pastilla { min-width: 5.25rem; justify-content: center; margin-top: .125rem; }
+.aviso-informe .pastilla { min-width: 6.75rem; justify-content: center; margin-top: .125rem; }
 td.importe, th.importe { text-align: right; font-variant-numeric: tabular-nums; white-space: nowrap; }
 
 /* Traducción */
@@ -822,8 +966,8 @@ td.importe, th.importe { text-align: right; font-variant-numeric: tabular-nums; 
 .version.facil .doc-sub { font-size: var(--t-s); line-height: 1.5; }
 
 /* Ventana de confirmación y avisos */
-dialog.confirmar { width: min(36rem, calc(100vw - 2rem)); max-height: calc(100vh - 2rem); padding: 0; border: 0; border-radius: var(--radio-l); background: var(--papel); color: var(--cuerpo); box-shadow: 0 24px 64px -16px rgb(23 50 44 / .45); }
-dialog.confirmar::backdrop { background: rgb(23 50 44 / .45); }
+dialog.confirmar { width: min(36rem, calc(100vw - 2rem)); max-height: calc(100vh - 2rem); padding: 0; border: 0; border-radius: var(--radio-l); background: var(--papel); color: var(--cuerpo); box-shadow: 0 24px 64px -16px var(--velo); }
+dialog.confirmar::backdrop { background: var(--velo); }
 .confirmar-dentro { display: grid; gap: 1rem; padding: 1.5rem; }
 .confirmar-dentro h2 { font-size: var(--t-xl); font-weight: 600; }
 #confirmar-titulo:focus { outline: none; }
@@ -845,8 +989,12 @@ dialog.confirmar::backdrop { background: rgb(23 50 44 / .45); }
   .menu nav { overflow-x: auto; scrollbar-width: thin; }
   .menu nav ul { display: flex; gap: .25rem; width: max-content; padding: .25rem max(16px, env(safe-area-inset-right, 0px)) .25rem max(16px, env(safe-area-inset-left, 0px)); }
   .menu nav a { white-space: nowrap; min-height: 2.5rem; }
+  /* En fila no hace falta alinear los nombres: el Inicio y el correo, sin el hueco del punto */
+  .menu nav a:not([data-cat])::before, .menu nav a[data-cat="comunicacion"]::before { display: none; }
   /* La barra se desplaza de lado (overflow): el anillo del foco va por dentro de la píldora, para que no se recorte */
   .menu nav a:focus-visible { outline-offset: -3px; }
+  /* Por dentro de la píldora pizarra de la sección abierta, el anillo va en chispa (4,6:1 sobre pizarra), como en la banda oscura */
+  .menu nav a[aria-current="page"]:focus-visible { outline-color: var(--chispa); }
   .menu .grupo, .menu-pie { display: none; }
 }
 @media (max-width: 1100px) {
@@ -903,6 +1051,11 @@ dialog.confirmar::backdrop { background: rgb(23 50 44 / .45); }
   .cabeza-ilus { display: none; }
   .cabeza-inicio .origen { display: block; }
   .cabeza-inicio .origen .sep { display: none; }
+  /* En el móvil, la cabecera de una función va sin icono: la raya del antetítulo abre la línea, como pide la marca, y el
+     punto de color de la función ya está en el menú, justo encima. El título conserva todo el ancho. */
+  .cabeza-vista.con-icono { grid-template-columns: minmax(0, 1fr); }
+  .cabeza-vista.con-icono > .ico { display: none; }
+  .cabeza-vista.con-icono > .titulo-vista { grid-column: 1; }
 }
 @media (min-width: 641px) and (max-height: 800px) {
   .principal-inicio { padding-top: .75rem; }

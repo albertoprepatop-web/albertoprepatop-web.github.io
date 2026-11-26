@@ -181,6 +181,8 @@ function validarRol(r) {
     const fn = VALIDA[m.tipo];
     if (fn) fn(d, m, irValido);
   });
+
+  guardiasSinDevolver(r);
 }
 
 // ─── Panel de mando del Inicio ───
@@ -228,14 +230,17 @@ function refValida(r, donde, s) {
   else if (m.tipo === 'plazos') { if (!/^\d+$/.test(el) || +el >= (m.items || []).length) err(donde, `«${el}» no es un plazo de «${mid}» (se cuentan desde 0)`); }
   else err(donde, `un módulo de tipo ${m.tipo} no tiene elementos: quita «#${el}»`);
 }
-// Lo que cambia cuando lo seguido está hecho: si.titulo, si.detalle y si.estado (por defecto, «hecho»).
-function siValido(r, d, it) {
+// Lo que cambia cuando lo seguido está hecho: si.titulo, si.detalle, si.estado (por defecto, «hecho») y si.ir (null quita el
+// enlace: lo que ya está respondido y no se decide ahí).
+function siValido(r, d, it, irValido) {
   if (it.sigue !== undefined) sigueValido(r, d + '.sigue', it.sigue);
   if (it.si === undefined) return;
   if (it.sigue === undefined) err(d + '.si', 'solo tiene sentido con «sigue»');
   texto(d + '.si.titulo', it.si.titulo, { max: 70, opcional: true });
   texto(d + '.si.detalle', it.si.detalle, { max: 130, opcional: true });
   if (it.si.estado !== undefined) uno(d + '.si.estado', it.si.estado, ESTADOS_INICIO);
+  if (it.si.ir !== undefined && it.si.ir !== null && irValido) irValido(d + '.si.ir', it.si.ir);
+  for (const k of Object.keys(it.si)) if (!['titulo', 'detalle', 'estado', 'ir'].includes(k)) av(d + '.si', `«${k}» no lo cambia el motor (vale: titulo, detalle, estado e ir)`);
 }
 // siOtra: variantes para cuando jefatura elige a otra persona para lo que DirectorIA proponía a la persona del perfil.
 // Cada variante lleva «cuando» (una propuesta de aprobaciones, 'jefatura/guardias#g1', o varias) y solo los campos que cambian.
@@ -325,6 +330,65 @@ function privacidadInicio(r, ini) {
     const m = t.match(SALUD);
     if (m) err(donde, `«${m[0]}»: en el Inicio no van datos de salud de nadie (guion-de-datos.md §5). Di lo que hace falta para actuar («Sergio Prieto no viene»)`);
     if (r.id !== 'orientacion' && /Alumno\/a\s+[A-Z]\b/.test(t)) err(donde, 'fuera de orientación, el Inicio no nombra al alumno del caso: el Caso 2026-07 va solo por su número');
+  }
+}
+
+// Las guardias no se devuelven (guion-de-datos.md §3, E1): quien cubre una guardia no recupera esa hora más tarde, nadie le
+// «debe» una guardia a nadie y no hay intercambios. En cada pieza que habla de una guardia (una cifra, un carril del día, una
+// fila, una marca de la agenda, un correo con sus respuestas, una propuesta, un plazo o una ficha), ningún texto puede decir
+// que se devuelve (devolver, devuelve, devolvérsela…), ni hablar de su «vuelta», de lo que se hace «a cambio», de un
+// intercambio o de un «cambio de guardia», ni decir que alguien le debe una guardia a otro («le debo una guardia», «te la
+// debo»). Se mira la pieza entera y no la frase: en «Laura le devuelve la del viernes 27» no sale la palabra guardia, pero en
+// su correo sí. La hora de regreso de una salida («Vuelta a las 13:30») no cuenta, aunque la pieza nombre una guardia; «Vuelta
+// a la calma» tampoco, porque va en una pieza que no habla de guardias.
+const GUARDIA = /guardia/i;
+const DEVOLVER = new RegExp([
+  '\\bdev(?:ol|uel|uél)[\\wáéíóúüñ]*',                                  // devolver, devuelve, devolvérsela, devolución…
+  '\\bvueltas?\\b(?!\\s+a\\s+las?\\s+\\d)',                              // su «vuelta» (no la hora de regreso: «Vuelta a las 13:30»)
+  '\\ba cambio\\b',
+  '\\bintercambi[\\wáéíóúüñ]*',                                         // intercambio, intercambiar, intercambiamos…
+  '\\bcambios?\\s+de\\s+guardias?\\b',
+  // «le debo una guardia», «le debo a Rosa una guardia»; no «debe cubrir la guardia» ni «se debe a la guardia de 3.ª».
+  '(?<!\\bse\\s)\\bdeb(?:o|es|e|emos|éis|en|ía|ías|íamos|íais|ían)\\s+(?:a\\s+[^\\s.,;:]+(?:\\s+[^\\s.,;:]+)?\\s+)?(?:(?:una|la|esa|otra|dos|tres|\\d+)\\s+)?guardias?\\b',
+  '\\b(?:me|te|le|nos|os|les|se)\\s+las?\\s+deb[\\wáéíóúüñ]*',          // te la debo, se la debe
+].join('|'), 'i');
+function textosDe(x, donde, out = []) {
+  if (typeof x === 'string') out.push([donde, x]);
+  else if (Array.isArray(x)) x.forEach((y, i) => textosDe(y, `${donde}[${i}]`, out));
+  else if (x && typeof x === 'object') Object.keys(x).forEach((k) => textosDe(x[k], `${donde}.${k}`, out));
+  return out;
+}
+function piezasDe(r) {
+  const out = [];
+  const ini = r.inicio || {};
+  out.push(['inicio', { antetitulo: ini.antetitulo, titulo: ini.titulo, entradilla: ini.entradilla }]);
+  (ini.bloques || []).forEach((b, i) => (b.items || []).forEach((x, j) => out.push([`inicio.bloques[${i}].items[${j}]`, x])));
+  (ini.cifras || []).forEach((x, i) => out.push([`inicio.cifras[${i}]`, x]));
+  if (ini.dia) {
+    out.push(['inicio.dia', { titulo: ini.dia.titulo, aviso: ini.dia.aviso, nota: ini.dia.nota }]);
+    (ini.dia.carriles || []).forEach((x, i) => out.push([`inicio.dia.carriles[${i}]`, x]));
+  }
+  ((ini.lista || {}).items || []).forEach((x, i) => out.push([`inicio.lista.items[${i}]`, x]));
+  ((ini.agenda || {}).marcas || []).forEach((x, i) => out.push([`inicio.agenda.marcas[${i}]`, x]));
+  (r.correo || []).forEach((c) => out.push([`correo ${c.id}`, c]));
+  // Un módulo con propuestas, plazos o fichas: cada una es su pieza, y el resto del módulo (título, entradilla…), otra.
+  (r.modulos || []).forEach((m) => {
+    const hijos = Array.isArray(m.items) ? 'items' : Array.isArray(m.fichas) ? 'fichas' : null;
+    if (!hijos) { out.push([`módulo ${m.id}`, m]); return; }
+    const resto = Object.assign({}, m); delete resto[hijos];
+    out.push([`módulo ${m.id}`, resto]);
+    m[hijos].forEach((x, i) => out.push([`módulo ${m.id}.${hijos}[${i}]`, x]));
+  });
+  return out;
+}
+function guardiasSinDevolver(r) {
+  for (const [donde, pieza] of piezasDe(r)) {
+    const ts = textosDe(pieza, donde);
+    if (!ts.some(([, t]) => GUARDIA.test(t))) continue;
+    for (const [d, t] of ts) {
+      const m = t.match(DEVOLVER);
+      if (m) err(d, `«${m[0]}»: las guardias no se devuelven. Quien cubre una guardia no recupera esa hora y nadie le debe una guardia a nadie: di quién la cubre, sin «vuelta», ni «a cambio», ni intercambios (guion-de-datos.md §3, E1)`);
+    }
   }
 }
 
@@ -570,7 +634,7 @@ function validarPanel(r, ini, irValido) {
       uno(d + '.estado', it.estado, ESTADOS_INICIO);
       texto(d + '.fecha', it.fecha, { max: 12, opcional: true });
       irValido(d + '.ir', it.ir);
-      siValido(r, d, it);
+      siValido(r, d, it, irValido);
       extrasMarca(d, it);
       if (it.ia !== undefined && typeof it.ia !== 'boolean') err(d + '.ia', 'tiene que ser true o false');
       // siDictado: lo que cambia mientras el dictado que se sigue está dictado y por revisar.
@@ -636,7 +700,7 @@ function validarPanel(r, ini, irValido) {
       if (m.tipo === 'aviso' && !m.choque) av(d + '.tipo', 'el triángulo de aviso es para los choques: pon también choque: true');
       if (m.tipo === 'plazo' && /[úu]ltimo d[ií]a/i.test((m.titulo || '') + ' ' + (m.detalle || ''))) av(d, 'si la fuente dice «antes del…», escribe «antes de este día» y no «último día»');
       irValido(d + '.ir', m.ir);
-      siValido(r, d, m);
+      siValido(r, d, m, irValido);
       extrasMarca(d, m);
       aMediasValido(r, d, m, ['titulo', 'detalle', 'ir'], (dv, x) => {
         texto(dv + '.titulo', x.titulo, { max: 60, opcional: true });

@@ -81,27 +81,30 @@ DEMO.rol({
         { grupo: 'Hoy', icono: 'familia', titulo: 'Familia de Daniel M.: qué llevar a la salida', detalle: 'No les ha llegado la circular. Tienes tres respuestas propuestas.', estado: 'hoy', ir: 'correo:c-daniel', sigue: 'correo:c-daniel' },
         { grupo: 'Hoy', icono: 'familia', titulo: 'Madre de Amira: el chándal, en inglés', detalle: 'Amira tiene Educación Física mañana. Las respuestas están en inglés y traducidas.', estado: 'hoy', ir: 'correo:c-amira', sigue: 'correo:c-amira' },
         { grupo: 'Hoy', icono: 'microfono', titulo: 'Tutoría con la familia de Daniel M.', detalle: 'Dicta el correo y te llega redactado para revisar.', estado: 'hoy', ir: 'dictado', sigue: 'dictado', siDictado: { detalle: 'Ya lo has dictado. Te queda revisar el correo y enviarlo.' } },
-        // Sale de tu correo a jefatura del martes 17, como el plazo de «Tus plazos» («Sacado con IA»): lleva la insignia.
-        // El texto vale antes y después de que jefatura conteste (las dos respuestas piden otro día para la vuelta).
-        { grupo: 'Esta semana', icono: 'alerta', titulo: 'Tu guardia del viernes 27 coincide con la salida', detalle: 'Es la que ofreciste a Rosa Medina a cambio de la de mañana. Cierra con ella y con jefatura qué día se la devuelves.', estado: 'pendiente', choque: true, ia: true, ir: 'plazos', sigue: 'plazos#6', verbo: 'Resuelto' },
+        // El choque lo detecta DirectorIA cruzando tu horario con la salida: son reglas y fechas, así que va sin insignia
+        // (ia: false, aunque siga a tu correo en jefatura). Va en «Para saber»: es la semana que viene, la guardia la cubre
+        // otra persona y tú no haces nada. Pasa a hecho («Confirmado») cuando jefatura te contesta: las dos respuestas dicen
+        // que esa guardia también la cubre otra persona (#0,1). Si jefatura archiva tu correo, no cambia.
+        { grupo: 'Para saber', icono: 'alerta', titulo: 'Tu guardia del viernes 27 coincide con la salida', detalle: 'Estarás en el Jardín Botánico de 9:15 a 13:30, así que la cubre otra persona. Jefatura ya lo sabe.', estado: 'info', choque: true, ia: false, ir: 'plazos', sigue: 'jefatura/correo:c-laura#0,1', verbo: 'Confirmado', si: { detalle: 'Jefatura te ha confirmado que la cubre otra persona.' } },
         { grupo: 'Para saber', icono: 'libro', titulo: 'Plan de lectura desde enero', detalle: '20 minutos diarios en Primaria, de 14:30 a 14:50. Dirección te cuenta cómo se organiza.', estado: 'info', ir: 'correo:c-lectura' },
       ],
     },
 
     // fuente: 'correo' para los plazos que la IA ha sacado de un correo (llevan la insignia), como en «Tus plazos».
-    // La tutoría del jueves sigue al correo de Laura en jefatura: cuando jefatura lo responde (las dos respuestas
-    // aprueban el cambio del jueves), el detalle lo dice. Si jefatura lo archiva, sigue sin contestar.
+    // La tutoría del jueves sale de tu correo a jefatura y sigue a ese correo en jefatura: cuando jefatura lo responde (las
+    // dos respuestas dicen que tu guardia la cubre Rosa Medina), el detalle lo dice. Si jefatura lo archiva, sigue sin contestar.
+    // El choque del viernes 27 no sale de ningún correo, sino de tu horario y la salida: va sin fuente y sin insignia.
     agenda: {
       titulo: 'Lo que viene',
       desde: '2026-11-16',
       semanas: 3,
       marcas: [
-        { fecha: '2026-11-19', hora: '11:45', tipo: 'evento', titulo: 'Tutoría con una familia de 4.º A', detalle: 'Coincide con tu guardia. Pediste a jefatura que la haga Rosa Medina y aún no te ha contestado.', fuente: 'correo', ir: 'plazos', sigue: 'jefatura/correo:c-laura', si: { detalle: 'Coincide con tu guardia. Jefatura ya ha aprobado que la haga Rosa Medina.', estado: 'pendiente' } },
+        { fecha: '2026-11-19', hora: '11:45', tipo: 'evento', titulo: 'Tutoría con una familia de 4.º A', detalle: 'Coincide con tu guardia. Has pedido a jefatura que la cubra otra persona y aún no te ha contestado.', fuente: 'correo', ir: 'plazos', sigue: 'jefatura/correo:c-laura', si: { detalle: 'Coincide con tu guardia. Jefatura te ha contestado: la cubre Rosa Medina.', estado: 'pendiente' } },
         { fecha: '2026-11-20', tipo: 'plazo', titulo: 'Programación quincenal', detalle: 'Del 23 de noviembre al 4 de diciembre, con el modelo del ciclo.', fuente: 'correo', ir: 'plazos', sigue: 'plazos#3', verbo: 'Entregada' },
         { fecha: '2026-11-20', tipo: 'plazo', titulo: 'Autorizaciones de la salida, antes de las 14:00', detalle: 'Las de 4.º A firmadas, en secretaría y con la lista de quién falta.', fuente: 'correo', ir: 'plazos', sigue: 'plazos#4', verbo: 'Entregadas' },
         { fecha: '2026-11-27', hora: '9:15', tipo: 'evento', titulo: 'Salida al Jardín Botánico', detalle: 'Con 4.º. Vuelta a las 13:30.', ir: 'plazos' },
-        { fecha: '2026-11-27', tipo: 'aviso', choque: true, titulo: 'Tu guardia de 3.ª hora y la salida', detalle: 'Cierra con Rosa Medina y con jefatura qué día se la devuelves.', fuente: 'correo', ir: 'plazos', sigue: 'plazos#6', verbo: 'Resuelto' },
-        { fecha: '2026-12-04', tipo: 'plazo', titulo: 'Títulos para el lote de lectura', detalle: 'Si quieres libros concretos para 4.º A, pídeselos a la biblioteca antes de este día.', fuente: 'correo', ir: 'plazos', sigue: 'plazos#7', verbo: 'Pedidos' },
+        { fecha: '2026-11-27', tipo: 'aviso', choque: true, titulo: 'Tu guardia de 3.ª hora y la salida', detalle: 'Estarás en la salida, así que la cubre otra persona. Jefatura ya lo sabe.', ir: 'plazos', sigue: 'jefatura/correo:c-laura#0,1', verbo: 'Confirmado', si: { detalle: 'Jefatura te ha confirmado que la cubre otra persona.' } },
+        { fecha: '2026-12-04', tipo: 'plazo', titulo: 'Títulos para el lote de lectura', detalle: 'Si quieres libros concretos para 4.º A, pídeselos a la biblioteca antes de este día.', fuente: 'correo', ir: 'plazos', sigue: 'plazos#6', verbo: 'Pedidos' },
       ],
     },
   },
@@ -426,7 +429,8 @@ DEMO.rol({
         {
           fecha: 'jue 19 nov · 11:45',
           titulo: 'Tutoría con una familia de 4.º A',
-          detalle: 'Es a 4.ª hora, en tu guardia. Pediste a jefatura que la haga Rosa Medina y todavía no te ha contestado.',
+          // «Tus plazos» no cambia cuando jefatura contesta: lo de si ya te ha contestado lo dice la marca del jueves 19 en el Inicio.
+          detalle: 'Es a 4.ª hora, en tu guardia. Has pedido a jefatura que la cubra otra persona.',
           quien: 'Tú',
           origen: 'Tu correo a jefatura del martes 17',
           estado: 'pronto',
@@ -448,20 +452,14 @@ DEMO.rol({
           estado: 'pronto',
         },
         {
+          // Tu guardia de 3.ª no va como plazo aparte, porque no tienes nada que entregar: la nombra la salida, y el choque va
+          // en el Inicio. «De: Acuerdo del claustro», sin insignia: no lo saca la IA de un correo.
           fecha: 'vie 27 nov · 9:15',
           titulo: 'Salida al Jardín Botánico con 4.º',
-          detalle: 'Vuelta a las 13:30. Deja en la programación la tarea de tu Educación Física de 3.º A a 4.ª hora; jefatura organiza quién la cubre.',
+          detalle: 'Vuelta a las 13:30. Deja en la programación la tarea de tu Educación Física de 3.º A a 4.ª hora. Jefatura organiza quién cubre esa clase y tu guardia de 3.ª.',
           quien: 'Tú, con el equipo de 4.º',
           origen: 'Acuerdo del claustro del lunes 16',
           estado: 'despues',
-        },
-        {
-          fecha: 'vie 27 nov · 3.ª hora',
-          titulo: 'La guardia que ofreciste devolver a Rosa Medina',
-          detalle: 'Coincide con la salida: estarás fuera de 9:15 a 13:30. Busca con ella otro día y díselo a jefatura.',
-          quien: 'Tú y Rosa Medina',
-          origen: 'Tu correo a jefatura del martes 17',
-          estado: 'pronto',
         },
         {
           fecha: 'vie 4 dic',

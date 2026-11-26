@@ -75,9 +75,13 @@
   function esIA(m) { return m && m.ia !== undefined ? !!m.ia : !!TIPOS_IA[m && m.tipo]; }
   function sinInsignia(texto) { return h('span', { class: 'con-insignia suave' }, texto); }
   var NOMBRE_ESTADO = { hoy: 'Hoy', pendiente: 'Pendiente', hecho: 'Hecho', info: 'Para saber', plazo: 'Plazo', pronto: 'Pronto', despues: 'Más adelante', ok: 'Listo', falta: 'Falta', revisar: 'Revisar', aviso: 'Aviso', curso: 'En curso' };
+  // Cada estado lleva su glifo además del texto, nunca solo el color: ✓ hecho, «…» pendiente, banderín plazo, reloj hoy,
+  // triángulo aviso, «i» para saber. Los estados van en los colores de la marca, no en los de las categorías (app.css).
+  var GLIFO_ESTADO = { pendiente: 'espera', curso: 'espera', revisar: 'espera', plazo: 'plazo', pronto: 'plazo', despues: 'plazo', hoy: 'reloj', aviso: 'aviso', falta: 'aviso', info: 'info' };
   function pastilla(estado, texto) {
     var el = h('span', { class: 'pastilla p-' + estado });
     if (estado === 'hecho' || estado === 'ok') el.append(visto());
+    else if (GLIFO_ESTADO[estado]) el.append(glifo(GLIFO_ESTADO[estado]));
     el.append(document.createTextNode(texto || NOMBRE_ESTADO[estado] || estado));
     return el;
   }
@@ -290,17 +294,17 @@
         h('h2', null, 'Recorrido para enseñarla'),
         h('ol', null, RECORRIDO.filter(function (p) { return D.roles[p.rol]; }).map(function (p) {
           var destino = p.vista === 'inicio' || modulo(p.rol, p.vista) ? p.vista : 'inicio';
-          return h('li', null, h('button', { type: 'button', onclick: function () { ir(p.rol, destino); } },
+          return h('li', null, h('button', { type: 'button', 'data-perfil': p.rol, onclick: function () { ir(p.rol, destino); } },
             h('div', null, h('b', null, p.t), h('span', null, D.roles[p.rol].persona.cargo + ' · ' + p.d))));
         }))),
       h('div', { class: 'acceso-pie' },
-        h('p', { class: 'lema-corto' }, 'La IA propone. Vosotros decidís.'),
+        h('p', { class: 'lema-corto' }, 'DirectorIA propone. Vosotros decidís.'),
         h('p', null, 'Demo con datos ficticios. Nada se envía ni se guarda fuera de esta página.'),
         boton('Reiniciar la demo', reiniciar, { cls: 'boton-borde boton-pequeno' })));
 
     var lista = h('ul', { class: 'perfiles' }, PERFILES.map(function (p) {
       var cargo = p.persona.cargo;
-      return h('li', null, h('button', { class: 'perfil', type: 'button', 'aria-label': 'Entrar como ' + p.persona.nombre + ', ' + cargo, onclick: function () { ir(p.id, 'inicio'); } },
+      return h('li', null, h('button', { class: 'perfil', type: 'button', 'data-perfil': p.id, 'aria-label': 'Entrar como ' + p.persona.nombre + ', ' + cargo, onclick: function () { ir(p.id, 'inicio'); } },
         ilus(p.persona.ilustracion, null, ''),
         h('span', { class: 'cargo' }, cargo),
         h('span', { class: 'quien' }, p.persona.nombre + ' · ' + p.persona.detalle),
@@ -349,14 +353,15 @@
       boton([h('span', { class: 'cambiar-largo' }, 'Cambiar de perfil'), h('span', { class: 'cambiar-corto' }, 'Cambiar')], function () { ir(null); }, { cls: 'boton-borde boton-pequeno boton-cambiar', 'aria-label': 'Cambiar de perfil' }));
 
     var n = pendientes(rol);
-    var items = [{ id: 'inicio', t: 'Inicio' }, { id: 'correo', t: 'Correo', c: n }].concat((p.modulos || []).map(function (m) { return { id: m.id, t: m.menu }; }));
+    // Cada función lleva el punto de color de su tipo de trabajo (data-cat); el Inicio y el correo, sin tono.
+    var items = [{ id: 'inicio', t: 'Inicio' }, { id: 'correo', t: 'Correo', c: n, cat: 'comunicacion' }].concat((p.modulos || []).map(function (m) { return { id: m.id, t: m.menu, cat: categoriaModulo(m) }; }));
     var menu = h('aside', { class: 'menu' },
       h('nav', { 'aria-label': 'Secciones de ' + p.persona.cargo, onfocusin: verEnlaceMenu }, h('ul', null, items.map(function (it, i) {
-        var li = h('li', null, h('a', { href: enlace(rol, it.id), 'aria-current': it.id === vista ? 'page' : null, onclick: it.id === 'correo' ? function () { S.leyendo[rol] = false; guardar(); } : null },
+        var li = h('li', null, h('a', { href: enlace(rol, it.id), 'aria-current': it.id === vista ? 'page' : null, 'data-cat': it.cat || null, onclick: it.id === 'correo' ? function () { S.leyendo[rol] = false; guardar(); } : null },
           h('span', null, it.t), it.c ? h('span', { class: 'contador', 'aria-label': it.c + ' por responder' }, String(it.c)) : null));
         return i === 2 ? [h('li', { class: 'grupo', 'aria-hidden': 'true' }, 'Tus funciones'), li] : li;
       }))),
-      h('div', { class: 'menu-pie' }, h('p', { class: 'lema-corto' }, 'La IA propone. Tú decides.'), h('p', null, 'Demo con datos ficticios.'), h('button', { class: 'enlace', type: 'button', onclick: reiniciar }, 'Reiniciar la demo')));
+      h('div', { class: 'menu-pie' }, h('p', { class: 'lema-corto' }, 'DirectorIA propone. Tú decides.'), h('p', null, 'Demo con datos ficticios.'), h('button', { class: 'enlace', type: 'button', onclick: reiniciar }, 'Reiniciar la demo')));
 
     var contenido;
     if (vista === 'inicio') contenido = vistaInicio(rol);
@@ -364,7 +369,9 @@
     else contenido = vistaModulo(rol, modulo(rol, vista));
 
     var esPanel = vista === 'inicio' && p.inicio && p.inicio.cifras;
-    return h('div', { class: 'app', lang: 'es' }, cab, h('div', { class: 'cuerpo' }, menu, h('main', { class: 'principal marco' + (esPanel ? ' principal-inicio' : ''), id: 'contenido' }, h('div', { class: 'principal-dentro' }, contenido))));
+    // El tono de la función abierta (correo o módulo): lo toman el icono de la cabecera y los acentos de sus tarjetas.
+    var catVista = vista === 'correo' ? 'comunicacion' : vista !== 'inicio' ? categoriaModulo(modulo(rol, vista)) : null;
+    return h('div', { class: 'app', lang: 'es' }, cab, h('div', { class: 'cuerpo' }, menu, h('main', { class: 'principal marco' + (esPanel ? ' principal-inicio' : ''), id: 'contenido', 'data-cat': catVista || null }, h('div', { class: 'principal-dentro' }, contenido))));
   }
 
   // Con el menú en una fila que se desplaza de lado (hasta 1279 px y en el móvil), el enlace que recibe el foco entra
@@ -386,6 +393,13 @@
       h('h1', { class: 'titulo-vista', 'data-foco': '', tabindex: '-1' }, titulo),
       entradilla ? h('p', { class: 'entradilla' }, entradilla) : null,
       extra || null);
+  }
+  // La cabecera de una función lleva delante del título el icono de color de su tipo de trabajo (decorativo).
+  function conIcono(cab, nombre) {
+    if (!nombre) return cab;
+    cab.classList.add('con-icono');
+    cab.insertBefore(icono(nombre), cab.querySelector('.titulo-vista'));
+    return cab;
   }
 
   /* ---------- Inicio ----------
@@ -506,6 +520,35 @@
   function icono(nombre) {
     return svg('<svg class="ico" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle class="ico-fondo" cx="12" cy="12" r="12"/><g class="ico-trazo">' + (ICONOS[nombre] || ICONOS.info) + '</g></svg>');
   }
+  // Color por significado («Colores de la app» en el README): cada tipo de trabajo tiene su tono, el mismo en toda la app.
+  // El motor solo pone data-cat (y data-perfil en la pantalla de acceso); los tonos están en app.css. Una sola regla: el
+  // color dice adónde lleva una pieza (su función) y el icono, de qué trata. Lo que lleva al correo es «comunicacion»,
+  // que va sin tono (es donde escribe la IA, y su único color es la chispa); lo que no lleva a ninguna función, sin tono.
+  var CATEGORIA_TIPO = { dictado: 'comunicacion', traduccion: 'comunicacion', aprobaciones: 'personas', ficha: 'personas', documento: 'documentos',
+    tabla: 'documentos', plazos: 'plazos', protocolo: 'protocolos', informe: 'recursos', banco: 'recursos', material: 'recursos' };
+  // Dos funciones cuyo tipo no dice su trabajo: «Tu jornada» es el día (como el panel del día) y «Exámenes», un calendario.
+  var CATEGORIA_MODULO = { jornada: 'personas', examenes: 'plazos' };
+  // El icono de la cabecera de una función, si ninguna cifra del Inicio lleva a ella (o llevan varias), por su tipo.
+  var ICONO_TIPO = { dictado: 'microfono', traduccion: 'documento', aprobaciones: 'persona', ficha: 'documento', documento: 'documento', tabla: 'documento',
+    plazos: 'calendario', protocolo: 'carpeta', informe: 'carpeta', banco: 'libro', material: 'libro' };
+  // Lo confidencial (el protocolo y lo que es de un caso, como la citación que firma la directora) va siempre en su tono.
+  function categoriaModulo(m) { return m ? (m.confidencial ? 'protocolos' : CATEGORIA_MODULO[m.id] || CATEGORIA_TIPO[m.tipo] || null) : null; }
+  // Lo que lleva a una función (cifra, fila o marca) toma su tono: la cifra del dosier, su fila, su marca y
+  // «Dosier para inspección» en el menú van del mismo color. Se mira el enlace vigente: si cambia, el tono lo sigue.
+  function categoria(rol, ir) {
+    if (!ir) return null;
+    var s = String(ir), barra = s.indexOf('/');
+    var otro = barra > 0 ? s.slice(0, barra) : rol;
+    if (barra > 0) s = s.slice(barra + 1);
+    if (s === 'correo' || s.indexOf('correo:') === 0) return 'comunicacion';
+    return D.roles[otro] ? categoriaModulo(modulo(otro, s.split('#')[0])) : null;
+  }
+  // El icono de la cabecera de una función: el mismo dibujo que la cifra que lleva a ella en el Inicio; si no la hay, o si
+  // llevan varias (el protocolo: la entrevista con un reloj y el paso del caso con una carpeta), el de su tipo.
+  function iconoModulo(rol, m) {
+    var cs = ((D.roles[rol].inicio || {}).cifras || []).filter(function (c) { return c.ir === m.id; });
+    return cs.length === 1 && cs[0].icono ? cs[0].icono : ICONO_TIPO[m.tipo];
+  }
   // Glifos de estado y formas del calendario, sin disco: toman el color del texto (currentColor).
   // Banderín: plazo. Calendario: cita, salida o fecha del colegio. Triángulo: aviso. ✓: hecho. «…»: por confirmar.
   var GLIFOS = {
@@ -515,6 +558,7 @@
     hecho: '<path class="trazo grueso" d="M2.7 8.5l3.4 3.4 7.2-7.4"/>',
     espera: '<circle class="trazo" cx="8" cy="8" r="6.5"/><circle class="relleno" cx="5.2" cy="8" r="1.05"/><circle class="relleno" cx="8" cy="8" r="1.05"/><circle class="relleno" cx="10.8" cy="8" r="1.05"/>',
     reloj: '<circle class="trazo" cx="8" cy="8" r="6.5"/><path class="trazo" d="M8 4.6V8l2.4 1.6"/>',
+    info: '<circle class="trazo" cx="8" cy="8" r="6.5"/><path class="trazo grueso" d="M8 7.3v4"/><circle class="relleno" cx="8" cy="4.8" r="1.05"/>',
   };
   // «Cita, salida o fecha»: el calendario vale también para una fecha del colegio (el corte de la calle, el inicio de los exámenes).
   var NOMBRE_FORMA = { plazo: 'Plazo', evento: 'Cita, salida o fecha', aviso: 'Aviso', hecho: 'Hecho' };
@@ -846,6 +890,9 @@
   }
   function cifra(rol, c, v) {
     var destino = v.ir || c.ir;
+    // El tono de la función a la que lleva ahora: «Pendiente de tu firma» va en el de la citación (un caso) y, firmada,
+    // en el del acta.
+    var cat = categoria(rol, destino || c.cuenta);
     var larga = v.hecho ? accionHecha(rol, c, destino) : (v.accion || c.accion || etiquetaIr(rol, destino));
     // En el móvil, la acción corta. Hecha la cifra, «accionHecha», que ya es corta.
     var corta = v.hecho ? null : (v.accionCorta || c.accionCorta || null);
@@ -855,14 +902,14 @@
     var valorTexto = v.valorTexto || (typeof v.valor === 'string' ? v.valor : '');
     var leer = frases([c.etiqueta + ': ' + (v.hecho ? minuscula(fin) : minuscula(valorTexto) + (v.rotulo ? ' ' + v.rotulo : '') + (v.hoy ? ', hoy' : '')),
       typeof nota === 'string' ? nota : v.notaTexto, larga]);
-    var a = enlaceInicio(rol, destino, { class: 'indicador' + (v.hecho ? ' hecha' : v.hoy ? ' es-hoy' : ''), elegido: v.elegido }, [
+    var a = enlaceInicio(rol, destino, { class: 'indicador' + (v.hecho ? ' hecha' : v.hoy ? ' es-hoy' : ''), 'data-cat': cat || null, elegido: v.elegido }, [
       sr(leer),
       oculto(h('span', { class: 'indicador-cabeza' }, icono(c.icono), h('span', { class: 'indicador-etiqueta' }, c.etiqueta))),
       oculto(v.hecho ? h('span', { class: 'indicador-fila' }, h('span', { class: 'indicador-hecho' }, visto(), h('span', null, fin)))
         : h('span', { class: 'indicador-fila' },
           h('span', { class: 'indicador-valor' + (largo ? ' largo' : '') }, v.valor),
           v.rotulo ? h('span', { class: 'indicador-rotulo' + (v.rotulo.length > 12 ? ' largo' : '') }, ' ' + v.rotulo) : null,
-          v.hoy ? h('span', { class: 'pastilla p-hoy' }, 'Hoy') : null)),
+          v.hoy ? pastilla('hoy') : null)),
       oculto(h('span', { class: 'indicador-barra' }, v.hecho ? null : v.barra || null)),
       oculto(h('span', { class: 'indicador-nota' }, sinViuda(nota) || null)),
       oculto(h('span', { class: 'indicador-accion' },
@@ -1104,7 +1151,8 @@
     if (otro.ir !== undefined) x = Object.assign({}, x, { ir: otro.ir });
     if (!si && x.siDictado && e && (e.fase === 'dictado' || e.fase === 'borrador')) otro = x.siDictado;
     var estado = si ? otro.estado || 'hecho' : otro.estado || x.estado;
-    return { x: x, estado: estado, titulo: otro.titulo || x.titulo || x.texto,
+    // cat: el tono de la fila o de la marca, el de la función a la que lleva (su enlace vigente); sin función, ninguno.
+    return { x: x, estado: estado, cat: categoria(rol, x.ir), titulo: otro.titulo || x.titulo || x.texto,
       detalle: otro.detalle !== undefined ? otro.detalle : (si && estado === 'hecho' ? null : x.detalle),
       hora: e && e.hora, verbo: e && e.verbo, archivado: !!(si && e.archivado) };
   }
@@ -1164,7 +1212,7 @@
         ia ? h('span', { class: 'marca-ia' }, insignia(), 'Resumido con IA') : null,
         hecho ? h('span', { class: 'fila-hecho' }, pastilla('hecho', hechaCon)) : null)),
       oculto(h('span', { class: 'fila-marca' }, !hecho && it.fecha ? h('span', { class: 'chip-fecha' }, it.fecha) : null)), it.ir ? flecha() : null];
-    return h('li', { class: 'fila' + (hecho ? ' hecha' : '') + (choque ? ' choque' : '') + (it.ir ? '' : ' sin-enlace') },
+    return h('li', { class: 'fila' + (hecho ? ' hecha' : '') + (choque ? ' choque' : '') + (it.ir ? '' : ' sin-enlace'), 'data-cat': v.cat || null },
       it.ir ? enlaceInicio(rol, it.ir, { class: 'fila-dentro' }, dentro) : h('div', { class: 'fila-dentro' }, dentro));
   }
 
@@ -1214,7 +1262,7 @@
         fuente ? h('span', { class: 'marca-ia' }, insignia(), fuente) : null,
         hecho ? h('span', { class: 'fila-hecho' }, pastilla('hecho', hechaCon)) : null)),
       m.ir ? flecha() : null];
-    return h('li', { class: 'ag-item' + (hecho ? ' hecha' : '') + (choque ? ' choque' : '') },
+    return h('li', { class: 'ag-item' + (hecho ? ' hecha' : '') + (choque ? ' choque' : ''), 'data-cat': v.cat || null },
       m.ir ? enlaceInicio(rol, m.ir, { class: 'ag-dentro' }, dentro) : h('div', { class: 'ag-dentro' }, dentro));
   }
   function miniCalendario(rol, ag, porDia) {
@@ -1244,7 +1292,7 @@
           dentro = conGlobo(h('button', {
             type: 'button', class: 'minical-dia', tabindex: '-1', 'aria-label': diaParaLeer(iso) + (cu.hora ? ', a las ' + cu.hora : '') + '. ' + leer.map(function (t) { return t + trasTexto(t).trim(); }).join(' ') + ' Ver en la agenda.',
             onclick: function () { var x = document.getElementById('ag-' + iso); if (x) { x.scrollIntoView({ block: 'nearest', behavior: reducido ? 'auto' : 'smooth' }); x.focus({ preventScroll: true }); } },
-          }, h('span', null, num), h('span', { class: 'formas' }, formas.map(function (f) { return glifo(f, 'forma-' + f); }))),
+          }, h('span', null, num), h('span', { class: 'formas' }, formas.map(function (f, i) { var g = glifo(f, 'forma-' + f); if (vs[i].cat) g.setAttribute('data-cat', vs[i].cat); return g; }))),
           [cu.texto + (cu.hora ? ' · ' + cu.hora : ''), mayuscula(fechaLarga(iso))].concat(textos), false, ultima);
         } else if (iso === HOY) dentro = h('span', { class: 'minical-num' }, oculto(h('span', null, num)), sr(n + ', hoy'));
         else dentro = h('span', { class: 'minical-num' }, num);
@@ -1282,8 +1330,9 @@
       h('div', { class: 'bandeja-cabeza' }, h('h2', null, 'Bandeja de entrada'), h('span', { class: 'con-insignia suave' }, insignia(), 'Resumida con IA')),
       h('ul', null, lista.map(function (c) {
         var e = est[c.id];
+        // data-cat: el tono de la función a la que lleva el correo («Ir a…»), para el punto delante del asunto.
         return h('li', null, h('button', {
-          type: 'button', class: 'mensaje' + (e ? ' hecho' : ''), 'aria-current': c.id === sel ? 'true' : 'false', 'data-k': 'msg-' + c.id,
+          type: 'button', class: 'mensaje' + (e ? ' hecho' : ''), 'aria-current': c.id === sel ? 'true' : 'false', 'data-k': 'msg-' + c.id, 'data-cat': categoria(rol, c.ir) || null,
           onclick: function () { S.sel[rol] = c.id; S.leyendo[rol] = true; repintar(); var l = raiz.querySelector('.lectura h2'); if (l && window.matchMedia('(max-width: 900px)').matches) l.focus(); },
         },
           h('span', { class: 'fila1' }, h('span', { class: 'de' }, c.de), h('span', { class: 'hora' }, c.hora)),
@@ -1294,7 +1343,7 @@
             h('span', { class: 'pastilla p-info' }, c.categoria))));
       })));
 
-    var cabeza = cabezaVista('Correo', 'Tu correo, resumido', n ? (n === 1 ? 'Tienes un correo con respuestas propuestas.' : 'Tienes ' + n + ' correos con respuestas propuestas.') + ' Elige una, cámbiala si hace falta y envíala tú: nada sale sin que lo envíes.' : 'No te queda ningún correo por responder.');
+    var cabeza = conIcono(cabezaVista('Correo', 'Tu correo, resumido', n ? (n === 1 ? 'Tienes un correo con respuestas propuestas.' : 'Tienes ' + n + ' correos con respuestas propuestas.') + ' Elige una, cámbiala si hace falta y envíala tú: nada sale sin que lo envíes.' : 'No te queda ningún correo por responder.'), 'correo');
     return [cabeza, h('div', { class: 'correo' + (S.leyendo[rol] ? ' leyendo' : '') }, bandeja, actual ? lectura(rol, actual) : h('p', null, 'No hay correos.'))];
   }
 
@@ -1329,8 +1378,9 @@
         h('ul', null, (c.resumen || []).map(function (s) { return h('li', null, s); })),
         c.piden ? h('p', { class: 'piden' }, h('b', null, 'Qué te piden'), c.piden) : null),
     ];
-    if (c.nota) partes.push(h('div', { class: 'nota-ia' }, h('div', null, h('p', null, c.nota), m ? h('button', { class: 'enlace', type: 'button', style: 'margin-top:.375rem', onclick: function () { ir(rol, m.id); } }, irAModulo(m)) : null)));
-    else if (m) partes.push(h('div', null, h('button', { class: 'enlace', type: 'button', onclick: function () { ir(rol, m.id); } }, irAModulo(m))));
+    // El enlace a la función lleva su tono (data-cat), como en el menú; el dictado y las circulares adaptadas, ninguno.
+    if (c.nota) partes.push(h('div', { class: 'nota-ia' }, h('div', null, h('p', null, c.nota), m ? h('button', { class: 'enlace', type: 'button', style: 'margin-top:.375rem', 'data-cat': categoriaModulo(m) || null, onclick: function () { ir(rol, m.id); } }, irAModulo(m)) : null)));
+    else if (m) partes.push(h('div', null, h('button', { class: 'enlace', type: 'button', 'data-cat': categoriaModulo(m) || null, onclick: function () { ir(rol, m.id); } }, irAModulo(m))));
     partes.push(h('details', { class: 'original' }, h('summary', null, 'Ver el correo original'), h('div', { class: 'texto-original' }, parrafos(c.original))));
 
     if (e && e.estado === 'enviado') {
@@ -1397,7 +1447,7 @@
   function vistaModulo(rol, m) {
     var fn = MODULOS[m.tipo];
     var cuerpo = fn ? fn(rol, m) : h('p', null, 'Esta función todavía no está en la demo.');
-    return [cabezaVista(m.antetitulo, m.titulo, m.entradilla), m.confidencial ? bandaConfidencial(m.confidencial) : null].concat(cuerpo);
+    return [conIcono(cabezaVista(m.antetitulo, m.titulo, m.entradilla), iconoModulo(rol, m)), m.confidencial ? bandaConfidencial(m.confidencial) : null].concat(cuerpo);
   }
   function bandaConfidencial(texto) { return h('div', { class: 'confidencial' }, ilus('candado', null, ''), h('span', null, texto)); }
   function selloHecho(texto) { return h('p', { class: 'sello' }, visto(), texto); }
@@ -1438,7 +1488,7 @@
         h('p', { class: 'motivo' }, esIA(m) ? insignia() : null, elegido === it.propuesta ? it.motivo : 'Has elegido a ' + elegido + '. DirectorIA lo tendrá en cuenta al proponer el reparto de las próximas guardias. En la demo, el Inicio de cada perfil enseña a quien elijas; las fichas siguen la propuesta inicial.'),
         h('div', { class: 'lado' },
           e.hecho ? pastilla('hecho', 'Confirmado ' + e.hora) : boton(m.boton, function () { confirmarUno(it); }, { cls: 'boton-pequeno', 'data-k': 'ok-' + it.id }),
-          e.hecho && it.ficha ? h('span', { class: 'pastilla p-info' }, 'Ficha enviada a ' + elegido) : null));
+          e.hecho && it.ficha ? pastilla('hecho', 'Ficha enviada a ' + elegido) : null));
     }));
     return cab.concat([lista, todos ? h('div', { class: 'aviso ok' }, visto(), h('p', null, m.alConfirmar)) : h('p', { class: 'nota-ia' }, 'Nada cambia hasta que confirmes. Puedes elegir a otra persona en cada sesión.')]);
   };
@@ -1461,7 +1511,7 @@
         else out.push.apply(out, parrafos(txt));
       }
       else if (b.tipo === 'lista') out.push(h('ul', null, b.items.map(function (x) { return h('li', null, x); })));
-      else if (b.tipo === 'aviso') out.push(h('div', { class: 'aviso' }, h('p', null, b.texto)));
+      else if (b.tipo === 'aviso') out.push(h('div', { class: 'aviso' }, glifo('aviso'), h('p', null, b.texto)));
     });
     return out;
   }
@@ -1510,6 +1560,14 @@
     }));
   };
 
+  // El estado de un documento del protocolo viene en palabras («Firmado el lun 16», «Para revisar»): el motor le pone el
+  // glifo de su estado (✓, «…» o «i»), para que lo hecho y lo pendiente no se distingan solo leyendo. El texto no cambia.
+  function estadoDocumento(t) {
+    if (/^(firmad|revisad|enviad|hech|list)/i.test(t)) return 'hecho';
+    if (/^en curso/i.test(t)) return 'curso';
+    if (/^(para revisar|pendiente|por )/i.test(t)) return 'pendiente';
+    return 'info';
+  }
   MODULOS.protocolo = function (rol, m) {
     var pasos = h('section', { class: 'tarjeta' }, h('h2', { style: 'margin-bottom:.75rem' }, 'Pasos del protocolo'),
       h('ol', { class: 'pasos' }, m.pasos.map(function (p, i) {
@@ -1525,7 +1583,7 @@
         h('div', { class: 'secciones' }, m.actual.secciones.map(function (s) { return h('div', null, h('h4', null, s.titulo), h('ul', { class: 'lista-puntos' }, s.items.map(function (x) { return h('li', null, x); }))); }))),
       h('section', { class: 'tarjeta' },
         h('div', { class: 'tarjeta-cabeza' }, h('h2', null, 'Documentos preparados'), sinInsignia('Con las plantillas del protocolo')),
-        h('ul', { class: 'piezas' }, m.documentos.map(function (d) { return h('li', { class: 'pieza' }, h('span', { class: 'n' }, d.nombre), h('span', { class: 'pastilla p-info' }, d.estado)); }))),
+        h('ul', { class: 'piezas' }, m.documentos.map(function (d) { return h('li', { class: 'pieza' }, h('span', { class: 'n' }, d.nombre), pastilla(estadoDocumento(d.estado), d.estado)); }))),
       h('p', { class: 'nota-ia' }, m.pie));
     return h('div', { class: 'protocolo' }, pasos, actual);
   };
@@ -1552,7 +1610,7 @@
         h('form', { class: 'buscador', role: 'search', onsubmit: function (ev) { ev.preventDefault(); if ((est.consulta || m.consulta).trim() !== m.consulta.trim()) { est.consulta = m.consulta; repintar(); avisar('En la demo hay una sola búsqueda', 'Te enseñamos la del ejemplo: «' + m.consulta + '».'); return; } est.buscado = true; repintar(); avisar('Búsqueda hecha', 'Ordenada por lo que más se parece a lo que pides.'); } },
           h('label', { class: 'sr', for: 'buscar-' + m.id }, 'Qué buscas'), entrada, h('button', { class: 'boton', type: 'submit' }, 'Buscar')),
         h('div', { class: 'chips' }, h('span', { class: 'con-insignia' }, insignia(), 'Entendido como'), m.entendido.map(function (c) { return h('span', { class: 'chip' }, c); })),
-        h('div', { class: 'aviso' }, h('p', null, m.aviso)),
+        h('div', { class: 'aviso' }, glifo('aviso'), h('p', null, m.aviso)),
         h('ul', { class: 'resultados' }, res),
         est.adaptado && adaptar ? h('section', { class: 'tarjeta adaptado' },
           h('div', { class: 'tarjeta-cabeza' }, h('h2', null, adaptar.adaptar.titulo), conInsignia('Preparado con IA · pendiente de revisar', true)),
@@ -1729,7 +1787,8 @@
     var partes = [h('div', { class: 'fichas' }, m.fichas.map(function (f) {
       return h('article', { class: 'ficha', 'aria-label': 'Ficha de ' + f.sesion },
         h('div', { class: 'ficha-cabeza' }, h('p', { class: 'ficha-sesion' }, f.sesion), h('p', { class: 'ficha-hora' }, f.hora), h('p', { class: 'ficha-origen' }, esIA(m) ? insignia() : null, f.origen)),
-        h('dl', { class: 'ficha-datos' }, f.datos.map(function (d) { return h('div', { class: d.aviso ? 'ficha-aviso' : null }, h('dt', null, d.dt), h('dd', null, d.dd)); })),
+        // Un aviso de la ficha (salud, recogida) lleva el triángulo delante de su título, como los demás avisos.
+        h('dl', { class: 'ficha-datos' }, f.datos.map(function (d) { return h('div', { class: d.aviso ? 'ficha-aviso' : null }, h('dt', null, d.aviso ? [glifo('aviso'), d.dt] : d.dt), h('dd', null, d.dd)); })),
         h('p', { class: 'ficha-pie' }, f.pie));
     }))];
     if (m.registro) {
@@ -1764,7 +1823,7 @@
         }));
       }))));
     var avisos = h('ul', { class: 'lista-avisos' }, m.avisos.map(function (a) {
-      return h('li', { class: 'aviso' + (a.estado === 'aviso' ? '' : ' ' + a.estado) }, a.estado === 'ok' ? visto() : a.estado === 'aviso' ? h('span', { class: 'marca-celda', 'aria-hidden': 'true' }, '!') : (esIA(m) ? insignia() : null), h('p', null, a.texto));
+      return h('li', { class: 'aviso' + (a.estado === 'aviso' ? '' : ' ' + a.estado) }, a.estado === 'ok' ? visto() : a.estado === 'aviso' ? h('span', { class: 'marca-celda', 'aria-hidden': 'true' }, '!') : (esIA(m) ? insignia() : glifo('info')), h('p', null, a.texto));
     }));
     var partes = [avisos, tabla];
     if (m.boton) partes.push(est.hecho ? selloHecho(m.alTerminar + ' (' + personaDe(rol).nombre + ', hoy a las ' + est.hora + ')') :

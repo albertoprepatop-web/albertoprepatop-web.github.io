@@ -271,6 +271,36 @@ if (roles.includes('direccion')) {
     await q.context().close();
   }
 }
+// 6. La guardia de Laura Sánchez (las guardias no se devuelven): si jefatura le contesta, el Inicio de Laura lo dice (el
+//    jueves 19, «la cubre Rosa Medina»; el choque de su guardia del viernes 27, ✓ en la lista y en la agenda) y en jefatura
+//    ese choque sigue abierto, sin enlace, porque falta decidir quién la cubre. Si jefatura archiva el correo, nada cambia.
+if (roles.includes('jefatura') && roles.includes('docente') && await p.evaluate(() => window.DEMO.roles.jefatura.correo.some((c) => c.id === 'c-laura'))) {
+  for (const accion of ['responder', 'archivar']) {
+    const q = await nueva(1440, 900);
+    await ir(q, 'jefatura-correo');
+    await q.locator('[data-k="msg-c-laura"]').click(); await q.waitForTimeout(80);
+    if (accion === 'responder') {
+      await q.locator('[data-k="enviar-c-laura"]').click(); await q.waitForTimeout(80);
+      await q.locator('#confirmar-si').click(); await q.waitForTimeout(150);
+    } else { await q.locator('[data-k="archivar-c-laura"]').click(); await q.waitForTimeout(150); }
+    // Los textos llevan espacios de no separación («viernes 27»): se buscan con \s.
+    const dia = (f) => q.evaluate((x) => { const d = document.getElementById('ag-' + x); return d ? [...d.querySelectorAll('.ag-item')].map((li) => ({ t: li.textContent.replace(/\s+/g, ' '), hecha: li.classList.contains('hecha'), choque: li.classList.contains('choque'), enlace: !!li.querySelector('a') })) : []; }, f);
+    await ir(q, 'docente'); await q.mouse.move(1, 1);
+    const d19 = (await dia('2026-11-19')).map((x) => x.t).join(' '), d27 = await dia('2026-11-27');
+    const fila = await q.evaluate(() => { const li = [...document.querySelectorAll('.panel-lista .fila')].find((x) => /viernes\s27/.test(x.textContent)); return li ? li.classList.contains('hecha') : null; });
+    const respondido = accion === 'responder';
+    if (respondido !== /la cubre Rosa Medina/.test(d19)) errores.push(`[guardia de Laura, ${accion}] el jueves 19 de docente no dice lo que toca: ${d19}`);
+    if (fila === null || !d27.some((x) => x.choque || x.hecha)) errores.push(`[guardia de Laura, ${accion}] en docente no sale el choque del viernes 27 en la lista o en la agenda`);
+    else if (respondido !== d27.some((x) => x.hecha) || respondido !== fila) errores.push(`[guardia de Laura, ${accion}] en docente, el choque del viernes 27 ${respondido ? 'no pasa' : 'pasa'} a ✓`);
+    await foto(q, `x-docente-guardia-${accion === 'responder' ? 'respondida' : 'archivada'}`);
+    await ir(q, 'jefatura'); await q.mouse.move(1, 1);
+    const j27 = (await dia('2026-11-27')).find((x) => x.choque) || {};
+    if (j27.hecha || !j27.choque) errores.push(`[guardia de Laura, ${accion}] en jefatura, el choque del viernes 27 no sigue abierto`);
+    if (respondido === j27.enlace) errores.push(`[guardia de Laura, ${accion}] en jefatura, el choque del viernes 27 ${respondido ? 'sigue llevando al correo ya respondido' : 'no lleva al correo'}`);
+    if (respondido) await foto(q, 'x-jefatura-guardia-respondida');
+    await q.context().close();
+  }
+}
 
 // Interacciones clave
 if (roles.includes('jefatura')) {
