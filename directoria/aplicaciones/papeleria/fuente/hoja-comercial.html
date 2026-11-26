@@ -60,6 +60,8 @@
   }
   h2 { font: 600 15pt/18pt 'Rubik', Arial, sans-serif; color: var(--pizarra); margin-bottom: 3.6mm; }
   section { margin-top: 7mm; }
+  /* En la página 2, algo menos de aire entre bloques: así caben las cifras con IVA y las condiciones */
+  .pagina + .pagina section { margin-top: 5.5mm; }
 
   /* ---------------------------------------------------------------- página 1 */
   .portada {
@@ -126,19 +128,23 @@
   .plan { border: 0.8pt solid var(--linea); border-radius: 3mm; padding: 4.4mm 5mm 4.2mm; background: var(--papel); }
   .plan h3 { font: 600 12.5pt/15pt 'Rubik', Arial, sans-serif; color: var(--pizarra); }
   .plan .tam { font-size: 9.5pt; line-height: 13pt; margin-top: 0.6mm; }
-  .plan .cuota { margin-top: 3.4mm; font-size: 9pt; line-height: 12pt; }
-  .plan .importe { font: 700 19pt/22pt 'Rubik', Arial, sans-serif; color: var(--pizarra); }
+  .plan .importe { margin-top: 2mm; font: 700 19pt/22pt 'Rubik', Arial, sans-serif; color: var(--pizarra); }
   .plan .importe small { font: 400 9.5pt/12pt 'Nunito Sans', Arial, sans-serif; color: var(--texto); }
   .plan .inicial {
-    margin-top: 3.2mm; padding-top: 3mm; border-top: 0.5pt solid var(--linea);
+    margin-top: 2.6mm; padding-top: 2.6mm; border-top: 0.5pt solid var(--linea);
     display: flex; justify-content: space-between; align-items: baseline; font-size: 9.5pt;
   }
   .plan .inicial b { font: 600 11.5pt/14pt 'Rubik', Arial, sans-serif; color: var(--pizarra); }
-  .plan .inicial-nota { font-size: 8.5pt; line-height: 11.5pt; margin-top: 0.4mm; }
-  .condiciones { margin-top: 3.6mm; }
+  /* El mismo importe con IVA, debajo de cada cifra: «Con IVA» a la izquierda y la cifra a la derecha */
+  .plan .iva {
+    font-size: 8.5pt; line-height: 11.5pt; margin-top: 0.4mm;
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .plan .iva b { font-weight: 700; color: var(--pizarra); }
+  .condiciones { margin-top: 3mm; }
   .condiciones b { color: var(--pizarra); font-weight: 700; }
 
-  .no-hace { display: grid; grid-template-columns: 1fr 1fr; column-gap: 8mm; row-gap: 2mm; }
+  .no-hace { display: grid; grid-template-columns: 1fr 1fr; column-gap: 8mm; row-gap: 1.4mm; }
   .no-hace li {
     position: relative; padding: 0 0 0 5.2mm;
   }
@@ -194,7 +200,7 @@
     <div>
       <h2>Dónde están los datos</h2>
       <ul class="vinetas">
-        <li>La IA trata los datos de vuestros alumnos en un servidor dentro del colegio. La copia de seguridad, cifrada, está en la UE. Los correos salen por la cuenta del propio colegio, y el mantenimiento a distancia queda registrado.</li>
+        <li>La aplicación y los datos están en un servidor dentro del colegio, y la IA los trata ahí. La copia de seguridad, cifrada, está en la UE. Los correos salen por la cuenta del propio colegio, y el mantenimiento a distancia queda registrado.</li>
         <li>El colegio sigue siendo el responsable del tratamiento. Os entregamos los borradores de la evaluación de impacto y del registro de actividades: los revisa vuestro delegado de protección de datos y los aprueba el colegio.</li>
         <li>DirectorIA propone y una persona decide. Nunca evalúa, puntúa ni clasifica a ningún alumno.</li>
         <li>El módulo opcional de Claude, en la nube, es solo para material didáctico, no para datos de alumnos.</li>
@@ -216,7 +222,7 @@
     <div class="pasos">
       <div class="paso"><div class="n">1</div><h3>Demo en el colegio</h3><p>45 minutos con una mañana de ejemplo, sin datos reales: una sustitución, su ficha y un acta.</p></div>
       <div class="paso"><div class="n">2</div><h3>Análisis de gastos</h3><p>Gratis y antes de firmar, con facturas y contratos solo de empresas, sin nóminas. El&nbsp;informe es vuestro.</p></div>
-      <div class="paso"><div class="n">3</div><h3>Instalación en un día</h3><p>El servidor llega montado. Cargamos los datos y creamos los usuarios.</p></div>
+      <div class="paso"><div class="n">3</div><h3>Instalación en un día</h3><p>Los equipos llegan montados. Cargamos los datos y creamos los usuarios.</p></div>
       <div class="paso"><div class="n">4</div><h3>Formación y soporte</h3><p>6 horas de formación al claustro y soporte en horario lectivo.</p></div>
     </div>
   </section>
@@ -227,24 +233,27 @@
     <div class="planes">
       <div class="plan">
         <h3>Básico</h3><p class="tam">Hasta 40 docentes</p>
-        <p class="cuota">Suscripción</p><p class="importe">1.200 € <small>al mes</small></p>
-        <div class="inicial"><span>Cuota inicial</span><b>6.000 €</b></div>
-        <p class="inicial-nota">Servidor e instalación</p>
+        <p class="importe">1.200 € <small>al mes</small></p>
+        <p class="iva"><span>Con IVA</span><b>1.452 € al mes</b></p>
+        <div class="inicial"><span>Cuota inicial</span><b>7.750 €</b></div>
+        <p class="iva"><span>Con IVA</span><b>9.378 €</b></p>
       </div>
       <div class="plan">
         <h3>Centro</h3><p class="tam">De 41 a 80 docentes</p>
-        <p class="cuota">Suscripción</p><p class="importe">1.600 € <small>al mes</small></p>
-        <div class="inicial"><span>Cuota inicial</span><b>9.000 €</b></div>
-        <p class="inicial-nota">Servidor e instalación</p>
+        <p class="importe">1.600 € <small>al mes</small></p>
+        <p class="iva"><span>Con IVA</span><b>1.936 € al mes</b></p>
+        <div class="inicial"><span>Cuota inicial</span><b>7.750 €</b></div>
+        <p class="iva"><span>Con IVA</span><b>9.378 €</b></p>
       </div>
       <div class="plan">
         <h3>Grande</h3><p class="tam">De 81 a 150 docentes</p>
-        <p class="cuota">Suscripción</p><p class="importe">2.200 € <small>al mes</small></p>
-        <div class="inicial"><span>Cuota inicial</span><b>14.000 €</b></div>
-        <p class="inicial-nota">Servidor e instalación</p>
+        <p class="importe">2.200 € <small>al mes</small></p>
+        <p class="iva"><span>Con IVA</span><b>2.662 € al mes</b></p>
+        <div class="inicial"><span>Cuota inicial</span><b>9.150 €</b></div>
+        <p class="iva"><span>Con IVA</span><b>11.072 €</b></p>
       </div>
     </div>
-    <p class="condiciones"><b>Precios sin IVA. Compromiso mínimo de dos cursos escolares.</b> La suscripción incluye 6 horas de formación al claustro, soporte en horario lectivo, actualizaciones, una visita al año y el borrador de la evaluación de impacto. Claude es opcional. Si lo usáis, el colegio paga su uso directamente a Anthropic, con su propia cuenta.</p>
+    <p class="condiciones"><b>Precios sin IVA. Compromiso mínimo de dos cursos escolares.</b> La cuota inicial paga los equipos, que son vuestros, su instalación, 6 horas de formación al claustro y el borrador de la evaluación de impacto. Si el precio de los equipos sube más de un 10&nbsp;% antes del pedido, la cuota sube lo mismo. La suscripción incluye soporte en horario lectivo, actualizaciones y una visita al año. La luz va aparte. Claude es opcional: si lo usáis, el colegio paga su uso directamente a Anthropic, con su propia cuenta.</p>
   </section>
 
   <section>
@@ -261,13 +270,13 @@
   <div class="contacto">
     <div>
       <h2>¿Os lo enseñamos en&nbsp;vuestro colegio?</h2>
-      <p class="sub">Una demo de 45 minutos con una mañana de ejemplo, sin datos reales. Pedidnos una fecha.</p>
+      <p class="sub">Una demo de 45 minutos con una mañana de ejemplo, sin datos reales. Pedidnos una fecha y preguntadnos por la oferta para el primer colegio.</p>
     </div>
     <div class="datos">
       <b>[Tu nombre]</b>
       <div class="cargo-c">[Cargo]</div>
       [teléfono]<br>[correo@dominio.es]<br>[dominio.es]
-      <p class="sede">Empresa de la Comunidad de Madrid</p>
+      <p class="sede">Empresa con sede en la Comunidad de Madrid</p>
     </div>
   </div>
 

@@ -4,6 +4,7 @@ Uso (desde esta carpeta):  python3 generar_docx.py
 Escribe los dos .docx en la carpeta de arriba (aplicaciones/papeleria/).
 """
 import os
+import re
 
 import docx
 from docx.enum.section import WD_SECTION
@@ -110,7 +111,7 @@ def membrete():
              'Antes del [fecha] os enviamos la propuesta para [Nombre del colegio]: qué incluye, cuánto cuesta '
              'y qué compromiso os pedimos, sin letra pequeña.'),
             ('Instalación y formación.',
-             'Si decidís seguir, instalamos el servidor en un día, en la fecha que acordemos, y damos 6 horas de '
+             'Si decidís seguir, instalamos los equipos en un día, en la fecha que acordemos, y damos 6 horas de '
              'formación al claustro.')):
         con_entradilla(doc, entradilla, texto, estilo='List Number')
 
@@ -178,14 +179,47 @@ def tabla_simple(doc, cabecera, filas, anchos, alinear_derecha=(), cabecera_oscu
             c = t.rows[i].cells[j]
             m.borde_celda(c, bottom=(m.LINEA, 6))
             m.alinear_celda(c, 'top')
-            if isinstance(valor, tuple):
-                texto, fmt = valor
-            else:
-                texto, fmt = valor, {}
-            p = m.parrafo_celda(c, texto, **fmt)
-            if j in alinear_derecha:
-                p.alignment = 2
+            # Una celda puede llevar varias líneas (una lista): por ejemplo, el precio sin IVA y debajo con IVA
+            for linea in (valor if isinstance(valor, list) else [valor]):
+                if isinstance(linea, tuple):
+                    texto, fmt = linea
+                else:
+                    texto, fmt = linea, {}
+                p = m.parrafo_celda(c, texto, **fmt)
+                if j in alinear_derecha:
+                    p.alignment = 2
     m.no_partir_filas(t, cabecera=True)
+    return t
+
+
+def sin_cortes(doc):
+    """Espacio duro entre la cifra (o el corchete de un importe) y «€», «%» u «horas», para que no se separen al
+    final de línea: «14.399 €», «[importe] €», «10 %», «2 horas»."""
+    def arreglar(paragraphs):
+        for p in paragraphs:
+            for r in p.runs:
+                if re.search(r'[\d\]] (€|%|horas)', r.text):
+                    r.text = re.sub(r'([\d\]]) (€|%|horas)', '\\1\u00a0\\2', r.text)
+    arreglar(doc.paragraphs)
+    for t in doc.tables:
+        for row in t.rows:
+            for c in row.cells:
+                arreglar(c.paragraphs)
+
+
+def tabla_precios(doc, planes):
+    """Tabla de precios: plan, tamaño, cuota inicial y suscripción, cada cifra sin IVA y debajo con IVA.
+    planes: (plan, tamaño, cuota inicial, con IVA, suscripción, con IVA), con las cifras ya escritas en español."""
+    filas = [((plan, {'bold': True, 'color': m.PIZARRA}), tam,
+              [inicial + ' €', inicial_iva + ' € con IVA'],
+              [mes + ' € al mes', mes_iva + ' € con IVA'])
+             for plan, tam, inicial, inicial_iva, mes, mes_iva in planes]
+    t = tabla_simple(doc, ['Plan', 'Tamaño del centro', 'Cuota inicial: equipos e instalación',
+                           'Suscripción mensual'], filas, [26, 44, 48, 42], alinear_derecha=(2, 3))
+    for row in t.rows:  # la tabla no se separa de sus condiciones
+        for c in row.cells:
+            for q in c.paragraphs:
+                q.paragraph_format.keep_with_next = True
     return t
 
 
@@ -263,18 +297,22 @@ def propuesta():
                       'Con las reglas del colegio prepara sustituciones, guardias y avisos de plazos; con IA, '
                       'actas y respuestas de correo. Y cada docente tiene su asistente.')
     doc.add_paragraph('DirectorIA propone. Vosotros decidís.', style='Destacado')
+    # Si se deja el anexo de DirectorIA Esencial, se elige aquí Esencial y los importes son los suyos: así quien firma
+    # sabe qué firma. Va como elección entre corchetes, igual que el plan: una nota aparte movía el apartado 2 y dejaba
+    # la última línea del 4 sola en una página
     con_entradilla(doc, 'Lo que os proponemos.',
-                   'El plan [Básico / Centro / Grande], para [n.º de docentes] docentes: una cuota inicial de '
-                   '[importe] € (servidor e instalación) y una suscripción de [importe] € al mes. Precios sin '
-                   'IVA y con un compromiso mínimo de dos cursos escolares.')
+                   '[DirectorIA Completo, con IA / DirectorIA Esencial, sin IA, con el paso a Completo del anexo], en '
+                   'el plan [Básico / Centro / Grande], para [n.º de docentes] docentes: una cuota inicial de '
+                   '[importe] € (equipos e instalación) y una suscripción de [importe] € al mes, sin IVA. Con IVA, '
+                   '[importe] € y [importe] € al mes. Compromiso mínimo de dos cursos escolares.')
     con_entradilla(doc, 'Antes de firmar.',
                    'Os enseñamos DirectorIA funcionando en vuestro colegio y analizamos gratis vuestros gastos '
                    'para buscar ahorros.')
 
     # ---------------------------------------------------------- 2. Qué incluye
     h1(doc, 2, 'Qué incluye DirectorIA')
-    doc.add_paragraph('Un asistente para cada cargo, todos en el mismo servidor, dentro del colegio. Lo que '
-                      'preparan lo revisa y lo decide siempre una persona.')
+    doc.add_paragraph('Un asistente para cada cargo, todos dentro del colegio. Lo que preparan lo revisa y lo '
+                      'decide siempre una persona.')
     roles = [
         ('Dirección', [
             'Un resumen del día a las 8:00: quién falta, qué vence hoy y qué correos importan.',
@@ -313,9 +351,9 @@ def propuesta():
     # ---------------------------------------------------------- 3. Privacidad
     h1(doc, 3, 'Privacidad y protección de datos')
     con_entradilla(doc, 'Dónde están los datos.',
-                   'La IA trata los datos de vuestros alumnos en un servidor dentro del colegio. Las copias de '
-                   'seguridad van cifradas: una en el colegio y otra en un centro de datos de la UE. Los correos '
-                   'salen por la cuenta del propio colegio. El mantenimiento a distancia queda registrado.')
+                   'La aplicación y los datos están en un servidor dentro del colegio, y la IA los trata ahí. Las '
+                   'copias de seguridad van cifradas: una en el colegio y otra en un centro de datos de la UE. Los '
+                   'correos salen por la cuenta del propio colegio. El mantenimiento a distancia queda registrado.')
     con_entradilla(doc, 'El responsable es el colegio.',
                    'El colegio sigue siendo el responsable del tratamiento. DirectorIA os entrega los borradores '
                    'de la evaluación de impacto (EIPD) y del registro de actividades de tratamiento, para que '
@@ -330,45 +368,63 @@ def propuesta():
     # ---------------------------------------------------------- 4. Instalación y formación
     h1(doc, 4, 'Instalación y formación')
     con_entradilla(doc, 'Llave en mano.',
-                   'La cuota inicial incluye el servidor, que pasa a ser vuestro, y su instalación en el colegio. '
-                   'Si lo preferís, el servidor también se puede pagar mediante alquiler.')
+                   'La cuota inicial incluye los equipos, que pasan a ser vuestros, y su instalación en el '
+                   'colegio: el servidor de datos, el servidor de IA y el disco de copias. En el plan Grande, dos '
+                   'servidores de datos: si uno falla, el otro toma el relevo en 10-15 minutos.')
     con_entradilla(doc, 'Instalación en un día.',
-                   'El servidor llega montado. Ese día lo instalamos, cargamos los datos del centro y creamos '
+                   'Los equipos llegan montados. Ese día los instalamos, cargamos los datos del centro y creamos '
                    'los usuarios.')
-    con_entradilla(doc, 'Formación.', '6 horas de formación al claustro.')
-    con_entradilla(doc, 'Soporte.', 'En horario lectivo.')
+    con_entradilla(doc, 'Formación.', '6 horas de formación al claustro, con la alfabetización en IA.')
+    con_entradilla(doc, 'Soporte.', 'En horario lectivo, con el tiempo de respuesta fijado en el contrato.')
     con_entradilla(doc, 'Fecha prevista de instalación:', '[fecha].')
 
     # ---------------------------------------------------------- 5. Precio
-    h1(doc, 5, 'Precio')
-    p = doc.add_paragraph('Una cuota inicial, que incluye el servidor y la instalación, y una suscripción mensual.')
+    # El precio empieza en página nueva: ocupa casi una página, y LibreOffice no mantiene el título junto a
+    # una tabla aunque lleve «conservar con el siguiente» (lo dejaba solo al pie de la página anterior)
+    p = h1(doc, 5, 'Precio')
+    p.paragraph_format.space_before = Pt(0)
+    p.paragraph_format.page_break_before = True
+    p = doc.add_paragraph('DirectorIA Completo, con IA: una cuota inicial, que paga los equipos y su instalación, '
+                          'y una suscripción mensual.')
     p.paragraph_format.keep_with_next = True
-    filas = [
-        (('Básico', {'bold': True, 'color': m.PIZARRA}), 'Hasta 40 docentes', '6.000 €', '1.200 € al mes'),
-        (('Centro', {'bold': True, 'color': m.PIZARRA}), 'De 41 a 80 docentes', '9.000 €', '1.600 € al mes'),
-        (('Grande', {'bold': True, 'color': m.PIZARRA}), 'De 81 a 150 docentes', '14.000 €', '2.200 € al mes'),
-    ]
-    t = tabla_simple(doc, ['Plan', 'Tamaño del centro', 'Cuota inicial: servidor e instalación',
-                           'Suscripción mensual'], filas, [26, 44, 48, 42], alinear_derecha=(2, 3))
-    for row in t.rows:  # la tabla no se separa de sus condiciones
-        for c in row.cells:
-            for q in c.paragraphs:
-                q.paragraph_format.keep_with_next = True
+    tabla_precios(doc, [
+        ('Básico', 'Hasta 40 docentes', '7.750', '9.378', '1.200', '1.452'),
+        ('Centro', 'De 41 a 80 docentes', '7.750', '9.378', '1.600', '1.936'),
+        ('Grande', 'De 81 a 150 docentes', '9.150', '11.072', '2.200', '2.662'),
+    ])
     # Las condiciones, a tamaño de texto: sin letra pequeña
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(8)
     p.paragraph_format.keep_with_next = True
-    m.run(p, 'Precios sin IVA. Compromiso mínimo de dos cursos escolares.', bold=True, color=m.PIZARRA)
-    m.run(p, ' La cuota inicial se paga una vez; la suscripción, cada mes.')
-    # Lo que incluye la suscripción: la misma lista en todas las piezas (web, presentación y hoja comercial)
+    m.run(p, 'Precios sin IVA; debajo de cada uno, con el 21 % de IVA. Compromiso mínimo de dos cursos escolares.',
+          bold=True, color=m.PIZARRA)
+    m.run(p, ' La cuota inicial se paga al empezar; la suscripción, cada mes. Con IVA, el primer año sale a '
+             '26.802 € en el Básico, 32.610 € en el Centro y 43.016 € en el Grande, y los siguientes, a 17.424 €, '
+             '23.232 € y 31.944 €.')
+    # Lo que incluye cada cuota, como en la hoja comercial. La formación y el borrador de la evaluación de impacto
+    # son de una vez y los paga la cuota inicial: si fueran en la suscripción, se leerían como 6 horas cada año
+    con_entradilla(doc, 'La cuota inicial incluye',
+                   'los equipos y su instalación, 6 horas de formación al claustro, con la alfabetización en IA, y el '
+                   'borrador de la evaluación de impacto, con su capítulo de IA, que revisa vuestro delegado de '
+                   'protección de datos y aprueba el colegio.')
     con_entradilla(doc, 'La suscripción incluye',
-                   '6 horas de formación al claustro, soporte en horario lectivo, actualizaciones, una visita al '
-                   'año y el borrador de la evaluación de impacto, que revisa vuestro delegado de protección de '
-                   'datos y aprueba el colegio.')
+                   'soporte en horario lectivo, actualizaciones (también las de seguridad, durante 5 años como '
+                   'mínimo), una visita al año y la gestión de las garantías.')
+    con_entradilla(doc, 'Si el precio de los equipos sube',
+                   'más de un 10 % antes del pedido, la cuota inicial sube lo mismo.')
+    con_entradilla(doc, 'Aparte, la luz de los equipos:',
+                   'unos 60-118 € al año en el Básico y el Centro, y 71-135 € en el Grande.')
     doc.add_paragraph('Claude es opcional. Si lo usáis, el colegio paga su uso directamente a Anthropic, con su '
                       'propia cuenta.')
+    con_entradilla(doc, 'Si el claustro crece un poco,',
+                   'seguís en vuestro plan: hasta 44 docentes en el Básico, 88 en el Centro y 165 en el Grande. '
+                   'Con más de 165, os hacemos un presupuesto aparte.')
+    con_entradilla(doc, 'Garantía y renovación.',
+                   'La garantía del servidor de IA cubre 3 años; en el cuarto y el quinto, podéis renovarla por '
+                   '49,99 € al año, sin IVA porque es un seguro, o pagar sus reparaciones. A los 5 o 6 años, los '
+                   'equipos se renuevan con otra cuota inicial.')
     con_entradilla(doc, 'Plan propuesto para [Nombre del colegio]:',
-                   '[Básico / Centro / Grande], para [n.º de docentes] docentes.')
+                   'DirectorIA Completo [Básico / Centro / Grande], para [n.º de docentes] docentes.')
 
     # ---------------------------------------------------------- 6. Análisis de gastos
     h1(doc, 6, 'Análisis de gastos gratuito')
@@ -402,8 +458,8 @@ def propuesta():
 
     # ---------------------------------------------------------- 8. Firma
     h1(doc, 8, 'Firma')
-    p = doc.add_paragraph('Con su firma, el colegio manifiesta su conformidad con esta propuesta. Las condiciones '
-                          'completas se recogerán en el contrato.')
+    p = doc.add_paragraph('Con su firma, el colegio manifiesta su conformidad con esta propuesta y, en su caso, con '
+                          'su anexo. Las condiciones completas se recogerán en el contrato.')
     p.paragraph_format.keep_with_next = True
     t = doc.add_table(rows=1, cols=3)
     m.preparar_tabla(t, [76, 8, 76], margenes=(0, 0, 0, 0))
@@ -427,6 +483,74 @@ def propuesta():
         for q in c.paragraphs[:-1]:
             q.paragraph_format.keep_with_next = True
 
+    # ---------------------------------------------------------- Anexo opcional: primera fase sin IA
+    # Solo se deja si el colegio ha pedido empezar sin IA. DirectorIA Esencial no va en la web ni en la hoja
+    # comercial: se ofrece cuando un colegio rechaza Completo, o como primera fase con la fecha del paso pactada.
+    p = doc.add_paragraph()
+    p.paragraph_format.page_break_before = True
+    p.paragraph_format.keep_with_next = True
+    m.run(p, '[Opcional. Dejad este anexo solo si el colegio ha pedido empezar sin IA, y elegid entonces DirectorIA '
+             'Esencial en «Lo que os proponemos», en el Resumen. Si no, borradlo entero, desde aquí hasta el final.]',
+          bold=True, color=m.PIZARRA)
+    p = doc.add_paragraph(style='Heading 1')
+    m.run(p, 'Anexo', color=m.PIZARRA_LINEA)
+    m.run(p, ' DirectorIA Esencial, sin IA')
+    doc.add_paragraph('Empezáis con DirectorIA Esencial y pasáis a DirectorIA Completo [en la fecha que pactemos: '
+                      '(fecha) / cuando lo decidáis, con el precio de este anexo].')
+
+    doc.add_paragraph('Qué hace', style='Heading 2')
+    for t_ in ('Todo lo que DirectorIA hace con las reglas y los datos del colegio, sin IA: guardias, sustituciones '
+               'y la ficha de quien sustituye; protocolos, plazos, certificados y el dosier para la inspección; el '
+               'resumen de las 8:00, el banco de recursos y el analista de gastos.',
+               'Lo que escribe la IA llega con el paso a Completo: resúmenes y respuestas de correo, actas a partir '
+               'del dictado, traducciones y lectura fácil, y los plazos sacados de las circulares. Hasta entonces, '
+               'algunas funciones van sin su parte de IA: el resumen de las 8:00, sin los correos, y el analista de '
+               'gastos, solo con facturas electrónicas.',
+               'La aplicación y los datos están en un servidor dentro del colegio. La copia de seguridad, cifrada, '
+               'está en la UE. Los correos salen por la cuenta del propio colegio. El mantenimiento a distancia '
+               'queda registrado.'):
+        doc.add_paragraph(t_, style='List Bullet')
+
+    doc.add_paragraph('Qué incluye', style='Heading 2')
+    for t_ in ('Los equipos, que pasan a ser vuestros, y su instalación: el servidor de datos y el disco de copias. '
+               'En el plan Grande, dos servidores de datos.',
+               '4 horas de formación al claustro.',
+               'Soporte en horario lectivo, actualizaciones y una visita al año.',
+               'El borrador de la evaluación de impacto, con el anexo de IA ya redactado y sin activar.'):
+        doc.add_paragraph(t_, style='List Bullet')
+
+    p = doc.add_paragraph('Precio', style='Heading 2')
+    tabla_precios(doc, [
+        ('Básico', 'Hasta 40 docentes', '4.700', '5.687', '600', '726'),
+        ('Centro', 'De 41 a 80 docentes', '4.700', '5.687', '800', '968'),
+        ('Grande', 'De 81 a 150 docentes', '6.100', '7.381', '1.100', '1.331'),
+    ])
+    p = doc.add_paragraph()
+    p.paragraph_format.space_before = Pt(8)
+    m.run(p, 'Precios sin IVA; debajo de cada uno, con el 21 % de IVA.', bold=True, color=m.PIZARRA)
+    m.run(p, ' Con IVA, el primer año sale a 14.399 € en el Básico, 17.303 € en el Centro y 23.353 € en el '
+             'Grande, y los siguientes, a 8.712 €, 11.616 € y 15.972 €. La luz va aparte: unos 26-65 € al año. '
+             'Las demás condiciones son las de Completo: compromiso mínimo de dos cursos escolares, los mismos '
+             'límites de docentes y la misma revisión si el precio de los equipos sube más de un 10 % antes del '
+             'pedido.')
+
+    doc.add_paragraph('El paso a Completo', style='Heading 2')
+    con_entradilla(doc, 'Precio.',
+                   '3.050 € (3.690 € con IVA) en los tres tamaños, por el servidor de IA, su instalación y 2 horas '
+                   'más de formación, más la diferencia de cuota: 600, 800 o 1.100 € más al mes (726, 968 o '
+                   '1.331 € con IVA). Este precio queda fijado en el contrato desde el principio.')
+    con_entradilla(doc, 'Lo mismo que empezar con IA.',
+                   'Empezar sin IA y pasar después cuesta lo mismo que empezar con IA, menos los meses sin IA.')
+    con_entradilla(doc, 'Sin empezar de cero.',
+                   'El servidor de datos sigue con vuestros datos, reglas, usuarios e historial, y el servidor de IA '
+                   'se añade a su lado, dentro del colegio. Con el paso llegan también los documentos de la IA: el '
+                   'anexo de la evaluación de impacto, la adenda al contrato y la información al personal y a las '
+                   'familias.')
+    con_entradilla(doc, 'Fecha del paso a Completo:', '[fecha pactada / cuando lo decidáis].')
+    con_entradilla(doc, 'Plan propuesto para la primera fase:',
+                   'DirectorIA Esencial [Básico / Centro / Grande], para [n.º de docentes] docentes.')
+
+    sin_cortes(doc)
     ruta = os.path.join(SALIDA, 'propuesta-comercial.docx')
     doc.save(ruta)
     m.posprocesar(ruta)

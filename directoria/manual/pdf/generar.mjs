@@ -111,7 +111,7 @@ const lamPiezas = `<div class="pz-rej">${pieza('Boton', prev('Boton'))}${pieza('
 <div class="pz-rej pz-1">${pieza('FichaSustitucion', prev('FichaSustitucion'))}</div>`;
 
 const img = (p, pie, ancho = '100%') => fs.existsSync(path.join(DIR, p)) ? `<figure class="ap"><img src="${url(p)}" alt="" style="max-width:${ancho}"><figcaption>${pie}</figcaption></figure>` : '';
-const lamAplic = `${img('presentacion/vista-general.png', 'La presentación comercial: 27 diapositivas')}
+const lamAplic = `${img('presentacion/vista-general.png', 'La presentación comercial: 35 diapositivas')}
 ${img('manual/pdf/web-captura.png', 'La web: portada y primeras secciones')}
 <div class="ap-2">${img('aplicaciones/papeleria/tarjeta-anverso.png', 'Tarjeta de visita · anverso')}${img('aplicaciones/papeleria/tarjeta-reverso.png', 'Tarjeta de visita · reverso')}</div>
 <div class="ap-2">${img('aplicaciones/papeleria/membrete.png', 'Membrete')}${img('aplicaciones/papeleria/hoja-comercial-1.png', 'Hoja comercial')}</div>

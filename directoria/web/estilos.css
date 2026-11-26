@@ -256,6 +256,8 @@ main:focus { outline: none; }
 }
 
 .dato-contacto { font-weight: 700; color: var(--tinta); user-select: all; }
+/* Un intervalo que no se parte por el guion («10-15 minutos»): la fuente no trae el guion que no se parte */
+.sin-corte { white-space: nowrap; }
 
 .solo-lector {
   position: absolute !important;

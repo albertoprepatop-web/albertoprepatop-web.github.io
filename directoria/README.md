@@ -13,7 +13,7 @@ Si vais a crear algo nuevo, empezad por el manual de marca (`manual/manual-de-ma
 | `ilustraciones/` | Las 22 ilustraciones de la marca en SVG y su generador. | `LEEME.md` · `kit.png` |
 | `fuentes/` | Rubik y Nunito Sans en woff2, con su licencia SIL OFL, para alojarlas en la web. | `fuentes.css` |
 | `tokens.json` | Los colores y las tipografías con sus usos. | — |
-| `presentacion/` | Las fuentes de la presentación comercial (27 diapositivas), `vista-general.png` y, en `herramientas/`, la vista previa de las diapositivas y lo que falta subir a claude.ai. La presentación se edita y se descarga en PowerPoint o PDF desde el mazo de Slides. | `vista-general.png` · `herramientas/LEEME.md` |
+| `presentacion/` | Las fuentes de la presentación comercial (35 diapositivas: la apertura, tres partes —Esencial, Completo y comparativa—, el cierre y un anexo), `vista-general.png` y, en `herramientas/`, la vista previa de las diapositivas y lo que falta subir a claude.ai. La presentación se edita y se descarga en PowerPoint o PDF desde el mazo de Slides. | `vista-general.png` · `herramientas/LEEME.md` |
 | `demo/` | La demo para enseñar en los colegios. Se entra como directora, jefe de estudios, secretaria, docente, orientador o profesor que sustituye y se ve su panel. Es un solo HTML que funciona sin conexión; la carpeta trae también sus fuentes, el guion de datos y la guía para presentarla. | `README.md` |
 | `web/` | La web: portada, privacidad y aviso legal, con favicon, iconos e imagen para compartir. Sin cookies ni fuentes externas. | `README.md` |
 | `aplicaciones/papeleria/` | Tarjeta de visita, firma de correo, membrete, propuesta comercial y hoja comercial, con sus generadores. | `README.md` |

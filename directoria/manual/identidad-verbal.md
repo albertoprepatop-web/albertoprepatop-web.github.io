@@ -139,7 +139,7 @@ DirectorIA, empresa de la Comunidad de Madrid, instala en colegios privados y co
 
 5. **Llave en mano, sin letra pequeña**
 
-   Incluye servidor, instalación, borrador de la evaluación de impacto, formación y soporte. El compromiso mínimo es de dos cursos, por escrito y sin asteriscos. Para el primer colegio, el colegio pionero, hay una oferta propia: servidor e instalación gratis y suscripción desde el tercer mes; si en los dos primeros meses no está contento, se va sin compromiso, y si sigue, se compromete un año desde el tercer mes. Hasta completarlo, el servidor sigue siendo de DirectorIA.
+   Incluye los equipos, la instalación, el borrador de la evaluación de impacto, la formación y el soporte. El compromiso mínimo es de dos cursos, por escrito y sin asteriscos. Para el primer colegio, el colegio pionero, hay una oferta propia, solo con IA y a partir de 41 docentes: equipos e instalación gratis y suscripción desde el tercer mes; si en los dos primeros meses no está contento, se va sin compromiso, y si sigue, se compromete un año desde el tercer mes. Hasta completarlo, los equipos siguen siendo de DirectorIA; pasan al colegio al empezar el segundo año, y si se va al acabar el primero, DirectorIA se los lleva o el colegio los compra por un valor pactado de antemano.
 
 ## Frases para la web
 
