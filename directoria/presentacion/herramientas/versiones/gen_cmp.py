@@ -24,10 +24,13 @@ def table(groups):
     for gi, (role, rows) in enumerate(groups):
         last_group = gi == len(groups) - 1
         n = len(rows)
-        end = ' cmp-end' if last_group else ''
-        out.append(f'<div class="cmp-role cmp-r{n}{end}"><h3>{role}</h3></div>')
         for ri, (f, e, c) in enumerate(rows):
             e2 = ' cmp-end' if (last_group and ri == n - 1) else ''
+            # El cargo va en la primera fila de su grupo; en las demás, una celda vacía sin filete.
+            if ri == 0:
+                out.append(f'<div class="cmp-role{e2}"><h3>{role}</h3></div>')
+            else:
+                out.append(f'<div class="cmp-role cmp-cont{e2}"></div>')
             out.append(f'<div class="cmp-f{e2}"><p>{f}</p></div><div class="cmp-e{e2}">{cell(e)}</div><div class="cmp-c{e2}">{cell(c)}</div>')
     out.append('</div>')
     return '\n'.join(out)

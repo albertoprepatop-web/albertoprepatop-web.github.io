@@ -97,7 +97,7 @@ deriva('acoso-plan', 'acoso-plan-esencial', [
 
 # Banco de recursos: subir sin IA. Otro recurso (Lengua, 3.er ciclo), para que no choque con la búsqueda de la parte 2.
 deriva('banco-compartir', 'banco-subir-esencial', [
- ('<section id="banco-compartir">', '<section id="banco-subir-esencial">'),
+ ('<section id="banco-compartir">', '<section id="banco-subir-esencial" class="bs-esencial">'),
  ('<p class="eyebrow">Ejemplo · Banco de recursos · 2/2</p>', antetitulo('Esencial · Ejemplo · Banco de recursos', 'esencial')),
  ('<p class="bk-fv">Flashcards: frutas y verduras de temporada</p>', '<p class="bk-fv">Rúbrica de exposición oral</p>'),
  ('<div class="bk-f"><p class="bk-fl">Curso <b>· obligatorio</b></p><div class="bk-fr"><p class="bk-chip bk-sel">3.º de Primaria</p><p class="bk-chip bk-sel">4.º de Primaria</p></div></div>\n<div class="bk-f"><p class="bk-fl">Materia <b>· obligatoria</b></p><div class="bk-fr"><p class="bk-chip bk-sel">Educación Física</p></div></div>',

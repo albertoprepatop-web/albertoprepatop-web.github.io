@@ -88,7 +88,7 @@ COND = [
  ('Claude, opcional en Completo', 'Si lo usáis, el colegio paga su uso directamente a Anthropic, con su propia&nbsp;cuenta.'),
 ]
 items = '\n'.join(f'<div class="cd-it"><h3 class="cd-h">{h}</h3><p class="cd-p">{t}</p></div>' for h, t in COND)
-open(os.path.join(D, 'condiciones-versiones.html'), 'w').write(f'''<section id="condiciones-versiones">
+open(os.path.join(D, 'condiciones-versiones.html'), 'w').write(f'''<section id="condiciones-versiones" class="cd-slide">
 <img class="marca" src="{B('isotipo')}" alt="" width="56" height="56">
 <p class="eyebrow">Precios · Condiciones</p>
 <h2 class="title vs-t">Las condiciones, enteras</h2>

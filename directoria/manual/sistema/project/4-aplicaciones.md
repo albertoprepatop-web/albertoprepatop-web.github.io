@@ -4,7 +4,7 @@ Las piezas que ya existen, dónde están y qué hay que respetar en cada una. La
 
 ## Presentación comercial
 
-- **Dónde:** el mazo de Slides «DirectorIA Esencial y Completo · Presentación para equipos directivos», que se descarga como PowerPoint o PDF. Sus fuentes están en `presentacion/project/` (con dos hojas compartidas, `deck.css` y `deck-versiones.css`) y la hoja `vista-general.png` está en el grupo **Laminas**.
+- **Dónde:** el mazo de Slides «DirectorIA Esencial y Completo · Presentación para equipos directivos», que se descarga como PowerPoint o PDF. Sus fuentes están en `presentacion/project/` (todos los estilos en `deck.css`, la única hoja que lee el visor de Slides) y la hoja `vista-general.png` está en el grupo **Laminas**.
 - **Estructura (35 diapositivas, en tres partes):** apertura con las dos versiones y qué se trata dentro del colegio; parte 1, DirectorIA Esencial, sin IA (cómo funciona, todas sus funciones por cargo y los ejemplos de guardias, ficha, protocolo de acoso, banco de recursos y analista de gastos); parte 2, DirectorIA Completo, con IA (por qué la IA va dentro del colegio, lo que añade a cada cargo, el correo, el banco y lo que no hace); parte 3, comparativa función a función, cuál os conviene, el paso de Esencial a Completo, precios y condiciones; cierre con cómo empezar y la oferta para el primer colegio, y un anexo con el plan del protocolo.
 - **Marcas de versión:** cada diapositiva de la parte 1 lleva la etiqueta «sin IA» (pastilla salvia) junto al antetítulo, y cada una de la parte 2, «con IA» (pastilla oscura). En la parte 1 no hay insignia de la IA ni ilustraciones con la chispa.
 - **Reglas:**
