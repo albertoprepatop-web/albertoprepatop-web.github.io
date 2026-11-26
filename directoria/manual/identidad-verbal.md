@@ -16,7 +16,7 @@ Cómo habla DirectorIA: qué decimos, cómo lo decimos y cómo se escribe el nom
 - El papeleo, preparado. La decisión, vuestra.
 - Menos despacho, más colegio
 - IA de puertas adentro
-- Los datos de vuestros alumnos, tratados en casa
+- La IA trata en casa los datos de vuestros alumnos
 - Ausencia cubierta, sustituto informado
 - Plazos al día, sin perseguir a nadie
 - Del dictado al acta
@@ -31,8 +31,8 @@ Cómo habla DirectorIA: qué decimos, cómo lo decimos y cómo se escribe el nom
 
 | Valor | Qué quiere decir |
 |---|---|
-| **Puertas adentro** | La IA trata los datos de vuestros alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos. |
-| **Decide una persona** | La IA propone; decide siempre alguien del colegio. Y la IA nunca evalúa, puntúa ni clasifica a ningún alumno. |
+| **Puertas adentro** | La IA trata los datos de vuestros alumnos en un servidor dentro del colegio. La copia de seguridad, cifrada, está en la UE; los correos salen por la cuenta del propio colegio, y el mantenimiento a distancia queda registrado. |
+| **Decide una persona** | DirectorIA propone; decide siempre alguien del colegio. Y DirectorIA nunca evalúa, puntúa ni clasifica a ningún alumno. |
 | **Sin letra pequeña** | Antes de firmar, sabéis qué hace, qué no hace, cuánto cuesta y qué compromiso os pedimos. Todo por escrito. |
 | **Trato directo** | Escuchamos cómo trabaja vuestro colegio antes de proponer nada. Y de lo técnico nos ocupamos nosotros. |
 
@@ -55,11 +55,12 @@ Cómo habla DirectorIA: qué decimos, cómo lo decimos y cómo se escribe el nom
 ### Reglas
 
 1. En la web, la publicidad y los correos comerciales tratamos al colegio de vosotros: vuestro colegio, vuestro claustro, vuestros alumnos. En contratos y documentos legales, de usted o en impersonal.
-2. La IA prepara, resume, propone y avisa. Decidir, aprobar, firmar y evaluar son verbos de personas, y así lo escribimos siempre.
-3. Primero el ejemplo, después la idea: «propone quién cubre cada hora» dice más que «gestión inteligente de sustituciones».
-4. De privacidad contamos lo que hace DirectorIA: la IA trata los datos de los alumnos en un servidor dentro del colegio, sin transferencias internacionales de esos datos. No decimos que los datos «no salen del colegio» como frase absoluta: el correo sale por la cuenta del colegio, el resumen y la ficha llegan a los dispositivos de cada persona y hay soporte técnico. Sin «riesgo cero», sin «cumplimiento garantizado», sin meter miedo y sin señalar a otras herramientas.
-5. Ninguna cifra, estudio ni testimonio que no podamos enseñar. Precios y condiciones se dicen enteros, sin asteriscos ni letra pequeña.
-6. Frases cortas, voz activa y vocabulario de colegio (guardia, claustro, jefatura, acta), sin anglicismos ni siglas sin explicar.
+2. DirectorIA prepara, resume, propone y avisa. Decidir, aprobar, firmar y evaluar son verbos de personas, y así lo escribimos siempre.
+3. «La IA» solo para lo que escribe la IA: resúmenes de correos, respuestas propuestas, dictados y actas, traducciones y lectura fácil, plazos sacados de circulares, búsqueda por significado y adaptación de recursos. Guardias, sustituciones, horarios, la ficha de sustitución, plazos de jefatura, protocolos, certificados y dosier salen de las reglas y los datos del colegio, sin IA: decimos «DirectorIA propone quién cubre cada hora, con las reglas del colegio», nunca «La IA propone quién cubre…». La insignia de la IA y «Preparado con IA» siguen la misma regla. La ficha lleva «Preparada por DirectorIA · confirmada por jefatura», sin insignia.
+4. Primero el ejemplo, después la idea: «propone quién cubre cada hora» dice más que «gestión inteligente de sustituciones».
+5. De privacidad contamos lo que hace DirectorIA, con esta forma: «La IA trata los datos de los alumnos en un servidor dentro del colegio. La copia de seguridad, cifrada, está en la UE. Los correos salen por la cuenta del propio colegio. El mantenimiento a distancia queda registrado.» Donde no hay sitio, basta la primera frase. Nunca decimos que los datos «no salen del colegio» ni nada parecido: las copias de seguridad van cifradas, una en el colegio (en el NAS) y otra en un centro de datos de la UE; el correo sale por la cuenta del colegio; el resumen y la ficha llegan a los dispositivos de cada persona, y hay mantenimiento a distancia. Sin «riesgo cero», sin «cumplimiento garantizado», sin meter miedo y sin señalar a otras herramientas.
+6. Ninguna cifra, estudio ni testimonio que no podamos enseñar. Precios y condiciones se dicen enteros, sin asteriscos ni letra pequeña.
+7. Frases cortas, voz activa y vocabulario de colegio (guardia, claustro, jefatura, acta), sin anglicismos ni siglas sin explicar.
 
 ### Ejemplos
 
@@ -67,7 +68,7 @@ Cómo habla DirectorIA: qué decimos, cómo lo decimos y cómo se escribe el nom
 |---|---|
 | DirectorIA revoluciona la gestión de vuestro centro con IA on-premise de última generación. | Cuando falta un profesor, DirectorIA propone quién cubre cada hora y prepara la ficha para quien sustituye. |
 | Con otras IA estáis incumpliendo la ley. Con DirectorIA, riesgo cero. | DirectorIA funciona en un servidor dentro de vuestro colegio: la IA trata ahí los datos de vuestros alumnos. |
-| La IA asigna las guardias automáticamente y detecta a los alumnos en riesgo de abandono. | La IA propone un reparto de guardias equilibrado; jefatura de estudios lo revisa y lo aprueba. Y la IA nunca evalúa ni clasifica a ningún alumno. |
+| La IA asigna las guardias automáticamente y detecta a los alumnos en riesgo de abandono. | DirectorIA propone un reparto de guardias equilibrado; jefatura de estudios lo revisa y lo aprueba. Y la IA nunca evalúa ni clasifica a ningún alumno. |
 | ¡Probadlo sin riesgo!\* \*Permanencia mínima según condiciones generales. | El compromiso mínimo es de dos cursos, y lo tenéis por escrito antes de firmar. |
 
 ## Palabras que usamos y que evitamos
@@ -86,6 +87,7 @@ Cómo habla DirectorIA: qué decimos, cómo lo decimos y cómo se escribe el nom
 | ficha de sustitución | ilegal |
 | plazos y entregas | on-premise |
 | llave en mano | perfil del alumno |
+| con las reglas del colegio | la IA propone quién cubre |
 
 ## Cómo se escribe DirectorIA
 
@@ -107,25 +109,25 @@ Cómo habla DirectorIA: qué decimos, cómo lo decimos y cómo se escribe el nom
 
 ### Texto corto
 
-DirectorIA instala en colegios privados y concertados una IA propia, en un servidor dentro del centro. Prepara sustituciones y guardias, actas, respuestas de correo y avisos de plazos para dirección y claustro. La IA propone, una persona decide y los datos de los alumnos se tratan dentro del colegio.
+DirectorIA instala en colegios privados y concertados una IA propia, en un servidor dentro del centro. Con las reglas del colegio prepara sustituciones, guardias y avisos de plazos; con IA, actas y respuestas de correo. DirectorIA propone, una persona decide, y la IA trata los datos de los alumnos dentro del colegio.
 
 ### Texto largo
 
-DirectorIA, empresa de la Comunidad de Madrid, instala en colegios privados y concertados una IA propia: un servidor dentro del centro y un programa para el día a día escolar. Propone sustituciones y un reparto equilibrado de guardias, y prepara la ficha del sustituto. Saca los plazos de las circulares, sugiere respuestas al correo, redacta actas a partir del dictado y envía a dirección un resumen diario a las 8:00. Cada docente tiene su asistente, y un analista de gastos busca ahorros en facturas y contratos. Decide una persona: la IA propone y nunca evalúa, puntúa ni clasifica a los alumnos, cuyos datos se tratan dentro del colegio. Se entrega llave en mano: servidor, instalación, borrador de la evaluación de impacto, formación y soporte.
+DirectorIA, empresa de la Comunidad de Madrid, instala en colegios privados y concertados una IA propia: un servidor dentro del centro y un programa para el día a día escolar. Con las reglas del colegio, propone sustituciones y un reparto equilibrado de guardias, prepara la ficha del sustituto y envía a dirección un resumen diario a las 8:00. Con IA, saca los plazos de las circulares, sugiere respuestas al correo y redacta actas a partir del dictado. Cada docente tiene su asistente, y un analista de gastos busca ahorros en facturas y contratos. Decide una persona: DirectorIA propone y nunca evalúa, puntúa ni clasifica a los alumnos. La IA trata sus datos en un servidor dentro del colegio, y la copia de seguridad, cifrada, está en la UE. Se entrega llave en mano: servidor, instalación, borrador de la evaluación de impacto, formación y soporte.
 
 ### Discurso de 30 segundos
 
-> ¿Cuánto tiempo se os va cada mañana en cubrir ausencias? DirectorIA propone quién cubre cada hora y le prepara al sustituto una ficha con la tarea, las alergias y quién puede recoger a cada alumno. También redacta actas a partir de vuestro dictado y os avisa de los plazos. Es vuestra IA, en un servidor dentro del colegio: ahí trata los datos de los alumnos. La IA propone; vosotros decidís. ¿Os lo enseño en vuestro colegio, con una sustitución de ejemplo?
+> ¿Cuánto tiempo se os va cada mañana en cubrir ausencias? DirectorIA propone quién cubre cada hora, con las reglas del colegio, y le prepara al sustituto una ficha con la tarea, las alergias y quién puede recoger a cada alumno. También redacta actas a partir de vuestro dictado y os avisa de los plazos. Es vuestra IA, en un servidor dentro del colegio: ahí trata los datos de los alumnos. DirectorIA propone; vosotros decidís. ¿Os lo enseño en vuestro colegio, con una sustitución de ejemplo?
 
 ## Mensajes clave
 
-1. **Los datos de vuestros alumnos, tratados en casa**
+1. **La IA trata en casa los datos de vuestros alumnos**
 
-   DirectorIA funciona en un servidor dentro del colegio y la IA trata ahí los datos de los alumnos, sin transferencias internacionales de esos datos. El módulo opcional de Claude, en la nube, es solo para material didáctico, nunca para datos personales.
+   DirectorIA funciona en un servidor dentro del colegio y la IA trata ahí los datos de los alumnos. La copia de seguridad, cifrada, está en la UE. Los correos salen por la cuenta del propio colegio, y el mantenimiento a distancia queda registrado. El módulo opcional de Claude, en la nube, es solo para material didáctico, nunca para datos personales.
 
 2. **Ausencia cubierta, sustituto informado**
 
-   Si falta alguien, DirectorIA propone quién cubre cada hora con un reparto equilibrado de guardias. Quien sustituye recibe su ficha: tarea, adaptaciones, alergias, recogidas y avisos de seguridad.
+   Si falta alguien, DirectorIA propone quién cubre cada hora, con las reglas del colegio y un reparto equilibrado de guardias. Quien sustituye recibe su ficha: tarea, adaptaciones, alergias, recogidas y avisos de seguridad.
 
 3. **Un asistente para cada cargo**
 
@@ -144,6 +146,6 @@ DirectorIA, empresa de la Comunidad de Madrid, instala en colegios privados y co
 | Elemento | Texto |
 |---|---|
 | Titular | Vuestra propia IA, dentro del colegio |
-| Subtítulo | Propone quién cubre cada ausencia, redacta actas y correos, y os avisa de los plazos. Vosotros decidís. La IA trata los datos de vuestros alumnos dentro del colegio. |
+| Subtítulo | DirectorIA propone quién cubre cada ausencia, con las reglas del colegio, y os avisa de los plazos. La IA redacta actas y correos, y trata los datos de vuestros alumnos dentro del colegio. Vosotros decidís. |
 | Botón principal | Pedir una demo en el colegio |
 | Botón secundario | Análisis de gastos gratis |

@@ -121,8 +121,9 @@ const titleLine = (x1, x2, y) => line(x1, y, x2, y, C.pizarra, 8);
 const tick = (x, y, color, w) => stroke(`M${x - 4} ${y}L${x - 1} ${y + 3.5}L${x + 4.5} ${y - 3.5}`, color, w);
 
 // ───────────────────────── personas ─────────────────────────
-// Dirección: mujer de unos 55, melena corta y gafas, con americana; tableta con el resumen del día
-// que prepara la IA (por eso lleva la insignia con la chispa en la esquina de la pantalla).
+// Dirección: mujer de unos 55, melena corta y gafas, con americana; tableta con el resumen del día.
+// El resumen de las 8:00 sale de las reglas y los datos del colegio, sin IA: en la esquina de la pantalla
+// lleva el ✓ de «al día» (pizarra y papel), no la insignia de la IA. Es el mismo dibujo que la demo.
 {
   let s = '';
   s += P(rrectPath(86, 58, 68, 74, [34, 34, 12, 12]), C.pizarra);                  // melena (detrás)
@@ -137,9 +138,9 @@ const tick = (x, y, color, w) => stroke(`M${x - 4} ${y}L${x - 1} ${y + 3.5}L${x 
   s += rect(85, 161, 70, 44, R1, C.papel);                                            // pantalla: el resumen
   s += textLine(93, 115, 170, C.pizarra, 5);                                          // barra corta (titular)
   [182, 194].forEach((y, i) => { s += circle(95, y, 3, C.pizarra) + textLine(103, i ? 128 : 138, y, C.textoSuave, 5); });
-  s += aiBadge(144, 173, 9);                                                          // lo ha preparado la IA
+  s += circle(144, 173, 9, C.pizarra) + tick(144, 173, C.papel, 2.4);                // al día (sin la insignia de la IA)
   s += hand(78, 194) + hand(162, 194);
-  save('direccion', 'Dirección: directora con la tableta del resumen del día que prepara la IA', s);
+  save('direccion', 'Dirección: directora con la tableta del resumen del día', s);
 }
 // Jefatura de estudios: hombre de unos 45, pelo corto y barba recortada; cuadrante de horarios.
 {
@@ -400,8 +401,8 @@ save('colegio-servidor', 'Colegio con el servidor de DirectorIA dentro, a la vis
     }
     s += textLine(98, i === 1 ? 140 : 164, yy, i === 2 ? C.texto : C.textoSuave, 6);
   }
-  s += aiBadgeCut(170, 178, 17);                                                     // la ficha la prepara la IA: su insignia, en la misma esquina que en documento-ia
-  save('ficha', 'Ficha de sustitución preparada por la IA: una lista y un aviso', s);
+  // Sin insignia: la ficha la prepara DirectorIA con las reglas y los datos del colegio, sin IA
+  save('ficha', 'Ficha de sustitución: una lista y un aviso', s);
 }
 {
   let s = '';
@@ -417,10 +418,10 @@ save('colegio-servidor', 'Colegio con el servidor de DirectorIA dentro, a la vis
   s += rect(82, 48, 10, 22, 5, C.texto) + rect(148, 48, 10, 22, 5, C.texto);
   for (let r = 0; r < 4; r++) for (let c = 0; c < 5; c++) {
     const cx = 74 + c * 23, cy = 108 + r * 22;
-    if (r === 2 && c === 3) s += circle(cx, cy, 11, C.pizarra) + circle(cx, cy, 4.5, C.chispa); // el plazo, marcado por la IA
+    if (r === 2 && c === 3) s += circle(cx, cy, 11, C.pizarra) + circle(cx, cy, 4.5, C.papel); // el plazo, marcado (sin chispa: los plazos salen de las reglas del colegio)
     else s += rect(cx - 7, cy - 7, 14, 14, 3, C.linea);
   }
-  save('calendario', 'Calendario con un plazo marcado por la IA', s);
+  save('calendario', 'Calendario con un plazo marcado', s);
 }
 {
   let s = '';
@@ -458,8 +459,8 @@ save('colegio-servidor', 'Colegio con el servidor de DirectorIA dentro, a la vis
   let s = '';
   s += P(roundPoly([[120, 54], [190, 176], [50, 176]], 14), C.pizarraLinea);
   s += line(120, 98, 120, 132, C.papel, 12) + circle(120, 152, 7, C.papel);
-  s += aiBadgeCut(174, 168, 20, 5);                                                   // el aviso lo da la IA
-  save('alerta', 'Aviso suave de la IA', s);
+  // Sin insignia: los avisos los da DirectorIA con las reglas del colegio, sin IA
+  save('alerta', 'Aviso suave', s);
 }
 
 for (const [name, svg] of Object.entries(files)) fs.writeFileSync(path.join(OUT, name + '.svg'), svg);

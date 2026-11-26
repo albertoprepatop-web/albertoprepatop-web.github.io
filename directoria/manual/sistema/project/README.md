@@ -8,7 +8,7 @@ DirectorIA instala en colegios privados y concertados una IA propia, en un servi
 4. **Dos tipografías.** Rubik (familia `titulares`) para titulares y nombres; Nunito Sans (familia `texto`) para todo lo que se lee. No hay una tercera.
 5. **Ilustraciones de la casa, siempre con su disco.** Planas, sobre el disco `linea` y sin retoques. Nada de fotos de banco, robots, cerebros ni circuitos.
 6. **El logotipo sale siempre del archivo.** Positivo sobre claro, negativo sobre pizarra y a una tinta para fotocopia o sello. Ver la sección Logotipo.
-7. **La IA prepara, resume, propone y avisa; las personas deciden, aprueban, firman y evalúan.** Escribidlo siempre así, también en los botones y en los textos alternativos.
+7. **DirectorIA prepara, resume, propone y avisa; las personas deciden, aprueban, firman y evalúan.** «La IA» y su insignia, solo en lo que escribe la IA: resúmenes y respuestas de correo, dictados y actas, traducciones y lectura fácil, plazos sacados de circulares, búsqueda por significado y adaptación de recursos. Guardias, sustituciones, horarios, la ficha de sustitución, plazos de jefatura, protocolos, certificados y dosier salen de las reglas y los datos del colegio: «DirectorIA propone quién cubre cada hora, con las reglas del colegio», nunca «La IA propone quién cubre…». Escribidlo siempre así, también en los botones y en los textos alternativos.
 8. **Nada de la «IA de moda».** Sin degradados, brillos, destellos, neones, fondos de estrellas ni azules y morados. Si una pieza parece de una empresa de IA cualquiera, no es DirectorIA.
 
 ## Color
@@ -79,14 +79,14 @@ Explicad cómo funciona con dibujos: el colegio con el servidor en el centro, la
 - **Halo `salvia`** detrás de la imagen central (el servidor o `colegio-servidor`).
 - **Ilustraciones de 160 px** en las personas y los pasos, y de 96 a 104 px en los iconos pequeños.
 - **Etiquetas:** el nombre en `diapo-nombre` y debajo una línea en `diapo-nota`.
-- **Frase de cierre.** Cada diagrama se cierra con una frase en Rubik 500 entre dos filetes `linea`, por ejemplo: «La IA prepara y propone; decide siempre una persona».
+- **Frase de cierre.** Cada diagrama se cierra con una frase en Rubik 500 entre dos filetes `linea`, por ejemplo: «DirectorIA prepara y propone; decide siempre una persona».
 
 ## Iconografía
 
 DirectorIA no usa una colección de iconos de interfaz ni emojis. En su lugar hay tres recursos:
 
 - **Las ilustraciones** del grupo Ilustraciones, a partir de 96 px.
-- **La insignia de la IA:** un círculo `pizarra` con la aguja `chispa`. Marca lo que ha preparado o propuesto la IA, en documentos, fichas y la app. Ver el componente Insignia.
+- **La insignia de la IA:** un círculo `pizarra` con la aguja `chispa`. Marca solo lo que escribe la IA, en documentos y en la app: el resumen de un correo, una respuesta propuesta, un acta dictada, una traducción. La ficha de sustitución, las guardias, los plazos y los protocolos no la llevan: los prepara DirectorIA con las reglas del colegio. Ver el componente Insignia.
 - **El visto:** un círculo `pizarra` con una marca de verificación en `tiza`, o la marca sola en `pizarra` en las listas. Indica lo que está hecho o incluido.
 
 No uséis una brújula como icono de nada, tampoco del departamento de Orientación: competiría con el símbolo. Cuando haga falta un icono pequeño de interfaz, usad trazo de 2 px con extremos redondos, en `pizarra` o `pizarra-linea`, y señaladlo en la revisión.

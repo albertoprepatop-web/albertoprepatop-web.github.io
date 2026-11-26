@@ -1,6 +1,6 @@
 # Ilustraciones de DirectorIA
 
-Veintiuna ilustraciones planas para contar, desde la primera diapositiva, cómo funciona DirectorIA. Hay un servidor dentro del colegio y, a su alrededor, las personas que lo usan, lo que la IA prepara para ellas y, aparte, la nube opcional. `kit.png` las reúne todas en una hoja.
+Veintiuna ilustraciones planas para contar, desde la primera diapositiva, cómo funciona DirectorIA. Hay un servidor dentro del colegio y, a su alrededor, las personas que lo usan, lo que DirectorIA prepara para ellas y, aparte, la nube opcional. `kit.png` las reúne todas en una hoja.
 
 ## Cómo son
 
@@ -8,11 +8,11 @@ Veintiuna ilustraciones planas para contar, desde la primera diapositiva, cómo 
 - **Formas planas y redondeadas.** No llevan degradados, sombras, texturas ni textos, y solo usan los colores de la paleta (`directoria/tokens.json`).
 - **Personas.** Se ven de pecho para arriba y todas tienen las mismas medidas: cabeza, hombros, altura de los ojos. La cabeza y las manos van en papel (#FFFDF8), un tono que no imita ningún color de piel y es igual para todos. La ropa, el pelo y el hiyab van en los verdes oscuros de la paleta (pizarra, pizarra-2, pizarra-linea y texto). Cada persona lleva un solo objeto que dice a qué se dedica.
 - **Radios de esquina.** Son siempre los mismos: 4 en las piezas pequeñas, 10 en hojas, tarjetas y pantallas, y 16 en los cuerpos grandes (servidor y candado).
-- **El naranja es solo la chispa (la aguja o un punto, sobre pizarra) donde actúa la IA: la luz del servidor y lo que prepara la IA.** La chispa es la aguja de brújula del logotipo «Norte» (un rombo alargado), para que las ilustraciones y el logo hablen el mismo idioma; donde es muy pequeña se dibuja como un punto. Va siempre sobre pizarra y aparece solo en estos dos casos:
+- **El naranja es solo la chispa (la aguja, sobre pizarra) donde actúa la IA: la luz del servidor y lo que escribe la IA.** La chispa es la aguja de brújula del logotipo «Norte» (un rombo alargado), para que las ilustraciones y el logo hablen el mismo idioma. Va siempre sobre pizarra y aparece solo en estos dos casos:
   - la luz del servidor (`servidor`, `colegio-servidor`);
-  - la insignia de lo que prepara la IA, un círculo pizarra con la chispa (`documento-ia`, `ficha`, la pantalla de `direccion`, `alerta` y el plazo de `calendario`).
+  - la insignia de lo que escribe la IA, un círculo pizarra con la chispa (`documento-ia`): resúmenes y respuestas de correo, actas dictadas, traducciones, plazos sacados de circulares.
 
-  El naranja no es un color de aviso ni de peligro. Los avisos (`alerta` y el aviso de `ficha`) van en pizarra, y si llevan naranja es solo por la insignia, porque el aviso lo da la IA. Las personas no llevan naranja. Tampoco lo llevan lo que firman o aprueban las personas (`acta`, `circular`) ni la nube. Chispa-suave y chispa-texto no se usan en las ilustraciones.
+  Lo que sale de las reglas y los datos del colegio va sin chispa, porque lo hace DirectorIA sin IA: la ficha de sustitución (`ficha`), el resumen de las 8:00 (la tableta de `direccion`, con el ✓ de «al día»), los avisos (`alerta`) y los plazos (`calendario`). El naranja no es un color de aviso ni de peligro: los avisos (`alerta` y el aviso de `ficha`) van en pizarra. Las personas no llevan naranja. Tampoco lo llevan lo que firman o aprueban las personas (`acta`, `circular`) ni la nube. Chispa-suave y chispa-texto no se usan en las ilustraciones.
 - **Se leen a 96 px.** Están comprobadas a ese tamaño sobre tiza, salvia, papel y pizarra.
 
 ## Archivos
@@ -30,7 +30,7 @@ Veintiuna ilustraciones planas para contar, desde la primera diapositiva, cómo 
 
 | Archivo | Quién es | Su objeto |
 |---|---|---|
-| `direccion.svg` | Directora de unos 55 años, con melena corta, gafas y americana | Tableta oscura con el resumen del día (un titular y dos puntos) y, en la esquina de la pantalla, la insignia de la IA, que es quien lo prepara |
+| `direccion.svg` | Directora de unos 55 años, con melena corta, gafas y americana | Tableta oscura con el resumen del día (un titular y dos puntos) y, en la esquina de la pantalla, el ✓ de «al día». No lleva la insignia de la IA: el resumen de las 8:00 sale de las reglas y los datos del colegio. Es la misma directora de la demo |
 | `jefatura.svg` | Jefe de estudios de unos 45, con barba recortada | Cuadrante de horarios |
 | `secretaria.svg` | Secretario de unos 60, con gafas y bigote | El sello del centro en alto y, en la otra mano, una hoja con su marca: el mismo aro que el sello de `circular` |
 | `docente.svg` | Maestra de unos 35, con pelo rizado | La tiza en la mano: dibuja en la pizarra un sol y una casa (dibujos, no letras ni números) |
@@ -42,16 +42,16 @@ Veintiuna ilustraciones planas para contar, desde la primera diapositiva, cómo 
 
 | Archivo | Qué muestra |
 |---|---|
-| `documento-ia.svg` | Una hoja con la insignia de la IA (la chispa naranja sobre un círculo pizarra) en la esquina de abajo: este documento lo ha preparado la IA. |
+| `documento-ia.svg` | Una hoja con la insignia de la IA (la chispa naranja sobre un círculo pizarra) en la esquina de abajo: este texto lo ha escrito la IA (un resumen, una respuesta, un acta dictada, una traducción). Solo para eso: no para la ficha, un informe de gastos ni un documento que rellena DirectorIA con una plantilla. |
 | `circular.svg` | Una circular con sello oficial, un aro con un pequeño edificio institucional. |
 | `acta.svg` | Un acta con dos firmas. |
-| `ficha.svg` | La ficha de sustitución, que prepara la IA: una lista de tareas con un aviso (alergias, necesidades o recogidas) en un triángulo pizarra del tamaño de las casillas. Lleva la insignia de la IA en la misma esquina que `documento-ia`. |
+| `ficha.svg` | La ficha de sustitución: una lista de tareas con un aviso (alergias, necesidades o recogidas) en un triángulo pizarra del tamaño de las casillas. No lleva la insignia de la IA: la prepara DirectorIA con las reglas y los datos del colegio («Preparada por DirectorIA · confirmada por jefatura»). |
 | `correo.svg` | Un sobre. |
-| `calendario.svg` | Un calendario con un plazo marcado por la IA: un círculo pizarra con el punto de la chispa. |
+| `calendario.svg` | Un calendario con un plazo marcado: un círculo pizarra con un punto claro, sin chispa, porque los plazos y sus avisos salen de las reglas del colegio. |
 | `candado.svg` | Un candado: la privacidad. |
 | `microfono.svg` | Un micrófono: el dictado por voz, «del dictado al acta». |
 | `reloj.svg` | Un reloj a las ocho, cuando llega el resumen del día, antes de las clases. |
-| `alerta.svg` | Un aviso suave: un triángulo pizarra-linea de esquinas redondeadas con la exclamación en papel, sin halo. Abajo a la derecha lleva la insignia de la IA, porque el aviso lo da ella. |
+| `alerta.svg` | Un aviso suave: un triángulo pizarra-linea de esquinas redondeadas con la exclamación en papel, sin halo y sin insignia, porque los avisos los da DirectorIA con las reglas del colegio. |
 
 ### Otros
 
@@ -72,7 +72,8 @@ Veintiuna ilustraciones planas para contar, desde la primera diapositiva, cómo 
   - `nube-claude` aparte, unida con una línea discontinua y la etiqueta «solo peticiones de material didáctico, con un filtro pensado para bloquear datos personales».
 - **Parejas que cuentan una función de un vistazo:**
   - `sustituto` + `ficha`: ausencia cubierta, sustituto informado;
-  - `direccion` + `reloj` + `documento-ia`: el resumen del día a las ocho;
+  - `direccion` + `reloj`: el resumen del día a las ocho;
+  - `direccion` + `correo` + `documento-ia`: cada correo, resumido por la IA y con una respuesta propuesta;
   - `docente` + `microfono` + `acta`: del dictado al acta;
   - `jefatura` + `calendario` + `alerta`: plazos y choques avisados;
   - `secretaria` + `circular` + `correo` + `familia`: circulares a las familias;
