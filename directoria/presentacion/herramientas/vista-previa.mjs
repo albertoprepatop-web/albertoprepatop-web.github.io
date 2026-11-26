@@ -27,8 +27,10 @@ const opt = (n, d) => { const i = argv.indexOf('--' + n); return i > -1 ? argv[i
 const root = path.resolve(argv[0]);
 const all = argv[1] === '--all';
 const scale = parseFloat(opt('scale', all ? '0.25' : '0.5'));
-const deckCss = fs.readFileSync(path.join(root, 'project/deck.css'), 'utf8');
 const deck = JSON.parse(fs.readFileSync(path.join(root, 'project/deck.json'), 'utf8'));
+// Las hojas compartidas de deck.json (format.shared), en su orden: deck.css y, si la hay, deck-versiones.css.
+const hojas = (deck.format && deck.format.shared) || ['project/deck.css'];
+const deckCss = hojas.map(h => fs.readFileSync(path.join(root, h), 'utf8')).join('\n');
 const blobMapFile = path.resolve(opt('blob-map', path.join(AQUI, 'blob-map.json')));
 const blobMap = fs.existsSync(blobMapFile) ? JSON.parse(fs.readFileSync(blobMapFile, 'utf8')) : {};
 const local = f => pathToFileURL(path.isAbsolute(f) ? f : path.join(DIR, f)).href;

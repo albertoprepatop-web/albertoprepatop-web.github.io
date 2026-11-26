@@ -38,3 +38,11 @@ La presentación (https://claude.ai/artifact/9x2eLc8Y7yPi2XKvhJwiFN) y el sistem
 5. **Comprobar:** abrir los dos artifacts y mirar las diapositivas y las piezas que han cambiado. `node blobs.mjs pendientes` debe decir «Nada pendiente».
 
 `inversion.html` sigue citando a propósito la ficha antigua (`pendientes.json`, «antiguos»): esa diapositiva lleva los precios y se publica con ellos. Cuando se publique, `node blobs.mjs presentacion ficha=<id de la ficha nueva> --antiguos` le pone la ficha nueva.
+
+## La presentación en tres partes (26 de noviembre de 2026)
+
+La presentación publicada tiene 35 diapositivas: apertura, parte 1 (DirectorIA Esencial, sin IA), parte 2 (DirectorIA Completo, con IA), parte 3 (comparativa, precios y condiciones), cierre y un anexo. Usa dos hojas compartidas, `project/deck.css` y `project/deck-versiones.css` (`format.shared` en `deck.json`); `vista-previa.mjs` ya lee las dos.
+
+- **Las diapositivas de antes** (`cover`, `solucion`, `funciona-colegio`, `mejora`, `rol-*`, `ahorro`, `inversion`, `piloto`…) siguen en `project/slides/` porque de ellas salen las derivadas, pero ya no están en `deck.json` ni en la presentación publicada (se quitaron al publicar la versión 21). `ahorro` e `inversion` llevan precios antiguos: no las volváis a poner sin cambiarlos.
+- **`versiones/`** guarda los generadores con los que se hicieron las nuevas: `derivar.py` (las que salen de una original), `gen_funciones.py`, `gen_cmp.py`, `gen_parte3.py` (paso a Completo, precios y condiciones; los precios están en `PRECIOS` y `COND`), `gen_analista_esencial.py`, `gen_funciona_esencial.py`, `ilus.py`, `comprobar.py`, `construir.sh` y `render.mjs`. Esperan una carpeta de trabajo con `project/` y, al lado, esta carpeta copiada como `tools/` (y `blob-map-versiones.json` copiado como `blob-map.json`). Allí: `bash tools/construir.sh`, mirar las capturas y copiar de vuelta las diapositivas cambiadas.
+- **Precios:** los de los planes del 26 de noviembre de 2026, sin IVA y con IVA debajo. Si cambian, se cambian en `gen_parte3.py` y se regeneran `precios-versiones` y `condiciones-versiones`.
