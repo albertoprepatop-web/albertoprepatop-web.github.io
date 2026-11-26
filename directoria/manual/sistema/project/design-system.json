@@ -172,6 +172,7 @@
     "sustituto.svg",
     "familia.svg",
     "documento-ia.svg",
+    "documento.svg",
     "circular.svg",
     "acta.svg",
     "ficha.svg",
@@ -209,8 +210,8 @@
     },
     "direccion.svg": {
      "name": "direccion.svg",
-     "blob": "3ac77ff19ccddd2266d526c2c9b2f037",
-     "size": 2552,
+     "blob": "1dcdf439169c3a47c581d54937f314bb",
+     "size": 2332,
      "type": "image/svg+xml"
     },
     "jefatura.svg": {
@@ -269,8 +270,8 @@
     },
     "ficha.svg": {
      "name": "ficha.svg",
-     "blob": "c1d82bd422f2769f8259988d47b5bb1c",
-     "size": 2334,
+     "blob": "0961bcc8e07ffa57229aeb5a806dae5d",
+     "size": 1909,
      "type": "image/svg+xml"
     },
     "correo.svg": {
@@ -281,8 +282,8 @@
     },
     "calendario.svg": {
      "name": "calendario.svg",
-     "blob": "771e543d17c0297e3588a5213b5d5c08",
-     "size": 2030,
+     "blob": "3235609b5cef3562d41ee465913ba2c2",
+     "size": 1859,
      "type": "image/svg+xml"
     },
     "candado.svg": {
@@ -305,8 +306,14 @@
     },
     "alerta.svg": {
      "name": "alerta.svg",
-     "blob": "30ed2f90f878aaf6693068a123b61187",
-     "size": 787,
+     "blob": "006feb5c8f75fece4e89d775170234cb",
+     "size": 459,
+     "type": "image/svg+xml"
+    },
+    "documento.svg": {
+     "name": "documento.svg",
+     "blob": "0ef7a510cb9f5cad559c182edb8462cc",
+     "size": 1218,
      "type": "image/svg+xml"
     }
    }
@@ -342,14 +349,14 @@
     },
     "kit.png": {
      "name": "kit.png",
-     "blob": "50b33bdede6e58891954cf6b0bd1bd6f",
-     "size": 235700,
+     "blob": "aedd78f4eaba212017172be7f78c8b62",
+     "size": 237247,
      "type": "image/png"
     },
     "vista-general.png": {
      "name": "vista-general.png",
-     "blob": "06333c18e3230d782ecf712c5e485582",
-     "size": 705098,
+     "blob": "a1ca3339518bef0e88c778e85b4d782f",
+     "size": 711193,
      "type": "image/png"
     }
    }
@@ -362,8 +369,8 @@
  },
  "lastChange": {
   "by": "Claude",
-  "at": "2026-11-24T22:50:21Z",
+  "at": "2026-11-26T09:55:42Z",
   "via": "Claude Code",
-  "note": "Presentación de 27 diapositivas, con el banco de recursos del claustro"
+  "note": "Ilustraciones y láminas al día: la ficha, los avisos, el calendario y la tableta de dirección, sin la chispa; ilustración nueva «documento»"
  }
 }

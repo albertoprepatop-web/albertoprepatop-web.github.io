@@ -15,14 +15,6 @@
  },
  "sistema": {
   "url": "https://claude.ai/artifact/FF3BxQXTHnNnQjXp86JjUd",
-  "subir": {
-   "Ilustraciones/ficha.svg": "ilustraciones/ficha.svg",
-   "Ilustraciones/alerta.svg": "ilustraciones/alerta.svg",
-   "Ilustraciones/direccion.svg": "ilustraciones/direccion.svg",
-   "Ilustraciones/calendario.svg": "ilustraciones/calendario.svg",
-   "Ilustraciones/documento.svg": "ilustraciones/documento.svg",
-   "Laminas/kit.png": "ilustraciones/kit.png",
-   "Laminas/vista-general.png": "presentacion/vista-general.png"
-  }
+  "subir": {}
  }
 }
