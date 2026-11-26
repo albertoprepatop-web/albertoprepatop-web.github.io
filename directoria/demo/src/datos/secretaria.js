@@ -9,96 +9,94 @@ DEMO.rol({
   },
   acceso: 'Analista de gastos, certificados, autorizaciones de imagen, plazos y correo resumido',
 
-  // ─── Inicio ───────────────────────────────────────────────────────
+  // ─── Inicio: panel de mando (guion-de-datos.md §6.2 bis), solo con datos ───
+  // Sin el día por sesiones: el trabajo de secretaría no va por el horario de Primaria.
   inicio: {
     antetitulo: 'Miércoles 18 de noviembre · 8:00',
     titulo: 'Buenos días, Carmen',
-    entradilla: 'Certificados, plazos, renovaciones y revisiones del edificio. Lo ha preparado DirectorIA; nada se envía ni se firma sin ti.',
-    bloques: [
+    entradilla: 'Certificados, gastos, plazos y revisiones del edificio. Nada se envía ni se firma sin ti.',
+
+    // Lo que importa a las 8:00, de lo más urgente a lo menos. Cada cifra lleva a donde se actúa y tiene un solo sentido.
+    cifras: [
       {
-        titulo: 'Certificados y autorizaciones',
-        items: [
-          {
-            texto: 'Certificado de matrícula de Nora D. (1.º ESO A) para una beca deportiva: listo para revisar y pasar a la firma. Su familia lo necesita antes del viernes 20.',
-            estado: 'hoy',
-            ir: 'certificados',
-          },
-          {
-            texto: 'Fotos del festival de otoño: tres alumnos de Primaria no pueden aparecer. Envía la lista a sus tutorías antes de publicar nada.',
-            estado: 'pendiente',
-            ir: 'imagen',
-          },
-          {
-            texto: 'La familia de Iker P. (4.º A) quiere cambiar su autorización de imagen. La respuesta está preparada.',
-            estado: 'pendiente',
-            ir: 'correo:c-iker',
-          },
+        // Cuenta lo que queda: el certificado de Nora D. (E8), que hoy pasa a la firma.
+        // «ir» también en la cifra: es adonde lleva cuando ya no queda nada pendiente.
+        etiqueta: 'Certificados por revisar',
+        icono: 'documento',
+        ir: 'certificados',
+        pendientes: [
+          { texto: 'Matrícula de Nora D. (1.º ESO A), para una beca. Antes del viernes 20.', sigue: 'certificados', ir: 'certificados', hoy: true, accion: 'Revisar y pasar a la firma', accionCorta: 'Pasar a la firma' },
         ],
+        alTerminar: 'Pasado a la firma',
+        accionHecha: 'Ver el documento',
       },
       {
-        titulo: 'Próximos plazos',
-        items: [
-          {
-            texto: 'Viernes 20: las tutorías de 4.º dejan en secretaría las autorizaciones firmadas de la salida al Jardín Botánico.',
-            estado: 'pendiente',
-            ir: 'circulares',
-          },
-          {
-            texto: 'Viernes 27: estadística de inicio de curso en la plataforma de la Consejería. Los recuentos están preparados para que los revises.',
-            estado: 'pendiente',
-            ir: 'correo:c-estadistica',
-          },
-          {
-            texto: 'Lunes 30: cortan la calle de la entrada por obras. Avisa a los proveedores que tengan entregas ese día.',
-            estado: 'info',
-            ir: 'circulares',
-          },
-        ],
+        etiqueta: 'Correos por responder',
+        icono: 'correo',
+        cuenta: 'correo',
+        accion: 'Abrir el correo',
+        alTerminar: 'Al día',
       },
       {
-        titulo: 'Renovaciones y ahorros',
-        items: [
-          {
-            texto: 'Fotocopiadoras: el contrato se renueva solo el 1 de diciembre. Para negociar o cambiar de empresa hay que avisar antes del sábado 21. Lo decide dirección.',
-            estado: 'pendiente',
-            ir: 'gastos',
-          },
-          {
-            texto: 'Banco: 46 € al mes de comisión de mantenimiento. La petición para que la quiten está preparada en el correo.',
-            estado: 'pendiente',
-            ir: 'correo:c-banco',
-          },
-          {
-            texto: 'El informe de gastos de octubre está listo para enviarlo a dirección y a la titularidad.',
-            estado: 'pendiente',
-            ir: 'gastos',
-          },
-        ],
+        // Un valor con su rótulo: los cinco avisos del analista (E6). Está hecho cuando envías el informe.
+        etiqueta: 'Informe de gastos',
+        icono: 'carpeta',
+        valor: '5',
+        rotulo: 'avisos para dirección',
+        nota: 'El más urgente: las fotocopiadoras, que dirección decide antes del sábado 21.',
+        sigue: 'gastos',
+        ir: 'gastos',
+        accion: 'Revisar y enviar',
+        alTerminar: 'Enviado',
+        accionHecha: 'Ver el informe',
       },
       {
-        titulo: 'Revisiones del edificio',
-        items: [
-          {
-            texto: 'Extintores: la revisión anual vence el lunes 30. La empresa propone el martes 24 o el jueves 26, el día de la visita de inspección.',
-            estado: 'pendiente',
-            ir: 'correo:c-extintores',
-          },
-          {
-            texto: 'Desfibrilador: los electrodos caducan el 12 de diciembre. Conviene pedir ya los de recambio.',
-            estado: 'info',
-            ir: 'circulares',
-          },
-          {
-            texto: 'Ascensor: inspección periódica el viernes 15 de enero.',
-            estado: 'info',
-          },
-          {
-            texto: 'Caldera: revisión anual hecha el 2 de noviembre.',
-            estado: 'hecho',
-          },
-        ],
+        // Un valor con su rótulo: los tres alumnos sin autorización del registro (E9). Está hecho cuando envías la lista.
+        etiqueta: 'Fotos del festival',
+        icono: 'persona',
+        valor: '3',
+        rotulo: 'alumnos sin autorización',
+        nota: 'Envía la lista a sus tutorías antes de publicar nada en la web o la revista.',
+        sigue: 'imagen',
+        ir: 'imagen',
+        accion: 'Ver la lista',
+        alTerminar: 'Lista enviada',
+        accionHecha: 'Ver la lista',
       },
     ],
+
+    // Lo que te necesita: empieza por lo que las cifras no dicen. Las cuatro primeras salen de correos (llevan «Resumido con IA»).
+    lista: {
+      titulo: 'Lo que te necesita',
+      items: [
+        { grupo: 'Esta semana', icono: 'familia', titulo: 'Familia de Iker P. (4.º A): cambiar su autorización de imagen', detalle: 'Quiere que salga en la revista, pero no en la web. Tienes tres respuestas propuestas.', estado: 'pendiente', ir: 'correo:c-iker', sigue: 'correo:c-iker' },
+        // Choque: una de las dos fechas que propone la empresa cae en la visita de inspección (E4).
+        { grupo: 'Esta semana', icono: 'calendario', titulo: 'Extintores: el jueves 26 coincide con la visita de inspección', detalle: 'La empresa propone ese día, de 9:00 a 12:00, o el martes 24 por la tarde, que tienes libre.', estado: 'pendiente', choque: true, ir: 'correo:c-extintores', sigue: 'correo:c-extintores', si: { titulo: 'Extintores: el día de la revisión', detalle: 'La empresa proponía el martes 24 o el jueves 26, el día de la visita de inspección.' } },
+        { grupo: 'Esta semana', icono: 'correo', titulo: 'Estadística: acusa recibo a la Consejería', detalle: 'Piden también quién cargará los datos. Tienes la respuesta preparada.', estado: 'pendiente', ir: 'correo:c-estadistica', sigue: 'correo:c-estadistica' },
+        { grupo: 'Esta semana', icono: 'correo', titulo: 'Banco: 46 € al mes de comisión de mantenimiento', detalle: 'Son 552 € al año. La petición para que la quiten está preparada en el correo.', estado: 'pendiente', ir: 'correo:c-banco', sigue: 'correo:c-banco' },
+        { grupo: 'Para saber', icono: 'colegio', titulo: 'Ascensor: inspección periódica el viernes 15 de enero', detalle: 'En diciembre, confirma la hora con la empresa: ese día no se podrá usar.', estado: 'info', ir: 'circulares' },
+        { grupo: 'Para saber', icono: 'colegio', titulo: 'Caldera: revisión anual', detalle: 'El certificado está guardado en el archivo de mantenimiento.', estado: 'hecho', verbo: 'Hecha el lun 2 nov', ir: 'circulares' },
+      ],
+    },
+
+    // Lo que viene: cuatro semanas, hasta los electrodos del sáb 12 dic. Cada plazo sigue a su línea de «Circulares y plazos».
+    // fuente: lo que la IA ha sacado de una circular o de un correo (lleva la insignia). El calendario de mantenimiento sale de reglas.
+    // La visita de inspección es una fecha del colegio (secretaría no tiene ese correo) y el corte de la calle sale como
+    // «De: Aviso del Ayuntamiento» en «Circulares y plazos», sin IA: las dos van sin insignia.
+    agenda: {
+      titulo: 'Lo que viene',
+      desde: '2026-11-16',
+      semanas: 4,
+      marcas: [
+        { fecha: '2026-11-20', tipo: 'plazo', titulo: 'Autorizaciones de la salida al Jardín Botánico', detalle: 'Las tutorías de 4.º las traen antes de las 14:00, con la lista de quién falta.', fuente: 'circular', ir: 'circulares', sigue: 'circulares#1', verbo: 'Recogidas' },
+        { fecha: '2026-11-26', hora: '10:00', tipo: 'evento', titulo: 'Visita de inspección', detalle: 'Inspección educativa, con la directora y el jefe de estudios.' },
+        { fecha: '2026-11-27', tipo: 'plazo', titulo: 'Estadística de inicio de curso', detalle: 'Súbela a la plataforma de la Consejería antes de este día. Los recuentos están preparados.', fuente: 'circular', ir: 'circulares', sigue: 'circulares#2', verbo: 'Datos subidos' },
+        // Sale del calendario de mantenimiento (sin insignia). Al responder a la empresa, cambia el detalle y sigue pendiente.
+        { fecha: '2026-11-30', tipo: 'plazo', titulo: 'Vence la revisión anual de los extintores', detalle: 'Los 42 del colegio. Falta fijar el día con la empresa.', ir: 'correo:c-extintores', sigue: 'correo:c-extintores', si: { detalle: 'Los 42 del colegio. Ya has respondido a la empresa para fijar el día.', estado: 'pendiente' } },
+        { fecha: '2026-11-30', tipo: 'evento', titulo: 'Corte de la calle de la entrada por obras', detalle: 'De 7:00 a 19:00. Avisa a los proveedores que tengan entregas ese día, como el comedor.', ir: 'circulares', sigue: 'circulares#4', verbo: 'Proveedores avisados' },
+        { fecha: '2026-12-12', tipo: 'plazo', titulo: 'Caducan los electrodos del desfibrilador', detalle: 'Pide ya los de recambio y comprueba con conserjería que quedan puestos.', ir: 'circulares', sigue: 'circulares#5', verbo: 'Recambio pedido' },
+      ],
+    },
   },
 
   // ─── Correo ───────────────────────────────────────────────────────

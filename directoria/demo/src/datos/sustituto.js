@@ -10,76 +10,149 @@ DEMO.rol({
   acceso: 'Fichas de sustitución de 3.º B, jornada de hoy y correo resumido',
 
   // ───────────────────────────── Inicio ─────────────────────────────
+  // Panel de mando (6.2 bis). Lo que cubre Pablo sigue a «Guardias de hoy» de jefatura.
+  // Cifras, día y calendario salen de reglas y de los datos del colegio: sin insignia de IA.
+  // Las filas que resumen un correo y los plazos sacados de un correo llevan la insignia (la pone el motor).
+  // Los textos de base son los de las 8:00, antes de que jefatura confirme; lo de después va en «siConfirmada».
+  // Si jefatura elige a otra persona para la 1.ª (g1) o para la 6.ª y la salida (g4), lo que cambia va en «siOtra»:
+  // la celda pasa a «Ya no la cubres», sale de tu recuento, y la cifra, el carril y la fila de la salida lo dicen.
+  // Si jefatura te elige a ti para la 3.ª (g2) o para el recreo (g3), la sesión sale en tu día («siElegido»).
   inicio: {
     antetitulo: 'Miércoles 18 de noviembre · 8:00',
     titulo: 'Buenos días, Pablo',
-    entradilla: 'Sergio Prieto no viene y jefatura cuenta contigo para 3.º B a 1.ª y a 6.ª. DirectorIA te ha preparado la jornada, las fichas y el correo. Nada se envía sin ti.',
-    bloques: [
+    // No da por hecho lo que decide jefatura: vale antes y después de que confirme, y si elige a otra persona.
+    entradilla: 'Sergio Prieto no viene hoy. Aquí tienes tu jornada. Nada se envía sin ti.',
+
+    cifras: [
       {
-        titulo: 'Tu jornada',
-        items: [
-          {
-            texto: 'DirectorIA te propone para cubrir a Sergio Prieto en 3.º B a 1.ª (Lengua) y a 6.ª (Matemáticas). Jefatura lo está revisando.',
-            estado: 'pendiente',
-            ir: 'correo:c-jefatura',
-            bandera: 'guardias',
-            textoSi: 'Jefatura ha confirmado que cubres a Sergio Prieto en 3.º B a 1.ª (Lengua) y a 6.ª (Matemáticas).',
-            estadoSi: 'hecho',
-          },
-          {
-            texto: 'Tus cuatro apoyos se mantienen: 1.º B a 2.ª, 3.º A a 3.ª, 4.º B a 4.ª y 2.º A a 5.ª. Cubres en tu guardia y en tu hora de preparación.',
-            estado: 'info',
-            ir: 'jornada',
-          },
-          {
-            texto: '16:00 · Haces tú la salida de 3.º B. Antes, lee el aviso de recogida de tu ficha de 6.ª.',
-            estado: 'hoy',
-            ir: 'ficha',
-          },
+        // Un valor, la hora, que la etiqueta ya rotula. Sin rótulo para que la hora y «Hoy» quepan en una línea en media
+        // tarjeta del móvil. A las 8:00 es una propuesta: la ficha aún no ha llegado, así que la acción lleva a tu jornada
+        // y la cifra no se puede dar por hecha. Cuando jefatura confirma las guardias (siConfirmada), te pide leer la
+        // ficha y está hecha cuando marcas en «Tu jornada» que la has leído.
+        etiqueta: 'Tu primera sesión',
+        icono: 'reloj',
+        valor: '9:00',
+        hoy: true,
+        nota: 'Te proponen para Lengua con 3.º B. Tu ficha llega cuando jefatura confirme las guardias.',
+        ir: 'jornada',
+        accion: 'Ver tu jornada',
+        accionCorta: 'Tu jornada',
+        alTerminar: 'Ficha leída',
+        accionHecha: 'Ver tu ficha',
+        siConfirmada: [
+          { cuando: 'jefatura/guardias', nota: 'Lengua con 3.º B, en tu hora de guardia. Lee su ficha antes de entrar.', sigue: 'jornada#0', ir: 'ficha', accion: 'Leer tu ficha de 1.ª', accionCorta: 'Leer la ficha' },
+          { cuando: 'jefatura/guardias#g1', nota: 'Cubres Lengua con 3.º B. Tu ficha llega cuando jefatura confirme las demás guardias.' },
+        ],
+        // Si la 1.ª es para otra persona, tu primera sesión es el apoyo de 2.ª.
+        siOtra: [
+          { cuando: 'jefatura/guardias#g1', valor: '9:45', nota: 'Apoyo de lectoescritura con 1.º B. Jefatura ha elegido a otra persona para la 1.ª.', sigue: 'jornada#2', ir: 'jornada', accion: 'Ver tu jornada', accionCorta: 'Tu jornada', alTerminar: 'Hecha', accionHecha: 'Ver tu jornada' },
         ],
       },
       {
-        titulo: 'Tus fichas',
-        items: [
-          {
-            texto: 'Tus fichas de 1.ª y 6.ª llegan en cuanto jefatura confirme las guardias.',
-            estado: 'pendiente',
-            ir: 'ficha',
-            bandera: 'guardias',
-            textoSi: 'Ya tienes tus fichas de 1.ª y 6.ª, con la tarea y lo que debes saber del grupo.',
-            estadoSi: 'hoy',
-          },
-          {
-            texto: 'Cada ficha se abre antes de su sesión y solo incluye lo que necesitas para dar la clase.',
-            estado: 'info',
-          },
-          {
-            texto: 'Aviso: la ficha se cierra al acabar la jornada y queda registrado quién la ve.',
-            estado: 'info',
-          },
-        ],
+        // Las fichas que te llegan: una por cada sesión de «Guardias de hoy» con ficha que es tuya, porque DirectorIA te
+        // la proponía o porque jefatura te ha elegido (las cuenta el motor). Llegan juntas cuando jefatura confirma.
+        etiqueta: 'Tus fichas de hoy',
+        icono: 'documento',
+        fichas: 'jefatura/guardias',
+        rotulo: 'por llegar',
+        ir: 'ficha',
+        accion: 'Ir a tus fichas',
+        alTerminar: 'Ya las tienes',
+        alTerminarUna: 'Ya la tienes',
+        accionHecha: 'Ver tus fichas',
+        // Sin ninguna (jefatura ha elegido a otras personas): la cifra no se da por hecha, dice «Ninguna» y lleva a tu jornada.
+        siNinguna: { valor: 'Ninguna', nota: 'Jefatura ha elegido a otra persona para la 1.ª y para la 6.ª de 3.º B.', ir: 'jornada', accion: 'Ver tu jornada' },
       },
       {
-        titulo: 'Tu correo',
-        items: [
-          {
-            texto: 'Laura Sánchez te pide material del aula de apoyo para su Educación Física de mañana con 4.º A.',
-            estado: 'hoy',
-            ir: 'correo:c-laura',
-          },
-          {
-            texto: 'Pilar Serrano quiere tu propuesta de apoyos para enero antes del viernes 20, para la reunión de ciclo del martes 24.',
-            estado: 'pendiente',
-            ir: 'correo:c-ciclo',
-          },
-          {
-            texto: 'Desde enero se lee de 14:30 a 14:50 en toda Primaria, y tus apoyos de 5.ª empiezan a las 14:30.',
-            estado: 'info',
-            ir: 'correo:c-lectura',
-          },
-        ],
+        etiqueta: 'Correos por responder',
+        icono: 'correo',
+        cuenta: 'correo',
+        accion: 'Abrir el correo',
+        alTerminar: 'Al día',
       },
     ],
+
+    // Tu jornada por sesiones (horario de Primaria). Las dos de 3.º B y la salida siguen a jefatura:
+    // «Por confirmar · Propuesta: tú» y, al confirmarlas, «Cubres tú · Confirmada a las 8:0x».
+    dia: {
+      titulo: 'Tu jornada',
+      carriles: [
+        {
+          titulo: 'Tus sesiones',
+          // Los textos del carril dicen lo que hay de verdad en tu día: el motor rellena {clases} (los apoyos que te quedan:
+          // con la 3.ª de 3.º B, tu apoyo de 3.º A queda sin hacer), {hechas} y {faltan} (lo que cubres, confirmado o no:
+          // «la 1.ª, la 3.ª, la 6.ª y la salida»), también si jefatura te elige para otra sesión (siElegido).
+          detalle: '{Clases} apoyos y lo que cubres de Sergio',
+          icono: 'clase',
+          cuenta: 'confirmadas',
+          pendiente: 'DirectorIA te propone para cubrir a Sergio Prieto. Jefatura lo está revisando.',
+          parcial: 'Jefatura ha confirmado que cubres {hechas}. {Faltan}, por confirmar.',
+          alTerminar: 'Jefatura ha confirmado que cubres a Sergio Prieto: {hechas}.',
+          // Si jefatura da a otra persona lo que te proponía. Si te lo quita todo y no te elige para nada, siNinguna.
+          siOtra: [
+            { cuando: ['jefatura/guardias#g1', 'jefatura/guardias#g4'], pendiente: 'Para la 1.ª, la 6.ª y la salida, jefatura ha elegido a otra persona. {Faltan}, por confirmar.', alTerminar: 'Para la 1.ª, la 6.ª y la salida, jefatura ha elegido a otra persona. Ha confirmado que cubres {hechas}.' },
+            { cuando: 'jefatura/guardias#g1', pendiente: 'Para la 1.ª, jefatura ha elegido a otra persona. {Faltan}, por confirmar.', alTerminar: 'Para la 1.ª, jefatura ha elegido a otra persona. Ha confirmado que cubres {hechas}.' },
+            { cuando: 'jefatura/guardias#g4', pendiente: 'Para la 6.ª y la salida, jefatura ha elegido a otra persona. {Faltan}, por confirmar.', alTerminar: 'Para la 6.ª y la salida, jefatura ha elegido a otra persona. Ha confirmado que cubres {hechas}.' },
+          ],
+          siNinguna: { detalle: 'Cuatro apoyos. En 3.º B no cubres nada.', linea: 'Jefatura ha elegido a otra persona para la 1.ª y para la 6.ª de 3.º B. Tus apoyos no cambian.' },
+          // Si jefatura te elige para una sesión que DirectorIA proponía a otra persona, sale en su franja, en lugar de lo que
+          // tenías a esa hora, y cuenta en tu recuento. El aviso, bajo el día.
+          siElegido: [
+            { cuando: 'jefatura/guardias#g2', franja: '3', titulo: 'Ciencias de la Naturaleza', detalle: '3.º B', nota: 'Cubres a Sergio Prieto. Tu apoyo de Matemáticas en 3.º A queda sin hacer.', aviso: 'Jefatura te ha elegido para la 3.ª de 3.º B: tu apoyo de Matemáticas en 3.º A queda sin hacer.' },
+            { cuando: 'jefatura/guardias#g3', franja: 'recreo', titulo: 'Patio de Primaria', detalle: 'Turno de Sergio', nota: 'Vigilas el patio en el turno de Sergio Prieto.', aviso: 'Jefatura te ha elegido para el turno de patio de Sergio Prieto, en el recreo.' },
+          ],
+          sesiones: [
+            { franja: '1', titulo: 'Lengua', detalle: '3.º B', tipo: 'cubre', sigue: 'jefatura/guardias#g1', nota: 'Cubres a Sergio Prieto en tu hora de guardia.' },
+            { franja: '2', titulo: 'Apoyo de lectoescritura', detalle: '1.º B', tipo: 'clase', nota: 'Grupo pequeño en el aula de apoyo: sílabas trabadas.' },
+            { franja: '3', titulo: 'Apoyo de Matemáticas', detalle: '3.º A', tipo: 'clase', nota: 'Dentro del aula: problemas de dos operaciones.' },
+            { franja: '4', titulo: 'Apoyo de Lengua', detalle: '4.º B', tipo: 'clase', nota: 'Grupo pequeño en el aula de apoyo: comprensión lectora.' },
+            { franja: '5', titulo: 'Apoyo de Matemáticas', detalle: '2.º A', tipo: 'clase', nota: 'Dentro del aula: sumas con llevada.' },
+            { franja: '6', titulo: 'Matemáticas', detalle: '3.º B', tipo: 'cubre', sigue: 'jefatura/guardias#g4', nota: 'Cubres a Sergio Prieto en tu hora de preparación.' },
+            { franja: 'salida', titulo: 'Salida de 3.º B', tipo: 'cubre', sigue: 'jefatura/guardias#g4', nota: 'Acompañas al grupo a la puerta de Primaria. Antes, lee el aviso de recogida de tu ficha de 6.ª.' },
+          ],
+        },
+      ],
+    },
+
+    // Lo que te necesita: empieza por lo que las cifras no dicen. Lo que tiene fecha va en la agenda.
+    lista: {
+      titulo: 'Lo que te necesita',
+      items: [
+        { grupo: 'Hoy', icono: 'correo', titulo: 'Laura Sánchez te pide material', detalle: 'Saquitos y aros del aula de apoyo, para su Educación Física de mañana con 4.º A.', estado: 'hoy', ir: 'correo:c-laura', sigue: 'correo:c-laura' },
+        {
+          // La salida va con la 6.ª (g4). A las 8:00 es una propuesta: para saber, sin pedir nada. Cuando jefatura confirma
+          // (siConfirmada), pasa a hoy y pide leer el aviso de recogida de la ficha de 6.ª, que llega con todas las guardias.
+          grupo: 'Hoy', icono: 'persona', titulo: '16:00: te proponen para la salida de 3.º B', detalle: 'Va con la 6.ª. Cuando jefatura lo confirme, lee el aviso de recogida de tu ficha de 6.ª.', estado: 'info', ir: 'jornada',
+          siConfirmada: [
+            { cuando: 'jefatura/guardias', titulo: '16:00: haces tú la salida de 3.º B', detalle: 'Antes, lee el aviso de recogida de tu ficha de 6.ª.', estado: 'hoy', ir: 'ficha', sigue: 'jornada#7', verbo: 'Hecha' },
+            { cuando: 'jefatura/guardias#g4', titulo: '16:00: haces tú la salida de 3.º B', detalle: 'El aviso de recogida te llega con tu ficha de 6.ª, cuando jefatura confirme las demás guardias.', estado: 'hoy', sigue: 'jornada#7', verbo: 'Hecha' },
+          ],
+          // Si jefatura la da a otra persona, la fila pasa a ser para saber, sin enlace.
+          siOtra: [{ cuando: 'jefatura/guardias#g4', titulo: '16:00: la salida de 3.º B ya no es tuya', detalle: 'Va con la 6.ª, y para la 6.ª jefatura ha elegido a otra persona.', estado: 'info', ir: null }],
+        },
+        {
+          // Choque: desde enero se lee de 14:30 a 14:50 y sus apoyos de 5.ª empiezan a las 14:30 (correos de Pilar Serrano y de dirección).
+          grupo: 'Esta semana', icono: 'alerta', titulo: 'Tus apoyos de 5.ª coinciden con la lectura de enero',
+          detalle: 'Desde enero se lee de 14:30 a 14:50 en toda Primaria. Tenlo en cuenta en tu propuesta para Pilar Serrano.',
+          // Lo resuelven las respuestas que hablan de la lectura: empezar los apoyos a las 14:50 (#0) o preguntar a Pilar cómo
+          // encajarla (#2). Pedirle más tiempo (#1) no: el choque sigue.
+          estado: 'pendiente', choque: true, ir: 'correo:c-ciclo', sigue: 'correo:c-ciclo#0,2',
+          aMedias: { sigue: 'correo:c-ciclo', detalle: 'Le has pedido a Pilar Serrano más tiempo. Tenlo en cuenta en tu propuesta.' },
+        },
+        { grupo: 'Para saber', icono: 'documento', titulo: 'Tus fichas se cierran al acabar la jornada', detalle: 'Cada una se abre antes de su sesión y solo trae lo que necesitas para la clase. Queda registrado quién la ve.', estado: 'info' },
+      ],
+    },
+
+    // Lo que viene: lo que Pilar Serrano pide en su correo (lleva la insignia).
+    agenda: {
+      titulo: 'Lo que viene',
+      desde: '2026-11-16',
+      semanas: 3,
+      marcas: [
+        { fecha: '2026-11-20', tipo: 'plazo', titulo: 'Tu propuesta de apoyos para enero', detalle: 'Pásasela a Pilar Serrano antes de este día, para la reunión de ciclo.', fuente: 'correo', ir: 'correo:c-ciclo' },
+        { fecha: '2026-11-24', hora: '16:15', tipo: 'evento', titulo: 'Reunión del 2.º ciclo', detalle: 'Hasta las 17:15, en el aula de 4.º B. Entre otros puntos, los apoyos del 2.º trimestre.', fuente: 'correo', ir: 'correo:c-ciclo' },
+      ],
+    },
   },
 
   // ───────────────────────────── Correo ─────────────────────────────

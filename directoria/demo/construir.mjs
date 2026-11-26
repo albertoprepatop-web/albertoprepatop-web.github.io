@@ -35,9 +35,12 @@ const fontFace = FUENTES.map(([fam, peso, archivo]) =>
 
 const css = leer(path.join(SRC, 'app.css')).replace('/*FUENTES*/', fontFace);
 
-// Ilustraciones de la casa, con su disco
+// Ilustraciones de la casa, con su disco. Si src/ilustraciones/ trae una con el mismo nombre, va esa:
+// la demo tiene sus propias secretaria y orientacion, para que cuadren con Carmen López y Andrés Vidal
+// (ver src/ilustraciones/generar-dos.mjs).
 const ILUS = ['direccion', 'jefatura', 'secretaria', 'docente', 'orientacion', 'sustituto', 'servidor', 'candado', 'reloj', 'microfono', 'nube-claude', 'correo', 'acta', 'ficha', 'calendario', 'documento-ia', 'familia', 'circular', 'alerta', 'colegio-servidor'];
-const ilus = Object.fromEntries(ILUS.map((n) => [n, 'data:image/svg+xml;base64,' + b64(path.join(MARCA, 'ilustraciones', n + '.svg'))]));
+const ilusDe = (n) => { const propia = path.join(SRC, 'ilustraciones', n + '.svg'); return fs.existsSync(propia) ? propia : path.join(MARCA, 'ilustraciones', n + '.svg'); };
+const ilus = Object.fromEntries(ILUS.map((n) => [n, 'data:image/svg+xml;base64,' + b64(ilusDe(n))]));
 
 const sinDeclaracion = (s) => s.replace(/<\?xml[^>]*>\s*/, '').trim();
 const logo = sinDeclaracion(leer(path.join(MARCA, 'logo', 'logo-horizontal.svg')));

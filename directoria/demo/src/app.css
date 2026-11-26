@@ -222,16 +222,372 @@ button { cursor: pointer; }
 .principal-dentro { max-width: 76rem; display: grid; grid-template-columns: minmax(0, 1fr); gap: 1.5rem; }
 .cabeza-vista { display: grid; grid-template-columns: minmax(0, 1fr); gap: .125rem; }
 [data-foco]:focus { outline: none; }
+html:has(.principal-inicio) { scroll-padding-top: calc(var(--cabecera) + env(safe-area-inset-top, 0px) + .75rem); }
+/* Si una pantalla no se puede pintar */
+.fallo { display: grid; gap: 1rem; justify-items: start; max-width: 44rem; padding-block: 3rem; }
 .lectura, .impacto, .dictado-panel, .adaptado, .formulario, .version, .enviado, .editor, .recorrido, .lateral { grid-template-columns: minmax(0, 1fr); }
 
 /* Inicio */
-.bloques { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: 1rem; align-items: start; }
+/* Formato de bloques: las tarjetas se reparten en columnas, una debajo de otra, para que no queden huecos entre tarjetas de distinta altura. */
+.bloques { columns: 26rem 2; column-gap: 1rem; }
+.bloques > .tarjeta { break-inside: avoid; margin-bottom: 1rem; }
 .items { list-style: none; display: grid; gap: .25rem; }
 .item { display: grid; grid-template-columns: auto 1fr; gap: .25rem .75rem; align-items: start; padding: .625rem 0; border-top: 1px solid var(--borde); }
 .item:first-child { border-top: 0; padding-top: 0; }
 .item .pastilla { margin-top: .125rem; min-width: 5.25rem; justify-content: center; }
 .item .texto { color: var(--tinta); line-height: 1.5; }
 .item .ir { grid-column: 2; justify-self: start; font-size: var(--t-s); }
+.origen-inicio { margin-top: .75rem; }
+
+/* Inicio: panel de mando. La cabecera con la persona, cifras que llevan a donde se actúa, el día por sesiones,
+   lo que te necesita y lo que viene. Cifras, día y calendario salen de reglas y de los datos del colegio: sin insignia.
+   La insignia de la IA solo va en lo que escribe un modelo de lenguaje: resúmenes de correo y plazos sacados de un correo
+   o de una circular. Un solo tono para las magnitudes (la pizarra); el estado, siempre con icono o forma y texto.
+   La chispa no va en ningún icono: es solo de la insignia de la IA. */
+.principal-inicio { padding-top: 1.25rem; }
+/* En una pantalla Full HD (1920 px), el panel llega hasta 96rem: no se queda pegado al menú con un hueco a la derecha */
+.principal-inicio .principal-dentro { gap: 1.25rem; max-width: 96rem; }
+
+/* Cabecera: el saludo con una línea de entradilla y, a la derecha, la ilustración de la persona (120 px; 136 px desde 1500 px; 104 px en tableta; en el móvil no va) */
+.cabeza-inicio { display: grid; grid-template-columns: minmax(0, 1fr) auto; align-items: center; gap: 1.5rem; }
+.cabeza-inicio-texto { display: grid; grid-template-columns: minmax(0, 1fr); gap: .25rem; min-width: 0; }
+.cabeza-inicio .antetitulo { display: block; text-wrap: balance; }
+.cabeza-inicio .antetitulo::before { display: inline-block; vertical-align: middle; margin: -.15em .5rem 0 0; }
+.cabeza-inicio .origen { color: var(--cuerpo); font-weight: 600; }
+.cabeza-inicio .titulo-vista { margin-top: 0; }
+.cabeza-inicio .entradilla { margin-top: 0; max-width: none; }
+/* El disco de la ilustración deja un margen transparente de 8 px (16 de 240): el margen negativo lo aprovecha,
+   así la cabecera no crece por el dibujo y las cifras y la fila del día suben. */
+.cabeza-ilus { display: block; width: 7.5rem; height: 7.5rem; margin-block: -.5rem; }
+@media (min-width: 1500px) { .cabeza-ilus { width: 8.5rem; height: 8.5rem; } }
+
+.panel { display: grid; gap: 1.25rem; min-width: 0; container: panel / inline-size; }
+.ico { display: inline-block; flex: none; width: 2.25rem; height: 2.25rem; }
+.ico-fondo { fill: var(--salvia); }
+.ico-trazo { fill: none; stroke: var(--pizarra); stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+.ico-trazo .f { fill: var(--pizarra); stroke: none; }
+.flecha { width: 1rem; height: 1rem; flex: none; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+/* Glifos de estado y formas del calendario: toman el color del texto; el hueco, el del fondo en que están */
+.glifo { display: inline-block; flex: none; width: 1rem; height: 1rem; }
+.glifo .trazo { fill: none; stroke: currentColor; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+.glifo .grueso { stroke-width: 2.2; }
+.glifo .relleno { fill: currentColor; }
+.glifo .hueco { fill: none; stroke: var(--hueco, var(--papel)); stroke-width: 1.6; stroke-linecap: round; }
+.glifo .hueco-f { fill: var(--hueco, var(--papel)); }
+/* Lo que ha escrito la IA: la insignia y «Resumido con IA», «Sacado del correo»… */
+.marca-ia { display: inline-flex; align-items: center; gap: .375rem; width: fit-content; font-size: var(--t-xs); font-weight: 600; line-height: 1.3; color: var(--cuerpo); }
+.marca-ia .insignia { width: 1rem; height: 1rem; }
+
+/* Medidor (un tramo por elemento) y tramos con nombre (pasos del dictado, días de una cuenta atrás) */
+.medidor { display: flex; gap: 3px; width: 100%; }
+.medidor i { flex: 1; height: .625rem; border-radius: 999px; background: var(--linea); box-shadow: inset 0 0 0 1px var(--borde-campo); }
+.indicador-barra .medidor i { height: .75rem; }
+.medidor i.lleno { background: var(--pizarra); box-shadow: none; }
+.medidor i.revisar, .medidor i.actual { background: transparent; box-shadow: inset 0 0 0 2px var(--pizarra); }
+/* El borde discontinuo, en un rectángulo de esquinas suaves: en una píldora estrecha los trazos se rompen en las curvas */
+.medidor i.falta, .medidor i.condicional { background: transparent; box-shadow: none; border: 1.5px dashed var(--pizarra); border-radius: 4px; }
+.tramos { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: .375rem; font-size: var(--t-xs); font-weight: 700; line-height: 1.2; color: var(--cuerpo); }
+.tramos > span { display: grid; gap: .3125rem; min-width: 0; white-space: nowrap; }
+.tramos > span::before { content: ""; height: .75rem; border-radius: 999px; background: var(--linea); box-shadow: inset 0 0 0 1px var(--borde-campo); }
+.tramos .hecho::before, .tramos .queda::before { background: var(--pizarra); box-shadow: none; }
+.tramos .queda, .tramos .actual { color: var(--tinta); }
+.tramos .actual::before { background: transparent; box-shadow: inset 0 0 0 2px var(--pizarra); }
+/* Aire entre «Dictar», «Revisar» y «Enviar» */
+.tramos.pasos { gap: .75rem; }
+
+/* Cifras: dos por fila en el móvil y todas en una fila con sitio. Las filas de dentro (etiqueta, cifra, medidor,
+   nota y acción) se alinean entre tarjetas con subgrid, así que la nota y la acción empiezan a la misma altura. */
+.indicadores { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: .75rem; row-gap: 0; margin-bottom: -.75rem; }
+.indicadores > li { display: grid; grid-row: span 5; grid-template-rows: subgrid; row-gap: 0; min-width: 0; margin-bottom: .75rem; }
+@container panel (width < 52rem) { .indicadores > li.entera { grid-column: 1 / -1; } }
+@container panel (width >= 52rem) {
+  .indicadores { grid-template-columns: repeat(var(--n, 4), minmax(0, 1fr)); column-gap: 1rem; margin-bottom: 0; }
+  .indicadores > li { margin-bottom: 0; }
+}
+.indicador {
+  grid-row: 1 / -1; display: grid; grid-template-rows: subgrid; row-gap: .375rem; min-width: 0;
+  padding: .875rem 1rem 1rem; border: 1px solid var(--borde); border-radius: var(--radio-l);
+  background: var(--papel); color: var(--cuerpo); text-decoration: none;
+  transition: border-color .18s ease, box-shadow .18s ease, background-color .18s ease;
+}
+.indicador:hover { border-color: var(--pizarra-linea); box-shadow: var(--sombra-suave); }
+.indicador-cabeza { display: flex; align-items: center; gap: .625rem; min-width: 0; color: var(--tinta); font-size: var(--t-s); font-weight: 700; line-height: 1.25; }
+.indicador-cabeza .ico { width: 2rem; height: 2rem; }
+.indicador-etiqueta { min-width: 0; overflow-wrap: anywhere; hyphens: auto; }
+.junto { white-space: nowrap; }
+/* align-content: la línea del valor va arriba aunque otra tarjeta tenga la fila más alta: las cifras no se escalonan */
+.indicador-fila { display: flex; flex-wrap: wrap; align-items: last baseline; align-content: flex-start; gap: .25rem .5rem; min-width: 0; }
+.indicador-valor { font-family: var(--f-tit); font-weight: 600; font-size: clamp(2rem, 1.55rem + 1.3vw, 2.75rem); line-height: 1; letter-spacing: -.02em; color: var(--tinta); }
+.indicador-valor small { font-size: .5em; font-weight: 500; letter-spacing: 0; }
+/* Un valor en palabras («Por dictar», «En espera») va un poco más pequeño que una cifra, para que quepa en una línea. */
+/* La misma caja que una cifra: «Por dictar» y «Por enviar» quedan a la altura de los números de al lado. */
+.indicador-valor.largo { font-size: clamp(1.625rem, 1.35rem + .9vw, 2.25rem); line-height: clamp(2rem, 1.55rem + 1.3vw, 2.75rem); }
+.indicador-rotulo { flex: 0 1 auto; min-width: 0; font-size: var(--t-xs); font-weight: 700; line-height: 1.3; color: var(--tinta); }
+/* Un rótulo largo («para avisar, antes del sáb 21») va al lado de la cifra si le queda sitio; si no, debajo */
+.indicador-rotulo.largo { flex: 1 1 6.25rem; }
+.indicador-fila .pastilla { margin-left: auto; align-self: center; }
+.indicador-hecho { display: flex; align-items: center; gap: .5rem; font-family: var(--f-tit); font-weight: 600; font-size: var(--t-xl); line-height: 1.2; color: var(--tinta); }
+.indicador-hecho .visto { width: 1.75rem; height: 1.75rem; }
+/* Lo hecho no se corta a media palabra: si una no cabe, se parte con guion (la página va en español) */
+.indicador-hecho > span { min-width: 0; overflow-wrap: normal; hyphens: auto; }
+.indicador-barra { display: block; min-width: 0; }
+/* Sin medidor, la nota sube a su fila: no queda un hueco entre la cifra y la nota. La acción sigue en la última fila,
+   alineada con las de las otras tarjetas. */
+.indicador-barra:empty { display: none; }
+.indicador-barra:empty + .indicador-nota { grid-row: 3 / span 2; }
+.indicador-accion { grid-row: 5; }
+.indicador-nota { display: grid; gap: .25rem; align-content: start; font-size: var(--t-s); line-height: 1.45; color: var(--cuerpo); text-wrap: pretty; }
+.indicador-nota .linea { display: block; }
+.indicador-accion { align-self: end; padding-top: .125rem; display: flex; align-items: center; justify-content: space-between; gap: .5rem; font-size: var(--t-s); font-weight: 700; color: var(--tinta); }
+.indicador-accion > span { min-width: 0; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; text-decoration-color: var(--linea); }
+.indicador:hover .indicador-accion > span { text-decoration-color: currentColor; }
+.accion-corta { display: none; }
+.indicador.es-hoy { background: var(--pizarra); border-color: var(--pizarra); color: var(--texto-suave); }
+.indicador.es-hoy:hover { background: var(--pizarra-2); border-color: var(--pizarra-2); }
+.indicador.es-hoy .indicador-cabeza, .indicador.es-hoy .indicador-valor, .indicador.es-hoy .indicador-rotulo, .indicador.es-hoy .indicador-accion { color: var(--tiza); }
+.indicador.es-hoy .indicador-nota, .indicador.es-hoy .marca-ia { color: var(--texto-suave); }
+.indicador.es-hoy .indicador-accion > span { text-decoration-color: var(--pizarra-linea); }
+.indicador.es-hoy:hover .indicador-accion > span { text-decoration-color: currentColor; }
+.indicador.es-hoy .ico-fondo { fill: var(--pizarra-linea); }
+.indicador.es-hoy .ico-trazo { stroke: var(--tiza); }
+.indicador.es-hoy .ico-trazo .f { fill: var(--tiza); }
+.indicador.es-hoy .p-hoy { background: var(--tiza); color: var(--pizarra); }
+/* En pizarra: lo hecho, en tiza; lo actual, con borde de tiza; lo pendiente, un tono apagado con un filo claro (en el
+   medidor y en los pasos del dictado), para que «0 de 4» y «Revisar · Enviar» se vean en el proyector (3:1) */
+.indicador.es-hoy .medidor i { background: rgb(246 243 236 / .16); box-shadow: inset 0 0 0 1px var(--texto-suave); }
+.indicador.es-hoy .tramos > span::before { background: rgb(246 243 236 / .16); box-shadow: inset 0 0 0 1px var(--texto-suave); }
+.indicador.es-hoy .medidor i.lleno, .indicador.es-hoy .tramos .hecho::before, .indicador.es-hoy .tramos .queda::before { background: var(--tiza); box-shadow: none; }
+.indicador.es-hoy .medidor i.revisar, .indicador.es-hoy .medidor i.actual { background: transparent; box-shadow: inset 0 0 0 2px var(--tiza); }
+.indicador.es-hoy .medidor i.falta, .indicador.es-hoy .medidor i.condicional { background: transparent; box-shadow: none; border-color: var(--tiza); }
+.indicador.es-hoy .tramos { color: var(--texto-suave); }
+.indicador.es-hoy .tramos .actual, .indicador.es-hoy .tramos .queda { color: var(--tiza); }
+.indicador.es-hoy .tramos .actual::before { background: transparent; box-shadow: inset 0 0 0 2px var(--tiza); }
+/* En el móvil, las tarjetas de media fila: menos margen, el icono más pequeño y la acción corta (no se parte) */
+@container panel (width < 32rem) {
+  .indicador { padding: .875rem .875rem 1rem; row-gap: .375rem; }
+  .indicador-cabeza { align-items: flex-start; gap: .5rem; }
+  .indicador-cabeza .ico { width: 1.875rem; height: 1.875rem; }
+  .indicadores > li:not(.entera) .accion-larga.con-corta { display: none; }
+  .indicadores > li:not(.entera) .accion-corta { display: inline; }
+}
+/* Lo hecho en media tarjeta («Al día», «Visto bueno dado»): un poco más pequeño, para que no se salga */
+@container panel (width < 52rem) {
+  .indicadores > li:not(.entera) .indicador-hecho { font-size: var(--t-l); }
+  .indicadores > li:not(.entera) .indicador-hecho .visto { width: 1.5rem; height: 1.5rem; }
+}
+/* A 360 px o menos, algo menos de margen en las tarjetas y en el calendario; a 320, lo hecho un poco más pequeño */
+@container panel (width < 21rem) {
+  .indicador { padding-inline: .75rem; }
+  .indicador-cabeza { gap: .375rem; }
+  .indicador-cabeza .ico { width: 1.5rem; height: 1.5rem; }
+  .indicadores > li:not(.entera) .indicador-hecho { font-size: var(--t-m); gap: .375rem; }
+  .indicadores > li:not(.entera) .indicador-hecho .visto { width: 1.25rem; height: 1.25rem; }
+}
+@container panel (width < 19rem) {
+  .indicadores > li:not(.entera) .indicador-hecho { font-size: var(--t-m); }
+}
+
+/* Cabeza de cada bloque del panel */
+.panel-cabeza { display: flex; flex-wrap: wrap; align-items: center; gap: .375rem .875rem; margin-bottom: .875rem; }
+.panel-cabeza h2 { font-size: var(--t-l); font-weight: 600; line-height: 1.25; }
+.panel-nota { margin-left: auto; font-size: var(--t-s); color: var(--cuerpo); }
+/* «Son las 8:00 · clases desde las 9:00»: en salvia; el chispa-suave queda para los avisos */
+.ahora { display: inline-flex; align-items: center; gap: .375rem; padding: .1875rem .625rem; border-radius: 999px; background: var(--salvia); color: var(--tinta); font-size: var(--t-xs); font-weight: 700; line-height: 1.4; }
+.ahora .glifo { width: .875rem; height: .875rem; }
+.dia-aviso { display: flex; gap: .5rem; align-items: flex-start; margin: -.125rem 0 .875rem; color: var(--tinta); font-size: var(--t-s); font-weight: 600; line-height: 1.45; }
+.dia-aviso .glifo { margin-top: .15em; }
+/* Sin una palabra sola en la última línea de una nota, un detalle o un aviso */
+.dia-aviso > span { text-wrap: pretty; }
+/* Lo que cambia en tu día porque jefatura te ha elegido para otra sesión (siElegido): bajo la rejilla, con el triángulo */
+.carril-aviso { margin: .625rem 0 0; padding: 0 .875rem; }
+.carril-aviso + .carril-aviso { margin-top: .375rem; }
+
+/* El día: una columna por sesión, como el horario del colegio (con sitio); en filas por debajo de 62rem */
+.horario { display: grid; gap: .375rem; }
+.horario-cabeza, .carril-sesiones { display: grid; grid-template-columns: var(--cols); column-gap: .25rem; min-width: 0; }
+.carril-sesiones { list-style: none; }
+/* Si no cabe (con más espaciado de texto, WCAG 1.4.12), la hora baja de línea en lugar de cortarse */
+.horario-cabeza .franja { min-width: 0; padding: 0 .375rem; font-size: var(--t-xs); line-height: 1.3; color: var(--cuerpo); }
+.horario-cabeza .franja b { font-family: var(--f-tit); font-weight: 600; font-size: var(--t-s); color: var(--tinta); }
+.carril { display: grid; gap: .375rem; }
+.carril + .carril { margin-top: .625rem; }
+.carril-titulo { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem .625rem; color: var(--cuerpo); font-size: var(--t-s); line-height: 1.35; }
+.carril-titulo .ico { width: 1.75rem; height: 1.75rem; }
+.carril-titulo > b { font-family: var(--f-tit); font-weight: 600; font-size: var(--t-m); color: var(--tinta); }
+.carril-cuenta { margin-left: auto; display: inline-flex; align-items: center; gap: .625rem; color: var(--tinta); }
+.carril-cuenta .medidor { width: 5.5rem; }
+.carril-cuenta .medidor i { height: .5rem; }
+.sesion { position: relative; display: flex; flex-direction: column; gap: .3125rem; min-width: 0; min-height: 5.25rem; padding: .4375rem .375rem .5rem; container-type: inline-size; border-radius: var(--radio-s); background: var(--salvia); color: var(--cuerpo); font-size: var(--t-xs); line-height: 1.3; }
+.sesion-franja { display: none; }
+.sesion-texto { display: grid; gap: .0625rem; min-width: 0; }
+/* Los nombres y las materias no se parten con guion; como mucho, en dos líneas */
+.sesion-texto b { color: var(--tinta); font-size: var(--t-s); font-weight: 700; line-height: 1.25; hyphens: none; overflow-wrap: normal; }
+.sesion-detalle { color: var(--cuerpo); }
+.sesion-cambio { margin-top: auto; display: grid; gap: .125rem; color: var(--tinta); }
+.sesion-estado { display: flex; align-items: flex-start; gap: .25rem; font-weight: 700; color: var(--tinta); }
+.sesion-estado .glifo, .sesion-estado .visto { width: .9375rem; height: .9375rem; margin-top: .05em; }
+.sesion-quien { color: var(--tinta); }
+.persona { white-space: nowrap; }
+/* En la rejilla, el nombre va siempre en su propia línea («Cubre / Pablo Sanz», «Propuesta: / Rosa Medina») y el texto
+   de debajo, equilibrado («Confirmada / a las 8:01»): así el ✓ y «Por confirmar» quedan a la misma altura en todas las celdas. */
+@container panel (width >= 62rem) {
+  .sesion-estado .persona, .sesion-quien .persona { display: block; }
+  .sesion-quien { text-wrap: balance; }
+}
+/* Con la rejilla en columnas, el estado de cada celda con cambio va arriba de su zona, en una fila que comparten todas
+   las celdas del carril (subgrid), y no pegado abajo: así el «…» y el ✓ quedan a la misma altura aunque debajo lleven
+   distinto número de líneas (confirmando una a una, «Elección: Rosa Medina», «Ya no la cubres · La cubre…»).
+   Una celda que hace de subgrid no puede ser un contenedor de tamaño: container-type normal. */
+@container panel (width >= 62rem) {
+  .carril-sesiones { grid-template-rows: auto auto; }
+  .carril-sesiones > .sesion { grid-row: span 2; }
+  .carril-sesiones > .sesion:has(> .sesion-cambio) { display: grid; grid-template-rows: subgrid; container-type: normal; }
+  .sesion-texto { align-content: start; }
+  .sesion-cambio { margin-top: 0; align-self: start; }
+}
+.nombre-corto { display: none; }
+@container (max-width: 4.875rem) { .persona .nombre-largo { display: none; } .persona .nombre-corto { display: inline; } }
+/* «Con su especialista» se quita si no cabe en una línea: la celda sigue diciendo la materia (y el globo, el resto) */
+@container (max-width: 6.95rem) { .sesion.t-igual .sesion-detalle { display: none; } }
+/* Sin cambios: salvia plano, sin borde. Aviso: chispa suave. Por confirmar: tinte suave y borde discontinuo. Confirmada: pizarra. */
+.sesion.t-aviso { background: var(--chispa-suave); }
+.sesion.t-aviso .glifo { --hueco: var(--chispa-suave); }
+.sesion.por-confirmar { background: var(--tiza); border: 1.5px dashed var(--pizarra); padding: calc(.4375rem - 1.5px) calc(.375rem - 1.5px) calc(.5rem - 1.5px); }
+.sesion.confirmada { background: var(--pizarra); color: var(--texto-suave); }
+.sesion.confirmada .sesion-texto b, .sesion.confirmada .sesion-detalle, .sesion.confirmada .sesion-estado, .sesion.confirmada .sesion-quien { color: var(--tiza); }
+.sesion.confirmada .visto circle { fill: var(--tiza); }
+.sesion.confirmada .visto path { stroke: var(--pizarra); }
+.sesion.vacia { background: var(--tiza); min-height: 0; }
+/* Una pausa en la que no hay nada (la comida): un separador fino */
+.sesion.separador { min-height: 0; padding: 0; background: none; }
+.sesion.separador::before { content: ""; position: absolute; top: .375rem; bottom: .375rem; left: 50%; width: 2px; margin-left: -1px; border-radius: 2px; background: var(--linea); }
+.sesion.juntas { display: none; }
+.sesion[tabindex]:hover { box-shadow: inset 0 0 0 2px var(--pizarra); }
+.sesion.por-confirmar[tabindex]:hover { border-style: solid; box-shadow: none; }
+.sesion.confirmada[tabindex]:hover { box-shadow: inset 0 0 0 2px var(--tiza), 0 0 0 1px var(--pizarra); }
+.sesion:focus-visible { outline-offset: 2px; border-radius: .5rem; }
+.carril-estado { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem .75rem; margin-top: .75rem; padding: .5rem .875rem; border-radius: var(--radio); background: var(--tiza); color: var(--tinta); font-size: var(--t-s); font-weight: 600; line-height: 1.4; }
+.carril-estado > p { flex: 1 1 16rem; min-width: 0; text-wrap: pretty; }
+.carril-estado.hecho { background: var(--salvia); }
+.carril-estado > .glifo, .carril-estado > .visto { width: 1.25rem; height: 1.25rem; }
+.atajo { display: inline-flex; align-items: center; gap: .375rem; min-height: 2rem; color: var(--tinta); font-weight: 700; text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; text-decoration-color: var(--pizarra-linea); }
+.atajo:hover { text-decoration-color: var(--pizarra); }
+@container panel (width < 62rem) {
+  .horario-cabeza { display: none; }
+  .carril-sesiones { grid-template-columns: minmax(0, 1fr); gap: .25rem; }
+  .sesion { grid-column: auto !important; display: grid; grid-template-columns: 5.25rem minmax(0, 1fr); align-items: center; gap: .125rem .75rem; min-height: 3.25rem; padding: .5rem .75rem; }
+  .sesion.por-confirmar { padding: calc(.5rem - 1.5px) calc(.75rem - 1.5px); }
+  .sesion-franja { display: grid; grid-row: 1 / span 2; color: var(--tinta); font-family: var(--f-tit); font-weight: 600; font-size: var(--t-s); line-height: 1.2; }
+  .sesion-franja span { font-family: var(--f-txt); font-weight: 600; font-size: var(--t-xs); color: var(--cuerpo); white-space: nowrap; }
+  .sesion-texto, .sesion-cambio { grid-column: 2; }
+  .sesion-cambio { margin-top: 0; }
+  .sesion.confirmada .sesion-franja, .sesion.confirmada .sesion-franja span { color: var(--tiza); }
+  .sesion.separador, .sesion.vacia, .sesion.junta { display: none; }
+  .sesion.juntas { display: grid; grid-template-columns: minmax(0, 1fr); }
+  .sesion.juntas .sesion-texto { grid-column: 1; }
+}
+
+/* Lo que te necesita: los grupos (Hoy, Esta semana, Para saber) en columnas; en el móvil, uno debajo de otro */
+.grupos { display: grid; gap: 1rem; }
+/* Con dos grupos desiguales, el motor da más ancho al que tiene más filas (--cols-grupos) */
+@container panel (min-width: 50rem) { .grupos { grid-template-columns: var(--cols-grupos, repeat(var(--g, 3), minmax(0, 1fr))); gap: 1rem 2rem; } }
+.grupo-titulo { display: flex; align-items: center; margin-bottom: .125rem; font-family: var(--f-txt); font-size: var(--t-xs); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--pizarra-linea); }
+.grupo-cuenta { white-space: pre; }
+/* Lo que oye el lector de pantalla va en minúscula: si hereda las mayúsculas, algunos sintetizadores deletrean */
+.grupo-titulo .sr { text-transform: none; letter-spacing: normal; }
+.grupo-cuenta .glifo { width: .875rem; height: .875rem; margin-right: .25rem; vertical-align: -.125rem; }
+.filas { list-style: none; display: grid; }
+.fila + .fila { border-top: 1px solid var(--borde); }
+.fila-dentro { display: grid; grid-template-columns: 2.25rem minmax(0, 1fr) auto auto; align-items: center; gap: .25rem .75rem; min-height: 3.5rem; padding: .625rem .5rem; margin: 0 -.5rem; border-radius: var(--radio); color: var(--cuerpo); text-decoration: none; }
+a.fila-dentro:hover, a.ag-dentro:hover { background: var(--tiza); }
+a.fila-dentro:hover .fila-texto b, a.ag-dentro:hover .fila-texto b { text-decoration: underline; text-decoration-thickness: 2px; text-underline-offset: 3px; text-decoration-color: var(--linea); }
+.fila-hecho { display: block; margin-top: .25rem; }
+.fila-texto { display: grid; gap: .125rem; min-width: 0; }
+.fila-texto b { color: var(--tinta); font-weight: 700; line-height: 1.3; }
+.fila-texto > span:not(.sr) { font-size: var(--t-s); line-height: 1.45; text-wrap: pretty; }
+.fila-texto > .marca-ia { margin-top: .125rem; font-size: var(--t-xs); }
+.fila-dentro .flecha, .ag-dentro .flecha { color: var(--pizarra-linea); }
+.fila.hecha .fila-texto b, .ag-item.hecha .fila-texto b { color: var(--cuerpo); }
+.chip-fecha { padding: .125rem .5rem; border-radius: 999px; box-shadow: inset 0 0 0 1.5px var(--pizarra-linea); color: var(--tinta); font-size: var(--t-xs); font-weight: 700; white-space: nowrap; }
+/* Un choque: tarjeta de aviso en chispa suave, con el triángulo y la palabra «Choque» */
+.fila.choque, .fila.choque + .fila { border-top: 0; }
+.fila.choque .fila-dentro, .ag-item.choque .ag-dentro { margin-top: .25rem; margin-bottom: .25rem; background: var(--chispa-suave); }
+.fila.choque a.fila-dentro:hover, .ag-item.choque a.ag-dentro:hover { background: var(--chispa-suave); box-shadow: inset 0 0 0 2px var(--pizarra); }
+.fila.choque .ico-fondo { fill: var(--papel); }
+.etiqueta-choque { font-size: var(--t-xs); font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: var(--pizarra); }
+.ag-item.choque .glifo { --hueco: var(--chispa-suave); }
+.ag-item.choque, .ag-item.choque + .ag-item { border-top: 0; }
+
+/* Lo que viene: el calendario al lado de la agenda; con sitio, la agenda en dos columnas */
+.agenda-cuerpo { display: grid; gap: 1.25rem; }
+@container panel (min-width: 50rem) {
+  .agenda-cuerpo { grid-template-columns: minmax(16rem, 20rem) minmax(0, 1fr); gap: 2.25rem; align-items: start; }
+  /* Con la agenda en una columna larga, el calendario la acompaña al bajar: no queda un hueco debajo */
+  .minical-caja { position: sticky; top: calc(var(--cabecera) + env(safe-area-inset-top, 0px) + 1rem); }
+}
+.minical-caja { display: grid; gap: .5rem; }
+.minical { width: calc(100% + 6px); max-width: 25rem; margin: -3px; table-layout: fixed; border-collapse: separate; border-spacing: 3px; font-size: var(--t-s); }
+.minical th { padding: 0 0 .125rem; border: 0; background: none; text-align: center; font-size: var(--t-xs); font-weight: 700; letter-spacing: 0; text-transform: none; color: var(--cuerpo); }
+.minical td { height: 2.75rem; padding: 0; border: 0; border-radius: .5rem; background: var(--tiza); text-align: center; vertical-align: middle; color: var(--tinta); font-weight: 700; }
+.minical td.finde { background: transparent; }
+.minical td.pasado { background: transparent; color: var(--cuerpo); font-weight: 400; }
+.minical td.hoy { background: var(--pizarra); color: var(--tiza); }
+.minical small { font-size: var(--t-xs); }
+.minical-num, .minical-dia { display: grid; place-items: center; align-content: center; gap: 2px; width: 100%; height: 100%; min-height: 2.75rem; }
+.minical-dia { padding: 0; border: 0; border-radius: .5rem; background: var(--salvia); color: var(--tinta); font: inherit; font-weight: 700; box-shadow: inset 0 0 0 1.5px var(--pizarra-linea); --hueco: var(--salvia); }
+.minical-dia:hover { background: var(--linea); --hueco: var(--linea); }
+.formas { display: flex; gap: 2px; justify-content: center; }
+.formas .glifo { width: .75rem; height: .75rem; }
+.leyenda { display: flex; flex-wrap: wrap; gap: .375rem 1rem; font-size: var(--t-xs); color: var(--cuerpo); }
+.leyenda > span { display: inline-flex; align-items: center; gap: .375rem; }
+.leyenda .glifo { width: .875rem; height: .875rem; color: var(--tinta); --hueco: var(--papel); }
+/* Con cuatro o cinco formas, la leyenda no cabe en una línea: va en dos filas parejas («Plazo · Cita, salida o fecha» y
+   «Aviso · Hoy»; con «Hecho», «Plazo · Cita… · Aviso» y «Hecho · Hoy»), nunca con «Hoy» solo en la segunda. Si no caben,
+   las columnas se estrechan y el texto baja de línea dentro de la suya. */
+.leyenda:has(> span:nth-child(4)) { display: grid; grid-template-columns: repeat(2, minmax(0, max-content)); }
+.leyenda:has(> span:nth-child(5)) { grid-template-columns: repeat(3, minmax(0, max-content)); }
+.muestra-hoy { width: .875rem; height: .875rem; border-radius: .25rem; background: var(--pizarra); }
+
+.agenda { list-style: none; display: grid; gap: .875rem; }
+.ag-dia { display: grid; grid-template-columns: 3.25rem minmax(0, 1fr); gap: .25rem .875rem; align-items: start; border-radius: var(--radio); }
+.ag-dia:focus { outline: 3px solid var(--foco); outline-offset: 3px; }
+.ag-fecha { display: grid; justify-items: center; overflow: hidden; border: 1.5px solid var(--pizarra); border-radius: .625rem; background: var(--papel); color: var(--tinta); line-height: 1.1; text-align: center; }
+.ag-fecha > span { width: 100%; padding: .1875rem 0; background: var(--pizarra); color: var(--tiza); font-size: var(--t-xs); font-weight: 700; }
+.ag-fecha b { padding-top: .25rem; font-family: var(--f-tit); font-size: var(--t-xl); font-weight: 600; }
+.ag-fecha small { padding-bottom: .3125rem; font-size: var(--t-xs); font-weight: 700; color: var(--cuerpo); }
+.ag-contenido { display: grid; min-width: 0; }
+/* Cuándo es, contado desde hoy: «Mañana · 11:45», «La semana que viene» */
+.ag-cuando { font-family: var(--f-txt); font-size: var(--t-xs); font-weight: 700; line-height: 1.3; letter-spacing: .02em; color: var(--pizarra-linea); }
+.ag-items { list-style: none; display: grid; }
+.ag-item + .ag-item { border-top: 1px solid var(--borde); }
+.ag-dentro { display: grid; grid-template-columns: 1rem minmax(0, 1fr) auto; align-items: center; gap: .25rem .625rem; min-height: 2.75rem; padding: .375rem .5rem; margin: 0 -.5rem; border-radius: var(--radio); color: var(--cuerpo); text-decoration: none; }
+.ag-forma { display: inline-flex; align-self: start; margin-top: .1875rem; color: var(--tinta); }
+@container panel (min-width: 66rem) {
+  .agenda { display: block; columns: 2; column-gap: 2.25rem; }
+  .ag-dia { break-inside: avoid; margin-bottom: .875rem; }
+}
+
+/* El foco se dibuja con la misma forma que el elemento */
+.indicador:focus-visible { border-radius: var(--radio-l); }
+.fila-dentro:focus-visible, .ag-dentro:focus-visible { border-radius: var(--radio); }
+.minical-dia:focus-visible { border-radius: .5rem; }
+/* En el móvil, las tarjetas del panel con menos margen (así cada día del calendario mide al menos 44 px)
+   y el atajo de la demo con una zona táctil de 44 px */
+@container panel (width < 32rem) {
+  .panel-dia, .panel-lista, .panel-agenda { padding: 1.125rem 1rem 1.25rem; }
+  .minical { border-spacing: 2px; width: calc(100% + 4px); margin: -2px; }
+  .atajo { min-height: 2.75rem; }
+}
+/* A 360 px, el calendario aprovecha parte del margen de la tarjeta: así cada día sigue midiendo 44 px.
+   A 320, la leyenda junta un poco sus piezas para que «Hoy» no baje sola de línea. */
+@container panel (width < 21rem) {
+  .minical { border-spacing: 1px; width: calc(100% + 1.5rem); max-width: none; margin: -1px -.75rem; }
+  .leyenda { column-gap: .75rem; }
+}
+
+/* El globo de las marcas */
+.globo { position: absolute; z-index: 60; max-width: min(19rem, calc(100vw - 1rem)); display: grid; gap: .125rem; padding: .5rem .75rem .5625rem; border-radius: var(--radio-s); background: var(--pizarra); color: var(--texto-suave); font-size: var(--t-xs); line-height: 1.45; box-shadow: var(--sombra); }
+.globo b { color: var(--tiza); font-size: var(--t-s); }
 
 /* Correo */
 .correo { display: grid; grid-template-columns: minmax(17rem, 23rem) minmax(0, 1fr); gap: 1rem; align-items: start; }
@@ -481,16 +837,23 @@ dialog.confirmar::backdrop { background: rgb(23 50 44 / .45); }
 @keyframes entra { from { opacity: 0; transform: translateY(.5rem); } }
 
 /* ---------- Pantallas medianas y móviles ---------- */
-@media (max-width: 1100px) {
+/* Hasta 1279 px, el menú pasa a una fila bajo la cabecera. Con el menú al lado, en una tableta apaisada (1180 px) o en un
+   portátil con el zoom al 110 % (1242 px), el panel no llegaba a 62rem y el día de 3.º B salía en filas casi vacías. */
+@media (max-width: 1279px) {
   .cuerpo { grid-template-columns: minmax(0, 1fr); }
   .menu { border-right: 0; border-bottom: 1px solid var(--borde); padding: .5rem 0; gap: 0; }
   .menu nav { overflow-x: auto; scrollbar-width: thin; }
   .menu nav ul { display: flex; gap: .25rem; width: max-content; padding: .25rem max(16px, env(safe-area-inset-right, 0px)) .25rem max(16px, env(safe-area-inset-left, 0px)); }
   .menu nav a { white-space: nowrap; min-height: 2.5rem; }
+  /* La barra se desplaza de lado (overflow): el anillo del foco va por dentro de la píldora, para que no se recorte */
+  .menu nav a:focus-visible { outline-offset: -3px; }
   .menu .grupo, .menu-pie { display: none; }
+}
+@media (max-width: 1100px) {
   .dos-columnas, .protocolo { grid-template-columns: minmax(0, 1fr); }
   .lateral { position: static; }
   .chip-hora { display: none; }
+  .cabeza-ilus { width: 6.5rem; height: 6.5rem; }
   /* Al desplazar de lado una tabla con cabecera de fila (MODULOS.tabla), la columna del grupo se queda fija.
      La tabla de gastos no tiene cabecera de fila: su primera columna se desplaza con las demás. */
   .tabla-caja.columna-fija thead th:first-child, .tabla-caja.columna-fija tbody th { position: sticky; left: 0; z-index: 1; box-shadow: 1px 0 0 var(--borde); }
@@ -509,12 +872,15 @@ dialog.confirmar::backdrop { background: rgb(23 50 44 / .45); }
 }
 @media (max-width: 640px) {
   :root { --cabecera: 3.5rem; }
+  /* El logotipo es el botón para volver a elegir perfil: 44 px de alto, como las demás zonas táctiles */
+  .cabecera .logo-boton { min-height: 2.75rem; }
   .perfil { grid-template-columns: 4.5rem minmax(0, 1fr); grid-template-rows: auto; column-gap: 1rem; row-gap: .25rem; align-items: start; }
   .perfil img { grid-row: 1 / span 4; width: 4.5rem; height: 4.5rem; margin: 0; }
   .perfil > span { grid-column: 2; }
   .perfil .cargo { font-size: var(--t-l); }
   .cabecera { gap: .625rem; }
   .cabecera .logo { width: 7rem; }
+  .cabecera .boton-pequeno, .menu nav a { min-height: 2.75rem; }
   .chip-servidor { display: none; }
   .usuario > div { display: none; }
   .propuesta { grid-template-columns: minmax(0, 1fr); }
@@ -532,6 +898,53 @@ dialog.confirmar::backdrop { background: rgb(23 50 44 / .45); }
   .aviso-informe .d { grid-column: 1; }
   .aviso-informe .pastilla { justify-self: start; }
   .principal { padding-block: 1.5rem 3rem; }
+  .principal-inicio { padding-top: 1.25rem; }
+  .cabeza-inicio { grid-template-columns: minmax(0, 1fr); }
+  .cabeza-ilus { display: none; }
+  .cabeza-inicio .origen { display: block; }
+  .cabeza-inicio .origen .sep { display: none; }
+}
+@media (min-width: 641px) and (max-height: 800px) {
+  .principal-inicio { padding-top: .75rem; }
+}
+/* Pantallas bajas (un portátil de 1366×768 con el zoom al 110 %, 1242×698; un proyector de 1280×720): la cabecera y los
+   márgenes se recogen un poco, y la ilustración baja a 96 px, para que la fila de 3.º B quepa entera en la primera pantalla */
+@media (min-width: 641px) and (max-height: 720px) {
+  .principal-inicio { padding-top: .5rem; }
+  .principal-inicio .principal-dentro, .principal-inicio .panel { gap: .875rem; }
+  .cabeza-inicio .titulo-vista { font-size: 2rem; }
+  .cabeza-ilus { width: 6rem; height: 6rem; }
+  .principal-inicio .indicador { padding-top: .75rem; padding-bottom: .875rem; }
+  .principal-inicio .panel-dia { padding-top: 1rem; }
+  .principal-inicio .panel-dia .panel-cabeza { margin-bottom: .625rem; }
+}
+/* Ventanas aún más bajas (un portátil de 1366×768 con el navegador maximizado, 1366×643; un proyector de 1280×720 en una
+   ventana, 1280×633): el saludo y la entradilla van en una línea y la ilustración, a 96 px, se mete en el margen. Así, tras
+   confirmar, «Confirmada a las 8:01» de la fila de 3.º B sigue en la primera pantalla. */
+@media (min-width: 641px) and (max-height: 700px) {
+  .principal-inicio .cabeza-inicio-texto { grid-template-columns: auto minmax(0, 1fr); align-items: baseline; column-gap: 1rem; }
+  .principal-inicio .cabeza-inicio .antetitulo { grid-column: 1 / -1; }
+  .principal-inicio .cabeza-inicio .titulo-vista { font-size: 1.75rem; }
+  .principal-inicio .cabeza-inicio .entradilla { font-size: var(--t-m); }
+  .principal-inicio .cabeza-ilus { width: 6rem; height: 6rem; margin-block: -.5rem -1.5rem; align-self: start; }
+  .principal-inicio .principal-dentro, .principal-inicio .panel { gap: .75rem; }
+  .principal-inicio .indicador { padding-top: .625rem; padding-bottom: .75rem; row-gap: .25rem; }
+  .principal-inicio .panel-dia { padding-top: .875rem; }
+}
+/* Con el menú en fila y muy poca altura (1366×768 con el zoom al 110 %, 1242×607), el menú se recoge un poco. Solo con
+   ratón o panel táctil del portátil: en una tableta (pantalla táctil), sus enlaces siguen midiendo 44 px. */
+@media (min-width: 641px) and (max-width: 1279px) and (max-height: 660px) and (pointer: fine) {
+  .menu { padding-block: .25rem; }
+  .menu nav a { min-height: 2.25rem; padding-block: .25rem; }
+}
+/* En un móvil estrecho (360 px): «Cambiar» en una línea (su nombre sigue siendo «Cambiar de perfil»), la fecha corta en el
+   antetítulo, «Preparado por…» en una línea pequeña y la entradilla en letra normal. Así las cifras caben en la primera pantalla. */
+.cambiar-corto, .ante-corto { display: none; }
+@media (max-width: 367px) {
+  .cambiar-largo, .ante-largo { display: none; }
+  .cambiar-corto, .ante-corto { display: inline; }
+  .cabeza-inicio .origen { font-size: var(--t-xs); letter-spacing: 0; }
+  .cabeza-inicio .entradilla { font-size: var(--t-m); line-height: 1.5; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { animation: none !important; transition: none !important; }

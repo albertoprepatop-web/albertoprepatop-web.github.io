@@ -9,78 +9,142 @@ DEMO.rol({
   },
   acceso: 'Guardias y fichas de sustitución, exámenes, programaciones y correo resumido',
 
-  // ───────────────────────────── Inicio ─────────────────────────────
+  // ─── Inicio: el panel de mando de jefatura (6.2 bis) ───────────────
+  // Cifras, día y calendario salen de reglas y de los datos del colegio: sin insignia de IA.
+  // Las filas que resumen un correo y los plazos sacados de un correo llevan la insignia (la pone el motor).
   inicio: {
-    antetitulo: 'Miércoles 18 de noviembre · 7:55',
+    antetitulo: 'Miércoles 18 de noviembre · 8:00',
     titulo: 'Buenos días, Javier',
-    entradilla: 'Sergio Prieto no viene hoy: la propuesta de guardias y las fichas están listas para que las revises. Nada se confirma ni se envía sin ti.',
-    bloques: [
+    // Vale antes y después de confirmar: no pide revisar lo que ya está confirmado.
+    entradilla: 'Sergio Prieto no viene. Tú confirmas quién cubre sus sesiones; hasta entonces, no se avisa a nadie.',
+
+    // Lo que importa a las 8:00, de lo más urgente a lo menos. Cada cifra lleva a donde se actúa.
+    cifras: [
       {
-        titulo: 'Ausencias de hoy',
-        items: [
-          {
-            texto: 'Sergio Prieto (3.º B) no viene hoy. La propuesta para cubrir sus tres sesiones y su turno de patio está lista: revísala y confírmala.',
-            estado: 'pendiente',
-            ir: 'guardias',
-            bandera: 'guardias',
-            textoSi: 'Has confirmado las guardias para cubrir a Sergio Prieto. Cada persona tiene ya su aviso.',
-            estadoSi: 'hecho',
-          },
-          {
-            texto: 'Las fichas de 1.ª, 3.ª y 6.ª hora de 3.º B están preparadas. Pablo Sanz y Rosa Medina las reciben cuando confirmes.',
-            estado: 'pendiente',
-            ir: 'fichas',
-            bandera: 'guardias',
-            textoSi: 'Quien sustituye en 3.º B ya tiene su ficha. Se cierra al acabar la jornada.',
-            estadoSi: 'hecho',
-          },
-        ],
+        // Progreso «X de Y», con el medidor rotulado por la cifra: las cuatro propuestas de «Guardias de hoy»
+        // (tres sesiones con 3.º B y el turno de patio).
+        etiqueta: 'Guardias confirmadas',
+        icono: 'persona',
+        progreso: 'guardias',
+        hoy: true,
+        nota: 'Tres sesiones de Sergio Prieto con 3.º B y su turno de patio.',
+        ir: 'guardias',
+        accion: 'Revisar y confirmar',
+        accionCorta: 'Confirmar',
+        alTerminar: 'Todas',
+        accionHecha: 'Ver las guardias',
       },
       {
-        titulo: 'Exámenes de la 1.ª evaluación',
-        items: [
-          {
-            texto: '4.º ESO A tiene dos exámenes el miércoles 2 de diciembre: Matemáticas e Inglés. DirectorIA propone pasar Inglés al jueves 3.',
-            estado: 'pendiente',
-            ir: 'examenes',
-          },
-          {
-            texto: 'Matemáticas espera tu respuesta sobre la fecha del examen de 4.º ESO para decírselo a los alumnos esta semana.',
-            estado: 'pendiente',
-            ir: 'correo:c-matematicas',
-          },
-        ],
+        etiqueta: 'Correos por responder',
+        icono: 'correo',
+        cuenta: 'correo',
+        accion: 'Abrir el correo',
+        alTerminar: 'Al día',
       },
       {
-        titulo: 'Programaciones',
-        items: [
-          {
-            texto: 'Educación Física y Música tienen apartados sin completar. Las de Matemáticas, que pide inspección, están completas.',
-            estado: 'pendiente',
-            ir: 'programaciones',
-          },
-        ],
+        // Cuenta lo que queda: el choque del calendario de exámenes. Está hecho cuando apruebas el calendario.
+        etiqueta: 'Exámenes de ESO',
+        icono: 'calendario',
+        valor: '1',
+        rotulo: 'choque',
+        nota: '4.º ESO A tiene dos el miércoles 2. DirectorIA propone pasar Inglés al jueves 3.',
+        sigue: 'examenes',
+        ir: 'examenes',
+        accion: 'Revisar el calendario',
+        accionCorta: 'Revisar',
+        alTerminar: 'Sin choques',
+        accionHecha: 'Ver los exámenes',
       },
       {
-        titulo: 'Esta semana',
-        items: [
-          {
-            texto: 'Caso 2026-07: entrevistas jue 19 y vie 20 (equipo del caso).',
-            estado: 'info',
-          },
-          {
-            texto: 'Laura Sánchez pide cambiar su guardia de mañana. El día que propone para devolverla coincide con la salida al Jardín Botánico.',
-            estado: 'hoy',
-            ir: 'correo:c-laura',
-          },
-          {
-            texto: 'Una familia de 2.º ESO A pide cambiar de Francés a Tecnología. El plazo del centro terminó el 30 de septiembre.',
-            estado: 'pendiente',
-            ir: 'correo:c-optativa',
-          },
-        ],
+        // Cuenta lo que queda: dos programaciones con apartados sin completar. Está hecho cuando pides lo que falta.
+        etiqueta: 'Programaciones de ESO',
+        icono: 'documento',
+        valor: '2',
+        rotulo: 'incompletas',
+        nota: 'Educación Física y Música. Las de Matemáticas, que pide inspección, están completas.',
+        sigue: 'programaciones',
+        ir: 'programaciones',
+        accion: 'Ver qué falta',
+        alTerminar: 'Ya lo has pedido',
+        accionHecha: 'Ver lo pedido',
       },
     ],
+
+    // Quién cubre a Sergio Prieto en cada sesión de 3.º B. La persona sale de «Guardias de hoy»:
+    // la propuesta o, si eliges a otra en el desplegable, la que elijas.
+    dia: {
+      titulo: 'Quién cubre 3.º B hoy',
+      carriles: [
+        {
+          titulo: '3.º B',
+          detalle: 'Sergio Prieto no viene',
+          icono: 'persona',
+          cuenta: 'confirmadas',
+          pendiente: 'En «Guardias de hoy» puedes elegir a otra persona para cada sesión antes de confirmar.',
+          // Si confirmas una a una: a quien cubre lo confirmado ya le ha llegado el aviso; a los demás, no ({n} de {de}).
+          parcial: 'Has confirmado {n} de {de}. Hasta que confirmes las demás, no se avisa a quien las cubre.',
+          alTerminar: 'Has confirmado quién cubre a Sergio Prieto. Cada persona tiene su aviso y quien entra en 3.º B, su ficha.',
+          sesiones: [
+            { franja: '1', titulo: 'Lengua', tipo: 'cubre', sigue: 'guardias#g1', nota: 'Tiene guardia a esa hora. Lleva 2 guardias este mes; la media es 3.' },
+            { franja: '2', titulo: 'Inglés', detalle: 'Con su especialista', tipo: 'igual' },
+            { franja: '3', titulo: 'Ciencias de la Naturaleza', tipo: 'cubre', sigue: 'guardias#g2', nota: 'Tiene guardia a esa hora. Lleva 3 guardias este mes, en la media.' },
+            { franja: 'recreo', titulo: 'Patio de Primaria', tipo: 'cubre', sigue: 'guardias#g3', nota: 'Hace el turno de patio de Sergio. Lleva 4 recreos este mes; la media es 6.' },
+            { franja: '4', titulo: 'Educación Física', detalle: 'Con su especialista', tipo: 'igual' },
+            { franja: '5', titulo: 'Música', detalle: 'Con su especialista', tipo: 'igual' },
+            { franja: '6', titulo: 'Matemáticas', tipo: 'cubre', sigue: 'guardias#g4', nota: 'Así 3.º B acaba el día con la misma persona que lo empezó.' },
+            { franja: 'salida', titulo: 'Salida de 3.º B', tipo: 'cubre', sigue: 'guardias#g4', nota: 'Acompaña al grupo a la puerta de Primaria a las 16:00. Va con la 6.ª hora.' },
+          ],
+        },
+      ],
+    },
+
+    // Lo que te necesita: empieza por lo que las cifras no dicen. Lo que tiene fecha va en la agenda.
+    lista: {
+      titulo: 'Lo que te necesita',
+      items: [
+        {
+          grupo: 'Hoy', icono: 'documento', titulo: 'Fichas de 1.ª, 3.ª y 6.ª hora de 3.º B',
+          detalle: 'Están listas. Quien cubre en 3.º B recibe la suya cuando confirmes las guardias.', estado: 'pendiente', ir: 'fichas',
+          sigue: 'guardias', verbo: 'Enviadas', si: { detalle: 'Quien cubre en 3.º B ya tiene su ficha. Se cierra al acabar la jornada.' },
+        },
+        {
+          // Choque: la guardia que Laura ofrece devolver el viernes 27 cae en la salida de 4.º (en docente, el mismo choque).
+          grupo: 'Hoy', icono: 'correo', titulo: 'Laura Sánchez pide cambiar su guardia de mañana',
+          detalle: 'La vuelta que ofrece, el viernes 27 a 3.ª hora, coincide con la salida de 4.º al Jardín Botánico.',
+          estado: 'hoy', choque: true, ir: 'correo:c-laura', sigue: 'correo:c-laura',
+        },
+        { grupo: 'Esta semana', icono: 'familia', titulo: 'Una familia de 2.º ESO A pide cambiar de optativa', detalle: 'De Francés a Tecnología. El plazo del centro terminó el 30 de septiembre.', estado: 'pendiente', ir: 'correo:c-optativa', sigue: 'correo:c-optativa' },
+        { grupo: 'Para saber', icono: 'info', titulo: 'Consejería: instrucciones de las sesiones de evaluación', detalle: 'Calificaciones en Raíces antes del viernes 18 de diciembre. Las sesiones del 9 al 11 encajan en ese plazo.', estado: 'info', ir: 'correo:c-consejeria', sigue: 'correo:c-consejeria' },
+      ],
+    },
+
+    // Lo que viene: plazos (lo que haces tú), citas o salidas y choques, en las próximas tres semanas.
+    // fuente: 'correo' para lo que la IA ha sacado de un correo (lleva la insignia).
+    // El Caso 2026-07 solo va por su número.
+    agenda: {
+      titulo: 'Lo que viene',
+      desde: '2026-11-16',
+      semanas: 3,
+      marcas: [
+        { fecha: '2026-11-19', tipo: 'evento', titulo: 'Caso 2026-07: entrevistas', detalle: 'Las hace el equipo del caso.' },
+        { fecha: '2026-11-20', tipo: 'evento', titulo: 'Caso 2026-07: entrevistas', detalle: 'Las hace el equipo del caso.' },
+        // Lo cumplen las dos respuestas que dan fecha (#0 y #1). La que pregunta antes si el examen es de una sesión (#2)
+        // no la da: el plazo sigue pendiente (aMedias).
+        {
+          fecha: '2026-11-20', tipo: 'plazo', titulo: 'Fecha del examen de Matemáticas de 4.º ESO', detalle: 'Respóndele a Ramón Esteban antes de este día: quieren decírselo a los alumnos esta semana.', fuente: 'correo',
+          ir: 'correo:c-matematicas', sigue: 'correo:c-matematicas#0,1',
+          aMedias: { sigue: 'correo:c-matematicas', detalle: 'Le has preguntado a Matemáticas. La fecha, antes de este día.' },
+        },
+        { fecha: '2026-11-27', hora: '9:15', tipo: 'evento', titulo: 'Salida de 4.º al Jardín Botánico', detalle: 'Vuelven a las 13:30. Laura Sánchez va con 4.º A.' },
+        { fecha: '2026-11-30', tipo: 'evento', titulo: 'Empiezan los exámenes de ESO', detalle: '1.ª evaluación, hasta el viernes 4 de diciembre.', ir: 'examenes' },
+        {
+          // Choque del calendario de exámenes: lo resuelve el calendario aprobado (módulo «Exámenes»).
+          fecha: '2026-12-02', tipo: 'aviso', choque: true, titulo: '4.º ESO A, con dos exámenes el mismo día',
+          detalle: 'Matemáticas e Inglés. Si apruebas la propuesta, Inglés pasa al jueves 3, que el grupo tiene libre.', ir: 'examenes', sigue: 'examenes', verbo: 'Aprobado',
+          si: { titulo: 'Inglés de 4.º ESO A, al jueves 3', detalle: 'Has aprobado el calendario. Matemáticas sigue el miércoles 2.' },
+        },
+      ],
+    },
   },
 
   // ───────────────────────────── Correo ─────────────────────────────

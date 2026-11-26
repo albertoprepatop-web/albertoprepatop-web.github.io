@@ -10,79 +10,100 @@ DEMO.rol({
   acceso: 'Correo resumido y dictado, banco de recursos, plazos y material con Claude',
 
   // ───────────────────────────── Inicio ─────────────────────────────
+  // Panel de mando. Cifras, día y calendario salen de reglas y de los datos del colegio: sin insignia de IA.
+  // Las filas que resumen un correo y los plazos sacados de un correo llevan la insignia (la pone el motor).
   inicio: {
     antetitulo: 'Miércoles 18 de noviembre · 8:00',
     titulo: 'Buenos días, Laura',
-    entradilla: 'Tus clases, tus plazos y lo que te ha llegado. Lo ha preparado DirectorIA; nada sale sin que lo revises y lo envíes tú.',
-    bloques: [
+    entradilla: 'Tus clases, lo que te ha llegado y lo que vence. Nada sale sin que lo revises y lo envíes tú.',
+
+    cifras: [
       {
-        titulo: 'Tu día',
-        items: [
-          {
-            texto: '9:00-10:30 · Lengua y Matemáticas con 4.º A. 10:30 · Educación Física con 4.º B.',
-            estado: 'hoy',
-          },
-          {
-            texto: '11:45 · Educación Física con 3.º B. Hoy no viene su tutor, Sergio Prieto; tu sesión no cambia.',
-            estado: 'info',
-          },
-          {
-            texto: '14:30-16:00 · Ciencias de la Naturaleza y Plástica con 4.º A. A las 16:00, salida con tu grupo.',
-            estado: 'hoy',
-          },
-        ],
+        etiqueta: 'Tutoría de Daniel M.',
+        icono: 'microfono',
+        progreso: 'dictado',
+        hoy: true,
+        nota: 'Dicta la propuesta para su familia. Te llega redactada para revisar.',
+        ir: 'dictado',
+        accion: 'Empezar a dictar',
+        accionCorta: 'Dictar',
+        // Ya dictado y por revisar, la nota y la acción cambian: no se pide otra vez que se dicte.
+        siDictado: { nota: 'Ya lo has dictado. Te queda revisar el correo y enviarlo tú.', accion: 'Revisar y enviar', accionCorta: 'Revisar' },
+        alTerminar: 'Enviado',
+        accionHecha: 'Ver lo enviado',
       },
       {
-        titulo: 'Para hoy',
-        items: [
-          {
-            texto: 'La familia de Daniel M. no tiene la circular de la salida y pregunta qué llevar. Tienes tres respuestas propuestas.',
-            estado: 'hoy',
-            ir: 'correo:c-daniel',
-          },
-          {
-            texto: 'La madre de Amira pregunta en inglés por el chándal. Amira tiene Educación Física mañana. Las respuestas están en inglés y traducidas.',
-            estado: 'hoy',
-            ir: 'correo:c-amira',
-          },
-          {
-            texto: 'Tienes apuntado proponer una tutoría a la familia de Daniel M. Díctalo y te llega redactado para revisar.',
-            estado: 'pendiente',
-            ir: 'dictado',
-          },
-        ],
+        etiqueta: 'Correos por responder',
+        icono: 'correo',
+        cuenta: 'correo',
+        accion: 'Abrir el correo',
+        alTerminar: 'Al día',
       },
       {
-        titulo: 'Tus plazos',
-        items: [
-          {
-            texto: 'Viernes 20: programación quincenal del 23 de noviembre al 4 de diciembre. De ahí sale la tarea si un día faltas.',
-            estado: 'pendiente',
-            ir: 'plazos',
-          },
-          {
-            texto: 'Viernes 20, antes de las 14:00: las autorizaciones firmadas de la salida, en secretaría y con la lista de quién falta.',
-            estado: 'pendiente',
-            ir: 'correo:c-secretaria',
-          },
+        etiqueta: 'Entregas del viernes 20',
+        icono: 'calendario',
+        // Cuenta lo que queda. La nota lo resume: «La programación y las autorizaciones».
+        // «ir» también en la cifra: es adonde lleva cuando ya no queda nada pendiente.
+        ir: 'plazos',
+        pendientes: [
+          { texto: 'La programación quincenal', corto: 'la programación', sigue: 'plazos#3', ir: 'plazos' },
+          { texto: 'Las autorizaciones de la salida, antes de las 14:00', corto: 'las autorizaciones', sigue: 'plazos#4', ir: 'plazos' },
         ],
-      },
-      {
-        titulo: 'Avisos',
-        items: [
-          {
-            texto: 'Tu cambio de guardia de mañana, a 4.ª hora, sigue pendiente de jefatura. Ojo: la que ofreciste a Rosa Medina a cambio, el viernes 27, coincide con la salida.',
-            estado: 'pendiente',
-            ir: 'plazos',
-          },
-          {
-            texto: 'Plan de lectura: desde enero, 20 minutos diarios en Primaria, de 14:30 a 14:50. Dirección te cuenta cómo se organiza.',
-            estado: 'info',
-            ir: 'correo:c-lectura',
-          },
-        ],
+        accion: 'Ver tus plazos',
+        alTerminar: 'Todo entregado',
+        accionHecha: 'Ver tus plazos',
       },
     ],
+
+    // Tu día por sesiones (horario de Primaria).
+    dia: {
+      titulo: 'Tu día',
+      aviso: 'Hoy no viene Sergio Prieto, el tutor de 3.º B: tu Educación Física con ellos no cambia.',
+      carriles: [
+        {
+          titulo: 'Tus clases',
+          detalle: 'Tutora de 4.º A',
+          icono: 'clase',
+          sesiones: [
+            { franja: '1', hasta: '2', titulo: 'Lengua y Matemáticas', detalle: '4.º A', tipo: 'clase' },
+            { franja: '3', titulo: 'Educación Física', detalle: '4.º B', tipo: 'clase' },
+            { franja: '4', titulo: 'Educación Física', detalle: '3.º B', tipo: 'aviso', aviso: 'Falta su tutor', nota: 'Hoy no viene su tutor, Sergio Prieto. Tu sesión no cambia.' },
+            { franja: '5', hasta: '6', titulo: 'Ciencias de la Naturaleza y Plástica', detalle: '4.º A', tipo: 'clase' },
+            { franja: 'salida', titulo: 'Con tu grupo', detalle: '4.º A', tipo: 'clase' },
+          ],
+        },
+      ],
+    },
+
+    lista: {
+      titulo: 'Lo que te necesita',
+      items: [
+        { grupo: 'Hoy', icono: 'familia', titulo: 'Familia de Daniel M.: qué llevar a la salida', detalle: 'No les ha llegado la circular. Tienes tres respuestas propuestas.', estado: 'hoy', ir: 'correo:c-daniel', sigue: 'correo:c-daniel' },
+        { grupo: 'Hoy', icono: 'familia', titulo: 'Madre de Amira: el chándal, en inglés', detalle: 'Amira tiene Educación Física mañana. Las respuestas están en inglés y traducidas.', estado: 'hoy', ir: 'correo:c-amira', sigue: 'correo:c-amira' },
+        { grupo: 'Hoy', icono: 'microfono', titulo: 'Tutoría con la familia de Daniel M.', detalle: 'Dicta el correo y te llega redactado para revisar.', estado: 'hoy', ir: 'dictado', sigue: 'dictado', siDictado: { detalle: 'Ya lo has dictado. Te queda revisar el correo y enviarlo.' } },
+        // Sale de tu correo a jefatura del martes 17, como el plazo de «Tus plazos» («Sacado con IA»): lleva la insignia.
+        // El texto vale antes y después de que jefatura conteste (las dos respuestas piden otro día para la vuelta).
+        { grupo: 'Esta semana', icono: 'alerta', titulo: 'Tu guardia del viernes 27 coincide con la salida', detalle: 'Es la que ofreciste a Rosa Medina a cambio de la de mañana. Cierra con ella y con jefatura qué día se la devuelves.', estado: 'pendiente', choque: true, ia: true, ir: 'plazos', sigue: 'plazos#6', verbo: 'Resuelto' },
+        { grupo: 'Para saber', icono: 'libro', titulo: 'Plan de lectura desde enero', detalle: '20 minutos diarios en Primaria, de 14:30 a 14:50. Dirección te cuenta cómo se organiza.', estado: 'info', ir: 'correo:c-lectura' },
+      ],
+    },
+
+    // fuente: 'correo' para los plazos que la IA ha sacado de un correo (llevan la insignia), como en «Tus plazos».
+    // La tutoría del jueves sigue al correo de Laura en jefatura: cuando jefatura lo responde (las dos respuestas
+    // aprueban el cambio del jueves), el detalle lo dice. Si jefatura lo archiva, sigue sin contestar.
+    agenda: {
+      titulo: 'Lo que viene',
+      desde: '2026-11-16',
+      semanas: 3,
+      marcas: [
+        { fecha: '2026-11-19', hora: '11:45', tipo: 'evento', titulo: 'Tutoría con una familia de 4.º A', detalle: 'Coincide con tu guardia. Pediste a jefatura que la haga Rosa Medina y aún no te ha contestado.', fuente: 'correo', ir: 'plazos', sigue: 'jefatura/correo:c-laura', si: { detalle: 'Coincide con tu guardia. Jefatura ya ha aprobado que la haga Rosa Medina.', estado: 'pendiente' } },
+        { fecha: '2026-11-20', tipo: 'plazo', titulo: 'Programación quincenal', detalle: 'Del 23 de noviembre al 4 de diciembre, con el modelo del ciclo.', fuente: 'correo', ir: 'plazos', sigue: 'plazos#3', verbo: 'Entregada' },
+        { fecha: '2026-11-20', tipo: 'plazo', titulo: 'Autorizaciones de la salida, antes de las 14:00', detalle: 'Las de 4.º A firmadas, en secretaría y con la lista de quién falta.', fuente: 'correo', ir: 'plazos', sigue: 'plazos#4', verbo: 'Entregadas' },
+        { fecha: '2026-11-27', hora: '9:15', tipo: 'evento', titulo: 'Salida al Jardín Botánico', detalle: 'Con 4.º. Vuelta a las 13:30.', ir: 'plazos' },
+        { fecha: '2026-11-27', tipo: 'aviso', choque: true, titulo: 'Tu guardia de 3.ª hora y la salida', detalle: 'Cierra con Rosa Medina y con jefatura qué día se la devuelves.', fuente: 'correo', ir: 'plazos', sigue: 'plazos#6', verbo: 'Resuelto' },
+        { fecha: '2026-12-04', tipo: 'plazo', titulo: 'Títulos para el lote de lectura', detalle: 'Si quieres libros concretos para 4.º A, pídeselos a la biblioteca antes de este día.', fuente: 'correo', ir: 'plazos', sigue: 'plazos#7', verbo: 'Pedidos' },
+      ],
+    },
   },
 
   // ───────────────────────────── Correo ─────────────────────────────

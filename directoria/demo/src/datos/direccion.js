@@ -9,84 +9,161 @@ DEMO.rol({
   },
   acceso: 'Resumen de las 8:00, correo resumido, actas, dosier para inspección y firmas',
 
-  // ─── Inicio: tu resumen de las 8:00 ───────────────────────────────
+  // ─── Inicio: tu resumen de las 8:00 (panel de mando) ───────────────
+  // Cifras, día y calendario salen de reglas y de los datos del colegio: sin insignia de IA.
+  // Las filas que resumen un correo y los plazos sacados de un correo llevan la insignia (la pone el motor).
   inicio: {
     antetitulo: 'Miércoles 18 de noviembre · Tu resumen de las 8:00',
     titulo: 'Buenos días, Elena',
-    entradilla: 'Quién falta, qué vence y qué correos importan. Lo ha preparado DirectorIA; nada se envía ni se firma sin ti.',
-    bloques: [
+    entradilla: 'Lo que te espera hoy, quién cubre 3.º B y lo que vence. Nada se envía ni se firma sin ti.',
+
+    // Lo que importa a las 8:00, de lo más urgente a lo menos. Cada cifra lleva a donde se actúa.
+    cifras: [
       {
-        titulo: 'Quién falta',
-        items: [
-          {
-            texto: 'Sergio Prieto (tutor de 3.º B) no viene hoy. Jefatura revisa la propuesta para cubrir 1.ª, 3.ª, 6.ª y el recreo.',
-            estado: 'pendiente',
-            bandera: 'guardias',
-            textoSi: 'Jefatura ha confirmado quién cubre a Sergio Prieto: Pablo Sanz (1.ª y 6.ª), Rosa Medina (3.ª) y Teresa Gil (recreo). Quien entra en 3.º B ya tiene su ficha.',
-            estadoSi: 'hecho',
-          },
+        etiqueta: 'Pendiente de tu firma',
+        icono: 'firma',
+        // Cuenta lo que queda. La nota lo resume: «La citación y el acta del claustro».
+        // «ir» también en la cifra: es adonde lleva cuando ya no queda nada pendiente.
+        ir: 'firma',
+        pendientes: [
+          { texto: 'La citación del Caso 2026-07', corto: 'la citación', sigue: 'firma', ir: 'firma', hoy: true, accion: 'Revisar y firmar', accionCorta: 'Firmar' },
+          { texto: 'El acta del claustro del lunes 16', corto: 'el acta del claustro', sigue: 'acta', ir: 'acta', accion: 'Dar el visto bueno', accionCorta: 'Visto bueno' },
         ],
+        alTerminar: 'Todo firmado',
+        accionHecha: 'Ver lo firmado',
       },
       {
-        titulo: 'Qué vence hoy y esta semana',
-        items: [
-          {
-            texto: 'Fotocopiadoras: si quieres negociar o cambiar de empresa, avisa antes del sábado 21. Si no, el contrato se renueva solo el 1 de diciembre.',
-            estado: 'pendiente',
-            ir: 'correo:c-fotocopiadoras',
-          },
-          {
-            texto: 'Dosier para inspección, antes del lunes 23: está todo menos el acta de la evaluación inicial de 2.º ESO A.',
-            estado: 'pendiente',
-            ir: 'dosier',
-          },
-          {
-            texto: 'Reclamación del comedor (familia de 5.º A): responder antes del viernes 27. DirectorIA lleva el plazo; la respuesta es tuya.',
-            estado: 'pendiente',
-            ir: 'correo:c-comedor',
-          },
-        ],
+        etiqueta: 'Correos por responder',
+        icono: 'correo',
+        cuenta: 'correo',
+        accion: 'Abrir el correo',
+        alTerminar: 'Al día',
       },
       {
-        titulo: 'Correos que importan',
-        items: [
-          {
-            texto: 'Inspección educativa visita el colegio el jueves 26 a las 10:00 y quiere verte con el jefe de estudios. Falta confirmarle la cita.',
-            estado: 'pendiente',
-            ir: 'correo:c-inspeccion',
-          },
-          {
-            texto: 'AMPA: propone el festival de Navidad el viernes 11 de diciembre, que coincide con las sesiones de evaluación.',
-            estado: 'pendiente',
-            ir: 'correo:c-ampa',
-          },
-          {
-            texto: 'Ayuntamiento: el lunes 30 cortan al tráfico la calle de la entrada principal. El aviso a las familias está listo para revisar.',
-            estado: 'info',
-            ir: 'correo:c-ayuntamiento',
-          },
+        // Cuenta atrás: miércoles, jueves y viernes. El preaviso del contrato es antes del sábado 21 (analista de gastos).
+        // Solo avisa la 2.ª respuesta propuesta, «Comunicar el preaviso» (#1). Con otra respuesta, o si se archiva el correo,
+        // la cuenta atrás sigue y la nota lo dice (aMedias): pedir la oferta o una reunión no es avisar.
+        etiqueta: 'Fotocopiadoras',
+        icono: 'reloj',
+        valor: '3 días',
+        rotulo: 'para avisar, antes del sáb 21',
+        cuentaAtras: '2026-11-21',
+        nota: 'Si no avisas, el contrato se renueva solo el 1 de diciembre.',
+        sigue: 'correo:c-fotocopiadoras#1',
+        aMedias: [
+          { sigue: 'correo:c-fotocopiadoras#archivado', nota: 'Archivado sin avisar. Si no avisas, el contrato se renueva solo el 1 de diciembre.' },
+          { sigue: 'correo:c-fotocopiadoras', nota: 'Has respondido sin el preaviso. Si no avisas, se renueva solo el 1 de diciembre.' },
         ],
+        ir: 'correo:c-fotocopiadoras',
+        accion: 'Leer la oferta',
+        alTerminar: 'Preaviso enviado',
+        accionHecha: 'Ver el correo',
       },
       {
-        titulo: 'Pendiente de tu firma',
-        items: [
-          {
-            texto: 'Caso 2026-07: citación a la familia',
-            estado: 'hoy',
-            ir: 'firma',
-          },
-          {
-            texto: 'Acta del claustro del lunes 16: el borrador de tu dictado espera tu visto bueno.',
-            estado: 'pendiente',
-            ir: 'acta',
-          },
-          {
-            texto: 'Certificado de matrícula de Nora D. (1.º ESO A): lo firma secretaría con tu visto bueno. Te llega cuando Carmen López lo pase a la firma.',
-            estado: 'pendiente',
-          },
-        ],
+        // 6 de 8 listas: 6 piezas listas, el escrito de remisión por revisar y el acta de 2.º ESO A, que falta.
+        etiqueta: 'Dosier para inspección',
+        icono: 'carpeta',
+        progreso: 'dosier',
+        nota: 'Falta el acta de 2.º ESO A y revisar el escrito de remisión.',
+        ir: 'dosier',
+        accion: 'Revisar el dosier',
+        accionCorta: 'Revisar',
+        alTerminar: 'Visto bueno dado',
+        accionHecha: 'Ver el dosier',
       },
     ],
+
+    // Quién cubre a Sergio Prieto en cada sesión de 3.º B. La persona sale de lo que confirma jefatura
+    // (si jefatura elige a otra en el desplegable, sale esa).
+    dia: {
+      titulo: 'Quién cubre 3.º B hoy',
+      carriles: [
+        {
+          titulo: '3.º B',
+          detalle: 'Sergio Prieto no viene',
+          icono: 'persona',
+          cuenta: 'confirmadas',
+          pendiente: 'Las guardias las confirma jefatura. Hasta entonces, no se avisa a nadie.',
+          // Si jefatura confirma una a una: lo confirmado ya se ha avisado; lo demás, no ({n} de {de}, como el recuento).
+          parcial: 'Jefatura ha confirmado {n} de {de}. Hasta que confirme las demás, no se avisa a quien las cubre.',
+          alTerminar: 'Jefatura ha confirmado quién cubre a Sergio Prieto. Quien entra en 3.º B ya tiene su ficha.',
+          sesiones: [
+            { franja: '1', titulo: 'Lengua', tipo: 'cubre', sigue: 'jefatura/guardias#g1', nota: 'Tiene guardia a esa hora. Lleva 2 guardias este mes; la media es 3.' },
+            { franja: '2', titulo: 'Inglés', detalle: 'Con su especialista', tipo: 'igual' },
+            { franja: '3', titulo: 'Ciencias de la Naturaleza', tipo: 'cubre', sigue: 'jefatura/guardias#g2', nota: 'Tiene guardia a esa hora.' },
+            { franja: 'recreo', titulo: 'Patio de Primaria', tipo: 'cubre', sigue: 'jefatura/guardias#g3', nota: 'Hace el turno de patio de Sergio.' },
+            { franja: '4', titulo: 'Educación Física', detalle: 'Con su especialista', tipo: 'igual' },
+            { franja: '5', titulo: 'Música', detalle: 'Con su especialista', tipo: 'igual' },
+            { franja: '6', titulo: 'Matemáticas', tipo: 'cubre', sigue: 'jefatura/guardias#g4', nota: 'Así 3.º B acaba el día con la misma persona que lo empezó.' },
+            { franja: 'salida', titulo: 'Salida de 3.º B', tipo: 'cubre', sigue: 'jefatura/guardias#g4', nota: 'Acompaña al grupo a la puerta de Primaria a las 16:00. Va con la 6.ª hora.' },
+          ],
+        },
+      ],
+    },
+
+    // Lo que te necesita: empieza por lo que las cifras no dicen. Lo que tiene fecha va en la agenda.
+    lista: {
+      titulo: 'Lo que te necesita',
+      items: [
+        { grupo: 'Hoy', icono: 'correo', titulo: 'Inspección: confírmale la visita del jueves 26', detalle: 'A las 10:00, contigo y con el jefe de estudios.', estado: 'pendiente', ir: 'correo:c-inspeccion', sigue: 'correo:c-inspeccion' },
+        { grupo: 'Hoy', icono: 'firma', titulo: 'Caso 2026-07: citación a la familia', detalle: 'Revísala con las cuatro comprobaciones y fírmala.', estado: 'hoy', ir: 'firma', sigue: 'firma', verbo: 'Firmada' },
+        { grupo: 'Esta semana', icono: 'acta', titulo: 'Acta del claustro del lunes 16', detalle: 'El borrador de tu dictado espera tu visto bueno.', estado: 'pendiente', ir: 'acta', sigue: 'acta', verbo: 'Visto bueno dado' },
+        { grupo: 'Esta semana', icono: 'correo', titulo: 'AMPA: fecha del festival de Navidad', detalle: 'Proponen el viernes 11 de diciembre, que coincide con las sesiones de evaluación.', estado: 'pendiente', choque: true, ir: 'correo:c-ampa', sigue: 'correo:c-ampa' },
+        {
+          grupo: 'Para saber', icono: 'documento', titulo: 'Certificado de matrícula de Nora D. (1.º ESO A)',
+          detalle: 'Lo firma secretaría con tu visto bueno. Te llega cuando Carmen López lo pase a la firma.', estado: 'info',
+          // Cuando secretaría lo pasa a la firma, sigue siendo para saber: en dirección no hay dónde darle el visto bueno.
+          sigue: 'secretaria/certificados', si: { detalle: 'Carmen López lo ha pasado a la firma y te lo lleva para tu visto bueno.', estado: 'info' },
+        },
+      ],
+    },
+
+    // Lo que viene: plazos (lo que haces tú) y citas o salidas, en las próximas tres semanas.
+    // fuente: 'correo' para lo que la IA ha sacado de un correo (lleva la insignia).
+    agenda: {
+      titulo: 'Lo que viene',
+      desde: '2026-11-16',
+      semanas: 3,
+      marcas: [
+        // Cada plazo pasa a ✓ solo con lo que lo cumple: el preaviso (#1) o la circular a las familias (#0). Lo que va hacia
+        // ello lo dice «aMedias», sin el ✓ (vale la primera variante que está hecha).
+        {
+          fecha: '2026-11-21', tipo: 'plazo', titulo: 'Fotocopiadoras: avisar antes de este día', detalle: 'Si no avisas, el contrato se renueva solo el 1 de diciembre.',
+          ir: 'correo:c-fotocopiadoras', sigue: 'correo:c-fotocopiadoras#1', verbo: 'Preaviso enviado',
+          // El mismo texto que la nota de la cifra.
+          aMedias: { sigue: 'correo:c-fotocopiadoras', detalle: 'Has respondido sin el preaviso. Si no avisas, se renueva solo el 1 de diciembre.' },
+        },
+        // El dosier: enviado con la respuesta que lo adjunta (#1) y con tu visto bueno. Ni así pasa a ✓: esa respuesta lo
+        // envía sin el acta de 2.º ESO A («que le enviaré antes del lunes 23»), así que el plazo sigue abierto para el acta.
+        {
+          fecha: '2026-11-23', tipo: 'plazo', titulo: 'Dosier para inspección', detalle: 'Envíalo antes de este día. Falta el acta de 2.º ESO A.', fuente: 'correo',
+          ir: 'dosier', sigue: ['dosier', 'correo:c-inspeccion#1'],
+          si: { detalle: 'Enviado sin el acta de 2.º ESO A. Esa acta, antes de este día.', estado: 'pendiente' },
+          aMedias: [
+            // Enviado sin dar antes el visto bueno al dosier.
+            { sigue: 'correo:c-inspeccion#1', detalle: 'Enviado sin el acta de 2.º ESO A y sin tu visto bueno al dosier. Esa acta, antes de este día.', ir: 'dosier' },
+            // Respondido con otra respuesta (confirmar la visita, preguntar por los horarios): el dosier no ha salido.
+            { sigue: 'correo:c-inspeccion', detalle: 'Has confirmado la visita sin el dosier. Envíaselo antes de este día.' },
+            // Con el visto bueno y el correo sin responder.
+            { sigue: 'dosier', detalle: 'Visto bueno dado. Falta enviarlo a Inspección desde el correo.', ir: 'correo:c-inspeccion' },
+          ],
+        },
+        { fecha: '2026-11-26', hora: '10:00', tipo: 'evento', titulo: 'Visita de inspección', detalle: 'Te reúnes con la inspectora y con el jefe de estudios.', fuente: 'correo', ir: 'correo:c-inspeccion' },
+        // Las tres respuestas propuestas dejan el fondo para después: contestar no cumple el plazo, que sigue pendiente.
+        {
+          fecha: '2026-11-27', tipo: 'plazo', titulo: 'Reclamación del comedor', detalle: 'Familia de 5.º A: respóndeles antes de este día. DirectorIA te lo recuerda el miércoles 25.', fuente: 'correo',
+          ir: 'correo:c-comedor', sigue: 'correo:c-comedor', si: { detalle: 'Ya les has contestado. La respuesta por escrito, antes de este día.', estado: 'pendiente' },
+        },
+        { fecha: '2026-11-27', hora: '9:15', tipo: 'evento', titulo: 'Salida de 4.º al Jardín Botánico', detalle: 'Vuelven a las 13:30.' },
+        {
+          fecha: '2026-11-30', tipo: 'evento', titulo: 'Corte de la calle de la entrada', detalle: 'De 7:00 a 19:00. El aviso a las familias está listo para revisar.', fuente: 'correo',
+          ir: 'correo:c-ayuntamiento', sigue: 'correo:c-ayuntamiento#0', si: { detalle: 'De 7:00 a 19:00.' },
+          // Si respondes al Ayuntamiento (pedir paso seguro), la circular a las familias, que era la otra respuesta, ya no está.
+          aMedias: { sigue: 'correo:c-ayuntamiento', detalle: 'De 7:00 a 19:00. Has escrito al Ayuntamiento; falta avisar a las familias.' },
+        },
+        { fecha: '2026-11-30', tipo: 'evento', titulo: 'Empiezan los exámenes de ESO', detalle: '1.ª evaluación, hasta el viernes 4 de diciembre.' },
+      ],
+    },
   },
 
   // ─── Correo ───────────────────────────────────────────────────────

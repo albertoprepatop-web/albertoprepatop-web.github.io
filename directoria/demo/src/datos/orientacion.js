@@ -9,86 +9,105 @@ DEMO.rol({
   },
   acceso: 'Protocolo de acoso paso a paso, pautas para el aula, lectura fácil y correo resumido',
 
-  // ─── Inicio ───────────────────────────────────────────────────────
+  // ─── Inicio: panel de mando (guion-de-datos.md §6.2 bis), solo con datos ───
+  // Aquí sí sale el Caso 2026-07 con su paso actual y Alumno/a A: es el perfil del equipo del caso.
+  // Sin el día por sesiones: las entrevistas no van por el horario de Primaria.
   inicio: {
     antetitulo: 'Miércoles 18 de noviembre · 8:00',
     titulo: 'Buenos días, Andrés',
-    entradilla: 'El Caso 2026-07, tus entrevistas, las pautas para el aula y una circular por revisar. Lo ha preparado DirectorIA; nada se envía sin ti.',
-    bloques: [
+    entradilla: 'El Caso 2026-07, tus entrevistas, las pautas y la circular de Amira. Nada se envía sin ti.',
+
+    // Lo que importa a las 8:00. Cada cifra lleva a donde se actúa y tiene un solo sentido.
+    cifras: [
       {
-        titulo: 'Caso 2026-07',
-        items: [
-          {
-            texto: 'Paso 4 de 9: recogida de información (Anexo II), hasta el lunes 23. La reunión para la toma de decisiones es el martes 24.',
-            estado: 'pendiente',
-            ir: 'acoso',
-          },
-          {
-            texto: 'La citación a la familia de Alumno/a A, para el viernes 20 a las 17:00, está pendiente de la firma de la directora.',
-            estado: 'pendiente',
-            ir: 'acoso',
-          },
-          {
-            texto: 'Nuria Castro te pide antes del jueves el guion para el alumnado observador. El borrador está listo para que lo revises.',
-            estado: 'hoy',
-            ir: 'correo:c-nuria',
-          },
-        ],
+        etiqueta: 'Entrevista de hoy',
+        icono: 'reloj',
+        valor: '10:15',
+        hoy: true,
+        nota: 'Caso 2026-07, con Alumno/a A, en tu despacho. El guion ya lo has revisado.',
+        sigue: 'acoso',
+        ir: 'acoso',
+        accion: 'Repasar el guion',
+        accionCorta: 'Repasar',
+        alTerminar: 'Hecha',
+        accionHecha: 'Ver el protocolo',
       },
       {
-        titulo: 'Entrevistas de hoy y de mañana',
-        items: [
-          {
-            texto: 'Caso 2026-07 · hoy a las 10:15: Alumno/a A, en el despacho de orientación. Tienes el guion en el expediente.',
-            estado: 'hoy',
-            ir: 'acoso',
-          },
-          {
-            texto: 'Caso 2026-07 · mañana, jueves 19: alumnado observador por la mañana y profesorado del grupo, de 15:00 a 17:00.',
-            estado: 'pendiente',
-            ir: 'acoso',
-          },
-        ],
+        // Progreso del protocolo: el paso en curso, «4 de 9», rotulado «en curso». El medidor tiene un tramo por paso:
+        // hechos (rellenos), el que está en curso (con borde), los pendientes (vacíos) y los que solo van si se confirma
+        // (borde discontinuo). El globo da los nueve pasos con su estado.
+        etiqueta: 'Paso del Caso 2026-07',
+        icono: 'carpeta',
+        progreso: 'acoso',
+        nota: 'Recogida de información (Anexo II), hasta el lunes 23.',
+        ir: 'acoso',
+        accion: 'Ver el protocolo',
+        alTerminar: 'Cerrado',
+        accionHecha: 'Ver el protocolo',
       },
       {
-        titulo: 'Pautas para el aula',
-        items: [
-          {
-            texto: 'Quien cubra hoy a Sergio Prieto en 3.º B verá en su ficha la pauta de Mario. Falta que jefatura confirme las guardias.',
-            estado: 'info',
-            ir: 'pautas',
-            bandera: 'guardias',
-            textoSi: 'Jefatura ha confirmado las guardias: Pablo Sanz (1.ª y 6.ª) y Rosa Medina (3.ª) verán la pauta de Mario en sus fichas. Queda registrado.',
-            estadoSi: 'hecho',
-          },
-          {
-            texto: 'Pauta de Amira (4.º A) actualizada el lunes 16 con su tutora: instrucciones cortas y con apoyo visual.',
-            estado: 'hecho',
-            ir: 'pautas',
-          },
-          {
-            texto: 'Beatriz Romero pide pautas de organización del aula para 2.º ESO B. La propuesta, sin nombres, está lista para revisar.',
-            estado: 'pendiente',
-            ir: 'correo:c-beatriz',
-          },
-        ],
+        etiqueta: 'Correos por responder',
+        icono: 'correo',
+        cuenta: 'correo',
+        accion: 'Abrir el correo',
+        alTerminar: 'Al día',
       },
       {
-        titulo: 'Para revisar y enviar',
-        items: [
-          {
-            texto: 'Circular de la salida al Jardín Botánico para la familia de Amira (4.º A), en lectura fácil y en inglés. Las autorizaciones se entregan antes del viernes 20.',
-            estado: 'hoy',
-            ir: 'traduccion',
-          },
-          {
-            texto: 'La madre de Mario (3.º B) pide una reunión el jueves o el viernes por la tarde, cuando tienes entrevistas. Las respuestas proponen otros días.',
-            estado: 'pendiente',
-            ir: 'correo:c-mario',
-          },
-        ],
+        etiqueta: 'Circular adaptada',
+        icono: 'documento',
+        valor: 'Por enviar',
+        nota: 'La de la salida al Botánico, en lectura fácil y en inglés, para la familia de Amira.',
+        sigue: 'traduccion',
+        ir: 'traduccion',
+        accion: 'Revisar y enviar',
+        alTerminar: 'Enviada',
+        accionHecha: 'Ver lo enviado',
       },
     ],
+
+    // Lo que te necesita: empieza por lo que las cifras no dicen. Las de «Hoy» salen de correos (llevan «Resumido con IA»).
+    lista: {
+      titulo: 'Lo que te necesita',
+      items: [
+        { grupo: 'Hoy', icono: 'correo', titulo: 'Nuria Castro te pide el guion para el alumnado observador', detalle: 'Lo quiere antes del jueves, para repasarlo con los dos docentes designados. El borrador está listo.', estado: 'hoy', ir: 'correo:c-nuria', sigue: 'correo:c-nuria' },
+        { grupo: 'Hoy', icono: 'familia', titulo: 'La madre de Mario (3.º B) pide una reunión', detalle: 'Propone el jueves o el viernes por la tarde, cuando tienes entrevistas. Las respuestas proponen otros días.', estado: 'hoy', ir: 'correo:c-mario', sigue: 'correo:c-mario' },
+        // Sale de la plantilla del protocolo (Anexo III), no de la IA: sin insignia.
+        { grupo: 'Esta semana', icono: 'documento', titulo: 'Caso 2026-07: convocatoria de la reunión del martes 24', detalle: 'Anexo III, para todo el equipo del caso. Está lista para que la revises.', estado: 'pendiente', ir: 'acoso' },
+        // Siguen a otros perfiles: la firma de la directora y las guardias que confirma jefatura (sin nombres: jefatura puede elegir a otra persona).
+        {
+          grupo: 'Para saber', icono: 'firma', titulo: 'Citación a la familia de Alumno/a A',
+          detalle: 'Para el viernes 20 a las 17:00. La firma la directora.', estado: 'info', ir: 'acoso',
+          sigue: 'direccion/firma', verbo: 'Firmada por la directora', si: { detalle: 'Para el viernes 20 a las 17:00.' },
+        },
+        {
+          grupo: 'Para saber', icono: 'documento', titulo: 'La pauta de Mario, en las fichas de 3.º B',
+          detalle: 'Quien cubra hoy a Sergio Prieto la verá en su ficha. Falta que jefatura confirme las guardias.', estado: 'info', ir: 'pautas',
+          sigue: 'jefatura/guardias', verbo: 'Guardias confirmadas', si: { detalle: 'Quien entra hoy en 3.º B la verá en su ficha. Queda registrado quién la abre.' },
+        },
+        { grupo: 'Para saber', icono: 'documento', titulo: 'Pauta de Amira (4.º A)', detalle: 'Con su tutora: instrucciones cortas, con apoyo visual, y un compañero de referencia.', estado: 'hecho', verbo: 'Actualizada el lun 16', ir: 'pautas' },
+      ],
+    },
+
+    // Lo que viene: el calendario del protocolo (sale de reglas, sin insignia) y las pautas que pide Beatriz Romero (sacado del correo).
+    agenda: {
+      titulo: 'Lo que viene',
+      desde: '2026-11-16',
+      semanas: 3,
+      marcas: [
+        { fecha: '2026-11-19', tipo: 'evento', titulo: 'Caso 2026-07: entrevistas', detalle: 'Alumnado observador por la mañana, de uno en uno. Profesorado del grupo, de 15:00 a 17:00.', ir: 'acoso' },
+        { fecha: '2026-11-20', tipo: 'evento', titulo: 'Caso 2026-07: alumnado observador', detalle: 'Por la mañana, de uno en uno.', ir: 'acoso' },
+        { fecha: '2026-11-20', hora: '17:00', tipo: 'evento', titulo: 'Caso 2026-07: familia de Alumno/a A', detalle: 'En tu despacho.', ir: 'acoso' },
+        { fecha: '2026-11-23', tipo: 'plazo', titulo: 'Caso 2026-07: termina la recogida de información', detalle: 'Entrevistas con el alumnado mencionado y sus familias. El Anexo II, completo por la tarde.', ir: 'acoso' },
+        { fecha: '2026-11-24', tipo: 'evento', titulo: 'Caso 2026-07: reunión para la toma de decisiones', detalle: 'Anexo III, con todo el equipo del caso.', ir: 'acoso' },
+        // Las pautas solo van en la 1.ª respuesta propuesta (#0). Proponer ver una clase o preparar juntos una hoja no las
+        // envía: el plazo sigue pendiente (aMedias).
+        {
+          fecha: '2026-11-30', tipo: 'plazo', titulo: 'Pautas de organización del aula para 2.º ESO B', detalle: 'Envíaselas a Beatriz Romero antes de este día. La propuesta, sin nombres, está lista.', fuente: 'correo',
+          ir: 'correo:c-beatriz', sigue: 'correo:c-beatriz#0', verbo: 'Enviadas',
+          aMedias: { sigue: 'correo:c-beatriz', detalle: 'Ya has contestado a Beatriz Romero. Las pautas, antes de este día.' },
+        },
+      ],
+    },
   },
 
   // ─── Correo ───────────────────────────────────────────────────────

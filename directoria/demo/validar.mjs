@@ -9,6 +9,11 @@ const ROLES = ['direccion', 'jefatura', 'secretaria', 'docente', 'orientacion', 
 const ILUS = ['direccion', 'jefatura', 'secretaria', 'docente', 'orientacion', 'sustituto'];
 const CATEGORIAS = ['Familias', 'Inspección', 'Consejería', 'Claustro', 'Equipo directivo', 'Proveedores', 'Otros'];
 const TIPOS = ['aprobaciones', 'documento', 'plazos', 'protocolo', 'banco', 'dictado', 'material', 'traduccion', 'ficha', 'tabla', 'informe'];
+// Panel de mando del Inicio (inicio.cifras): iconos del motor, franjas del horario de Primaria y el día de la demo.
+const ICONOS = ['correo', 'firma', 'carpeta', 'reloj', 'calendario', 'persona', 'familia', 'alerta', 'libro', 'acta', 'documento', 'microfono', 'clase', 'autobus', 'colegio', 'info'];
+const FRANJAS = ['1', '2', '3', 'recreo', '4', 'comida', '5', '6', 'salida'];
+const HOY = '2026-11-18';
+const ESTADOS_INICIO = ['hoy', 'pendiente', 'hecho', 'info'];
 const PROHIBIDAS = [
   [/autom[aá]ticamente/i, 'no uses «automáticamente»: la IA prepara y una persona decide'],
   [/riesgo cero/i, 'sin «riesgo cero»'],
@@ -45,6 +50,9 @@ function texto(donde, v, { max, min, opcional, palabrasMin, palabrasMax } = {}) 
 
 function revisarEstilo(donde, v) {
   if (/<\/?[a-z][^>]*>/i.test(v)) err(donde, 'no uses HTML dentro de los textos');
+  // Los huecos que rellena el motor ({hechas}, {faltan}, {n}, {de}, {clases}) solo valen en los textos del carril del día.
+  const hueco = v.match(/\{[A-Za-z]+\}/);
+  if (hueco) err(donde, `«${hueco[0]}»: los huecos que rellena el motor solo valen en los textos de un carril del día (detalle, pendiente, parcial, alTerminar y siNinguna), y no todos en todos`);
   if (/\*\*|__|^#{1,6}\s/m.test(v)) err(donde, 'no uses Markdown dentro de los textos');
   if (/[\w.+-]+@[\w-]+\.[\w.]+/.test(v)) err(donde, 'sin direcciones de correo');
   if (/(\+34\s?)?\b[6-9]\d{2}[\s.]?\d{3}[\s.]?\d{3}\b/.test(v)) err(donde, 'sin números de teléfono');
@@ -110,7 +118,8 @@ function validarRol(r) {
   texto('inicio.antetitulo', ini.antetitulo, { max: 60 });
   texto('inicio.titulo', ini.titulo, { max: 60 });
   texto('inicio.entradilla', ini.entradilla, { max: 160 });
-  lista('inicio.bloques', ini.bloques, 2, 4).forEach((b, i) => {
+  if (ini.cifras !== undefined) validarPanel(r, ini, irValido);
+  else lista('inicio.bloques', ini.bloques, 2, 4).forEach((b, i) => {
     texto(`inicio.bloques[${i}].titulo`, b.titulo, { max: 40 });
     lista(`inicio.bloques[${i}].items`, b.items, 1, 4).forEach((it, j) => {
       const d = `inicio.bloques[${i}].items[${j}]`;
@@ -172,6 +181,472 @@ function validarRol(r) {
     const fn = VALIDA[m.tipo];
     if (fn) fn(d, m, irValido);
   });
+}
+
+// ─── Panel de mando del Inicio ───
+// Lo que sigue el panel para estar al día: 'correo:<id>', '<módulo>', '<módulo>#<elemento>' o 'bandera:<nombre>',
+// con '<perfil>/' delante si es de otro perfil. Las de otro perfil se comprueban al final, si se ha cargado su archivo.
+const cruces = [];
+const cubres = [];
+const fichasDe = [];   // cifras «fichas»: tienen que seguir un módulo de aprobaciones con propuestas que llevan ficha
+const elegidos = [];   // sesiones de siElegido: la propuesta era para otra persona y la del perfil está entre las alternativas
+function sigueValido(r, donde, ref) {
+  // Una lista ('dosier' y 'correo:c-inspeccion#1'): hecha cuando lo están todas.
+  if (Array.isArray(ref)) {
+    if (ref.length < 2) err(donde, 'una lista lleva dos referencias o más (con una, pon el texto solo)');
+    ref.forEach((x, i) => sigueValido(r, `${donde}[${i}]`, x));
+    return;
+  }
+  if (typeof ref !== 'string' || !ref) { err(donde, 'tiene que ser un texto: correo:<id>, <módulo>, <módulo>#<elemento> o bandera:<nombre>, con «<perfil>/» delante si es de otro perfil'); return; }
+  let rol = r.id, s = ref;
+  const barra = s.indexOf('/');
+  if (barra > 0) {
+    rol = s.slice(0, barra); s = s.slice(barra + 1);
+    if (!ROLES.includes(rol)) { err(donde, `«${rol}» no es un perfil`); return; }
+  }
+  if (rol !== r.id) { cruces.push({ archivo: actual, donde, rol, s }); return; }
+  refValida(r, donde, s);
+}
+function refValida(r, donde, s) {
+  if (s.startsWith('bandera:')) { uno(donde, s.slice(8), ['guardias']); return; }
+  // 'correo:<id>' (respondido o archivado), 'correo:<id>#1' o '#0,1' (enviada esa respuesta propuesta, desde 0)
+  // y 'correo:<id>#archivado' (archivado sin responder).
+  if (s.startsWith('correo:')) {
+    const [cid, el] = s.slice(7).split('#');
+    const c = (r.correo || []).find((x) => x.id === cid);
+    if (!c) { err(donde, `el correo «${cid}» no existe en ${r.id}`); return; }
+    if (el === undefined || el === 'archivado') return;
+    const n = (c.respuestas || []).length;
+    if (!el.split(',').every((x) => /^\d+$/.test(x) && +x < n)) err(donde, `«#${el}» no vale en «${cid}»: pon el número de una respuesta propuesta, desde 0 (tiene ${n}), varios con comas («#0,1») o «#archivado»`);
+    return;
+  }
+  const [mid, el] = s.split('#');
+  const m = (r.modulos || []).find((x) => x.id === mid);
+  if (!m) { err(donde, `«${mid}» no es un módulo de ${r.id}`); return; }
+  if (el === undefined) return;
+  if (m.tipo === 'aprobaciones') { if (!(m.items || []).some((it) => it.id === el)) err(donde, `«${el}» no es una propuesta de «${mid}»`); }
+  else if (m.tipo === 'plazos') { if (!/^\d+$/.test(el) || +el >= (m.items || []).length) err(donde, `«${el}» no es un plazo de «${mid}» (se cuentan desde 0)`); }
+  else err(donde, `un módulo de tipo ${m.tipo} no tiene elementos: quita «#${el}»`);
+}
+// Lo que cambia cuando lo seguido está hecho: si.titulo, si.detalle y si.estado (por defecto, «hecho»).
+function siValido(r, d, it) {
+  if (it.sigue !== undefined) sigueValido(r, d + '.sigue', it.sigue);
+  if (it.si === undefined) return;
+  if (it.sigue === undefined) err(d + '.si', 'solo tiene sentido con «sigue»');
+  texto(d + '.si.titulo', it.si.titulo, { max: 70, opcional: true });
+  texto(d + '.si.detalle', it.si.detalle, { max: 130, opcional: true });
+  if (it.si.estado !== undefined) uno(d + '.si.estado', it.si.estado, ESTADOS_INICIO);
+}
+// siOtra: variantes para cuando jefatura elige a otra persona para lo que DirectorIA proponía a la persona del perfil.
+// Cada variante lleva «cuando» (una propuesta de aprobaciones, 'jefatura/guardias#g1', o varias) y solo los campos que cambian.
+// Vale la primera cuyas propuestas han pasado todas a otra persona. null quita un campo (rotulo, ir, sigue).
+// siConfirmada: lo mismo, para cuando lo de «cuando» está confirmado (una propuesta, 'jefatura/guardias#g1', o todo el
+// módulo, 'jefatura/guardias') y sigue siendo de la persona del perfil. Los datos dicen lo de las 8:00 y la variante, lo de después.
+function siOtraValido(r, d, vs, campos, comprobar, soloPropuestas = true) {
+  if (vs === undefined) return;
+  const lista_ = Array.isArray(vs) ? vs : [vs];
+  if (!lista_.length) err(d, 'la lista de variantes está vacía');
+  lista_.forEach((x, i) => {
+    const dv = `${d}[${i}]`;
+    if (!x || typeof x !== 'object') { err(dv, 'cada variante es un objeto'); return; }
+    const cuando = [].concat(x.cuando === undefined ? [] : x.cuando);
+    if (!cuando.length) err(dv + '.cuando', soloPropuestas ? 'falta: la propuesta (o las propuestas) que, dadas a otra persona, activan la variante' : 'falta: lo que, confirmado, activa la variante');
+    cuando.forEach((ref, j) => {
+      if (typeof ref !== 'string' || (soloPropuestas && !ref.includes('#'))) err(`${dv}.cuando[${j}]`, 'tiene que ser una propuesta de aprobaciones, como «jefatura/guardias#g1»');
+      else sigueValido(r, `${dv}.cuando[${j}]`, ref);
+    });
+    for (const k of Object.keys(x)) if (k !== 'cuando' && !campos.includes(k)) av(dv, `«${k}» no lo cambia el motor en una variante (vale: ${campos.join(', ')})`);
+    comprobar(dv, x);
+  });
+}
+// aMedias: lo que cambia mientras lo que se sigue no está hecho, pero sí otra cosa que va hacia ello. Cada variante lleva
+// su propio «sigue» (vale la primera que está hecha) y solo los campos que cambian. No puede dar nada por hecho.
+function aMediasValido(r, d, it, campos, comprobar) {
+  if (it.aMedias === undefined) return;
+  if (it.sigue === undefined && !it.siConfirmada) err(d + '.aMedias', 'solo tiene sentido con «sigue»: es lo que pasa mientras eso no está hecho');
+  const l = Array.isArray(it.aMedias) ? it.aMedias : [it.aMedias];
+  if (!l.length) err(d + '.aMedias', 'la lista de variantes está vacía');
+  l.forEach((x, i) => {
+    const dv = `${d}.aMedias[${i}]`;
+    if (!x || typeof x !== 'object') { err(dv, 'cada variante es un objeto'); return; }
+    if (x.sigue === undefined) err(dv + '.sigue', 'falta: lo que se ha hecho a medias (el visto bueno, una respuesta que no cumple el plazo…)');
+    else sigueValido(r, dv + '.sigue', x.sigue);
+    if (x.sigue !== undefined && x.sigue === it.sigue) err(dv + '.sigue', 'es lo mismo que sigue la marca: a medias tiene que ser otra cosa');
+    if (x.estado === 'hecho') err(dv + '.estado', 'a medias no está hecho: usa «si» para cuando lo esté');
+    for (const k of Object.keys(x)) if (k !== 'sigue' && !campos.includes(k)) av(dv, `«${k}» no lo cambia el motor a medias (vale: ${campos.join(', ')})`);
+    comprobar(dv, x);
+  });
+}
+const masDias = (iso, n) => { const x = new Date(iso + 'T00:00:00Z'); x.setUTCDate(x.getUTCDate() + n); return x.toISOString().slice(0, 10); };
+// verbo: cómo se dice lo hecho, con su hora («Firmada a las 8:05»). choque: tarjeta de aviso con el triángulo y «Choque».
+function extrasMarca(d, x) {
+  texto(d + '.verbo', x.verbo, { max: 24, opcional: true });
+  if (x.choque !== undefined && typeof x.choque !== 'boolean') err(d + '.choque', 'tiene que ser true o false');
+}
+// Los textos de un carril del día pueden llevar huecos que rellena el motor con lo que hay de verdad en el carril:
+// {hechas} y {faltan} (dónde cubres, confirmado o no: «la 1.ª, la 6.ª y la salida»), {n} y {de} (cuántas propuestas
+// confirmadas y cuántas hay, como el recuento) y {clases} (cuántas sesiones «clase» quedan, en letra: «cuatro»). Con
+// mayúscula («{Faltan}»), el valor empieza por mayúscula. Cada texto admite los que pueden tener valor en su momento.
+const HUECOS = {
+  detalle: ['clases'],
+  pendiente: ['faltan', 'de', 'clases'],
+  parcial: ['hechas', 'faltan', 'n', 'de', 'clases'],
+  alTerminar: ['hechas', 'n', 'de', 'clases'],
+  ninguna: ['clases'],
+};
+const MAX_CARRIL = { detalle: 40, pendiente: 120, parcial: 120, alTerminar: 140, ninguna: 140 };
+// Valores de ejemplo, para medir y revisar el texto relleno.
+const EJEMPLO = { hechas: 'la 1.ª, la 6.ª y la salida', faltan: 'la 3.ª y el recreo', n: '2', de: '4', clases: 'cuatro' };
+function textoCarril(donde, v, clave, opcional = true) {
+  if (v === undefined || v === null) { if (!opcional) err(donde, 'falta el texto'); return; }
+  if (typeof v !== 'string') { err(donde, 'tiene que ser un texto'); return; }
+  const validos = HUECOS[clave];
+  const lleno = v.replace(/\{([A-Za-z]+)\}/g, (todo, k) => {
+    const kk = k.charAt(0).toLowerCase() + k.slice(1);
+    if (!validos.includes(kk)) { err(donde, `«${todo}» no vale aquí (vale: ${validos.map((x) => '{' + x + '}').join(', ')})`); return kk; }
+    const x = EJEMPLO[kk];
+    return k.charAt(0) === k.charAt(0).toUpperCase() ? x.charAt(0).toUpperCase() + x.slice(1) : x;
+  });
+  texto(donde, lleno, { max: MAX_CARRIL[clave] });
+}
+
+// Privacidad del Inicio (guion-de-datos.md §5): ningún dato de salud de personas concretas, y «Alumno/a A» solo en orientación,
+// que es el equipo del caso. Los demás perfiles nombran el Caso 2026-07 solo por su número.
+const SALUD = /fiebre|al[ée]rgic|alergia|autoinyector|diagn[óo]stic|enferm|m[ée]dic[oa]s?\b|medicaci|epilep|asm[aá]tic|diab[ée]t|gripe|vacun/i;
+function privacidadInicio(r, ini) {
+  const textos = [];
+  const recorrer = (x, donde) => {
+    if (typeof x === 'string') textos.push([donde, x]);
+    else if (Array.isArray(x)) x.forEach((y, i) => recorrer(y, `${donde}[${i}]`));
+    else if (x && typeof x === 'object') Object.keys(x).forEach((k) => recorrer(x[k], `${donde}.${k}`));
+  };
+  recorrer(ini, 'inicio');
+  for (const [donde, t] of textos) {
+    const m = t.match(SALUD);
+    if (m) err(donde, `«${m[0]}»: en el Inicio no van datos de salud de nadie (guion-de-datos.md §5). Di lo que hace falta para actuar («Sergio Prieto no viene»)`);
+    if (r.id !== 'orientacion' && /Alumno\/a\s+[A-Z]\b/.test(t)) err(donde, 'fuera de orientación, el Inicio no nombra al alumno del caso: el Caso 2026-07 va solo por su número');
+  }
+}
+
+function validarPanel(r, ini, irValido) {
+  privacidadInicio(r, ini);
+  if (ini.bloques !== undefined) err('inicio.bloques', 'con el panel de mando (cifras) no van bloques: lo de cada línea va en inicio.lista');
+  // La cabecera del panel es compacta: la entradilla cabe en una línea a 1440 px y el motor añade al antetítulo
+  // «Preparado por DirectorIA en el servidor del colegio».
+  if (esTexto(ini.entradilla) && ini.entradilla.length > 100) av('inicio.entradilla', `tiene ${ini.entradilla.length} caracteres: en el panel va en una sola línea a 1440 px (100 como mucho)`);
+  if (/preparado por/i.test(ini.antetitulo || '')) av('inicio.antetitulo', 'no pongas «Preparado por…»: el motor lo añade al antetítulo');
+  const sigue = (donde, ref) => sigueValido(r, donde, ref);
+
+  // Cifras: 3-4, cada una de un tipo y con un destino.
+  let destacadas = 0;
+  lista('inicio.cifras', ini.cifras, 3, 4).forEach((c, i) => {
+    const d = `inicio.cifras[${i}]`;
+    texto(d + '.etiqueta', c.etiqueta, { max: 32 });
+    uno(d + '.icono', c.icono, ICONOS);
+    const tipos = ['cuenta', 'pendientes', 'progreso', 'valor', 'fichas'].filter((k) => c[k] !== undefined);
+    if (tipos.length !== 1) err(d, `lleva una sola de estas claves: cuenta, pendientes, progreso, valor o fichas (tiene: ${tipos.join(', ') || 'ninguna'})`);
+    // fichas: '<perfil>/<módulo de aprobaciones>'. El motor cuenta las sesiones con ficha que son de la persona del perfil
+    // (por la propuesta o porque jefatura la elige) y pone la nota; «siNinguna» es lo que dice si no le queda ninguna.
+    if (c.fichas !== undefined) {
+      sigue(d + '.fichas', c.fichas);
+      fichasDe.push({ archivo: actual, donde: d + '.fichas', rol: r.id, ref: c.fichas });
+      if (c.nota !== undefined) av(d + '.nota', 'con «fichas», la nota la pone el motor (qué fichas llegan y cuándo): quítala');
+      texto(d + '.alTerminarUna', c.alTerminarUna, { max: 24, opcional: true });
+      const sn = c.siNinguna;
+      if (sn === undefined) err(d + '.siNinguna', 'falta: lo que dice la cifra si jefatura ha elegido a otras personas para todo lo tuyo');
+      else {
+        texto(d + '.siNinguna.valor', sn.valor, { max: 10, opcional: true });
+        texto(d + '.siNinguna.nota', sn.nota, { max: 90 });
+        texto(d + '.siNinguna.accion', sn.accion, { max: 28, opcional: true });
+        texto(d + '.siNinguna.accionCorta', sn.accionCorta, { max: 16, opcional: true });
+        irValido(d + '.siNinguna.ir', sn.ir);
+        for (const k of Object.keys(sn)) if (!['valor', 'nota', 'ir', 'accion', 'accionCorta'].includes(k)) av(d + '.siNinguna', `«${k}» no lo usa el motor`);
+      }
+    } else if (c.alTerminarUna !== undefined || c.siNinguna !== undefined) av(d, '«alTerminarUna» y «siNinguna» solo van con «fichas»');
+    if (c.cuenta !== undefined) uno(d + '.cuenta', c.cuenta, ['correo']);
+    if (c.pendientes !== undefined) lista(d + '.pendientes', c.pendientes, 1, 4).forEach((x, j) => {
+      const dp = `${d}.pendientes[${j}]`;
+      texto(dp + '.texto', x.texto, { max: 70 });
+      // corto: cómo se nombra en la nota que resume lo que queda («la citación» → «La citación y el acta del claustro»).
+      texto(dp + '.corto', x.corto, { max: 30, opcional: true });
+      if (esTexto(x.corto) && /^[a-záéíóúñ]/.test(x.corto) === false && !/^(Caso|Inspección|AMPA|DirectorIA)/.test(x.corto)) av(dp + '.corto', 'va en minúscula: el motor lo junta con los demás («la citación y el acta»)');
+      sigue(dp + '.sigue', x.sigue);
+      if (x.ir === undefined) err(dp + '.ir', 'falta: cada pendiente lleva a donde se actúa'); else irValido(dp + '.ir', x.ir);
+      texto(dp + '.accion', x.accion, { max: 28, opcional: true });
+      texto(dp + '.accionCorta', x.accionCorta, { max: 16, opcional: true });
+      if (x.hoy !== undefined && typeof x.hoy !== 'boolean') err(dp + '.hoy', 'tiene que ser true o false');
+      if (j === 0 && x.hoy) destacadas++;
+      for (const k of Object.keys(x)) if (!['texto', 'corto', 'sigue', 'ir', 'accion', 'accionCorta', 'hoy'].includes(k)) av(dp, `«${k}» no lo usa el motor`);
+    });
+    if (c.pendientes !== undefined && c.pendientes.length > 1 && c.pendientes.some((x) => !esTexto(x.corto))) av(d + '.pendientes', 'pon «corto» en cada pendiente: la nota de la cifra resume lo que queda («La citación y el acta del claustro») y no repite la primera fila de la lista');
+    if (c.progreso !== undefined) {
+      const m = (r.modulos || []).find((x) => x.id === c.progreso);
+      if (!m) err(d + '.progreso', `«${c.progreso}» no es un módulo de este perfil`);
+      else if (!((m.tipo === 'documento' && m.documentos) || (m.tipo === 'protocolo' && m.pasos) || ['dictado', 'aprobaciones', 'plazos'].includes(m.tipo))) err(d + '.progreso', `un módulo de tipo ${m.tipo} no tiene progreso que contar (vale: documento con «documentos», protocolo con «pasos», dictado, aprobaciones o plazos)`);
+    }
+    // siDictado: la nota y la acción de un dictado ya dictado y por revisar (si no, el motor pone las suyas).
+    if (c.siDictado !== undefined) {
+      const m = (r.modulos || []).find((x) => x.id === c.progreso);
+      if (!m || m.tipo !== 'dictado') err(d + '.siDictado', 'solo va en una cifra con progreso de un dictado');
+      const sd = c.siDictado || {};
+      texto(d + '.siDictado.nota', sd.nota, { max: 90, opcional: true });
+      texto(d + '.siDictado.accion', sd.accion, { max: 28, opcional: true });
+      texto(d + '.siDictado.accionCorta', sd.accionCorta, { max: 16, opcional: true });
+      for (const k of Object.keys(sd)) if (!['nota', 'accion', 'accionCorta'].includes(k)) av(d + '.siDictado', `«${k}» no lo usa el motor`);
+    }
+    if (c.ancha !== undefined && typeof c.ancha !== 'boolean') err(d + '.ancha', 'tiene que ser true o false');
+    // accionHecha: lo que dice la acción cuando la cifra está hecha («Ver el dosier»). Va también en el móvil: ≤ 16.
+    texto(d + '.accionHecha', c.accionHecha, { max: 16, opcional: true });
+    const destinoHecho = c.ir || (c.pendientes && c.pendientes.length ? c.pendientes[c.pendientes.length - 1].ir : undefined);
+    if (c.cuenta === undefined && c.accionHecha === undefined && !(typeof destinoHecho === 'string' && destinoHecho.startsWith('correo'))) av(d + '.accionHecha', 'pon una acción corta para cuando la cifra esté hecha («Ver el dosier»); si no, el motor dirá «Ir a «…»», que no cabe en media tarjeta del móvil');
+    if (c.cuenta === 'correo' && c.alTerminar !== 'Al día') av(d + '.alTerminar', 'la cifra de correos dice «Al día» en los seis perfiles (cuenta también lo archivado)');
+    siOtraValido(r, d + '.siOtra', c.siOtra, ['valor', 'rotulo', 'nota', 'ir', 'accion', 'accionCorta', 'accionHecha', 'alTerminar', 'sigue', 'hoy'], (dv, x) => {
+      if (c.valor === undefined) err(dv, 'siOtra solo va en una cifra con «valor»');
+      texto(dv + '.valor', x.valor, { max: 10, opcional: true });
+      if (x.rotulo !== null) texto(dv + '.rotulo', x.rotulo, { max: 32, opcional: true });
+      texto(dv + '.nota', x.nota, { max: 90, opcional: true });
+      texto(dv + '.accion', x.accion, { max: 28, opcional: true });
+      texto(dv + '.accionCorta', x.accionCorta, { max: 16, opcional: true });
+      texto(dv + '.accionHecha', x.accionHecha, { max: 16, opcional: true });
+      texto(dv + '.alTerminar', x.alTerminar, { max: 24, opcional: true });
+      if (x.ir !== null) irValido(dv + '.ir', x.ir);
+      if (x.sigue !== undefined && x.sigue !== null) sigue(dv + '.sigue', x.sigue);
+    });
+    // siConfirmada: lo que dice la cifra cuando lo de «cuando» está confirmado (los datos dicen lo de las 8:00).
+    siOtraValido(r, d + '.siConfirmada', c.siConfirmada, ['valor', 'rotulo', 'nota', 'ir', 'accion', 'accionCorta', 'accionHecha', 'alTerminar', 'sigue', 'hoy'], (dv, x) => {
+      if (c.valor === undefined) err(dv, 'siConfirmada solo va en una cifra con «valor»');
+      texto(dv + '.valor', x.valor, { max: 10, opcional: true });
+      texto(dv + '.rotulo', x.rotulo, { max: 32, opcional: true });
+      texto(dv + '.nota', x.nota, { max: 90, opcional: true });
+      texto(dv + '.accion', x.accion, { max: 28, opcional: true });
+      texto(dv + '.accionCorta', x.accionCorta, { max: 16, opcional: true });
+      texto(dv + '.accionHecha', x.accionHecha, { max: 16, opcional: true });
+      texto(dv + '.alTerminar', x.alTerminar, { max: 24, opcional: true });
+      if (x.ir !== undefined) irValido(dv + '.ir', x.ir);
+      if (x.sigue !== undefined) sigue(dv + '.sigue', x.sigue);
+    }, false);
+    // aMedias: la nota (y adónde lleva) mientras lo seguido no está hecho, pero sí otra cosa: la cifra no se da por hecha.
+    aMediasValido(r, d, c, ['nota', 'ir', 'accion', 'accionCorta'], (dv, x) => {
+      if (c.valor === undefined) err(dv, 'aMedias solo va en una cifra con «valor»');
+      texto(dv + '.nota', x.nota, { max: 90, opcional: true });
+      texto(dv + '.accion', x.accion, { max: 28, opcional: true });
+      texto(dv + '.accionCorta', x.accionCorta, { max: 16, opcional: true });
+      if (x.ir !== undefined) irValido(dv + '.ir', x.ir);
+    });
+    if (c.valor !== undefined) {
+      texto(d + '.valor', c.valor, { max: 10 });
+      // Sin «sigue», la cifra no se puede dar por hecha hasta que lo diga siConfirmada (lo de las 8:00 es una propuesta).
+      const conSigue = [].concat(c.siConfirmada || []).some((x) => x && x.sigue !== undefined);
+      if (c.sigue === undefined && !conSigue) err(d + '.sigue', 'falta: una cifra fija necesita saber cuándo está hecha (o una variante siConfirmada con «sigue»)');
+      else if (c.sigue !== undefined) sigue(d + '.sigue', c.sigue);
+    } else if (c.sigue !== undefined) av(d + '.sigue', 'solo se usa con «valor»');
+    // rotulo: lo que dice la cifra («para avisar, antes del sáb 21»; en el dosier, por defecto, «listas»).
+    texto(d + '.rotulo', c.rotulo, { max: 32, opcional: true });
+    // cuentaAtras: la fecha que la fuente da como «antes del…». El motor pinta un tramo por cada día que queda, desde hoy.
+    if (c.cuentaAtras !== undefined) {
+      if (c.valor === undefined) err(d + '.cuentaAtras', 'solo va con «valor» («3 días»)');
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(c.cuentaAtras || '')) err(d + '.cuentaAtras', 'tiene que ser una fecha AAAA-MM-DD');
+      else {
+        const n = Math.round((new Date(c.cuentaAtras + 'T00:00:00Z') - new Date(HOY + 'T00:00:00Z')) / 864e5);
+        const dias = `${n} ${n === 1 ? 'día' : 'días'}`;
+        if (n < 1 || n > 7) err(d + '.cuentaAtras', 'tiene que caer entre mañana y dentro de una semana');
+        else if (typeof c.valor === 'string' && c.valor !== dias) err(d + '.valor', `con cuentaAtras ${c.cuentaAtras} quedan ${dias}: el valor tiene que decir «${dias}»`);
+      }
+    }
+    texto(d + '.accionCorta', c.accionCorta, { max: 16, opcional: true });
+    // En el móvil van dos por fila: una acción de más de 16 caracteres sin acción corta pasa la tarjeta a fila entera.
+    const accionMovil = (c.pendientes && c.pendientes[0] && (c.pendientes[0].accionCorta || c.pendientes[0].accion)) || c.accionCorta || c.accion;
+    const conPasos = c.progreso !== undefined && ((r.modulos || []).find((x) => x.id === c.progreso) || {}).tipo === 'dictado';
+    // ancha: true pasa la cifra a una fila entera en el móvil a propósito (sin aviso).
+    if (!conPasos && !c.ancha && esTexto(accionMovil) && accionMovil.length > 16) av(d + '.accionCorta', `en el móvil «${accionMovil}» no cabe en media tarjeta y la cifra ocupará una fila entera: pon una acción corta (16 caracteres como mucho) si quieres que vaya a media fila, o ancha: true si la quieres en una fila entera`);
+    for (const k of Object.keys(c)) if (!['etiqueta', 'icono', 'cuenta', 'pendientes', 'progreso', 'valor', 'fichas', 'sigue', 'rotulo', 'cuentaAtras', 'nota', 'ir', 'accion', 'accionCorta', 'accionHecha', 'alTerminar', 'alTerminarUna', 'hoy', 'ancha', 'siOtra', 'siConfirmada', 'siNinguna', 'siDictado', 'aMedias'].includes(k)) av(d, `«${k}» no lo usa el motor`);
+    // Con «pendientes», «ir» es adonde lleva la cifra cuando ya no queda nada: sin él, el Inicio no sabría adónde ir.
+    if (c.ir === undefined && c.cuenta === undefined) err(d + '.ir', c.pendientes !== undefined ? 'falta: con «pendientes», la cifra necesita su propio «ir», que es adonde lleva cuando ya no queda nada pendiente' : 'falta: cada cifra lleva a donde se actúa');
+    if (c.ir !== undefined) irValido(d + '.ir', c.ir);
+    texto(d + '.nota', c.nota, { max: 90, opcional: true });
+    texto(d + '.accion', c.accion, { max: 28, opcional: true });
+    texto(d + '.alTerminar', c.alTerminar, { max: 24 });
+    if (c.hoy !== undefined && typeof c.hoy !== 'boolean') err(d + '.hoy', 'tiene que ser true o false');
+    if (c.hoy) destacadas++;
+  });
+  if (destacadas > 1) av('inicio.cifras', 'hay más de una cifra de «hoy»: solo una debería ir en pizarra');
+
+  // La línea del día: sesiones sobre las franjas del horario, sin pisarse.
+  if (ini.dia !== undefined) {
+    const dia = ini.dia;
+    texto('inicio.dia.titulo', dia.titulo, { max: 40 });
+    if (/^hoy en el colegio$/i.test(dia.titulo || '')) av('inicio.dia.titulo', 'el título dice lo que hay: «Quién cubre 3.º B hoy», «Tu día», «Tu jornada»…');
+    texto('inicio.dia.nota', dia.nota, { max: 60, opcional: true });
+    // aviso: una frase a la vista bajo el título («Hoy no viene Sergio Prieto, el tutor de 3.º B: …»).
+    texto('inicio.dia.aviso', dia.aviso, { max: 120, opcional: true });
+    let ids = FRANJAS;
+    if (dia.franjas !== undefined) ids = lista('inicio.dia.franjas', dia.franjas, 2, 12).map((f, i) => {
+      texto(`inicio.dia.franjas[${i}].id`, f.id, { max: 12 }); texto(`inicio.dia.franjas[${i}].nombre`, f.nombre, { max: 12 });
+      texto(`inicio.dia.franjas[${i}].desde`, f.desde, { max: 5 }); texto(`inicio.dia.franjas[${i}].hasta`, f.hasta, { max: 5, opcional: true });
+      return f.id;
+    });
+    lista('inicio.dia.carriles', dia.carriles, 1, 3).forEach((c, i) => {
+      const d = `inicio.dia.carriles[${i}]`;
+      texto(d + '.titulo', c.titulo, { max: 30 });
+      textoCarril(d + '.detalle', c.detalle, 'detalle');
+      uno(d + '.icono', c.icono, ICONOS);
+      const usadas = new Set();
+      let cubre = 0;
+      lista(d + '.sesiones', c.sesiones, 1, 12).forEach((x, j) => {
+        const ds = `${d}.sesiones[${j}]`;
+        const i0 = ids.indexOf(x.franja), i1 = x.hasta !== undefined ? ids.indexOf(x.hasta) : i0;
+        if (i0 < 0) err(ds + '.franja', `«${x.franja}» no es una franja del horario (${ids.join(', ')})`);
+        else if (i1 < i0) err(ds + '.hasta', 'tiene que ser una franja del horario igual o posterior a «franja»');
+        else for (let k = i0; k <= i1; k++) { if (usadas.has(k)) err(ds, `se pisa con otra sesión en la franja «${ids[k]}»`); usadas.add(k); }
+        texto(ds + '.titulo', x.titulo, { max: 40 });
+        texto(ds + '.detalle', x.detalle, { max: 40, opcional: true });
+        uno(ds + '.tipo', x.tipo, ['clase', 'cubre', 'igual', 'aviso']);
+        if (x.tipo === 'cubre') {
+          cubre++;
+          if (x.sigue === undefined) err(ds + '.sigue', 'falta: una sesión que se cubre sigue lo que confirma jefatura');
+          // La persona sale de la propuesta que se sigue (y de quien elija jefatura): el título es lo que se cubre.
+          else cubres.push({ archivo: actual, donde: ds + '.titulo', rol: r.id, ref: x.sigue, titulo: x.titulo });
+        }
+        if (x.sigue !== undefined) sigue(ds + '.sigue', x.sigue);
+        if (x.tipo === 'aviso') texto(ds + '.aviso', x.aviso, { max: 24 });
+        texto(ds + '.nota', x.nota, { max: 120, opcional: true });
+      });
+      if (cubre) {
+        texto(d + '.cuenta', c.cuenta, { max: 24, opcional: true });
+        textoCarril(d + '.pendiente', c.pendiente, 'pendiente');
+        textoCarril(d + '.parcial', c.parcial, 'parcial');
+        textoCarril(d + '.alTerminar', c.alTerminar, 'alTerminar');
+      } else if (c.parcial !== undefined) av(d + '.parcial', 'solo se usa en un carril con sesiones «cubre»');
+      siOtraValido(r, d + '.siOtra', c.siOtra, ['pendiente', 'parcial', 'alTerminar', 'detalle'], (dv, x) => {
+        if (!cubre) err(dv, 'siOtra solo va en un carril con sesiones «cubre»');
+        textoCarril(dv + '.pendiente', x.pendiente, 'pendiente');
+        textoCarril(dv + '.parcial', x.parcial, 'parcial');
+        textoCarril(dv + '.alTerminar', x.alTerminar, 'alTerminar');
+        textoCarril(dv + '.detalle', x.detalle, 'detalle');
+      });
+      // siNinguna: lo que dicen el detalle y la línea si jefatura ha dado a otras personas todo lo que te proponía y no te
+      // ha elegido para nada (no te queda nada que cubrir).
+      if (c.siNinguna !== undefined) {
+        const sn = c.siNinguna || {};
+        if (!cubre) err(d + '.siNinguna', 'solo va en un carril con sesiones «cubre»');
+        if (c.siOtra === undefined) av(d + '.siNinguna', 'solo se usa si jefatura puede dar a otra persona lo que te proponía: pon también siOtra');
+        textoCarril(d + '.siNinguna.detalle', sn.detalle, 'detalle');
+        textoCarril(d + '.siNinguna.linea', sn.linea, 'ninguna', false);
+        for (const k of Object.keys(sn)) if (!['detalle', 'linea'].includes(k)) av(d + '.siNinguna', `«${k}» no lo usa el motor (vale: detalle y linea)`);
+      }
+      // siElegido: las sesiones que DirectorIA proponía a otra persona y para las que jefatura elige a la del perfil.
+      // Cada una sale en su franja como «cubre», en lugar de lo que hubiera a esa hora; «aviso» va bajo el día.
+      if (c.siElegido !== undefined) {
+        if (!cubre && !esTexto(c.pendiente)) err(d + '.pendiente', 'falta: con siElegido, el carril necesita «pendiente» y «alTerminar» para su línea de estado');
+        lista(d + '.siElegido', c.siElegido, 1, 6).forEach((x, j) => {
+          const dv = `${d}.siElegido[${j}]`;
+          if (typeof x.cuando !== 'string' || !x.cuando.includes('#')) err(dv + '.cuando', 'tiene que ser una sola propuesta de aprobaciones, como «jefatura/guardias#g2»');
+          else { sigue(dv + '.cuando', x.cuando); elegidos.push({ archivo: actual, donde: dv + '.cuando', rol: r.id, ref: x.cuando, persona: (r.persona || {}).nombre }); }
+          if (!ids.includes(x.franja)) err(dv + '.franja', `«${x.franja}» no es una franja del horario (${ids.join(', ')})`);
+          texto(dv + '.titulo', x.titulo, { max: 40 });
+          texto(dv + '.detalle', x.detalle, { max: 40, opcional: true });
+          texto(dv + '.nota', x.nota, { max: 120, opcional: true });
+          texto(dv + '.aviso', x.aviso, { max: 120, opcional: true });
+          for (const k of Object.keys(x)) if (!['cuando', 'franja', 'titulo', 'detalle', 'nota', 'aviso'].includes(k)) av(dv, `«${k}» no lo usa el motor`);
+        });
+      }
+      for (const k of Object.keys(c)) if (!['titulo', 'detalle', 'icono', 'cuenta', 'pendiente', 'parcial', 'alTerminar', 'siOtra', 'siNinguna', 'siElegido', 'sesiones'].includes(k)) av(d, `«${k}» no lo usa el motor`);
+    });
+  }
+
+  // Lo que te necesita: por grupos seguidos (Hoy, Esta semana, Para saber).
+  if (ini.lista === undefined) err('inicio.lista', 'falta: el panel lleva la lista de lo que te necesita');
+  else {
+    texto('inicio.lista.titulo', ini.lista.titulo, { max: 40 });
+    const grupos = [];
+    lista('inicio.lista.items', ini.lista.items, 1, 10).forEach((it, i) => {
+      const d = `inicio.lista.items[${i}]`;
+      texto(d + '.grupo', it.grupo, { max: 20 });
+      if (grupos.length && grupos[grupos.length - 1] !== it.grupo && grupos.includes(it.grupo)) err(d + '.grupo', `«${it.grupo}» ya ha salido antes: pon seguidos los de cada grupo`);
+      grupos.push(it.grupo);
+      uno(d + '.icono', it.icono, ICONOS);
+      texto(d + '.titulo', it.titulo, { max: 70 });
+      texto(d + '.detalle', it.detalle, { max: 130, opcional: true });
+      uno(d + '.estado', it.estado, ESTADOS_INICIO);
+      texto(d + '.fecha', it.fecha, { max: 12, opcional: true });
+      irValido(d + '.ir', it.ir);
+      siValido(r, d, it);
+      extrasMarca(d, it);
+      if (it.ia !== undefined && typeof it.ia !== 'boolean') err(d + '.ia', 'tiene que ser true o false');
+      // siDictado: lo que cambia mientras el dictado que se sigue está dictado y por revisar.
+      if (it.siDictado !== undefined) {
+        const mid = String(it.sigue || '').split('#')[0];
+        const m = (r.modulos || []).find((x) => x.id === mid);
+        if (!m || m.tipo !== 'dictado') err(d + '.siDictado', 'solo va en una fila que sigue a un dictado de este perfil');
+        const sd = it.siDictado || {};
+        texto(d + '.siDictado.titulo', sd.titulo, { max: 70, opcional: true });
+        texto(d + '.siDictado.detalle', sd.detalle, { max: 130, opcional: true });
+        if (sd.estado !== undefined) uno(d + '.siDictado.estado', sd.estado, ESTADOS_INICIO);
+        for (const k of Object.keys(sd)) if (!['titulo', 'detalle', 'estado'].includes(k)) av(d + '.siDictado', `«${k}» no lo usa el motor`);
+      }
+      siOtraValido(r, d + '.siOtra', it.siOtra, ['titulo', 'detalle', 'estado', 'ir', 'sigue', 'verbo', 'icono'], (dv, x) => {
+        texto(dv + '.titulo', x.titulo, { max: 70, opcional: true });
+        texto(dv + '.detalle', x.detalle, { max: 130, opcional: true });
+        if (x.estado !== undefined) uno(dv + '.estado', x.estado, ESTADOS_INICIO);
+        if (x.icono !== undefined) uno(dv + '.icono', x.icono, ICONOS);
+        if (x.ir !== null) irValido(dv + '.ir', x.ir);
+        if (x.sigue !== undefined && x.sigue !== null) sigue(dv + '.sigue', x.sigue);
+        texto(dv + '.verbo', x.verbo, { max: 24, opcional: true });
+      });
+      siOtraValido(r, d + '.siConfirmada', it.siConfirmada, ['titulo', 'detalle', 'estado', 'ir', 'sigue', 'verbo', 'icono'], (dv, x) => {
+        texto(dv + '.titulo', x.titulo, { max: 70, opcional: true });
+        texto(dv + '.detalle', x.detalle, { max: 130, opcional: true });
+        if (x.estado !== undefined) uno(dv + '.estado', x.estado, ESTADOS_INICIO);
+        if (x.icono !== undefined) uno(dv + '.icono', x.icono, ICONOS);
+        if (x.ir !== undefined) irValido(dv + '.ir', x.ir);
+        if (x.sigue !== undefined) sigue(dv + '.sigue', x.sigue);
+        texto(dv + '.verbo', x.verbo, { max: 24, opcional: true });
+      }, false);
+      aMediasValido(r, d, it, ['titulo', 'detalle', 'estado', 'ir', 'icono'], (dv, x) => {
+        texto(dv + '.titulo', x.titulo, { max: 70, opcional: true });
+        texto(dv + '.detalle', x.detalle, { max: 130, opcional: true });
+        if (x.estado !== undefined) uno(dv + '.estado', x.estado, ESTADOS_INICIO);
+        if (x.icono !== undefined) uno(dv + '.icono', x.icono, ICONOS);
+        if (x.ir !== undefined) irValido(dv + '.ir', x.ir);
+      });
+      for (const k of Object.keys(it)) if (!['grupo', 'icono', 'titulo', 'detalle', 'estado', 'fecha', 'ir', 'sigue', 'si', 'siDictado', 'siOtra', 'siConfirmada', 'aMedias', 'verbo', 'choque', 'ia'].includes(k)) av(d, `«${k}» no lo usa el motor`);
+    });
+  }
+
+  // Lo que viene: el calendario empieza un lunes y las marcas caen después de hoy y dentro de sus semanas.
+  if (ini.agenda !== undefined) {
+    const ag = ini.agenda;
+    texto('inicio.agenda.titulo', ag.titulo, { max: 40 });
+    const iso = /^\d{4}-\d{2}-\d{2}$/;
+    if (!iso.test(ag.desde || '')) err('inicio.agenda.desde', 'tiene que ser una fecha AAAA-MM-DD');
+    else if (new Date(ag.desde + 'T00:00:00Z').getUTCDay() !== 1) err('inicio.agenda.desde', 'tiene que ser un lunes');
+    if (!Number.isInteger(ag.semanas) || ag.semanas < 1 || ag.semanas > 5) err('inicio.agenda.semanas', 'tiene que ser un número del 1 al 5');
+    const fin = iso.test(ag.desde || '') ? masDias(ag.desde, 7 * (ag.semanas || 3)) : '9999';
+    if (ag.desde > HOY || fin <= HOY) err('inicio.agenda.desde', `el calendario tiene que incluir hoy (${HOY})`);
+    lista('inicio.agenda.marcas', ag.marcas, 1, 12).forEach((m, i) => {
+      const d = `inicio.agenda.marcas[${i}]`;
+      if (!iso.test(m.fecha || '')) err(d + '.fecha', 'tiene que ser una fecha AAAA-MM-DD');
+      else if (m.fecha <= HOY || m.fecha >= fin) err(d + '.fecha', 'tiene que caer después de hoy y dentro de las semanas del calendario (lo de hoy va en la lista)');
+      uno(d + '.tipo', m.tipo, ['plazo', 'evento', 'aviso']);
+      texto(d + '.titulo', m.titulo, { max: 60 });
+      texto(d + '.detalle', m.detalle, { max: 110, opcional: true });
+      // hora: sale con el tiempo relativo («Mañana · 11:45»). fuente: de dónde lo ha sacado la IA (lleva la insignia).
+      if (m.hora !== undefined && !/^\d{1,2}:\d{2}$/.test(m.hora)) err(d + '.hora', 'tiene que ser una hora como 9:15');
+      if (m.fuente !== undefined) uno(d + '.fuente', m.fuente, ['correo', 'circular']);
+      if (m.tipo === 'aviso' && !m.choque) av(d + '.tipo', 'el triángulo de aviso es para los choques: pon también choque: true');
+      if (m.tipo === 'plazo' && /[úu]ltimo d[ií]a/i.test((m.titulo || '') + ' ' + (m.detalle || ''))) av(d, 'si la fuente dice «antes del…», escribe «antes de este día» y no «último día»');
+      irValido(d + '.ir', m.ir);
+      siValido(r, d, m);
+      extrasMarca(d, m);
+      aMediasValido(r, d, m, ['titulo', 'detalle', 'ir'], (dv, x) => {
+        texto(dv + '.titulo', x.titulo, { max: 60, opcional: true });
+        texto(dv + '.detalle', x.detalle, { max: 110, opcional: true });
+        if (x.ir !== undefined) irValido(dv + '.ir', x.ir);
+      });
+      for (const k of Object.keys(m)) if (!['fecha', 'hora', 'tipo', 'titulo', 'detalle', 'ir', 'sigue', 'si', 'aMedias', 'verbo', 'choque', 'fuente'].includes(k)) av(d, `«${k}» no lo usa el motor`);
+    });
+  }
+  for (const k of Object.keys(ini)) if (!['antetitulo', 'titulo', 'entradilla', 'cifras', 'dia', 'lista', 'agenda', 'bloques'].includes(k)) av('inicio.' + k, 'el motor no usa esta clave');
 }
 
 const bloquesDoc = (d, bloques) => lista(d, bloques, 1, 30).forEach((b, i) => {
@@ -334,6 +809,7 @@ const VALIDA = {
   },
 };
 
+const cargados = {};
 const archivos = process.argv.slice(2);
 if (!archivos.length) { console.error('Uso: node validar.mjs <archivo.js> [...]'); process.exit(2); }
 for (const a of archivos) {
@@ -348,8 +824,47 @@ for (const a of archivos) {
   }
   if (recogidos.length !== 1) { errores.push(`${actual}: tiene que haber exactamente una llamada DEMO.rol({...}) (hay ${recogidos.length})`); continue; }
   validarRol(recogidos[0]);
+  cargados[recogidos[0].id] = recogidos[0];
   const esperado = path.basename(a, '.js');
   if (recogidos[0].id && recogidos[0].id !== esperado) errores.push(`${actual}: el id «${recogidos[0].id}» no coincide con el nombre del archivo`);
+}
+// Lo que un perfil sigue de otro (por ejemplo, 'jefatura/guardias#g1'): se comprueba si se ha cargado ese perfil.
+for (const x of cruces) {
+  actual = x.archivo;
+  if (cargados[x.rol]) refValida(cargados[x.rol], x.donde, x.s);
+  else av(x.donde, `sigue a «${x.rol}», que no se ha cargado: valida también ${x.rol}.js para comprobarlo`);
+}
+// En las sesiones «cubre», la persona sale de la propuesta que se sigue: si el título es una de esas personas, avisa.
+for (const x of cubres) {
+  actual = x.archivo;
+  let rol = x.rol, s = x.ref;
+  const barra = s.indexOf('/');
+  if (barra > 0) { rol = s.slice(0, barra); s = s.slice(barra + 1); }
+  const [mid, el] = s.split('#');
+  const m = cargados[rol] && (cargados[rol].modulos || []).find((y) => y.id === mid);
+  if (!m || m.tipo !== 'aprobaciones' || el === undefined) continue;
+  const it = (m.items || []).find((y) => y.id === el);
+  if (it && [it.propuesta].concat(it.alternativas || []).includes(x.titulo)) av(x.donde, `«${x.titulo}» es una persona: sale de la propuesta de ${rol}/${mid} (y de quien elija jefatura); el título es lo que se cubre («Lengua», «Patio de Primaria»…)`);
+}
+// «fichas» sigue un módulo de aprobaciones con propuestas que llevan ficha.
+const moduloDe = (rol, ref) => { let r0 = rol, s = ref; const b = s.indexOf('/'); if (b > 0) { r0 = s.slice(0, b); s = s.slice(b + 1); } const [mid, el] = s.split('#'); return { m: cargados[r0] && (cargados[r0].modulos || []).find((y) => y.id === mid), el, cargado: !!cargados[r0] }; };
+for (const x of fichasDe) {
+  actual = x.archivo;
+  const { m, el, cargado } = moduloDe(x.rol, x.ref);
+  if (!cargado) continue;
+  if (el !== undefined) err(x.donde, 'va con el módulo entero («jefatura/guardias»), sin «#»');
+  else if (!m || m.tipo !== 'aprobaciones') err(x.donde, 'tiene que ser un módulo de aprobaciones');
+  else if (!(m.items || []).some((it) => it.ficha)) err(x.donde, 'ninguna propuesta de ese módulo lleva ficha');
+}
+// siElegido: la propuesta es para otra persona y la del perfil está entre las alternativas (si no, jefatura no podría elegirla).
+for (const x of elegidos) {
+  actual = x.archivo;
+  const { m, el, cargado } = moduloDe(x.rol, x.ref);
+  if (!cargado || !m || m.tipo !== 'aprobaciones') continue;
+  const it = (m.items || []).find((y) => y.id === el);
+  if (!it) continue;
+  if (it.propuesta === x.persona) err(x.donde, `la propuesta ya es para ${x.persona}: va en las sesiones del carril, no en siElegido`);
+  else if (!(it.alternativas || []).includes(x.persona)) err(x.donde, `${x.persona} no está entre las alternativas de «${el}»: jefatura no puede elegirla`);
 }
 for (const x of avisos) console.log('AVISO  ' + x);
 for (const x of errores) console.log('ERROR  ' + x);
