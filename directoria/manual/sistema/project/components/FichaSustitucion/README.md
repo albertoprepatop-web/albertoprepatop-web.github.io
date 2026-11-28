@@ -1,6 +1,6 @@
 # FichaSustitucion
 
-La ficha que recibe quien sustituye: qué hacer en esa sesión, con qué material y a quién llamar. Solo lleva la clase: ningún dato de alumnos. Es la pantalla de la app que mejor cuenta el producto, y se usa igual en la web, en la presentación y en la hoja comercial.
+La ficha que recibe quien sustituye: qué hacer en esa sesión, con qué material y a quién llamar. Solo lleva la clase: ningún dato de alumnos. Es la pantalla de la app que mejor cuenta el producto, y tiene la misma estructura en la web, en la presentación, en la demo y en la hoja comercial. Los datos del ejemplo pueden seguir la historia de cada pieza: en la presentación y en la demo falta el tutor de 3.º B, y la ficha da la tutora del grupo paralelo.
 
 - **Qué pone quien la usa:**
   - Una cabecera con la sesión (`ficha-sesion`: grupo, materia, hora y aula) y quién la ha preparado (`ficha-origen`): «Preparada por DirectorIA · confirmada por jefatura». Va sin la `insignia` de la IA, porque la ficha sale de las reglas y los datos del colegio, no de la IA.

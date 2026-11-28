@@ -122,7 +122,7 @@ ul.list.sm { font-size: 24px; }
 
 /* ==== BEGIN bloque «roles» (slides: mejora, rol-direccion, rol-jefatura, rol-secretaria, rol-docentes, rol-orientacion) ==== */
 /* Resumen por cargos: 3 + 2 tarjetas y una tarjeta de cierre oscura */
-.rl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; grid-auto-rows: 1fr; gap: 32px; flex: 1; min-height: 0; }
+.rl-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 32px; flex: 1; min-height: 0; }
 .card.rl-card { padding: 36px; gap: 16px; }
 .card.rl-card > p { margin-top: auto; }
 .rl-head { display: flex; gap: 16px; align-items: flex-start; }
@@ -531,7 +531,8 @@ ul.list.sm { font-size: 24px; }
 .vf-band b { color: var(--accent); }
 
 /* ---------- Comparativa: tabla Esencial / Completo por cargo, en tres diapositivas ---------- */
-.cmp { display: grid; grid-template-columns: 220px 1fr 390px 520px; }
+/* Esencial, 24 px más ancha que antes, para «Ausencias, plazos y firmas» en una línea; sale de Completo y de Función, que aún caben. */
+.cmp { display: grid; grid-template-columns: 220px 1fr 414px 504px; }
 .cmp > div { box-sizing: border-box; border-top: 2px solid var(--line); padding: 8px 16px; min-height: 60px; display: flex; align-items: center; gap: 12px; }
 .cmp p { font-size: 28px; line-height: 1.25; color: var(--ink); }
 .cmp .cmp-hd { border-top: 0; padding-top: 0; padding-bottom: 12px; min-height: 0; }
@@ -715,3 +716,75 @@ ul.list.sm { font-size: 24px; }
 
 /* ---------- Privacidad común (funciona-datos-dos): lo que solo es de Completo, en negrita y en tinta ---------- */
 .fnd-zt b, .fnd-solo b { font-weight: 700; color: var(--ink); }
+
+/* ==== Sin datos de alumnos (decisión del 26-28 de noviembre de 2026): ficha con solo la clase, guía del protocolo y justificantes ==== */
+/* ficha-esencial: la línea fija, igual en todas las fichas, que no es un dato. Sin etiqueta: no hay «Salud» ni «Recogida». */
+.item.alert.fch-fija .val { font-weight: 600; }
+/* Con los textos de la ficha de la demo (aula, material y a quién llamar), la ficha necesita más ancho: la columna de la izquierda, más estrecha. */
+.fch-e .left { width: 600px; }
+
+/* ---------- Esencial · guía del protocolo de acoso (protocolo-acoso-esencial y su anexo, protocolo-pasos-esencial) ----------
+   DirectorIA explica cómo se hace y los pasos; no abre ningún caso. Misma ventana que guardias y correo (.ac-win):
+   a la izquierda, los pasos numerados; a la derecha, el paso abierto, con la plantilla en blanco y lo que hay que cuidar. */
+.pg-side { width: 468px; gap: 4px; padding: 8px 6px; }
+.pg-step { display: flex; gap: 10px; align-items: flex-start; padding: 3px 6px; border-radius: 12px; }
+.pg-step.on { background: var(--card); box-shadow: inset 0 0 0 2px var(--accent-ink); }
+.pg-step.on .ac-sl { font-weight: 700; }
+.pg-n { width: 28px; height: 28px; flex-shrink: 0; border-radius: 14px; background: var(--dark-line); color: var(--light); font-family: 'Rubik', Arial, sans-serif; font-size: 24px; font-weight: 600; line-height: 28px; text-align: center; }
+.pg-step.on .pg-n { background: var(--accent-ink); }
+.ac-grp .pg-step { padding-top: 1px; padding-bottom: 1px; }
+.pg-btns { display: flex; gap: 12px; margin: 6px 0 0 18px; }
+.pg-btn { font-size: 24px; font-weight: 700; line-height: 1.2; color: var(--light); background: var(--dark); border-radius: 40px; padding: 5px 20px; }
+.pg-btn.pg-btn2 { color: var(--ink); background: transparent; box-shadow: inset 0 0 0 2px var(--dark-line); }
+.pg-aviso { margin-top: auto; padding: 10px 16px; border-radius: 14px; background: var(--light2); }
+.pg-aviso p { font-size: 24px; font-weight: 700; line-height: 1.25; color: var(--ink); }
+/* Anexo: los nueve pasos en filas (flex, sin celdas que ocupen varias columnas), en cuatro columnas: paso, quién lo hace,
+   plazo y anexo (o registro en Raíces); el grupo «si se confirma», con el mismo contorno discontinuo que en la ventana de la guía. */
+.pp-tab { display: flex; flex-direction: column; }
+.pp-row { display: flex; align-items: center; min-height: 50px; border-top: 2px solid var(--line); }
+.pp-row > p, .pp-row > div { box-sizing: border-box; padding: 6px 12px; font-size: 26px; line-height: 1.25; color: var(--ink); }
+.pp-c1 { width: 490px; flex-shrink: 0; display: flex; align-items: center; gap: 14px; }
+.pp-c1 p { font-size: 26px; line-height: 1.25; color: var(--ink); }
+.pp-c1 .pg-n { font-size: 24px; line-height: 28px; color: var(--light); }
+.pp-c2 { width: 545px; flex-shrink: 0; }
+.pp-c3 { width: 370px; flex-shrink: 0; }
+.pp-c4 { flex: 1; min-width: 0; }
+.pp-c4 b { font-weight: 700; }
+.pp-hd { min-height: 0; border-top: 0; }
+.pp-hd > p { font-size: 24px; font-weight: 700; color: var(--body); padding-bottom: 8px; }
+.pp-grp { margin: 4px 0; border: 2px dashed var(--soft); border-radius: 14px; }
+/* Dentro del grupo, la primera columna 2 px más estrecha: así las columnas siguen alineadas con las filas de fuera del borde */
+.pp-grp .pp-c1 { width: 488px; padding-left: 10px; }
+.pp-cap { padding: 6px 12px 2px; font-size: 24px; font-weight: 700; line-height: 1.25; color: var(--body); }
+.pp-grp .pp-cap + .pp-row { border-top: 0; }
+.pp-tab > .pp-row:last-child { border-bottom: 2px solid var(--line); }
+
+/* ---------- Esencial · justificantes del profesorado: subir (izquierda) y lo que hace el programa (derecha) ----------
+   Un programa, con reglas, lo renombra y lo archiva en su carpeta; nadie lee su contenido. Sin el naranja de la IA. */
+.js-side { width: 500px; flex-shrink: 0; box-sizing: border-box; padding: 16px 22px; background: var(--light2); border-right: 2px solid var(--line); display: flex; flex-direction: column; gap: 12px; }
+.js-side .ac-bt { margin-bottom: 0; }
+.js-lab { font-size: 24px; font-weight: 700; line-height: 1.2; color: var(--body); margin-top: 4px; }
+.js-opt { display: flex; gap: 12px; align-items: flex-start; padding: 8px 14px; border: 2px solid var(--line); border-radius: 12px; background: var(--card); }
+.js-opt.on { border-color: var(--dark-line); box-shadow: inset 0 0 0 1px var(--dark-line); }
+.js-radio { width: 22px; height: 22px; margin-top: 3px; flex-shrink: 0; box-sizing: border-box; border: 2px solid var(--body); border-radius: 11px; }
+.js-opt.on .js-radio { border: 7px solid var(--dark); }
+.js-o1 { font-size: 24px; font-weight: 700; line-height: 1.2; color: var(--ink); }
+.js-o2 { font-size: 24px; line-height: 1.2; color: var(--body); }
+.js-file { display: flex; align-items: center; gap: 10px; padding: 8px 14px; border: 2px dashed var(--soft); border-radius: 12px; background: var(--card); }
+.js-file p { font-size: 24px; line-height: 1.2; color: var(--ink); }
+/* Cómo se va a guardar (lo renombra el programa): el mismo chip, con borde liso y el nombre en negrita */
+.js-file.js-saved { border-style: solid; border-color: var(--line); }
+.js-file.js-saved p { font-weight: 700; }
+.js-ic { display: block; width: 28px; height: 24px; flex-shrink: 0; }
+.js-btn { align-self: flex-start; font-size: 24px; font-weight: 700; line-height: 1.2; color: var(--light); background: var(--dark); border-radius: 40px; padding: 8px 24px; }
+.js-foot { margin-top: auto; font-size: 24px; line-height: 1.25; color: var(--body); }
+.js-col { display: flex; flex-direction: column; gap: 20px; min-width: 0; }
+.js-tree { display: flex; flex-direction: column; gap: 6px; }
+.js-row { display: flex; align-items: center; gap: 10px; padding: 3px 10px; border-radius: 10px; }
+.js-row p { font-size: 24px; line-height: 1.25; color: var(--ink); }
+.js-l1 { margin-left: 30px; } .js-l2 { margin-left: 60px; } .js-l3 { margin-left: 90px; } .js-l4 { margin-left: 120px; }
+.js-row.js-new { background: var(--light2); }
+.js-row.js-new p { font-weight: 700; }
+.js-reg { display: flex; align-items: center; flex-wrap: wrap; gap: 8px 12px; padding-left: 10px; }
+.js-reg p { font-size: 24px; line-height: 1.25; color: var(--ink); }
+.js-reg p.js-chip { font-weight: 700; background: var(--soft); border-radius: 40px; padding: 2px 14px; }

@@ -8,7 +8,7 @@ Si vais a crear algo nuevo, empezad por el manual de marca (`manual/manual-de-ma
 
 | Carpeta | Qué contiene | Empezad por |
 |---|---|---|
-| `manual/` | El manual de marca: el PDF de 39 páginas (40 cuando vuelva a llevar la vista general de la presentación), la identidad verbal y las fuentes del sistema de diseño (`sistema/project/`). El PDF se regenera con `pdf/generar.mjs`. | `manual-de-marca.pdf` |
+| `manual/` | El manual de marca: el PDF de 41 páginas, con la vista general de la presentación de 35 diapositivas, la identidad verbal y las fuentes del sistema de diseño (`sistema/project/`). El PDF se regenera con `pdf/generar.mjs`. | `manual-de-marca.pdf` |
 | `logo/` | El logotipo «Norte» en SVG (positivo, negativo, a una tinta, vertical, con eslogan, palabra sola, isotipo, favicon e icono de app) y en PNG para correo y redes, con su generador. | `construccion.md` |
 | `ilustraciones/` | Las 22 ilustraciones de la marca en SVG y su generador. | `LEEME.md` · `kit.png` |
 | `fuentes/` | Rubik y Nunito Sans en woff2, con su licencia SIL OFL, para alojarlas en la web. | `fuentes.css` |

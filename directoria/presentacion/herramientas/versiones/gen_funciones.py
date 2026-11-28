@@ -11,7 +11,7 @@ ROL = {
  'jefatura': ('Jefatura de estudios', 'jefatura', 'Jefe de estudios con el cuadrante de horarios'),
  'secretaria': ('Secretaría', 'secretaria', 'Secretario con el sello del centro'),
  'docentes': ('Docentes', 'docente', 'Maestra dibujando en la pizarra'),
- 'orientacion': ('Orientación y tutoría', 'orientacion', 'Orientadora con un bocadillo con un corazón'),
+ 'orientacion': ('Orientación y convivencia', 'orientacion', 'Orientadora con un bocadillo con un corazón'),
 }
 # Insignia de la banda, dentro de un disco como el de las ilustraciones del kit
 DISCO_INS = ('<svg class="vf-band-ill" viewBox="0 0 88 88" width="88" height="88" role="img" aria-label="Lo escribe la IA">'
@@ -63,48 +63,58 @@ def slide(id_, version, eyebrow, titulo, rejilla, cuerpo, band, notas):
 '''
 
 # ---------------- Esencial ----------------
+# Lista de funciones de la decisión del 26-28 de noviembre de 2026: DirectorIA no guarda datos de alumnos, solo del profesorado
+# y del funcionamiento del colegio. Fuera certificados, autorizaciones de imagen, optativas, reclamaciones, pautas y anotaciones.
 E1 = slide('esencial-funciones-1', 'esencial', 'Esencial · Funciones · 1/2', 'Para dirección y jefatura de estudios', 'c2',
  tarjeta('direccion', [
-   ('pt', '<b>Resumen de las 8:00:</b> quién falta, qué vence y&nbsp;qué&nbsp;firmar.'),
-   ('pt', '<b>Dosier para inspección,</b> por tipo, curso y&nbsp;fecha.'),
-   ('pt', '<b>Reclamaciones con plazo:</b> días hábiles y&nbsp;avisos.'),
-   ('pt', '<b>Protocolos</b> de acoso, absentismo y&nbsp;accidentes.'),
-   ('pt', '<b>Archivo de actas,</b> con búsqueda por&nbsp;palabras.'),
+   ('pt', '<b>Resumen de las 8:00:</b> quién falta del profesorado, qué vence y&nbsp;qué&nbsp;firmar.'),
+   ('pt', '<b>Dosier para inspección:</b> documentos del centro por tipo, curso y&nbsp;fecha.'),
+   ('pt', '<b>Guías de los protocolos:</b> acoso, absentismo y&nbsp;accidentes.'),
+   ('pt', '<b>Archivo de actas</b> del claustro y del consejo escolar, con búsqueda por&nbsp;palabras.'),
  ]) + '\n' +
  tarjeta('jefatura', [
    ('pt', '<b>Guardias y sustituciones,</b> con vuestras&nbsp;reglas.'),
-   ('pt', '<b>Ficha de sustitución,</b> con permisos por&nbsp;cargo.'),
+   ('pt', '<b>Ficha de sustitución:</b> solo la&nbsp;clase.'),
    ('pt', '<b>Horarios,</b> con un programa que cuadra las&nbsp;restricciones.'),
-   ('pt', '<b>Exámenes, optativas y aulas:</b> avisa de cada&nbsp;choque.'),
-   ('pt', '<b>Informe de ausencias</b> del&nbsp;profesorado.'),
+   ('pt', '<b>Exámenes y aulas:</b> avisa de cada&nbsp;choque.'),
+   ('pt', '<b>Ausencias del profesorado:</b> sin el motivo; justificante entregado o&nbsp;pendiente.'),
    ('pt', '<b>Programaciones:</b> comprueba que tienen los apartados del&nbsp;modelo.'),
  ]),
- banda(ill_banda('colegio', 'Un colegio, con el servidor de DirectorIA dentro'), 'Lo prepara DirectorIA <b>con las reglas y los datos del colegio,</b> y decide siempre una&nbsp;persona.'),
- 'Todas las funciones de Esencial para dirección y jefatura de estudios. Ninguna usa IA: salen de las reglas y los datos del colegio, y decide siempre una persona. Dirección recibe a las 8:00 quién falta, qué vence y qué hay que firmar (sin resumen de correos, que es de Completo). El dosier para inspección se busca por tipo de documento, curso y fecha. En las reclamaciones, DirectorIA calcula los días hábiles y avisa antes de que venza el plazo; la respuesta la escribe una persona. Los protocolos de acoso, absentismo y accidentes llevan cada paso con fecha y responsable y la plantilla de cada anexo. Las actas se buscan por palabras. Para jefatura: DirectorIA propone quién cubre cada hora con las reglas del colegio (quién tiene guardia u hora libre, cuántas lleva este mes y si conoce al grupo), y jefatura confirma; la ficha de sustitución lleva la tarea de la programación, pautas, salud y recogidas, con permisos por cargo; los horarios se cuadran con un programa que tiene en cuenta las restricciones; exámenes, optativas y aulas avisan de cada choque; hay un informe de ausencias del profesorado, y DirectorIA comprueba que las programaciones tienen los apartados del modelo del colegio. Los ejemplos que vienen después enseñan las guardias, la ficha y el protocolo de acoso.')
+ banda(ill_banda('colegio', 'Un colegio, con el servidor de DirectorIA dentro'), 'Lo prepara DirectorIA <b>con las reglas del colegio y sin datos de alumnos,</b> y decide siempre una&nbsp;persona.'),
+ 'Todas las funciones de Esencial para dirección y jefatura de estudios. Ninguna usa IA: salen de las reglas del colegio y de sus datos de funcionamiento, y decide siempre una persona. DirectorIA no guarda datos de alumnos: solo del profesorado y del funcionamiento del colegio. '
+ 'Dirección recibe a las 8:00 quién falta del profesorado, qué vence y qué hay que firmar (sin resumen de correos, que es de Completo). El dosier para inspección reúne los documentos del centro por tipo, curso y fecha. '
+ 'Las guías de los protocolos de acoso, absentismo y accidentes explican cómo se hace y los pasos que hay que seguir, con quién, el plazo y la plantilla oficial en blanco de cada anexo; no se abre ningún caso en DirectorIA. Las actas del claustro y del consejo escolar se buscan por palabras. '
+ 'Para jefatura: DirectorIA propone quién cubre cada hora con las reglas del colegio (quién tiene guardia u hora libre, cuántas lleva este mes y si conoce al grupo), y jefatura confirma; la ficha de sustitución solo lleva la clase: la tarea de la programación, el material y a quién llamar. '
+ 'Los horarios se cuadran con un programa que tiene en cuenta las restricciones; exámenes y aulas avisan de cada choque, y el informe de ausencias del profesorado dice quién falta y a qué horas, nunca el motivo: del justificante solo pone «entregado» o «pendiente». '
+ 'DirectorIA comprueba, además, que las programaciones tienen los apartados del modelo del colegio. Los ejemplos que vienen después enseñan las guardias, la ficha, los justificantes y la guía del protocolo de acoso.')
 
-E2 = slide('esencial-funciones-2', 'esencial', 'Esencial · Funciones · 2/2', 'Para secretaría, docentes, orientación y tutoría', 'c3',
+E2 = slide('esencial-funciones-2', 'esencial', 'Esencial · Funciones · 2/2', 'Para secretaría, docentes y orientación', 'c3',
  tarjeta('secretaria', [
-   ('pt', '<b>Certificados</b> de matrícula y de&nbsp;estudios.'),
-   ('pt', '<b>Autorizaciones de imagen,</b> por alumno y grupo. DirectorIA no mira las&nbsp;fotos.'),
+   ('pt', '<b>Analista de gastos:</b> facturas, contratos y&nbsp;extractos.'),
    ('pt', '<b>Mantenimiento,</b> con aviso de cada&nbsp;revisión.'),
-   ('pt', '<b>Analista de gastos,</b> con reglas y facturas&nbsp;electrónicas.'),
+   ('pt', '<b>Entregas a la Consejería,</b> con&nbsp;aviso.'),
+   ('pt', '<b>Justificantes</b> del profesorado, archivados en&nbsp;carpetas.'),
  ]) + '\n' +
  tarjeta('docentes', [
    ('pt', '<b>Programación quincenal:</b> de ahí sale la tarea de la&nbsp;ficha.'),
    ('pt', '<b>Plazos y entregas,</b> con&nbsp;aviso.'),
    ('pt', '<b>Banco de recursos:</b> catálogo, búsqueda y gamificación. Al subir, avisa si hay un DNI, un © o un&nbsp;ISBN.'),
+   ('pt', '<b>Sus justificantes:</b> los sube y elige la&nbsp;ausencia.'),
  ]) + '\n' +
  tarjeta('orientacion', [
-   ('pt', '<b>Pautas para el aula</b> en la ficha, con registro de&nbsp;accesos.'),
-   ('pt', '<b>Lo que anotáis del alumnado,</b> con acceso por&nbsp;cargo.'),
+   ('pt', '<b>Guías de los protocolos,</b> paso a paso y con sus&nbsp;plantillas.'),
+   ('pt', '<b>Plan de convivencia</b> y documentos del&nbsp;departamento.'),
  ]),
- banda(ill_banda('candado', 'Candado'), '<b>Para todos:</b> avisos, permisos por cargo, registro de accesos y copias de seguridad&nbsp;cifradas.'),
- 'El resto de cargos, también sin IA. Secretaría: certificados de matrícula y de estudios con plantilla; el registro de autorizaciones de imagen, que se consulta por alumno y por grupo (DirectorIA no mira las fotos ni reconoce caras); el calendario de revisiones del edificio, con aviso, y el analista de gastos, que con cálculos y reglas avisa de renovaciones, señala ahorros, compara presupuestos y lee las facturas electrónicas. Docentes: la programación quincenal por sesiones, de la que sale la tarea de la ficha; sus plazos y entregas, con aviso, y el banco de recursos del claustro, con curso y materia obligatorios, catálogo, búsqueda por palabras y gamificación; al subir un recurso, unas reglas avisan si aparece un DNI, un © o un ISBN. Orientación y tutoría: sus pautas llegan a la ficha de quien sustituye, con permisos y registro de accesos, y lo que anotan del alumnado tiene acceso por cargo. Para todos: avisos, permisos, registro de accesos y copias de seguridad cifradas, una en el colegio y otra en la UE. Los avisos y los correos salen por la cuenta del propio colegio.')
+ banda(ill_banda('candado', 'Candado'), '<b>Para todos:</b> avisos, permisos por cargo, registro de accesos y copias de seguridad cifradas, en el colegio y en la&nbsp;UE.'),
+ 'El resto de cargos, también sin IA. Secretaría: el analista de gastos, que con cálculos y reglas lee las facturas electrónicas, los contratos y los extractos del banco, avisa de las renovaciones, señala ahorros y compara presupuestos; el calendario de revisiones del edificio, con aviso; los plazos y las entregas a la Consejería, con aviso, y los justificantes del profesorado: cada docente sube el suyo y un programa, con reglas, lo renombra y lo archiva en su carpeta (justificantes, curso, mes y docente). Ningún programa lee su contenido; solo lo abren el propio docente y quien lleva el personal, con registro de accesos, y se borra cuando pasa el plazo que fije el colegio. '
+ 'Docentes: la programación quincenal por sesiones, de la que sale la tarea de la ficha; sus plazos y entregas, con aviso; el banco de recursos del claustro, con curso y materia obligatorios, catálogo, búsqueda por palabras y gamificación (al subir un recurso, unas reglas avisan si aparece un DNI, un © o un ISBN), y sus justificantes, que suben desde DirectorIA, no por correo, eligiendo la ausencia a la que corresponden. '
+ 'Orientación y convivencia: las guías de los protocolos, paso a paso y con sus plantillas, y el plan de convivencia y los documentos del departamento. No hay pautas ni anotaciones del alumnado: DirectorIA no guarda datos de alumnos. '
+ 'Para todos: avisos, permisos por cargo, registro de accesos y copias de seguridad cifradas, una en el colegio y otra en la UE. Los avisos y los correos salen por la cuenta del propio colegio.')
 
 # ---------------- Completo ----------------
 C1 = slide('completo-funciones-1', 'completo', 'Completo · Funciones · 1/2', 'Además, para dirección, jefatura y secretaría', 'c2 vf-pila',
  tarjeta('direccion', [
-   ('ins', '<b>Correo resumido,</b> con respuestas propuestas para revisar y&nbsp;enviar.'),
+   ('ins', '<b>Correo resumido,</b> con respuestas propuestas que revisa y envía una&nbsp;persona.'),
    ('ins', '<b>Resumen de las 8:00,</b> con los correos que&nbsp;importan.'),
    ('ins', '<b>Acta del claustro,</b> a partir del&nbsp;dictado.'),
    ('ia', '<b>Archivo de actas:</b> busca también por&nbsp;tema.'),
@@ -117,23 +127,31 @@ C1 = slide('completo-funciones-1', 'completo', 'Completo · Funciones · 1/2', '
    ('ia', '<b>Facturas</b> escaneadas o en foto, para el&nbsp;analista.'),
  ]) + '\n</div>',
  banda(DISCO_INS, 'Lo que escribe la IA lleva esta marca y <b>«Preparado con IA»,</b> y lo revisa una persona. Guardias, ficha, horarios y protocolos siguen igual, sin&nbsp;IA.'),
- 'Lo que añade la IA, empezando por dirección, jefatura y secretaría; todo lo de Esencial sigue igual. La marca naranja va en lo que escribe la IA, en el servidor del colegio, y siempre lo revisa una persona. Dirección: el correo llega resumido, con lo que piden y respuestas propuestas, que nunca se envían solas; el resumen de las 8:00 suma los correos que importan, y el acta del claustro sale del dictado. Jefatura: además de comprobar que las programaciones tienen los apartados del modelo, la IA revisa que cada apartado tenga sentido. Secretaría: la IA saca de las circulares en PDF qué hay que entregar, quién y cuándo. Las líneas con «con IA» son cosas que la IA busca o lee, sin escribir nada: el archivo de actas se puede buscar por tema, no solo por palabras, y el analista lee también las facturas escaneadas o en foto (las electrónicas ya las leía Esencial). Insistir en lo de abajo: guardias, ficha, horarios y protocolos siguen saliendo de las reglas del colegio, sin IA, también en Completo.')
+ 'Lo que añade la IA, empezando por dirección, jefatura y secretaría; todo lo de Esencial sigue igual. La marca naranja va en lo que escribe la IA, en el servidor del colegio, y siempre lo revisa una persona. '
+ 'Dirección: el correo llega resumido, con lo que piden y respuestas propuestas, que nunca se envían solas: las revisa y las envía una persona; el resumen de las 8:00 suma los correos que importan, y el acta del claustro sale del dictado. '
+ 'Jefatura: además de comprobar que las programaciones tienen los apartados del modelo, la IA revisa que cada apartado tenga sentido. Secretaría: la IA saca de las circulares en PDF qué hay que entregar, quién y cuándo. '
+ 'Las líneas con «con IA» son cosas que la IA busca o lee, sin escribir nada: el archivo de actas se puede buscar por tema, no solo por palabras, y el analista lee también las facturas escaneadas o en foto (las electrónicas ya las leía Esencial). '
+ 'Insistir en lo de abajo: guardias, ficha, horarios y guías de los protocolos siguen saliendo de las reglas del colegio, sin IA, también en Completo. Y los justificantes del profesorado, igual: los archiva un programa y la IA no los lee.')
 
-C2 = slide('completo-funciones-2', 'completo', 'Completo · Funciones · 2/2', 'Además, para docentes, orientación y tutoría', 'c2d',
+C2 = slide('completo-funciones-2', 'completo', 'Completo · Funciones · 2/2', 'Además, para docentes y orientación', 'c2d',
  tarjeta('docentes', [
-   ('ins', '<b>Correo dictado</b> a familias, listo para&nbsp;revisar.'),
+   ('ins', '<b>Correo dictado:</b> comunicaciones generales, sin datos de un&nbsp;alumno.'),
    ('ins', '<b>Asistente</b> para dudas sobre los documentos del centro: cita la&nbsp;fuente.'),
    ('ins', '<b>Banco:</b> adapta un recurso a otro&nbsp;curso.'),
    ('ins', '<b>Material didáctico con Claude,</b> opcional, en la nube y sin datos de&nbsp;alumnos.'),
    ('ia', '<b>Buscador del banco</b> que entiende la&nbsp;petición.'),
-   ('ia', '<b>Al subir,</b> sugiere contenidos y detecta nombres o datos de&nbsp;salud.'),
+   ('ia', '<b>Al subir,</b> sugiere contenidos y avisa de nombres o datos de&nbsp;salud.'),
  ]) + '\n' +
  tarjeta('orientacion', [
-   ('ins', '<b>Cartas y circulares</b> en lectura fácil o&nbsp;traducidas.'),
-   ('ins', '<b>Acta de la junta de evaluación,</b> por dictado: recoge acuerdos; no pone ni propone&nbsp;notas.'),
- ], nota='Las pautas en la ficha y lo que anotáis del alumnado siguen igual, sin&nbsp;IA.'),
- banda(ill_banda('colegio-servidor', 'Colegio con el servidor de DirectorIA dentro'), '<b>Para todos:</b> la IA trata los datos de los alumnos en un servidor dentro del&nbsp;colegio.'),
- 'Lo que añade la IA al resto del claustro. Docentes: el correo a familias se dicta y llega redactado para revisar; un asistente responde dudas sobre los documentos del centro y cita el documento de donde saca cada respuesta; el banco de recursos adapta un recurso a otro curso. Claude es un módulo opcional, en la nube, solo para material didáctico y sin datos de alumnos; lo paga el colegio con su propia cuenta. Las líneas con la etiqueta «con IA» son lo que la IA hace sin escribir: el buscador del banco entiende lo que se le pide y, al subir un recurso, la IA sugiere contenidos del catálogo y detecta nombres o datos de salud. Orientación y tutoría: cartas y circulares en lectura fácil o traducidas, y el acta de la junta de evaluación por dictado, que recoge acuerdos y no pone ni propone notas. Todo lo que escribe la IA lleva la marca naranja y «Preparado con IA», y lo revisa una persona. La IA trata los datos de los alumnos en el servidor del colegio.')
+   ('ins', '<b>Circulares generales</b> en lectura fácil o&nbsp;traducidas.'),
+ ], nota='Las guías de los protocolos y el plan de convivencia siguen igual, sin&nbsp;IA.'),
+ banda(ill_banda('colegio-servidor', 'Colegio con el servidor de DirectorIA dentro'), '<b>Para todos:</b> la IA trabaja dentro del colegio, también con el correo. Los justificantes los archiva un programa en su carpeta; la IA no los&nbsp;lee.'),
+ 'Lo que añade la IA al resto del claustro. Docentes: el correo se dicta y llega redactado para revisar; sirve para comunicaciones generales, por ejemplo a las familias de un grupo, sin datos de un alumno. Un asistente responde dudas sobre los documentos del centro y cita el documento de donde saca cada respuesta; el banco de recursos adapta un recurso a otro curso. '
+ 'Claude es un módulo opcional, en la nube, solo para material didáctico y sin datos de alumnos; lo paga el colegio con su propia cuenta. '
+ 'Las líneas con la etiqueta «con IA» son lo que la IA hace sin escribir: el buscador del banco entiende lo que se le pide y, al subir un recurso, la IA sugiere contenidos del catálogo y avisa si aparecen nombres o datos de salud: es el filtro que impide que entren en el banco. '
+ 'Orientación y convivencia: circulares generales en lectura fácil o traducidas; las guías de los protocolos y el plan de convivencia siguen igual, sin IA. Todo lo que escribe la IA lleva la marca naranja y «Preparado con IA», y lo revisa una persona. '
+ 'La IA trabaja dentro del colegio, también con el correo: lo que llega puede traer nombres de alumnos, porque lo escriben las familias; la IA lo lee en el servidor del colegio para resumirlo, y DirectorIA no crea fichas de alumnos ni guarda sus datos aparte. '
+ 'Los justificantes del profesorado los archiva un programa en su carpeta, y la IA no tiene acceso a ella: no la busca, no la resume y el asistente no la usa.')
 
 for id_, html in (('esencial-funciones-1', E1), ('esencial-funciones-2', E2), ('completo-funciones-1', C1), ('completo-funciones-2', C2)):
     open(os.path.join(D, id_ + '.html'), 'w').write(html)

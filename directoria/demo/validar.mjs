@@ -8,7 +8,7 @@ import path from 'node:path';
 const ROLES = ['direccion', 'jefatura', 'secretaria', 'docente', 'orientacion', 'sustituto'];
 const ILUS = ['direccion', 'jefatura', 'secretaria', 'docente', 'orientacion', 'sustituto'];
 const CATEGORIAS = ['Familias', 'Inspección', 'Consejería', 'Claustro', 'Equipo directivo', 'Proveedores', 'Otros'];
-const TIPOS = ['aprobaciones', 'documento', 'plazos', 'protocolo', 'banco', 'dictado', 'material', 'traduccion', 'ficha', 'tabla', 'informe'];
+const TIPOS = ['aprobaciones', 'documento', 'plazos', 'protocolo', 'banco', 'dictado', 'material', 'traduccion', 'ficha', 'tabla', 'informe', 'justificantes'];
 // Panel de mando del Inicio (inicio.cifras): iconos del motor, franjas del horario de Primaria y el día de la demo.
 const ICONOS = ['correo', 'firma', 'carpeta', 'reloj', 'calendario', 'persona', 'familia', 'alerta', 'libro', 'acta', 'documento', 'microfono', 'clase', 'autobus', 'colegio', 'info'];
 const FRANJAS = ['1', '2', '3', 'recreo', '4', 'comida', '5', '6', 'salida'];
@@ -77,8 +77,11 @@ function uno(donde, v, opciones) {
   if (!opciones.includes(v)) err(donde, `«${v}» no vale; tiene que ser uno de: ${opciones.join(', ')}`);
 }
 
+let actualRol = null;
+const justificantesDe = []; // «sigue» de un justificante: tiene que ser una ausencia de la vista «subir» de otro perfil
 function validarRol(r) {
   actual = r && r.id ? r.id : '(sin id)';
+  actualRol = r;
   if (!r || typeof r !== 'object') { err('raíz', 'DEMO.rol() necesita un objeto'); return; }
   uno('id', r.id, ROLES);
   if (!Number.isInteger(r.orden) || r.orden < 1 || r.orden > 6) err('orden', 'tiene que ser un número del 1 al 6');
@@ -90,7 +93,7 @@ function validarRol(r) {
   texto('acceso', r.acceso, { max: 90 });
 
   const correos = lista('correo', r.correo, r.id === 'sustituto' ? 3 : 4, 6);
-  const modulos = lista('modulos', r.modulos, 2, 4);
+  const modulos = lista('modulos', r.modulos, 2, 5);
   const idsCorreo = new Set();
   const idsModulo = new Set();
   for (const c of correos) {
@@ -183,6 +186,7 @@ function validarRol(r) {
   });
 
   guardiasSinDevolver(r);
+  sinDatosDeAlumnos(r);
 }
 
 // ─── Panel de mando del Inicio ───
@@ -192,6 +196,7 @@ const cruces = [];
 const cubres = [];
 const fichasDe = [];   // cifras «fichas»: tienen que seguir un módulo de aprobaciones con propuestas que llevan ficha
 const elegidos = [];   // sesiones de siElegido: la propuesta era para otra persona y la del perfil está entre las alternativas
+const guiasDe = [];    // guías tomadas de otro perfil ('orientacion/protocolos'): una guía de protocolos con sus guías escritas
 function sigueValido(r, donde, ref) {
   // Una lista ('dosier' y 'correo:c-inspeccion#1'): hecha cuando lo están todas.
   if (Array.isArray(ref)) {
@@ -228,6 +233,7 @@ function refValida(r, donde, s) {
   if (el === undefined) return;
   if (m.tipo === 'aprobaciones') { if (!(m.items || []).some((it) => it.id === el)) err(donde, `«${el}» no es una propuesta de «${mid}»`); }
   else if (m.tipo === 'plazos') { if (!/^\d+$/.test(el) || +el >= (m.items || []).length) err(donde, `«${el}» no es un plazo de «${mid}» (se cuentan desde 0)`); }
+  else if (m.tipo === 'justificantes') { if (!(m.ausencias || []).some((a) => a.id === el)) err(donde, `«${el}» no es una ausencia con id de «${mid}»`); }
   else err(donde, `un módulo de tipo ${m.tipo} no tiene elementos: quita «#${el}»`);
 }
 // Lo que cambia cuando lo seguido está hecho: si.titulo, si.detalle, si.estado (por defecto, «hecho») y si.ir (null quita el
@@ -315,21 +321,53 @@ function textoCarril(donde, v, clave, opcional = true) {
   texto(donde, lleno, { max: MAX_CARRIL[clave] });
 }
 
-// Privacidad del Inicio (guion-de-datos.md §5): ningún dato de salud de personas concretas, y «Alumno/a A» solo en orientación,
-// que es el equipo del caso. Los demás perfiles nombran el Caso 2026-07 solo por su número.
-const SALUD = /fiebre|al[ée]rgic|alergia|autoinyector|diagn[óo]stic|enferm|m[ée]dic[oa]s?\b|medicaci|epilep|asm[aá]tic|diab[ée]t|gripe|vacun/i;
-function privacidadInicio(r, ini) {
-  const textos = [];
-  const recorrer = (x, donde) => {
-    if (typeof x === 'string') textos.push([donde, x]);
-    else if (Array.isArray(x)) x.forEach((y, i) => recorrer(y, `${donde}[${i}]`));
-    else if (x && typeof x === 'object') Object.keys(x).forEach((k) => recorrer(x[k], `${donde}.${k}`));
-  };
-  recorrer(ini, 'inicio');
-  for (const [donde, t] of textos) {
-    const m = t.match(SALUD);
-    if (m) err(donde, `«${m[0]}»: en el Inicio no van datos de salud de nadie (guion-de-datos.md §5). Di lo que hace falta para actuar («Sergio Prieto no viene»)`);
-    if (r.id !== 'orientacion' && /Alumno\/a\s+[A-Z]\b/.test(t)) err(donde, 'fuera de orientación, el Inicio no nombra al alumno del caso: el Caso 2026-07 va solo por su número');
+// Privacidad (guion-de-datos.md §5): DirectorIA no guarda datos de alumnos. Ni nombres ni iniciales, salud, alergias,
+// necesidades o adaptaciones, recogidas, anotaciones, pautas personales, notas, certificados de un alumno, autorizaciones de
+// imagen, optativas por alumno, reclamaciones de una familia ni casos. Solo datos del profesorado y del funcionamiento del
+// colegio: horarios, grupos («3.º B» no es un dato personal), aulas, guardias, plazos, documentos del centro, gastos y
+// contratos; las cifras agregadas valen. Del profesorado, el registro de ausencias no guarda el motivo. Se mira cada texto
+// del perfil: el Inicio, el correo (las familias escriben de temas generales y sin nombres de alumnos) y los módulos.
+// Vale la línea fija de la ficha (la pone el motor), también citada: «Las indicaciones de salud y de recogida de los alumnos».
+const LINEA_FICHA = 'Las indicaciones de salud y de recogida de los alumnos no están en DirectorIA: las tiene el colegio. Pregúntalas en conserjería o a la tutora antes de empezar.';
+const PERMITIDAS = [LINEA_FICHA, /[Ll]as indicaciones de salud y de recogida(?: de los alumnos)?/g];
+// Los alumnos que tenía la demo antes del 26-11-2026, con nombre o nombre e inicial. Ninguno puede volver.
+const ALUMNOS_DEMO = ['Mario', 'Lucía', 'Hugo', 'Daniel', 'Irene', 'Amira', 'Nora', 'Iker', 'Sofía', 'Adrián', 'Gonzalo', 'Carla', 'Alba', 'Óliver', 'Oliver', 'Samuel'];
+const RE_ALUMNOS = new RegExp(`(?<![\\p{L}\\p{N}])(${ALUMNOS_DEMO.join('|')})(?![\\p{L}\\p{N}])`, 'u');
+const DATOS_ALUMNO = [
+  [/Alumno\/a/, '«Alumno/a»: no se abre ningún caso en DirectorIA'],
+  [/\bCaso\s+\d{4}/i, 'no se abre ningún caso en DirectorIA («Caso 20…»): los datos del caso van a Raíces y al expediente del centro'],
+  [/al[ée]rgic|alergi|autoinyector|intoleranci|diagn[óo]stic|medicaci|epilep|asm[aá]tic|diab[ée]t|\bTDAH\b|dislexi|discapacidad/i, 'datos de salud o diagnósticos de un alumno'],
+  [/\bnecesidades\b|adaptaci[oó]n(?:es)? (?:curricular|de acceso)|\bNEE\b|\bACNEAE\b/i, 'necesidades o adaptaciones de un alumno'],
+  // «Recogida de información» (el paso del protocolo), «la información recogida» y «la recogida de datos» de una estadística sí valen.
+  [/(?<!informaci[oó]n\s)\brecogidas?\b(?!\s+de\s+(?:la\s+|los\s+)?(?:informaci[oó]n|datos))|\bpuede salir (?:solo )?con\b|\brecog(?:er|e|en)\s+a\s+(?:su |tu |la |el |los |las )?(?:hij|alumn|niñ)/i, 'recogidas de alumnos (solo vale la línea fija de la ficha)'],
+  [/autorizaci[oó]n(?:es)? de imagen|derechos de imagen/i, 'autorizaciones de imagen de alumnos'],
+  [/certificados? de (?:matr[ií]cula|estudios|notas)/i, 'certificados de un alumno'],
+  [/\boptativas?\b/i, 'optativas elegidas por un alumno'],
+  [/reclamaci[oó]n/i, 'reclamaciones de una familia'],
+  [/\bpautas? (?:de|para) [A-ZÁÉÍÓÚÑ]/, 'pautas personales de un alumno'],
+];
+// El motivo de una ausencia (del profesorado o de quien sea): nunca, tampoco de pasada («que te mejores»).
+const MOTIVO_SALUD = /fiebre|gripe|resfriad|enferm[oa]s?\b|enfermedad|m[ée]dic[oa]s?\b|consulta m[ée]dica|baja (?:m[ée]dica|laboral)|recup[ée]rate|te mejores|hospital|urgencias/i;
+// Nombre e inicial («Nora D.»): así se nombraba a los alumnos. Los docentes van con su nombre entero («Marta Ramos»).
+const NO_SON_NOMBRES = new Set(['Grupo', 'Curso', 'Anexo', 'Aula', 'Planta', 'Sala', 'Puerta', 'Edificio', 'Fase', 'Paso', 'Tipo']);
+function nombreEInicial(t) {
+  const re = /(?<![\p{L}])(\p{Lu}\p{Ll}+) (\p{Lu})\.(?=[\s,;:)»]|$)/gu;
+  let m;
+  while ((m = re.exec(t))) if (!NO_SON_NOMBRES.has(m[1])) return m[0];
+  return null;
+}
+function sinDatosDeAlumnos(r) {
+  const piezas = [['inicio', r.inicio]].concat((r.correo || []).map((c) => [`correo ${c.id}`, c]), (r.modulos || []).map((m) => [`módulo ${m.id}`, m]));
+  for (const [d, original] of piezas.flatMap(([donde, x]) => textosDe(x, donde))) {
+    let t = original;
+    for (const x of PERMITIDAS) t = typeof x === 'string' ? t.split(x).join(' ') : t.replace(x, ' ');
+    const n = t.match(RE_ALUMNOS);
+    if (n) err(d, `«${n[0]}» era un alumno de la demo: DirectorIA no guarda datos de alumnos («una familia de 4.º A», «su hijo»)`);
+    const ini = nombreEInicial(t);
+    if (ini) err(d, `«${ini}»: nombre e inicial, como se nombraba a los alumnos. Sin nombres de alumnos; a los docentes, con su nombre entero`);
+    for (const [re, msg] of DATOS_ALUMNO) { const m = t.match(re); if (m) err(d, `«${m[0]}»: ${msg}. DirectorIA no guarda datos de alumnos (guion-de-datos.md §5)`); }
+    const s = t.match(MOTIVO_SALUD);
+    if (s) err(d, `«${s[0]}»: ni el motivo de una ausencia ni datos de salud. Di lo que hace falta para actuar («Sergio Prieto no viene»); el justificante va a su carpeta`);
   }
 }
 
@@ -393,7 +431,6 @@ function guardiasSinDevolver(r) {
 }
 
 function validarPanel(r, ini, irValido) {
-  privacidadInicio(r, ini);
   if (ini.bloques !== undefined) err('inicio.bloques', 'con el panel de mando (cifras) no van bloques: lo de cada línea va en inicio.lista');
   // La cabecera del panel es compacta: la entradilla cabe en una línea a 1440 px y el motor añade al antetítulo
   // «Preparado por DirectorIA en el servidor del colegio».
@@ -446,7 +483,8 @@ function validarPanel(r, ini, irValido) {
     if (c.progreso !== undefined) {
       const m = (r.modulos || []).find((x) => x.id === c.progreso);
       if (!m) err(d + '.progreso', `«${c.progreso}» no es un módulo de este perfil`);
-      else if (!((m.tipo === 'documento' && m.documentos) || (m.tipo === 'protocolo' && m.pasos) || ['dictado', 'aprobaciones', 'plazos'].includes(m.tipo))) err(d + '.progreso', `un módulo de tipo ${m.tipo} no tiene progreso que contar (vale: documento con «documentos», protocolo con «pasos», dictado, aprobaciones o plazos)`);
+      else if (m.tipo === 'protocolo') err(d + '.progreso', 'una guía de un protocolo no tiene progreso: no se abre ningún caso en DirectorIA');
+      else if (!((m.tipo === 'documento' && m.documentos) || ['dictado', 'aprobaciones', 'plazos', 'justificantes'].includes(m.tipo))) err(d + '.progreso', `un módulo de tipo ${m.tipo} no tiene progreso que contar (vale: documento con «documentos», dictado, aprobaciones, plazos o justificantes)`);
     }
     // siDictado: la nota y la acción de un dictado ya dictado y por revisar (si no, el motor pone las suyas).
     if (c.siDictado !== undefined) {
@@ -765,22 +803,57 @@ const VALIDA = {
       uno(di + '.estado', it.estado, ['hoy', 'pronto', 'hecho', 'despues']);
     });
   },
+  // Una guía de pasos, sin caso: qué se hace, quién, el plazo («Según el protocolo vigente» si no hay uno fijo), el anexo
+  // (la plantilla en blanco), dónde queda y qué hay que cuidar. Lo que va solo si se confirma lleva «condicional».
   protocolo(d, m) {
-    texto(d + '.caso', m.caso, { max: 120 });
-    lista(d + '.pasos', m.pasos, 5, 12).forEach((p, i) => {
-      texto(`${d}.pasos[${i}].nombre`, p.nombre, { max: 60 });
-      uno(`${d}.pasos[${i}].estado`, p.estado, ['hecho', 'curso', 'pendiente', 'condicional']);
-      texto(`${d}.pasos[${i}].nota`, p.nota, { max: 60, opcional: true });
+    for (const k of ['caso', 'actual', 'documentos']) if (m[k] !== undefined) err(`${d}.${k}`, 'una guía no lleva caso: no se abre ningún caso en DirectorIA (los datos del caso van a Raíces y al expediente del centro)');
+    if (m.confidencial !== undefined) av(d + '.confidencial', 'una guía no lleva datos de nadie: sin banda confidencial');
+    texto(d + '.aviso', m.aviso, { max: 180 });
+    if (esTexto(m.aviso) && !/ning[uú]n caso/i.test(m.aviso)) av(d + '.aviso', 'di que no se abre ningún caso en DirectorIA y adónde van los datos del caso');
+    const ids = new Set();
+    // Las guías se escriben una vez: un perfil puede tomar las de otro con «guias: 'orientacion/protocolos'» (dirección
+    // usa las de orientación). Se comprueba al final, con ese perfil cargado.
+    let guias = [];
+    if (typeof m.guias === 'string') {
+      const [rolG, modG] = m.guias.split('/');
+      if (!rolG || !modG || !ROLES.includes(rolG)) err(d + '.guias', 'una lista de guías o las de otro perfil, como «orientacion/protocolos»');
+      else if (rolG === actualRol.id) err(d + '.guias', 'las guías de este mismo perfil van escritas aquí, no con «perfil/módulo»');
+      else guiasDe.push({ archivo: actual, donde: d + '.guias', ref: m.guias });
+    } else guias = lista(d + '.guias', m.guias, 1, 4);
+    guias.forEach((g, i) => {
+      const dg = `${d}.guias[${i}]`;
+      if (!/^[a-z][a-z0-9-]*$/.test(g.id || '')) err(dg + '.id', 'el id lleva solo minúsculas, números y guiones');
+      else if (ids.has(g.id)) err(dg + '.id', 'id repetido'); else ids.add(g.id);
+      texto(dg + '.nombre', g.nombre, { max: 30 });
+      texto(dg + '.fuente', g.fuente, { max: 140 });
+      texto(dg + '.si', g.si, { max: 40, opcional: true });
+      const pasos = lista(dg + '.pasos', g.pasos, 3, 12);
+      let condicional = false;
+      pasos.forEach((p, j) => {
+        const dp = `${dg}.pasos[${j}]`;
+        texto(dp + '.nombre', p.nombre, { max: 60 });
+        texto(dp + '.que', p.que, { max: 220 });
+        texto(dp + '.quien', p.quien, { max: 90 });
+        texto(dp + '.plazo', p.plazo, { max: 60 });
+        texto(dp + '.anexo', p.anexo, { max: 40, opcional: true });
+        texto(dp + '.donde', p.donde, { max: 50, opcional: true });
+        texto(dp + '.cuidar', p.cuidar, { max: 160, opcional: true });
+        if (p.condicional !== undefined && typeof p.condicional !== 'boolean') err(dp + '.condicional', 'tiene que ser true o false');
+        if (p.condicional) condicional = true;
+        if (p.estado !== undefined || p.nota !== undefined) err(dp, 'una guía no lleva el estado de un caso («hecho», «en curso»): explica cómo se hace cada paso');
+        for (const k of Object.keys(p)) if (!['nombre', 'que', 'quien', 'plazo', 'anexo', 'donde', 'cuidar', 'condicional'].includes(k)) av(dp, `«${k}» no lo usa el motor`);
+      });
+      if (condicional && !esTexto(g.si)) err(dg + '.si', 'falta: el título que va antes de los pasos que solo van si se confirma');
+      const anexos = pasos.map((p) => p.anexo || '').join(' · ');
+      if (g.plantillas !== undefined) lista(dg + '.plantillas', g.plantillas, 1, 8).forEach((x, j) => {
+        texto(`${dg}.plantillas[${j}].nombre`, x.nombre, { max: 40 });
+        texto(`${dg}.plantillas[${j}].detalle`, x.detalle, { max: 60, opcional: true });
+        const codigo = String(x.nombre || '').replace(/^Anexo\s+/, '');
+        if (codigo && !anexos.includes(codigo)) av(`${dg}.plantillas[${j}]`, `«${x.nombre}» no lo usa ningún paso de la guía`);
+      });
     });
-    const a = m.actual || {};
-    texto(d + '.actual.titulo', a.titulo, { max: 80 });
-    lista(d + '.actual.secciones', a.secciones, 2, 4).forEach((s, i) => {
-      texto(`${d}.actual.secciones[${i}].titulo`, s.titulo, { max: 50 });
-      lista(`${d}.actual.secciones[${i}].items`, s.items, 1, 6).forEach((x, j) => texto(`${d}.actual.secciones[${i}].items[${j}]`, x, { max: 160 }));
-    });
-    lista(d + '.documentos', m.documentos, 1, 6).forEach((x, i) => { texto(`${d}.documentos[${i}].nombre`, x.nombre, { max: 80 }); texto(`${d}.documentos[${i}].estado`, x.estado, { max: 50 }); });
     texto(d + '.pie', m.pie, { max: 220 });
-    if (!m.confidencial) err(d, 'un protocolo necesita la banda confidencial');
+    if (esTexto(m.pie) && !/abogad/i.test(m.pie)) av(d + '.pie', 'lo legal se presenta como lectura del equipo de DirectorIA, no de un abogado: dilo en el pie');
   },
   banco(d, m) {
     texto(d + '.consulta', m.consulta, { max: 80 });
@@ -809,6 +882,11 @@ const VALIDA = {
       if (typeof x === 'string' && /\bIA\b/.test(x)) err(`${d}.subir.casillas[${i}]`, 'declarar que el recurso está hecho con IA es voluntario: ponlo en «declaracion», no en las casillas obligatorias');
     });
     texto(d + '.subir.declaracion', s.declaracion, { max: 80, opcional: true });
+    // Lo que se comprueba al leer el archivo: con reglas (un DNI, un ©, un ISBN) o con IA (nombres, datos de salud), sin la insignia.
+    if (s.comprobado !== undefined) lista(d + '.subir.comprobado', s.comprobado, 1, 4).forEach((x, i) => {
+      texto(`${d}.subir.comprobado[${i}].texto`, x.texto, { max: 50 });
+      uno(`${d}.subir.comprobado[${i}].como`, x.como, ['reglas', 'ia']);
+    });
     const im = m.impacto || {};
     texto(d + '.impacto.texto', im.texto, { max: 160 });
     lista(d + '.impacto.insignias', im.insignias, 1, 4);
@@ -832,6 +910,8 @@ const VALIDA = {
   },
   traduccion(d, m) {
     texto(d + '.para', m.para, { max: 60 });
+    // Una circular general, para las familias de un curso o de un grupo: «para» lleva su artículo («Las familias de 4.º»).
+    if (esTexto(m.para) && !/^(La|Las|El|Los) /.test(m.para)) err(d + '.para', 'empieza por su artículo («Las familias de 4.º de Primaria»): el motor lo usa en «¿Enviarlo a las familias…?»');
     texto(d + '.original.titulo', (m.original || {}).titulo, { max: 80 });
     texto(d + '.original.texto', (m.original || {}).texto, { palabrasMin: 50, palabrasMax: 220 });
     lista(d + '.versiones', m.versiones, 2, 3).forEach((v, i) => { texto(`${d}.versiones[${i}].idioma`, v.idioma, { max: 20 }); texto(`${d}.versiones[${i}].texto`, v.texto, { palabrasMin: 40, palabrasMax: 240 }); });
@@ -839,17 +919,67 @@ const VALIDA = {
     texto(d + '.boton', m.boton, { max: 30 });
     texto(d + '.alTerminar', m.alTerminar, { max: 160 });
   },
+  // La ficha de sustitución, solo la clase: grupo, materia, hora y aula; «Preparada por DirectorIA · confirmada por
+  // jefatura»; la tarea, el material y a quién llamar. Nada de «Necesidades», «Salud» ni «Recogida», ni nombres de alumnos:
+  // la línea fija de salud y recogidas la pone el motor, igual en todas las fichas.
   ficha(d, m) {
     if (m.bandera !== undefined) uno(d + '.bandera', m.bandera, ['guardias']);
     lista(d + '.fichas', m.fichas, 1, 3).forEach((f, i) => {
       const di = `${d}.fichas[${i}]`;
       texto(di + '.sesion', f.sesion, { max: 60 });
       texto(di + '.hora', f.hora, { max: 20 });
-      texto(di + '.origen', f.origen, { max: 90 });
-      lista(di + '.datos', f.datos, 1, 6).forEach((x, j) => { texto(`${di}.datos[${j}].dt`, x.dt, { max: 30 }); texto(`${di}.datos[${j}].dd`, x.dd, { max: 260 }); });
+      texto(di + '.aula', f.aula, { max: 50 });
+      texto(di + '.para', f.para, { max: 40, opcional: true });
+      if (f.origen !== 'Preparada por DirectorIA · confirmada por jefatura') err(di + '.origen', '«Preparada por DirectorIA · confirmada por jefatura», sin insignia: la ficha sale de reglas y la confirma jefatura');
+      const datos = lista(di + '.datos', f.datos, 3, 5);
+      datos.forEach((x, j) => {
+        texto(`${di}.datos[${j}].dt`, x.dt, { max: 30 }); texto(`${di}.datos[${j}].dd`, x.dd, { max: 200 });
+        if (!['Tarea', 'Material', 'A quién llamar', 'Al acabar'].includes(x.dt)) err(`${di}.datos[${j}].dt`, `«${x.dt}» no va en la ficha: solo la clase (Tarea, Material, A quién llamar y Al acabar)`);
+        if (x.aviso !== undefined) err(`${di}.datos[${j}].aviso`, 'la ficha no lleva avisos de alumnos: el único aviso es la línea fija de salud y recogidas, y la pone el motor');
+      });
+      for (const k of ['Tarea', 'Material', 'A quién llamar']) if (!datos.some((x) => x.dt === k)) err(di + '.datos', `falta «${k}»`);
+      const llamar = datos.find((x) => x.dt === 'A quién llamar');
+      if (llamar && !(/tutor/i.test(llamar.dd) && /jefatura/i.test(llamar.dd) && /conserjer/i.test(llamar.dd) && /ext\. \d+/.test(llamar.dd))) err(di + '.datos', '«A quién llamar»: tutoría, jefatura y conserjería, con su extensión («ext. 202»)');
       texto(di + '.pie', f.pie, { max: 160 });
     });
     if (m.registro !== undefined) lista(d + '.registro', m.registro, 1, 5).forEach((s, i) => texto(`${d}.registro[${i}]`, s, { max: 100 }));
+  },
+  // Justificantes del profesorado: un programa los archiva en Justificantes / curso / mes / docente; la IA no los lee.
+  // «subir»: las ausencias de la persona del perfil (las pendientes, con id). «carpetas» e «informe»: las de todo el
+  // profesorado, con docente; si la entrega se hace en otro perfil, «sigue» ('docente/justificantes#j1'). Nunca el motivo.
+  justificantes(d, m) {
+    uno(d + '.vista', m.vista, ['subir', 'carpetas', 'informe']);
+    if (!/^\d{4}-\d{2}$/.test(m.curso || '')) err(d + '.curso', 'tiene que ser el curso como «2026-27»');
+    if (m.ia) err(d + '.ia', 'los justificantes no llevan la insignia de la IA: los archiva un programa y la IA no los lee');
+    texto(d + '.nota', m.nota, { max: 80, opcional: true });
+    if (m.vista !== 'informe' && !esTexto(m.confidencial)) err(d + '.confidencial', 'falta: los justificantes los ven el propio docente y quien lleva el personal, con registro de accesos');
+    if (m.vista === 'subir') { texto(d + '.archivo', m.archivo, { max: 40 }); if (esTexto(m.archivo) && !/\.(pdf|jpe?g|png)$/i.test(m.archivo)) err(d + '.archivo', 'un PDF o una foto (.pdf, .jpg, .png)'); }
+    else if (m.archivo !== undefined) av(d + '.archivo', 'solo se usa en la vista «subir»');
+    const ids = new Set();
+    lista(d + '.ausencias', m.ausencias, 1, 12).forEach((a, i) => {
+      const da = `${d}.ausencias[${i}]`;
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(a.fecha || '')) err(da + '.fecha', 'tiene que ser una fecha AAAA-MM-DD');
+      else if (a.fecha > HOY) err(da + '.fecha', 'una ausencia es de hoy o de antes');
+      texto(da + '.horas', a.horas, { max: 24 });
+      uno(da + '.justificante', a.justificante, ['entregado', 'pendiente']);
+      for (const k of ['motivo', 'causa', 'razon']) if (a[k] !== undefined) err(`${da}.${k}`, 'el registro de ausencias nunca guarda el motivo');
+      if (m.vista === 'subir') {
+        if (a.docente !== undefined) err(da + '.docente', 'en «subir», las ausencias son de la persona del perfil: sin docente');
+        if (a.sigue !== undefined) err(da + '.sigue', 'en «subir», el justificante se sube aquí: sin «sigue»');
+        if (a.justificante === 'pendiente' && !esTexto(a.id)) err(da + '.id', 'falta: es la ausencia que se elige al subir el justificante');
+      } else {
+        texto(da + '.docente', a.docente, { max: 40 });
+        if (a.id !== undefined) av(da + '.id', 'solo se usa en «subir»');
+        if (a.sigue !== undefined) {
+          if (typeof a.sigue !== 'string' || !a.sigue.includes('/')) err(da + '.sigue', 'tiene que ser el justificante de otro perfil, como «docente/justificantes#j1»');
+          else { sigueValido(actualRol, da + '.sigue', a.sigue); justificantesDe.push({ archivo: actual, donde: da + '.sigue', ref: a.sigue, docente: a.docente, fecha: a.fecha }); }
+          if (a.justificante !== 'pendiente') err(da + '.justificante', 'con «sigue», empieza pendiente: pasa a entregado cuando se sube en el otro perfil');
+        }
+      }
+      if (esTexto(a.id)) { if (ids.has(a.id)) err(da + '.id', 'id repetido'); ids.add(a.id); }
+    });
+    lista(d + '.reglas', m.reglas, 2, 6).forEach((x, i) => texto(`${d}.reglas[${i}]`, x, { max: 150 }));
+    if (m.registro !== undefined) { if (m.vista !== 'carpetas') av(d + '.registro', 'el registro de accesos solo sale en «carpetas»'); lista(d + '.registro', m.registro, 1, 5).forEach((x, i) => texto(`${d}.registro[${i}]`, x, { max: 110 })); }
   },
   tabla(d, m) {
     const cols = lista(d + '.columnas', m.columnas, 2, 7);
@@ -929,6 +1059,27 @@ for (const x of elegidos) {
   if (!it) continue;
   if (it.propuesta === x.persona) err(x.donde, `la propuesta ya es para ${x.persona}: va en las sesiones del carril, no en siElegido`);
   else if (!(it.alternativas || []).includes(x.persona)) err(x.donde, `${x.persona} no está entre las alternativas de «${el}»: jefatura no puede elegirla`);
+}
+// El justificante que se sigue es una ausencia de la vista «subir» de otro perfil, de la misma persona y el mismo día.
+for (const x of justificantesDe) {
+  actual = x.archivo;
+  const { m, el, cargado } = moduloDe(null, x.ref);
+  if (!cargado || !m) continue;
+  const rol = x.ref.slice(0, x.ref.indexOf('/'));
+  if (m.tipo !== 'justificantes' || m.vista !== 'subir') { err(x.donde, 'tiene que seguir la vista «subir» de los justificantes de otro perfil'); continue; }
+  const a = (m.ausencias || []).find((y) => y.id === el);
+  if (!a) continue;
+  if (cargados[rol].persona && cargados[rol].persona.nombre !== x.docente) err(x.donde, `esa ausencia es de ${cargados[rol].persona.nombre}, no de ${x.docente}`);
+  if (a.fecha !== x.fecha) err(x.donde, `esa ausencia es del ${a.fecha}, no del ${x.fecha}`);
+}
+// Las guías tomadas de otro perfil: un módulo de tipo protocolo de ese perfil, con sus guías escritas (no otra referencia).
+for (const x of guiasDe) {
+  actual = x.archivo;
+  const { m, cargado } = moduloDe(null, x.ref);
+  if (!cargado) { av(x.donde, `toma las guías de «${x.ref}», que no se ha cargado: valida también ${x.ref.split('/')[0]}.js para comprobarlo`); continue; }
+  if (!m) err(x.donde, `«${x.ref}» no es un módulo`);
+  else if (m.tipo !== 'protocolo') err(x.donde, `«${x.ref}» no es una guía de protocolos (es de tipo ${m.tipo})`);
+  else if (!Array.isArray(m.guias)) err(x.donde, `«${x.ref}» también toma sus guías de otro perfil: apunta al que las tiene escritas`);
 }
 for (const x of avisos) console.log('AVISO  ' + x);
 for (const x of errores) console.log('ERROR  ' + x);

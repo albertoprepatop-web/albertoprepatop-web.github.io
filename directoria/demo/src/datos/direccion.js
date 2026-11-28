@@ -7,7 +7,7 @@ DEMO.rol({
     detalle: 'Dirección del colegio',
     ilustracion: 'direccion',
   },
-  acceso: 'Resumen de las 8:00, correo resumido, actas, dosier para inspección y firmas',
+  acceso: 'Resumen de las 8:00, dosier para inspección, actas, firmas, guías de protocolos y correo',
 
   // ─── Inicio: tu resumen de las 8:00 (panel de mando) ───────────────
   // Cifras, día y calendario salen de reglas y de los datos del colegio: sin insignia de IA.
@@ -22,11 +22,11 @@ DEMO.rol({
       {
         etiqueta: 'Pendiente de tu firma',
         icono: 'firma',
-        // Cuenta lo que queda. La nota lo resume: «La citación y el acta del claustro».
+        // Cuenta lo que queda. La nota lo resume: «La convocatoria y el acta del claustro».
         // «ir» también en la cifra: es adonde lleva cuando ya no queda nada pendiente.
         ir: 'firma',
         pendientes: [
-          { texto: 'La citación del Caso 2026-07', corto: 'la citación', sigue: 'firma', ir: 'firma', hoy: true, accion: 'Revisar y firmar', accionCorta: 'Firmar' },
+          { texto: 'La convocatoria del consejo escolar del jueves 3', corto: 'la convocatoria', sigue: 'firma', ir: 'firma', hoy: true, accion: 'Revisar y firmar', accionCorta: 'Firmar' },
           { texto: 'El acta del claustro del lunes 16', corto: 'el acta del claustro', sigue: 'acta', ir: 'acta', accion: 'Dar el visto bueno', accionCorta: 'Visto bueno' },
         ],
         alTerminar: 'Todo firmado',
@@ -60,11 +60,11 @@ DEMO.rol({
         accionHecha: 'Ver el correo',
       },
       {
-        // 6 de 8 listas: 6 piezas listas, el escrito de remisión por revisar y el acta de 2.º ESO A, que falta.
+        // 6 de 8 listas: 6 piezas listas, el escrito de remisión por revisar y el acta de Matemáticas del martes 17, que falta.
         etiqueta: 'Dosier para inspección',
         icono: 'carpeta',
         progreso: 'dosier',
-        nota: 'Falta el acta de 2.º ESO A y revisar el escrito de remisión.',
+        nota: 'Falta el acta de Matemáticas del martes 17 y revisar el escrito.',
         ir: 'dosier',
         accion: 'Revisar el dosier',
         accionCorta: 'Revisar',
@@ -106,15 +106,17 @@ DEMO.rol({
       titulo: 'Lo que te necesita',
       items: [
         { grupo: 'Hoy', icono: 'correo', titulo: 'Inspección: confírmale la visita del jueves 26', detalle: 'A las 10:00, contigo y con el jefe de estudios.', estado: 'pendiente', ir: 'correo:c-inspeccion', sigue: 'correo:c-inspeccion' },
-        { grupo: 'Hoy', icono: 'firma', titulo: 'Caso 2026-07: citación a la familia', detalle: 'Revísala con las cuatro comprobaciones y fírmala.', estado: 'hoy', ir: 'firma', sigue: 'firma', verbo: 'Firmada' },
+        { grupo: 'Hoy', icono: 'firma', titulo: 'Consejo escolar: la convocatoria del jueves 3', detalle: 'Si la firmas hoy, llega con dos semanas de margen. Revísala con las cuatro comprobaciones.', estado: 'hoy', ir: 'firma', sigue: 'firma', verbo: 'Firmada' },
         { grupo: 'Esta semana', icono: 'acta', titulo: 'Acta del claustro del lunes 16', detalle: 'El borrador de tu dictado espera tu visto bueno.', estado: 'pendiente', ir: 'acta', sigue: 'acta', verbo: 'Visto bueno dado' },
         { grupo: 'Esta semana', icono: 'correo', titulo: 'AMPA: fecha del festival de Navidad', detalle: 'Proponen el viernes 11 de diciembre, que coincide con las sesiones de evaluación.', estado: 'pendiente', choque: true, ir: 'correo:c-ampa', sigue: 'correo:c-ampa' },
         {
-          grupo: 'Para saber', icono: 'documento', titulo: 'Certificado de matrícula de Nora D. (1.º ESO A)',
-          detalle: 'Lo firma secretaría con tu visto bueno. Te llega cuando Carmen López lo pase a la firma.', estado: 'info',
-          // Cuando secretaría lo pasa a la firma, sigue siendo para saber: en dirección no hay dónde darle el visto bueno.
-          sigue: 'secretaria/certificados', si: { detalle: 'Carmen López lo ha pasado a la firma y te lo lleva para tu visto bueno.', estado: 'info' },
+          // Sigue al informe de gastos de secretaría: cuando Carmen López lo envía, te llegan los dos presupuestos.
+          grupo: 'Para saber', icono: 'documento', titulo: 'Seguro escolar: dos presupuestos para decidir',
+          detalle: 'La póliza vence el 31 de diciembre. Te llegan con el informe de gastos de octubre que prepara Carmen López.', estado: 'info',
+          sigue: 'secretaria/gastos', si: { detalle: 'Carmen López te ha enviado el informe de gastos de octubre, con los dos presupuestos.', estado: 'info' },
         },
+        // Las guías salen de reglas y plantillas: sin insignia. Casi todos los pasos del de acoso son de la dirección.
+        { grupo: 'Para saber', icono: 'carpeta', titulo: 'Guías de protocolos: acoso, absentismo y accidentes', detalle: 'Casi todos los pasos del de acoso son de la dirección. Con los anexos en blanco; ningún caso se abre en DirectorIA.', estado: 'info', ir: 'protocolos' },
       ],
     },
 
@@ -134,14 +136,14 @@ DEMO.rol({
           aMedias: { sigue: 'correo:c-fotocopiadoras', detalle: 'Has respondido sin el preaviso. Si no avisas, se renueva solo el 1 de diciembre.' },
         },
         // El dosier: enviado con la respuesta que lo adjunta (#1) y con tu visto bueno. Ni así pasa a ✓: esa respuesta lo
-        // envía sin el acta de 2.º ESO A («que le enviaré antes del lunes 23»), así que el plazo sigue abierto para el acta.
+        // envía sin el acta de Matemáticas del martes 17 («que le enviaré antes del lunes 23»), así que el plazo sigue abierto.
         {
-          fecha: '2026-11-23', tipo: 'plazo', titulo: 'Dosier para inspección', detalle: 'Envíalo antes de este día. Falta el acta de 2.º ESO A.', fuente: 'correo',
+          fecha: '2026-11-23', tipo: 'plazo', titulo: 'Dosier para inspección', detalle: 'Envíalo antes de este día. Falta el acta de Matemáticas del martes 17.', fuente: 'correo',
           ir: 'dosier', sigue: ['dosier', 'correo:c-inspeccion#1'],
-          si: { detalle: 'Enviado sin el acta de 2.º ESO A. Esa acta, antes de este día.', estado: 'pendiente' },
+          si: { detalle: 'Enviado sin el acta del martes 17. Esa acta, antes de este día.', estado: 'pendiente' },
           aMedias: [
             // Enviado sin dar antes el visto bueno al dosier.
-            { sigue: 'correo:c-inspeccion#1', detalle: 'Enviado sin el acta de 2.º ESO A y sin tu visto bueno al dosier. Esa acta, antes de este día.', ir: 'dosier' },
+            { sigue: 'correo:c-inspeccion#1', detalle: 'Enviado sin el acta del martes 17 y sin tu visto bueno al dosier. Esa acta, antes de este día.', ir: 'dosier' },
             // Respondido con otra respuesta (confirmar la visita, preguntar por los horarios): el dosier no ha salido.
             { sigue: 'correo:c-inspeccion', detalle: 'Has confirmado la visita sin el dosier. Envíaselo antes de este día.' },
             // Con el visto bueno y el correo sin responder.
@@ -149,10 +151,12 @@ DEMO.rol({
           ],
         },
         { fecha: '2026-11-26', hora: '10:00', tipo: 'evento', titulo: 'Visita de inspección', detalle: 'Te reúnes con la inspectora y con el jefe de estudios.', fuente: 'correo', ir: 'correo:c-inspeccion' },
-        // Las tres respuestas propuestas dejan el fondo para después: contestar no cumple el plazo, que sigue pendiente.
+        // Lo cumplen las dos respuestas que dicen cuántos estudiantes acoge el colegio (#0 y #1). La que lo habla antes con
+        // Matemáticas (#2) no responde todavía: el plazo sigue pendiente (aMedias).
         {
-          fecha: '2026-11-27', tipo: 'plazo', titulo: 'Reclamación del comedor', detalle: 'Familia de 5.º A: respóndeles antes de este día. DirectorIA te lo recuerda el miércoles 25.', fuente: 'correo',
-          ir: 'correo:c-comedor', sigue: 'correo:c-comedor', si: { detalle: 'Ya les has contestado. La respuesta por escrito, antes de este día.', estado: 'pendiente' },
+          fecha: '2026-11-27', tipo: 'plazo', titulo: 'Prácticas del máster: responde antes de este día', detalle: 'Si el colegio acoge a los dos estudiantes de Matemáticas y quién los tutoriza.', fuente: 'correo',
+          ir: 'correo:c-practicas', sigue: 'correo:c-practicas#0,1', verbo: 'Respondido',
+          aMedias: { sigue: 'correo:c-practicas', detalle: 'Le has dicho que lo hablas con Matemáticas. La respuesta, antes de este día.' },
         },
         { fecha: '2026-11-27', hora: '9:15', tipo: 'evento', titulo: 'Salida de 4.º al Jardín Botánico', detalle: 'Vuelven a las 13:30.' },
         {
@@ -162,6 +166,7 @@ DEMO.rol({
           aMedias: { sigue: 'correo:c-ayuntamiento', detalle: 'De 7:00 a 19:00. Has escrito al Ayuntamiento; falta avisar a las familias.' },
         },
         { fecha: '2026-11-30', tipo: 'evento', titulo: 'Empiezan los exámenes de ESO', detalle: '1.ª evaluación, hasta el viernes 4 de diciembre.' },
+        { fecha: '2026-12-03', hora: '17:00', tipo: 'evento', titulo: 'Consejo escolar', detalle: 'Sesión ordinaria, en la sala de reuniones. La convocatoria, en «Pendiente de firma».', ir: 'firma' },
       ],
     },
   },
@@ -178,10 +183,10 @@ DEMO.rol({
       etiqueta: { texto: 'Documentos antes del lun 23', tipo: 'plazo' },
       resumen: [
         'Visita de supervisión el jueves 26 a las 10:00. Al empezar, la inspectora quiere reunirse contigo y con el jefe de estudios.',
-        'Antes del lunes 23 pide: plan de convivencia, horarios de 2.º ESO, programaciones de Matemáticas y actas de la evaluación inicial de ESO.',
+        'Antes del lunes 23 pide: plan de convivencia, horarios de 2.º ESO, programaciones de Matemáticas y actas del departamento de Matemáticas.',
       ],
       piden: 'Confirmar la visita y enviar los cuatro documentos antes del lunes 23.',
-      original: 'Estimada directora:\n\nLe comunico que el jueves 26 de noviembre, a las 10:00, visitaré el Colegio Ejemplo dentro de las visitas de supervisión previstas para este trimestre. Al comienzo de la visita me gustaría reunirme con usted y con el jefe de estudios.\n\nPara prepararla, le ruego que me remita antes del lunes 23 de noviembre la siguiente documentación:\n\n- Plan de convivencia del curso 2026-27.\n- Horarios de los grupos de 2.º de ESO.\n- Programaciones didácticas de Matemáticas de ESO.\n- Actas de las sesiones de evaluación inicial de ESO.\n\nLe agradeceré que me confirme la recepción de este correo y la cita.\n\nUn saludo cordial,\n\nLa inspectora de referencia del centro\nServicio de Inspección Educativa\nDirección de Área Territorial Madrid-Capital',
+      original: 'Estimada directora:\n\nLe comunico que el jueves 26 de noviembre, a las 10:00, visitaré el Colegio Ejemplo dentro de las visitas de supervisión previstas para este trimestre. Al comienzo de la visita me gustaría reunirme con usted y con el jefe de estudios.\n\nPara prepararla, le ruego que me remita antes del lunes 23 de noviembre la siguiente documentación:\n\n- Plan de convivencia del curso 2026-27.\n- Horarios de los grupos de 2.º de ESO.\n- Programaciones didácticas de Matemáticas de ESO.\n- Actas de las reuniones del Departamento de Matemáticas de este trimestre.\n\nLe agradeceré que me confirme la recepción de este correo y la cita.\n\nUn saludo cordial,\n\nLa inspectora de referencia del centro\nServicio de Inspección Educativa\nDirección de Área Territorial Madrid-Capital',
       adjuntos: ['Solicitud de documentación.pdf'],
       respuestas: [
         {
@@ -191,46 +196,46 @@ DEMO.rol({
         {
           titulo: 'Confirmar y enviar ya el dosier',
           adjuntos: ['Dosier para la visita de inspección.pdf'],
-          texto: 'Estimada inspectora:\n\nLe confirmo la visita del jueves 26 de noviembre a las 10:00. La recibiremos el jefe de estudios y yo.\n\nLe adjunto la documentación que nos pide: el plan de convivencia 2026-27, los horarios de 2.º ESO, las programaciones de Matemáticas de ESO y las actas de la evaluación inicial de ESO, salvo la de 2.º ESO A, que le enviaré antes del lunes 23.\n\nUn saludo cordial,\nElena Ruiz\nDirectora del Colegio Ejemplo',
+          texto: 'Estimada inspectora:\n\nLe confirmo la visita del jueves 26 de noviembre a las 10:00. La recibiremos el jefe de estudios y yo.\n\nLe adjunto la documentación que nos pide: el plan de convivencia 2026-27, los horarios de 2.º ESO, las programaciones de Matemáticas de ESO y las actas del Departamento de Matemáticas, salvo la de la reunión del martes 17, que le enviaré antes del lunes 23.\n\nUn saludo cordial,\nElena Ruiz\nDirectora del Colegio Ejemplo',
         },
         {
           titulo: 'Confirmar y preguntar por los horarios',
           texto: 'Estimada inspectora:\n\nLe confirmo la visita del jueves 26 de noviembre a las 10:00. Antes de enviarle la documentación, ¿me puede indicar si necesita solo los horarios de grupo de 2.º ESO o también los del profesorado que da clase en esos grupos?\n\nSe lo enviaré todo antes del lunes 23. Si quiere visitar alguna clase ese día, dígamelo y lo organizamos con jefatura.\n\nUn saludo cordial,\nElena Ruiz\nDirectora del Colegio Ejemplo',
         },
       ],
-      nota: 'DirectorIA ha reunido el dosier con lo que hay en el servidor. Falta una pieza: el acta de la evaluación inicial de 2.º ESO A.',
+      nota: 'DirectorIA ha reunido el dosier con lo que hay en el servidor. Falta una pieza: el acta de Matemáticas del martes 17.',
       ir: 'dosier',
     },
     {
-      id: 'c-comedor',
-      de: 'Familia de Carla S.',
-      deDetalle: '5.º A de Primaria',
-      asunto: 'Reclamación por el nuevo horario del comedor',
+      id: 'c-practicas',
+      de: 'Universidad',
+      deDetalle: 'Máster de Formación del Profesorado · prácticas',
+      asunto: 'Prácticas del máster en el 2.º trimestre: dos plazas de Matemáticas',
       hora: 'ayer',
-      categoria: 'Familias',
+      categoria: 'Otros',
       etiqueta: { texto: 'Responder antes del vie 27', tipo: 'plazo' },
       resumen: [
-        'La familia de Carla S. reclama: desde el lunes 9, 5.º y 6.º comen en el segundo turno (13:40-14:20) y no a las 12:40.',
-        'Dicen que su hija pasa una hora sin comer y come con prisa, y que nadie avisó a las familias del cambio.',
-        'Plazo para responder: viernes 27 de noviembre (10 días naturales, según el reglamento de régimen interior).',
+        'La universidad pregunta si el colegio acoge a dos estudiantes del máster de profesorado, de Matemáticas, del 11 de enero al 26 de marzo.',
+        'Cada estudiante necesita un tutor o tutora del Departamento de Matemáticas del colegio.',
+        'Hay que responder antes del viernes 27 para firmar el convenio en diciembre.',
       ],
-      piden: 'Volver al horario anterior o que se les explique el motivo, por escrito, y que se avise a las familias antes de cambios así.',
-      original: 'Estimada directora:\n\nLe escribimos para presentar una reclamación por el cambio de horario del comedor. Desde el lunes 9 de noviembre, 5.º y 6.º comen en el segundo turno, de 13:40 a 14:20, cuando hasta ahora comían a las 12:40.\n\nNuestra hija pasa más de una hora en el patio sin comer y luego tiene que hacerlo con prisa: varios días nos ha dicho que no le ha dado tiempo a terminar. Además, nadie avisó a las familias. Nos enteramos por ella.\n\nPedimos que se vuelva al horario anterior o, si no es posible, que se nos explique el motivo. También pedimos que en adelante se informe a las familias antes de hacer cambios así.\n\nQuedamos a la espera de su respuesta por escrito.\n\nAtentamente,\nAna y Óscar\nPadres de Carla S. (5.º A)',
+      piden: 'Confirmar antes del viernes 27 si el colegio acoge a los dos estudiantes y quién los tutoriza.',
+      original: 'Estimada directora:\n\nComo en cursos anteriores, le escribimos para saber si el Colegio Ejemplo puede acoger a estudiantes del Máster de Formación del Profesorado en sus prácticas del segundo trimestre. Este curso le proponemos dos estudiantes de la especialidad de Matemáticas, del 11 de enero al 26 de marzo de 2027.\n\nCada estudiante necesita un tutor o tutora del centro, del departamento de su especialidad, que le acompañe en el aula y le oriente durante las prácticas.\n\nLe rogamos que nos responda antes del viernes 27 de noviembre, para poder firmar el convenio en diciembre.\n\nAtentamente,\nCoordinación de prácticas\nMáster de Formación del Profesorado',
       respuestas: [
         {
-          titulo: 'Acusar recibo y dar el plazo',
-          texto: 'Estimados Ana y Óscar:\n\nHemos recibido su reclamación sobre el nuevo horario del comedor de 5.º y 6.º. La estamos estudiando con la coordinación del comedor y les responderemos por escrito antes del viernes 27 de noviembre.\n\nGracias por contárnoslo con tanto detalle: nos ayuda a revisarlo bien.\n\nAtentamente,\nElena Ruiz\nDirectora del Colegio Ejemplo',
+          titulo: 'Aceptar las dos plazas',
+          texto: 'Buenos días:\n\nLe confirmo que el Colegio Ejemplo acogerá a los dos estudiantes de Matemáticas del 11 de enero al 26 de marzo. Los tutorizarán dos profesores del Departamento de Matemáticas; le enviaré sus nombres antes del viernes 4 de diciembre, cuando lo cierre con el jefe del departamento, Ramón Esteban.\n\nQuedamos a la espera del convenio para firmarlo.\n\nAtentamente,\nElena Ruiz\nDirectora del Colegio Ejemplo',
         },
         {
-          titulo: 'Proponer una reunión',
-          texto: 'Estimados Ana y Óscar:\n\nGracias por escribirnos. Antes de responderles por escrito, me gustaría escucharles en persona. ¿Les viene bien el jueves 19 o el lunes 23 de noviembre, a las 16:15, en mi despacho? Si ninguno de los dos días les encaja, díganme cuál les va mejor.\n\nEn cualquier caso, tendrán nuestra respuesta por escrito antes del viernes 27.\n\nAtentamente,\nElena Ruiz\nDirectora del Colegio Ejemplo',
+          titulo: 'Aceptar una plaza',
+          texto: 'Buenos días:\n\nGracias por contar con nosotros. Este curso podemos acoger a uno de los dos estudiantes de Matemáticas, del 11 de enero al 26 de marzo: con los exámenes y las salidas del 2.º trimestre, el departamento solo puede tutorizar bien a una persona.\n\nLe enviaré el nombre de su tutor antes del viernes 4 de diciembre. Quedamos a la espera del convenio.\n\nAtentamente,\nElena Ruiz\nDirectora del Colegio Ejemplo',
         },
         {
-          titulo: 'Pedir detalles para comprobarlo',
-          texto: 'Estimados Ana y Óscar:\n\nGracias por escribirnos. Para estudiar bien su reclamación, ¿podrían indicarnos qué días se queda Carla al comedor y en cuáles no le ha dado tiempo a terminar? Lo comprobaremos con las monitoras del segundo turno.\n\nLes responderemos por escrito antes del viernes 27 de noviembre.\n\nAtentamente,\nElena Ruiz\nDirectora del Colegio Ejemplo',
+          titulo: 'Hablarlo antes con Matemáticas',
+          texto: 'Buenos días:\n\nGracias por pensar en el Colegio Ejemplo. Antes de confirmarlo, quiero hablarlo con el Departamento de Matemáticas, que es quien tutorizaría a los estudiantes.\n\nLe respondo antes del viernes 27 de noviembre, como nos pide.\n\nAtentamente,\nElena Ruiz\nDirectora del Colegio Ejemplo',
         },
       ],
-      nota: 'DirectorIA ha apuntado el plazo de respuesta y te avisa el miércoles 25. Las respuestas propuestas no entran en el fondo: eso lo decides tú.',
+      nota: 'DirectorIA ha apuntado el plazo de respuesta: viernes 27. Quién tutoriza lo decides tú con el Departamento de Matemáticas.',
     },
     {
       id: 'c-fotocopiadoras',
@@ -352,33 +357,33 @@ DEMO.rol({
               'Plan de convivencia 2026-27, aprobado el 30 de septiembre',
               'Horarios de grupo de 2.º ESO A y 2.º ESO B',
               'Programaciones didácticas de Matemáticas de 1.º, 2.º y 3.º de ESO, y de Matemáticas A y B de 4.º',
-              'Actas de las sesiones de evaluación inicial de los ocho grupos de ESO',
+              'Actas de las reuniones del Departamento de Matemáticas de este trimestre',
             ],
           },
-          { tipo: 'aviso', texto: 'Falta el acta de la evaluación inicial de 2.º ESO A: no está en el archivo de actas del servidor. Puedes pedírsela a jefatura antes del lunes 23 o enviar el dosier sin ella y explicarlo en el escrito.' },
+          { tipo: 'aviso', texto: 'Falta el acta de la reunión del Departamento de Matemáticas del martes 17: todavía no está en el archivo de actas. Puedes pedírsela a Ramón Esteban antes del lunes 23 o enviar el dosier sin ella y explicarlo en el escrito.' },
         ],
       },
       rellenado: [
         'Lista de piezas, del correo de Inspección de hoy a las 7:12',
         'Plan de convivencia, horarios y programaciones, de las carpetas del servidor del colegio',
-        'Siete de las ocho actas de evaluación inicial, del archivo de actas',
+        'Las actas del Departamento de Matemáticas, del archivo de actas',
         'Escrito de remisión, con los datos de la visita',
       ],
       comprobaciones: [
         'Cada pieza es la versión vigente y está firmada',
-        'El acta de 2.º ESO A: pedírsela a jefatura o explicarlo en el escrito',
-        'Las actas llevan datos de alumnos: solo van a Inspección',
+        'El acta del martes 17: pedírsela a Ramón Esteban o explicarlo en el escrito',
+        'Ninguna pieza lleva datos de alumnos',
       ],
       boton: 'Dar el visto bueno al dosier',
-      alTerminar: 'Visto bueno dado. Adjunta el dosier a tu respuesta a Inspección desde el correo. Si jefatura sube el acta de 2.º ESO A, DirectorIA te avisa.',
+      alTerminar: 'Visto bueno dado. Adjunta el dosier a tu respuesta a Inspección desde el correo. Si Ramón Esteban sube el acta del martes 17, DirectorIA te avisa.',
       documentos: [
         { nombre: 'Plan de convivencia 2026-27', estado: 'ok', detalle: 'Aprobado el 30 de septiembre. Es la versión vigente.' },
         { nombre: 'Horarios de grupo de 2.º ESO A y 2.º ESO B', estado: 'ok', detalle: 'Versión vigente, del archivo de jefatura de estudios' },
         { nombre: 'Programaciones de Matemáticas de ESO', estado: 'ok', detalle: '1.º, 2.º y 3.º, y Matemáticas A y B de 4.º: cinco documentos' },
-        { nombre: 'Actas de la evaluación inicial de 1.º ESO A y B', estado: 'ok' },
-        { nombre: 'Acta de la evaluación inicial de 2.º ESO A', estado: 'falta', detalle: 'No está en el archivo de actas. Decide si se la pides a jefatura.' },
-        { nombre: 'Acta de la evaluación inicial de 2.º ESO B', estado: 'ok' },
-        { nombre: 'Actas de la evaluación inicial de 3.º y 4.º ESO', estado: 'ok', detalle: 'Cuatro actas, de los grupos A y B' },
+        { nombre: 'Actas del Departamento de Matemáticas de septiembre', estado: 'ok', detalle: 'Dos reuniones, del 8 y del 22 de septiembre' },
+        { nombre: 'Acta del Departamento de Matemáticas del 20 de octubre', estado: 'ok' },
+        { nombre: 'Acta del Departamento de Matemáticas del 3 de noviembre', estado: 'ok' },
+        { nombre: 'Acta del Departamento de Matemáticas del martes 17', estado: 'falta', detalle: 'Todavía no está en el archivo de actas. Decide si se la pides a Ramón Esteban.' },
         { nombre: 'Escrito de remisión a Inspección', estado: 'revisar', detalle: 'Borrador preparado por DirectorIA con los datos de la visita. Lo revisas y lo firmas tú.' },
       ],
     },
@@ -412,7 +417,7 @@ DEMO.rol({
           { tipo: 'parrafo', texto: 'Tercero. Se acuerda que, a partir de enero, en Primaria se dediquen 20 minutos diarios a la lectura. Aprobado por mayoría: 39 votos a favor, 3 en contra y 5 abstenciones.' },
           { tipo: 'titulo', texto: 'Ruegos y preguntas' },
           { tipo: 'parrafo', texto: 'Una maestra de Primaria pide revisar la salida de las 16:00 por la puerta lateral, donde se juntan muchas familias. La dirección lo estudiará con jefatura de estudios.' },
-          { tipo: 'aviso', texto: 'En tu dictado, al hablar de la salida de las 16:00, nombrabas a un alumno. DirectorIA lo ha quitado del borrador: en el acta no van datos de alumnos. Comprueba que se entiende sin él.' },
+          { tipo: 'aviso', texto: 'En tu dictado, el recuento del tercer acuerdo no queda claro: primero dices 39 votos a favor y luego 38. El borrador pone 39, que es lo que suma con los 47 asistentes. Compruébalo con tus notas.' },
           { tipo: 'parrafo', texto: 'Sin más asuntos que tratar, se levanta la sesión a las 18:20.' },
         ],
       },
@@ -434,38 +439,62 @@ DEMO.rol({
       ia: false,
       tipo: 'documento',
       menu: 'Pendiente de firma',
-      antetitulo: 'Caso 2026-07 · Protocolo contra el acoso escolar',
-      titulo: 'Citación a la familia de Alumno/a A',
-      entradilla: 'DirectorIA ha preparado la citación con la plantilla del protocolo y los datos del plan del caso. Revísala con las cuatro comprobaciones y fírmala: nada se envía sin tu firma.',
-      confidencial: 'Confidencial · solo equipo del caso',
-      origen: 'Preparado por DirectorIA con la plantilla del protocolo y el plan del caso. No pasa por la IA.',
+      antetitulo: 'Consejo escolar · sesión ordinaria',
+      titulo: 'Convocatoria del consejo escolar del jueves 3',
+      entradilla: 'DirectorIA ha preparado la convocatoria con la plantilla del centro y el calendario del colegio. Revísala con las cuatro comprobaciones y fírmala: nada se envía sin tu firma.',
+      origen: 'Preparado por DirectorIA con la plantilla de convocatorias del centro. No pasa por la IA.',
       documento: {
-        titulo: 'Citación a la familia de Alumno/a A',
-        subtitulo: 'Caso 2026-07 · 2.º ESO B · Borrador para revisar y firmar',
+        titulo: 'Convocatoria de sesión ordinaria del consejo escolar',
+        subtitulo: 'Jueves 3 de diciembre de 2026 · 17:00 · Sala de reuniones · Borrador para revisar y firmar',
         bloques: [
-          { tipo: 'campo', etiqueta: 'Para', texto: 'Familia de Alumno/a A, 2.º ESO B' },
-          { tipo: 'campo', etiqueta: 'Cita', texto: 'Viernes 20 de noviembre, 17:00, despacho de orientación' },
-          { tipo: 'campo', etiqueta: 'Quién les atiende', texto: 'Los dos docentes designados por la dirección el martes 17' },
-          { tipo: 'campo', etiqueta: 'Paso del protocolo', texto: 'Paso 4 de 9 · Recogida de información (Anexo II), del martes 17 al lunes 23' },
-          { tipo: 'titulo', texto: 'Texto de la citación' },
-          { tipo: 'parrafo', texto: 'Estimada familia:\n\nNos gustaría hablar con ustedes sobre cómo se encuentra su hijo/a en el centro. Les esperamos el viernes 20 de noviembre a las 17:00 en el despacho de orientación.\n\nLes atenderán dos docentes del colegio, con total discreción. Si esa hora no les viene bien, díganselo a la tutora y buscaremos otra lo antes posible.\n\nAtentamente,\nElena Ruiz\nDirectora del Colegio Ejemplo' },
-          { tipo: 'aviso', texto: 'Solo lo ve el equipo del caso. Queda registro de quién abre, edita y firma este documento.' },
+          { tipo: 'campo', etiqueta: 'Para', texto: 'Miembros del consejo escolar del Colegio Ejemplo' },
+          { tipo: 'campo', etiqueta: 'Fecha y hora', texto: 'Jueves 3 de diciembre, a las 17:00' },
+          { tipo: 'campo', etiqueta: 'Lugar', texto: 'Sala de reuniones' },
+          { tipo: 'titulo', texto: 'Orden del día' },
+          {
+            tipo: 'lista',
+            items: [
+              'Lectura y aprobación, si procede, del acta de la sesión anterior',
+              'Información de la visita de Inspección educativa del jueves 26 de noviembre',
+              'Calendario de la 1.ª evaluación y fecha del festival de Navidad',
+              'Plan de lectura de Primaria, desde enero',
+              'Ruegos y preguntas',
+            ],
+          },
+          { tipo: 'titulo', texto: 'Texto de la convocatoria' },
+          { tipo: 'parrafo', texto: 'Estimados miembros del consejo escolar:\n\nLes convoco a la sesión ordinaria del consejo escolar, que se celebrará el jueves 3 de diciembre de 2026, a las 17:00, en la sala de reuniones del colegio, con el orden del día que figura arriba.\n\nLa documentación de cada punto estará a su disposición en secretaría desde el lunes 30 de noviembre.\n\nAtentamente,\nElena Ruiz\nDirectora del Colegio Ejemplo' },
+          { tipo: 'aviso', texto: 'La fecha del festival depende de lo que respondas al AMPA, que propone el viernes 11, en plenas sesiones de evaluación. Si la cierras antes de enviar la convocatoria, puedes decirla en el punto 3.' },
         ],
       },
       rellenado: [
-        'Nombres, curso y contacto, desde el servidor del colegio',
-        'Fecha, hora y sala, tomadas del plan del caso',
-        'Quién atiende: los dos docentes designados el mar 17 nov',
-        'Versión en otro idioma o en lectura fácil, de la plantilla, si hace falta',
+        'Miembros del consejo escolar, de la lista del centro',
+        'Fecha, hora y sala, del calendario del colegio',
+        'Orden del día, de tus notas del lunes 16',
+        'Texto, de la plantilla de convocatorias del centro',
       ],
       comprobaciones: [
-        'Ningún dato de otros alumnos ni detalles del caso',
-        'Tono neutro: no da nada por probado',
-        'Fecha y hora acordadas antes con la familia',
-        'Idioma de la familia y canal de entrega',
+        'El orden del día recoge todo lo que quieres tratar',
+        'La fecha y la sala están libres en el calendario',
+        'Va a todos los miembros, también a los representantes de las familias',
+        'No lleva datos de alumnos',
       ],
-      boton: 'Firmar la citación',
-      alTerminar: 'Citación firmada. Se guarda en el Caso 2026-07, en el servidor del colegio, con registro de tu firma. Ya se puede entregar a la familia.',
+      boton: 'Firmar la convocatoria',
+      alTerminar: 'Convocatoria firmada. Queda en el archivo de actas, en el servidor del colegio. Envíala tú a los miembros del consejo escolar desde tu correo.',
+    },
+
+    // E3. Guías de los protocolos (acoso escolar, absentismo y accidentes): las mismas que orientación, escritas una vez
+    // (guias: 'orientacion/protocolos'). Casi todos los pasos del de acoso son de la dirección. No se abre ningún caso en
+    // DirectorIA: los datos de cada caso van donde manda el protocolo (Raíces y el expediente del centro). Sin IA.
+    {
+      id: 'protocolos',
+      tipo: 'protocolo',
+      menu: 'Guías de protocolos',
+      antetitulo: 'Protocolos de la Comunidad de Madrid',
+      titulo: 'Cómo se aplica cada protocolo, paso a paso',
+      entradilla: 'En cada paso, qué se hace, quién lo hace, en qué plazo y con qué anexo en blanco. En el de acoso, casi todos los pasos son de la dirección: abrirlo, decidir las medidas y comunicarlo.',
+      aviso: 'No se abre ningún caso en DirectorIA. Los datos de cada caso van donde manda el protocolo: Raíces y el expediente del centro.',
+      guias: 'orientacion/protocolos',
+      pie: 'Es la lectura del protocolo vigente que ha hecho el equipo de DirectorIA, no la de un abogado: manda siempre el texto oficial. Si hay acoso, y con qué medidas, lo decide la dirección.',
     },
   ],
 });

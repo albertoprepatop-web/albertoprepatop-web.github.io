@@ -14,13 +14,20 @@
 # 8. Ningún marcador a la vista: «PENDIENTE» o texto entre corchetes en lo que se proyecta (no en las notas).
 #    Excepciones: las cifras de precios-versiones y condiciones-versiones mientras no estén cerradas (aviso), y los
 #    huecos del ponente de la portada y el cierre ([Tu nombre], [correo@dominio.es], [teléfono]).
+# 9. Sin datos de alumnos (decisión del 26-28 de noviembre de 2026), en lo que se proyecta y en las notas: ni «Alumno/a», ni
+#    casos («Caso 2026-07»), ni los nombres de alumnos de la ficha antigua, ni salud de nadie (alergias, fiebre), ni «la IA trata
+#    los datos de los alumnos» y parecidas. En lo que se proyecta, además: ni «no salen del colegio», ni apartados «Necesidades»,
+#    «Salud» o «Recogida», ni las funciones que salen (certificados de matrícula o de estudios, autorizaciones de imagen,
+#    optativas, reclamaciones, pautas y anotaciones, acta de la junta de evaluación, actas de una evaluación, que llevan las
+#    notas de cada alumno). La ficha lleva su línea fija, tal cual. En los protocolos, quien decide es la dirección: nunca
+#    «decide el equipo». En el resumen de las 8:00, ausencias del profesorado, no «faltas» (se leen como las del alumnado).
 import hashlib, json, os, re, sys
 from xml.etree.ElementTree import canonicalize
 
 AQUI = os.path.dirname(os.path.abspath(__file__))
 MAZO = os.path.dirname(AQUI)
 sys.path.insert(0, AQUI)
-from ilus import ANTIGUOS
+from ilus import ANTIGUOS, FICHA_LINEA_FIJA
 
 permitir = '--permitir-pendientes' in sys.argv
 deck = json.load(open(os.path.join(MAZO, 'project/deck.json')))
@@ -125,6 +132,37 @@ for i in orden:
     if corchetes: errores.append(f'{i}: texto entre corchetes a la vista: {", ".join(corchetes)}')
     if pend and i in PRECIOS: avisos.append(f'{i}: {pend} {"cifra pendiente" if pend == 1 else "cifras pendientes"} («PENDIENTE»): no publicar hasta cerrarlas')
     elif pend: errores.append(f'{i}: «PENDIENTE» a la vista')
+
+# 9. Sin datos de alumnos
+EN_TODO = [
+ (r'Alumno/a', '«Alumno/a»'),
+ (r'\bCaso \d{4}-\d{2}', 'un caso abierto en DirectorIA'),
+ (r'\b(Mario|Lucía|Hugo)\b', 'nombres de alumnos de la ficha antigua'),
+ (r'(?i)\bfiebre\b|alérgic|autoinyector', 'salud de una persona concreta'),
+ (r'(?i)\btrata\b[^.«»<]{0,40}\balumn', '«la IA trata los datos de los alumnos» o parecida'),
+]
+SOLO_A_LA_VISTA = [
+ (r'(?i)no salen (nunca )?del colegio', '«no salen del colegio»'),
+ (r'class="label">\s*(Necesidades|Salud|Recogida)', 'apartado «Necesidades», «Salud» o «Recogida» en la ficha'),
+ (r'(?i)certificados? de (matrícula|estudios)|autorizaci[oó]n(es)? de imagen|optativas|reclamaci[oó]n|junta de evaluaci[oó]n|pautas para el aula|anotáis',
+  'una función que ya no está (sin datos de alumnos)'),
+ (r'(?i)actas? de la evaluaci[oó]n', 'actas de una evaluación, con las notas de cada alumno'),
+ (r'(?i)decide el equipo', 'en el protocolo decide la dirección, no «el equipo»'),
+ (r'\bFaltas, plazos', '«Faltas» en el resumen de las 8:00: son ausencias del profesorado'),
+]
+for i in orden:
+    h = html.get(i, '')
+    # Lo que se proyecta, sin etiquetas (una frase partida por <br> también cuenta) y, para los apartados de la ficha, con ellas
+    v = visible(h); tv = texto_visible(h); notas_i = ''.join(re.findall(r'<aside>(.*?)</aside>', h, re.S))
+    for pat, que in EN_TODO:
+        for donde, t in (('a la vista', tv), ('en las notas', notas_i)):
+            m = re.search(pat, t)
+            if m: errores.append(f'{i}: {que} {donde} («{m.group(0)}»)')
+    for pat, que in SOLO_A_LA_VISTA:
+        m = re.search(pat, v if pat.startswith('class=') else tv)
+        if m: errores.append(f'{i}: {que} («{m.group(0)}»)')
+if 'ficha-esencial' in html and FICHA_LINEA_FIJA not in visible(html['ficha-esencial']):
+    errores.append('ficha-esencial: falta la línea fija de la ficha, tal cual')
 
 print(f'{len(orden)} diapositivas; {len(usados)} /_blob/ distintos; publicados comprobados: {len(publicados_ok)}')
 for a in avisos: print('aviso:', a)

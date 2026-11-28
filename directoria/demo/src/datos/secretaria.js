@@ -7,28 +7,32 @@ DEMO.rol({
     detalle: 'Secretaría y administración',
     ilustracion: 'secretaria',
   },
-  acceso: 'Analista de gastos, certificados, autorizaciones de imagen, plazos y correo resumido',
+  acceso: 'Analista de gastos, justificantes del profesorado, plazos y correo resumido',
 
   // ─── Inicio: panel de mando (guion-de-datos.md §6.2 bis), solo con datos ───
   // Sin el día por sesiones: el trabajo de secretaría no va por el horario de Primaria.
+  // Secretaría no guarda datos de alumnos: lleva gastos y contratos, plazos, el edificio y los justificantes del profesorado.
   inicio: {
     antetitulo: 'Miércoles 18 de noviembre · 8:00',
     titulo: 'Buenos días, Carmen',
-    entradilla: 'Certificados, gastos, plazos y revisiones del edificio. Nada se envía ni se firma sin ti.',
+    entradilla: 'Gastos, justificantes, plazos y revisiones del edificio. Nada se envía ni se firma sin ti.',
 
     // Lo que importa a las 8:00, de lo más urgente a lo menos. Cada cifra lleva a donde se actúa y tiene un solo sentido.
     cifras: [
       {
-        // Cuenta lo que queda: el certificado de Nora D. (E8), que hoy pasa a la firma.
-        // «ir» también en la cifra: es adonde lleva cuando ya no queda nada pendiente.
-        etiqueta: 'Certificados por revisar',
-        icono: 'documento',
-        ir: 'certificados',
-        pendientes: [
-          { texto: 'Matrícula de Nora D. (1.º ESO A), para una beca. Antes del viernes 20.', sigue: 'certificados', ir: 'certificados', hoy: true, accion: 'Revisar y pasar a la firma', accionCorta: 'Pasar a la firma' },
-        ],
-        alTerminar: 'Pasado a la firma',
-        accionHecha: 'Ver el documento',
+        // Un valor con su rótulo: los cinco avisos del analista (E6). Hoy: dirección decide las fotocopiadoras antes del
+        // sábado 21. Está hecho cuando envías el informe.
+        etiqueta: 'Informe de gastos',
+        icono: 'carpeta',
+        valor: '5',
+        rotulo: 'avisos para dirección',
+        hoy: true,
+        nota: 'El más urgente: las fotocopiadoras, que dirección decide antes del sábado 21.',
+        sigue: 'gastos',
+        ir: 'gastos',
+        accion: 'Revisar y enviar',
+        alTerminar: 'Enviado',
+        accionHecha: 'Ver el informe',
       },
       {
         etiqueta: 'Correos por responder',
@@ -38,38 +42,40 @@ DEMO.rol({
         alTerminar: 'Al día',
       },
       {
-        // Un valor con su rótulo: los cinco avisos del analista (E6). Está hecho cuando envías el informe.
-        etiqueta: 'Informe de gastos',
+        // Progreso «X de Y»: los justificantes del curso que ya están en su carpeta (E8). Cuando Laura Sánchez sube el suyo
+        // en su perfil, sube a 6 de 7. El de hoy de Sergio Prieto sigue pendiente: la cifra no se da por hecha.
+        etiqueta: 'Justificantes del profesorado',
         icono: 'carpeta',
-        valor: '5',
-        rotulo: 'avisos para dirección',
-        nota: 'El más urgente: las fotocopiadoras, que dirección decide antes del sábado 21.',
-        sigue: 'gastos',
-        ir: 'gastos',
-        accion: 'Revisar y enviar',
-        alTerminar: 'Enviado',
-        accionHecha: 'Ver el informe',
+        progreso: 'justificantes',
+        rotulo: 'entregados',
+        nota: 'Los justificantes los archiva un programa en su carpeta; la IA no los lee.',
+        ir: 'justificantes',
+        accion: 'Ver las carpetas',
+        alTerminar: 'Todos entregados',
+        accionHecha: 'Ver las carpetas',
       },
       {
-        // Un valor con su rótulo: los tres alumnos sin autorización del registro (E9). Está hecho cuando envías la lista.
-        etiqueta: 'Fotos del festival',
-        icono: 'persona',
-        valor: '3',
-        rotulo: 'alumnos sin autorización',
-        nota: 'Envía la lista a sus tutorías antes de publicar nada en la web o la revista.',
-        sigue: 'imagen',
-        ir: 'imagen',
-        accion: 'Ver la lista',
-        alTerminar: 'Lista enviada',
-        accionHecha: 'Ver la lista',
+        // La estadística de inicio de curso (E7): recuentos por curso y grupo, sin nombres. Está hecha cuando la marcas.
+        etiqueta: 'Estadística 2026-27',
+        icono: 'calendario',
+        valor: 'vie 27',
+        rotulo: 'para subirla',
+        nota: 'Los recuentos por curso y grupo están listos: cifras, sin nombres.',
+        sigue: 'circulares#1',
+        ir: 'circulares',
+        accion: 'Ver el plazo',
+        alTerminar: 'Datos subidos',
+        accionHecha: 'Ver tus plazos',
       },
     ],
 
-    // Lo que te necesita: empieza por lo que las cifras no dicen. Las cuatro primeras salen de correos (llevan «Resumido con IA»).
+    // Lo que te necesita: empieza por lo que las cifras no dicen. Las de «Hoy» y «Esta semana» salen de correos
+    // (llevan «Resumido con IA»).
     lista: {
       titulo: 'Lo que te necesita',
       items: [
-        { grupo: 'Esta semana', icono: 'familia', titulo: 'Familia de Iker P. (4.º A): cambiar su autorización de imagen', detalle: 'Quiere que salga en la revista, pero no en la web. Tienes tres respuestas propuestas.', estado: 'pendiente', ir: 'correo:c-iker', sigue: 'correo:c-iker' },
+        { grupo: 'Hoy', icono: 'correo', titulo: 'Sergio Prieto pregunta cómo entregar su justificante', detalle: 'Si por correo o en papel. Las respuestas le explican cómo subirlo desde DirectorIA.', estado: 'hoy', ir: 'correo:c-sergio', sigue: 'correo:c-sergio' },
+        { grupo: 'Esta semana', icono: 'familia', titulo: 'Una familia de 4.º B pregunta cómo pagar la salida', detalle: 'Cambian de banco y no saben si el recibo de diciembre llegará a tiempo. Tienes tres respuestas propuestas.', estado: 'pendiente', ir: 'correo:c-pago', sigue: 'correo:c-pago' },
         // Choque: una de las dos fechas que propone la empresa cae en la visita de inspección (E4).
         { grupo: 'Esta semana', icono: 'calendario', titulo: 'Extintores: el jueves 26 coincide con la visita de inspección', detalle: 'La empresa propone ese día, de 9:00 a 12:00, o el martes 24 por la tarde, que tienes libre.', estado: 'pendiente', choque: true, ir: 'correo:c-extintores', sigue: 'correo:c-extintores', si: { titulo: 'Extintores: el día de la revisión', detalle: 'La empresa proponía el martes 24 o el jueves 26, el día de la visita de inspección.' } },
         { grupo: 'Esta semana', icono: 'correo', titulo: 'Estadística: acusa recibo a la Consejería', detalle: 'Piden también quién cargará los datos. Tienes la respuesta preparada.', estado: 'pendiente', ir: 'correo:c-estadistica', sigue: 'correo:c-estadistica' },
@@ -88,81 +94,80 @@ DEMO.rol({
       desde: '2026-11-16',
       semanas: 4,
       marcas: [
-        { fecha: '2026-11-20', tipo: 'plazo', titulo: 'Autorizaciones de la salida al Jardín Botánico', detalle: 'Las tutorías de 4.º las traen antes de las 14:00, con la lista de quién falta.', fuente: 'circular', ir: 'circulares', sigue: 'circulares#1', verbo: 'Recogidas' },
+        { fecha: '2026-11-20', tipo: 'plazo', titulo: 'Autorizaciones de la salida al Jardín Botánico', detalle: 'Las tutorías de 4.º las traen antes de las 14:00 y te dicen cuántas faltan.', fuente: 'circular', ir: 'circulares', sigue: 'circulares#0', verbo: 'Recibidas' },
         { fecha: '2026-11-26', hora: '10:00', tipo: 'evento', titulo: 'Visita de inspección', detalle: 'Inspección educativa, con la directora y el jefe de estudios.' },
-        { fecha: '2026-11-27', tipo: 'plazo', titulo: 'Estadística de inicio de curso', detalle: 'Súbela a la plataforma de la Consejería antes de este día. Los recuentos están preparados.', fuente: 'circular', ir: 'circulares', sigue: 'circulares#2', verbo: 'Datos subidos' },
+        { fecha: '2026-11-27', tipo: 'plazo', titulo: 'Estadística de inicio de curso', detalle: 'Súbela a la plataforma de la Consejería antes de este día. Los recuentos, sin nombres, están preparados.', fuente: 'circular', ir: 'circulares', sigue: 'circulares#1', verbo: 'Datos subidos' },
         // Sale del calendario de mantenimiento (sin insignia). Al responder a la empresa, cambia el detalle y sigue pendiente.
         { fecha: '2026-11-30', tipo: 'plazo', titulo: 'Vence la revisión anual de los extintores', detalle: 'Los 42 del colegio. Falta fijar el día con la empresa.', ir: 'correo:c-extintores', sigue: 'correo:c-extintores', si: { detalle: 'Los 42 del colegio. Ya has respondido a la empresa para fijar el día.', estado: 'pendiente' } },
-        { fecha: '2026-11-30', tipo: 'evento', titulo: 'Corte de la calle de la entrada por obras', detalle: 'De 7:00 a 19:00. Avisa a los proveedores que tengan entregas ese día, como el comedor.', ir: 'circulares', sigue: 'circulares#4', verbo: 'Proveedores avisados' },
-        { fecha: '2026-12-12', tipo: 'plazo', titulo: 'Caducan los electrodos del desfibrilador', detalle: 'Pide ya los de recambio y comprueba con conserjería que quedan puestos.', ir: 'circulares', sigue: 'circulares#5', verbo: 'Recambio pedido' },
+        { fecha: '2026-11-30', tipo: 'evento', titulo: 'Corte de la calle de la entrada por obras', detalle: 'De 7:00 a 19:00. Avisa a los proveedores que tengan entregas ese día, como el comedor.', ir: 'circulares', sigue: 'circulares#3', verbo: 'Proveedores avisados' },
+        { fecha: '2026-12-12', tipo: 'plazo', titulo: 'Caducan los electrodos del desfibrilador', detalle: 'Pide ya los de recambio y comprueba con conserjería que quedan puestos.', ir: 'circulares', sigue: 'circulares#4', verbo: 'Recambio pedido' },
       ],
     },
   },
 
   // ─── Correo ───────────────────────────────────────────────────────
+  // Las familias escriben de temas generales, sin nombres de alumnos. Los justificantes no llegan por correo: se suben por DirectorIA.
   correo: [
     {
-      id: 'c-nora',
-      de: 'Padre de Nora D.',
-      deDetalle: '1.º ESO A',
-      asunto: 'Certificado de matrícula para la beca del club',
-      hora: '7:34',
-      categoria: 'Familias',
-      etiqueta: { texto: 'Lo necesitan antes del vie 20', tipo: 'plazo' },
+      id: 'c-sergio',
+      de: 'Sergio Prieto',
+      deDetalle: 'Tutor de 3.º B de Primaria',
+      asunto: '¿Cómo te hago llegar el justificante de hoy?',
+      hora: '7:50',
+      categoria: 'Claustro',
+      etiqueta: { texto: 'Responder hoy', tipo: 'hoy' },
       resumen: [
-        'El padre de Nora D. (1.º ESO A) pide un certificado de matrícula de este curso para una beca deportiva de su club.',
-        'La solicitud se cierra el viernes 20. Lo prefieren firmado por correo; si no, lo recoge él en secretaría el jueves o el viernes.',
+        'Sergio Prieto no viene hoy y pregunta cómo entregar el justificante: si por correo o en papel cuando vuelva.',
+        'No lo adjunta. Jefatura ya sabe que no viene.',
       ],
-      piden: 'Un certificado de matrícula del curso 2026-27, firmado, antes del viernes 20.',
-      original: 'Buenos días:\n\nMi hija Nora D., de 1.º de ESO A, juega en el club de baloncesto del barrio y este año ha salido la convocatoria de becas deportivas. Entre los papeles nos piden un certificado de matrícula del colegio de este curso.\n\nLa solicitud se cierra el viernes 20, así que vamos un poco justos. ¿Podrían enviárnoslo firmado por correo? Si tiene que ser en papel, me paso a recogerlo por secretaría el jueves o el viernes, a la hora que me digan.\n\nMuchas gracias, y perdonen las prisas.\n\nUn saludo,\nRubén, padre de Nora D. (1.º ESO A)',
+      piden: 'Saber cómo entregar el justificante de su ausencia de hoy.',
+      original: 'Hola, Carmen:\n\nHoy no voy a ir; ya lo he marcado en la app y Javier lo sabe. Te escribo por el justificante: ¿te lo mando por correo o te lo llevo en papel cuando vuelva? No sé cómo lo hacemos este curso.\n\nLo tendré esta tarde. Gracias,\nSergio',
       respuestas: [
         {
-          titulo: 'Confirmar el envío por correo',
-          texto: 'Buenos días, Rubén:\n\nYa tenemos preparado el certificado de matrícula de Nora de este curso. Lo firmo yo, como secretaria, con el visto bueno de la directora, y mañana, jueves 19, se lo envío por correo en PDF, con las dos firmas.\n\nAsí lo tendrán a tiempo para la solicitud del viernes. Si el club les pide algún dato más, díganmelo.\n\nUn saludo,\nCarmen López\nSecretaria del Colegio Ejemplo',
+          titulo: 'Explicarle cómo subirlo',
+          texto: 'Hola, Sergio:\n\nNo me lo mandes por correo. Súbelo desde DirectorIA, en «Tus justificantes»: eliges la ausencia de hoy y el archivo, y un programa lo guarda en tu carpeta con la fecha. Ni la IA ni ningún programa leen lo que pone: solo lo abrimos tú y secretaría, y queda registrado quién lo abre.\n\nEn el registro de ausencias solo pondrá «Justificante: entregado».\n\nUn saludo,\nCarmen López\nSecretaria del Colegio Ejemplo',
         },
         {
-          titulo: 'Ofrecer recogerlo en secretaría',
-          texto: 'Buenos días, Rubén:\n\nEl certificado de matrícula de Nora estará firmado mañana, jueves 19. Si el club lo quiere en papel, puede recogerlo en secretaría ese mismo día o el viernes, de 9:00 a 14:00.\n\nSi les basta con el PDF firmado, díganmelo y se lo envío por correo mañana.\n\nUn saludo,\nCarmen López\nSecretaria del Colegio Ejemplo',
+          titulo: 'Decirle que no hay prisa',
+          texto: 'Hola, Sergio:\n\nNo corre prisa. Cuando lo tengas, súbelo desde DirectorIA, en «Tus justificantes», y elige la ausencia de hoy. No hace falta que me lo mandes por correo ni que lo traigas en papel: un programa lo archiva en tu carpeta y yo ya lo veo ahí.\n\nUn saludo,\nCarmen López\nSecretaria del Colegio Ejemplo',
         },
         {
-          titulo: 'Preguntar si el club tiene un modelo',
-          texto: 'Buenos días, Rubén:\n\nTendremos listo el certificado de matrícula de Nora mañana, jueves 19. Antes de firmarlo, ¿el club les ha dado un modelo propio o les pide que conste algo más, como el horario de clases? Si es así, envíenmelo y lo preparamos con ese formato.\n\nSi no, les mandaré nuestro certificado habitual, con el curso, el grupo y la fecha de matrícula.\n\nUn saludo,\nCarmen López\nSecretaria del Colegio Ejemplo',
+          titulo: 'Ofrecerle ayuda para subirlo',
+          texto: 'Hola, Sergio:\n\nEste curso los justificantes se suben desde DirectorIA, en «Tus justificantes»: no por correo. Si cuando vuelvas no lo encuentras, pásate por secretaría y lo subimos juntos desde tu cuenta en un minuto.\n\nUn saludo,\nCarmen López\nSecretaria del Colegio Ejemplo',
         },
       ],
-      nota: 'El certificado está preparado con los datos del expediente: 1.º ESO A, matrícula del 3 de julio. Revísalo y pásalo a la firma.',
-      ir: 'certificados',
+      nota: 'Los justificantes se suben por DirectorIA, no por correo. Los archiva un programa en su carpeta; la IA no los lee.',
+      ir: 'justificantes',
     },
     {
-      id: 'c-iker',
-      de: 'Madre de Iker P.',
-      deDetalle: '4.º A de Primaria',
-      asunto: 'Cambiar la autorización de imagen de Iker',
-      hora: '7:10',
+      id: 'c-pago',
+      de: 'Inés',
+      deDetalle: 'Familia de 4.º B de Primaria',
+      asunto: 'Pago de la salida al Jardín Botánico',
+      hora: '7:34',
       categoria: 'Familias',
       etiqueta: { texto: 'Responder esta semana', tipo: 'plazo' },
       resumen: [
-        'La madre de Iker P. (4.º A) quiere cambiar su autorización de imagen: en la matrícula marcaron que no.',
-        'Quiere que Iker salga en la revista del colegio con su clase, pero no en la web.',
-        'Pregunta qué impreso tiene que rellenar.',
+        'Una familia de 4.º B pregunta si puede pagar la salida al Jardín Botánico por transferencia o en secretaría.',
+        'Este mes cambian de banco y no saben si el recibo de diciembre, que lleva la salida, llegará a la cuenta nueva.',
       ],
-      piden: 'Autorizar a Iker en la revista, pero no en la web, y saber cómo hacerlo.',
-      original: 'Buenos días:\n\nSoy Silvia, la madre de Iker P., de 4.º A. Cuando hicimos la matrícula marcamos que no autorizábamos el uso de su imagen. Ahora Iker nos ha contado que en la revista del colegio van a salir fotos del festival de otoño, y le hace mucha ilusión aparecer con su clase.\n\n¿Podemos cambiar la autorización? Nos gustaría que saliera en la revista, pero preferimos que sus fotos no se publiquen en la web del colegio.\n\nSi hay que rellenar algún impreso, díganme cómo lo hacemos.\n\nMuchas gracias,\nSilvia, madre de Iker P. (4.º A)',
+      piden: 'Saber si pueden pagar los 6 € de la salida de otra forma y cómo hacerlo.',
+      original: 'Buenos días:\n\nSomos una familia de 4.º B. En la circular de la salida al Jardín Botánico pone que los 6 € se cobran en el recibo de diciembre. Este mes cambiamos de banco y no sabemos si el recibo llegará a tiempo a la cuenta nueva.\n\n¿Podemos pagarlo por transferencia o en secretaría, para no tener problemas? Si es así, ¿nos dicen cómo?\n\nMuchas gracias,\nInés',
       respuestas: [
         {
-          titulo: 'Explicar cómo cambiarla',
-          texto: 'Buenos días, Silvia:\n\nClaro que pueden cambiarla. Basta con rellenar de nuevo la autorización de imagen, con «Sí» en la revista del colegio y «No» en la web. Pueden recoger el impreso en secretaría o se lo mandamos mañana con Iker, en un sobre.\n\nEn cuanto nos llegue firmado, lo anotamos en el registro y Iker podrá salir en la revista con su clase. Hasta entonces, no aparecerá en ninguna foto.\n\nUn saludo,\nCarmen López\nSecretaria del Colegio Ejemplo',
+          titulo: 'Explicar cómo cambiar la cuenta',
+          texto: 'Buenos días, Inés:\n\nNo se preocupen. Si nos traen a secretaría la nueva cuenta, firmada, antes del 1 de diciembre, el recibo de diciembre ya irá a la cuenta nueva, con la salida incluida.\n\nSi les resulta más cómodo, también pueden pagar los 6 € en secretaría, de 9:00 a 14:00, y se lo quitamos del recibo.\n\nUn saludo,\nCarmen López\nSecretaria del Colegio Ejemplo',
         },
         {
-          titulo: 'Proponer firmarlo en secretaría',
-          texto: 'Buenos días, Silvia:\n\nLo más rápido es que pase por secretaría y firme aquí el cambio. Le tendré preparado el impreso con «Sí» en la revista y «No» en la web, como nos pide: son cinco minutos.\n\nEstoy en secretaría de 9:00 a 14:00. Si le viene mejor a la salida de clase, a las 16:00, dígamelo y la espero.\n\nUn saludo,\nCarmen López\nSecretaria del Colegio Ejemplo',
+          titulo: 'Ofrecer el pago en secretaría',
+          texto: 'Buenos días, Inés:\n\nPueden pagar los 6 € de la salida en secretaría, de 9:00 a 14:00, cualquier día antes del viernes 27. Les daremos un recibo y no se les cobrará en el de diciembre.\n\nPara el cambio de cuenta de los demás recibos, tráiganme la nueva firmada cuando puedan.\n\nUn saludo,\nCarmen López\nSecretaria del Colegio Ejemplo',
         },
         {
-          titulo: 'Preguntar qué fotos autorizan',
-          texto: 'Buenos días, Silvia:\n\nGracias por escribirnos. Antes de prepararles el cambio, una pregunta: en la revista, ¿autorizan solo las fotos de grupo, con su clase, o también fotos en las que Iker salga solo? En el impreso son dos casillas distintas.\n\nEn cuanto me lo digan, se lo dejo preparado para firmar. Mientras tanto, Iker no aparecerá en ninguna foto.\n\nUn saludo,\nCarmen López\nSecretaria del Colegio Ejemplo',
+          titulo: 'Pedirles que avisen si hay problema',
+          texto: 'Buenos días, Inés:\n\nGracias por avisar con tiempo. De momento no tienen que hacer nada: si el recibo de diciembre se devuelve por el cambio de banco, se lo diremos y lo pagan en secretaría sin ningún recargo.\n\nY si prefieren evitarlo, tráiganme la nueva cuenta firmada antes del 1 de diciembre.\n\nUn saludo,\nCarmen López\nSecretaria del Colegio Ejemplo',
         },
       ],
-      nota: 'En el registro, Iker P. no tiene autorización de imagen. Hasta que llegue el cambio firmado, no puede salir en las fotos del festival.',
-      ir: 'imagen',
+      nota: 'El recibo de diciembre lleva la salida. Las cuentas de las familias están en el programa de gestión del colegio, no en DirectorIA.',
     },
     {
       id: 'c-estadistica',
@@ -173,7 +178,7 @@ DEMO.rol({
       categoria: 'Consejería',
       etiqueta: { texto: 'Entregar antes del vie 27', tipo: 'plazo' },
       resumen: [
-        'Piden los datos de la estadística de inicio de curso 2026-27: el alumnado por curso y grupo, y el profesorado.',
+        'Piden los datos de la estadística de inicio de curso 2026-27: cuántos alumnos hay por curso y grupo, y el profesorado.',
         'Novedad: el profesorado se da por etapa y por jornada, completa o parcial. Se sube a su plataforma antes del viernes 27.',
         'Piden acuse de recibo y el nombre de quien cargará los datos en el colegio.',
       ],
@@ -194,7 +199,7 @@ DEMO.rol({
           texto: 'Buenos días:\n\nLes escribo con una duda sobre la estadística de inicio del curso 2026-2027, antes de cargar los datos: ¿a qué fecha hay que contar el alumnado matriculado? Este curso hemos tenido altas en octubre y no sabemos si deben incluirse.\n\nAcusamos recibo de la comunicación. Seré yo, como secretaria del centro, quien cargue los datos en la plataforma.\n\nAtentamente,\nCarmen López\nSecretaria del Colegio Ejemplo',
         },
       ],
-      nota: 'Plazo apuntado en «Circulares y plazos». DirectorIA te lo recuerda el miércoles 25 y ha preparado los recuentos para que los revises.',
+      nota: 'Plazo apuntado en «Circulares y plazos». DirectorIA te lo recuerda el miércoles 25. Los recuentos son cifras por grupo, sin nombres.',
       ir: 'circulares',
     },
     {
@@ -319,79 +324,40 @@ DEMO.rol({
       pie: 'No sustituye a la gestoría ni lleva la contabilidad oficial. Las nóminas y los datos de personas solo se ven agregados. Contratar, cambiar o renegociar lo deciden dirección y la titularidad.',
     },
 
-    // E8. Certificado de matrícula de Nora D.
+    // E8. Justificantes del profesorado: las carpetas que archiva el programa, con reglas y sin IA. Ni la IA ni ningún
+    // programa leen lo que pone: solo lo abren el docente y secretaría, y el registro de accesos dice quién sube y quién abre.
     {
-      id: 'certificados',
-      ia: false,
-      tipo: 'documento',
-      menu: 'Certificados',
-      antetitulo: 'Pedido hoy por la familia · beca deportiva',
-      titulo: 'Certificado de matrícula de Nora D.',
-      entradilla: 'DirectorIA lo ha preparado con el expediente y el modelo del centro. Revísalo y pásalo a la firma: firmas tú, como secretaria, y la directora da el visto bueno.',
-      origen: 'Preparado por DirectorIA con la plantilla del certificado, el expediente de secretaría y el correo de la familia',
-      documento: {
-        titulo: 'Certificado de matrícula',
-        subtitulo: 'Curso 2026-27 · Borrador para revisar y pasar a la firma',
-        bloques: [
-          { tipo: 'campo', etiqueta: 'Alumna', texto: 'Nora D.' },
-          { tipo: 'campo', etiqueta: 'Curso y grupo', texto: '1.º de ESO, grupo A' },
-          { tipo: 'campo', etiqueta: 'Fecha de matrícula', texto: '3 de julio de 2026' },
-          { tipo: 'campo', etiqueta: 'Para qué', texto: 'Solicitud de una beca deportiva de su club' },
-          { tipo: 'campo', etiqueta: 'Lo pide', texto: 'Su padre, por correo, hoy a las 7:34' },
-          { tipo: 'titulo', texto: 'Texto del certificado' },
-          { tipo: 'parrafo', texto: 'Carmen López, secretaria del Colegio Ejemplo, centro concertado de la Comunidad de Madrid,\n\nCERTIFICA:\n\nQue la alumna Nora D. está matriculada en este centro en el curso 2026-2027, en 1.º de Educación Secundaria Obligatoria, grupo A. La matrícula se formalizó el 3 de julio de 2026.\n\nY para que conste, a petición de la familia y para la solicitud de una beca deportiva, firmo este certificado en Madrid, a 18 de noviembre de 2026.' },
-          { tipo: 'campo', etiqueta: 'La secretaria', texto: 'Carmen López' },
-          { tipo: 'campo', etiqueta: 'Visto bueno de la directora', texto: 'Elena Ruiz' },
-          { tipo: 'aviso', texto: 'Solo certifica la matrícula. No lleva notas, asistencia ni otros datos del expediente, porque la beca no los pide.' },
-        ],
-      },
-      rellenado: [
-        'Alumna, curso, grupo y fecha de matrícula, del expediente de secretaría',
-        'Para qué es y quién lo pide, del correo de su padre de hoy a las 7:34',
-        'Texto y firmas, del modelo de certificado del centro',
+      id: 'justificantes',
+      tipo: 'justificantes',
+      vista: 'carpetas',
+      menu: 'Justificantes',
+      antetitulo: 'Personal · curso 2026-27',
+      titulo: 'Justificantes del profesorado',
+      entradilla: 'Cada docente sube el suyo desde DirectorIA y elige la ausencia. Un programa lo renombra y lo guarda en su carpeta, por curso, mes y docente. Ni la IA ni ningún programa leen lo que pone.',
+      confidencial: 'Solo cada docente y secretaría, con registro de accesos',
+      curso: '2026-27',
+      ausencias: [
+        { docente: 'Sergio Prieto', fecha: '2026-11-18', horas: 'Toda la jornada', justificante: 'pendiente' },
+        { docente: 'Laura Sánchez', fecha: '2026-11-16', horas: '9:00-10:30', justificante: 'pendiente', sigue: 'docente/justificantes#j1' },
+        { docente: 'Teresa Gil', fecha: '2026-11-12', horas: 'Toda la jornada', justificante: 'entregado' },
+        { docente: 'Rosa Medina', fecha: '2026-11-05', horas: '9:00-11:15', justificante: 'entregado' },
+        { docente: 'Beatriz Romero', fecha: '2026-10-27', horas: '8:15-10:05', justificante: 'entregado' },
+        { docente: 'Ramón Esteban', fecha: '2026-10-21', horas: '12:30-14:45', justificante: 'entregado' },
+        { docente: 'Laura Sánchez', fecha: '2026-10-08', horas: 'Toda la jornada', justificante: 'entregado' },
       ],
-      comprobaciones: [
-        'El curso, el grupo y la fecha coinciden con el expediente',
-        'Quien lo pide consta en el expediente como padre o tutor legal',
-        'Solo lleva lo que pide la beca: ni notas ni asistencia',
+      reglas: [
+        'Un programa, con reglas y sin IA, renombra cada justificante con su fecha y lo guarda en Justificantes / curso / mes / docente.',
+        'Ni la IA ni ningún programa leen lo que pone. La IA no tiene acceso a esta carpeta: no la busca ni la resume.',
+        'En el registro de ausencias solo pone «Justificante: entregado» o «pendiente», nunca el motivo.',
+        'Lo ven el propio docente y secretaría, con registro de accesos.',
+        'El programa los borra cuando pasa el plazo que fija el colegio.',
       ],
-      boton: 'Pasar a la firma',
-      alTerminar: 'Pasado a la firma. Lo firmas tú y le llega a Elena Ruiz para el visto bueno. Con las dos firmas, envíalo a la familia desde el correo.',
-    },
-
-    // E9. Autorizaciones de imagen del festival de otoño
-    {
-      id: 'imagen',
-      tipo: 'tabla',
-      menu: 'Fotos y autorizaciones',
-      antetitulo: 'Fotos del festival de otoño · web y revista',
-      titulo: 'Autorizaciones de imagen del festival de otoño',
-      entradilla: 'DirectorIA ha cruzado los grupos del festival con el registro de autorizaciones. No mira las fotos ni reconoce caras: te dice quién no puede aparecer, y cada tutoría revisa sus fotos antes de publicar.',
-      columnas: ['Alumno', 'Grupo', 'Web', 'Revista'],
-      filas: [
-        ['Adrián C.', '3.º B', 'No', 'No'],
-        ['Iker P.', '4.º A', 'No', 'No, hasta que firmen el cambio'],
-        ['Sofía L.', '4.º B', 'No', 'No'],
-        ['Resto del alumnado', 'Primaria', 'Sí', 'Sí'],
+      // Quién sube y quién abre cada justificante, del más reciente al más antiguo. El motor añade arriba lo que se sube en la demo.
+      registro: [
+        'Carmen López abrió el de Teresa Gil del jueves 12 de noviembre, el viernes 13 a las 18:05',
+        'Teresa Gil subió el de su ausencia del jueves 12 de noviembre, el viernes 13 a las 17:40',
+        'Rosa Medina subió el de su ausencia del jueves 5 de noviembre, el viernes 6 a las 9:05',
       ],
-      marcas: [
-        { fila: 0, columna: 2, tipo: 'aviso' },
-        { fila: 0, columna: 3, tipo: 'aviso' },
-        { fila: 1, columna: 2, tipo: 'aviso' },
-        { fila: 1, columna: 3, tipo: 'aviso' },
-        { fila: 2, columna: 2, tipo: 'aviso' },
-        { fila: 2, columna: 3, tipo: 'aviso' },
-        { fila: 3, columna: 2, tipo: 'ok' },
-        { fila: 3, columna: 3, tipo: 'ok' },
-      ],
-      avisos: [
-        { texto: 'DirectorIA no mira las fotos ni reconoce caras. Solo saca del registro de autorizaciones quién no puede aparecer.', estado: 'info' },
-        { texto: 'Iker P. (4.º A): su familia pide autorizar la revista, pero no la web. Hasta que llegue el cambio firmado, no puede salir en ninguna de las dos.', estado: 'aviso' },
-        { texto: 'Antes de publicar, cada tutoría revisa las fotos de su grupo y quita aquellas en las que salga alguien de esta lista.', estado: 'info' },
-        { texto: 'En el resto de grupos de Primaria, todas las familias han autorizado este curso la web y la revista.', estado: 'ok' },
-      ],
-      boton: 'Enviar la lista a las tutorías',
-      alTerminar: 'Lista enviada a las tutorías de 3.º B, 4.º A y 4.º B. Nada se publica hasta que cada una confirme que ha revisado sus fotos.',
     },
 
     // E7 y E10. Plazos de las circulares, los correos y el mantenimiento
@@ -401,20 +367,12 @@ DEMO.rol({
       menu: 'Circulares y plazos',
       antetitulo: 'Circulares, correos y calendario de mantenimiento',
       titulo: 'Qué hay que hacer, quién y cuándo',
-      entradilla: 'DirectorIA saca los plazos de las circulares, de los correos y del calendario de mantenimiento, con quién se encarga de cada uno. Tú decides cuándo está hecho y lo marcas.',
+      entradilla: 'DirectorIA saca los plazos de las circulares, de los correos y del calendario de mantenimiento del edificio, con quién se encarga de cada uno. Tú decides cuándo está hecho y lo marcas.',
       items: [
         {
           fecha: 'vie 20 nov',
-          titulo: 'Certificado de matrícula de Nora D. (1.º ESO A)',
-          detalle: 'Lo pide su familia para una beca deportiva del club. Revísalo y pásalo a la firma; con el visto bueno de la directora, se envía por correo.',
-          quien: 'Tú, con el visto bueno de dirección',
-          origen: 'Correo del padre de Nora D. de hoy',
-          estado: 'pronto',
-        },
-        {
-          fecha: 'vie 20 nov',
           titulo: 'Autorizaciones de la salida al Jardín Botánico',
-          detalle: 'Las tutorías de 4.º A y 4.º B recogen las autorizaciones firmadas y las dejan en secretaría. La salida es el viernes 27, de 9:15 a 13:30, y cuesta 6 €.',
+          detalle: 'Las tutorías de 4.º A y 4.º B traen las autorizaciones firmadas a secretaría y dicen cuántas faltan. La salida es el viernes 27, de 9:15 a 13:30, y cuesta 6 €.',
           quien: 'Tutorías de 4.º y secretaría',
           origen: 'Circular de la salida al Jardín Botánico',
           estado: 'pronto',
@@ -422,7 +380,7 @@ DEMO.rol({
         {
           fecha: 'vie 27 nov',
           titulo: 'Estadística de inicio de curso 2026-27',
-          detalle: 'Subir a la plataforma de la Consejería el alumnado por curso y grupo y el profesorado por etapa y jornada. Los recuentos están preparados para revisar. DirectorIA te avisa el miércoles 25.',
+          detalle: 'Subir a la plataforma de la Consejería cuántos alumnos hay por curso y grupo, y el profesorado por etapa y jornada. Son recuentos, sin nombres. DirectorIA te avisa el miércoles 25.',
           quien: 'Tú',
           origen: 'Circular de la Consejería de ayer',
           estado: 'pronto',

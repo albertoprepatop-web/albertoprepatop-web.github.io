@@ -6,7 +6,7 @@ Esta demo es la aplicación modelo que el fundador de DirectorIA enseña a los e
 - **Correo:** cada correo llega resumido y con respuestas propuestas para revisar, editar y enviar.
 - **Funciones propias del cargo.**
 
-Todo es un ejemplo ficticio y nada se envía de verdad.
+Todo es un ejemplo ficticio y nada se envía de verdad. Y **DirectorIA no guarda datos de alumnos: solo del profesorado y del funcionamiento del colegio** (§5).
 
 Cada perfil tiene un archivo de datos, `src/datos/<id>.js`. Este documento fija:
 
@@ -34,7 +34,7 @@ Cada perfil tiene un archivo de datos, `src/datos/<id>.js`. Este documento fija:
 
   Salida y recogida a las 16:00.
 - **ESO:** de 8:15 a 14:45.
-- **DirectorIA** funciona en un servidor dentro del colegio. El correo sale por la cuenta de correo que el colegio ya tiene.
+- **DirectorIA:** «La aplicación y los datos están en un servidor dentro del colegio. La copia de seguridad, cifrada, está en la UE. Los correos salen por la cuenta del propio colegio. El mantenimiento a distancia queda registrado.»
 
 ## 2. Personas (todas inventadas)
 
@@ -42,25 +42,30 @@ Cada perfil tiene un archivo de datos, `src/datos/<id>.js`. Este documento fija:
 |---|---|---|
 | Elena Ruiz | Directora | `direccion` |
 | Javier Martín | Jefe de estudios | `jefatura` |
-| Carmen López | Secretaría y administración | `secretaria` |
+| Carmen López | Secretaría y administración; lleva el personal | `secretaria` |
 | Laura Sánchez | Tutora de 4.º A de Primaria; da Educación Física en 2.º ciclo | `docente` |
 | Andrés Vidal | Orientador (Departamento de Orientación) | `orientacion` |
 | Pablo Sanz | Maestro de apoyo de Primaria; hoy cubre dos sesiones | `sustituto` |
 | Sergio Prieto | Tutor de 3.º B de Primaria; hoy no viene | — |
 | Rosa Medina | Maestra de Primaria (guardia en 3.ª hora) | — |
 | Teresa Gil | Maestra de Inglés (vigilancia del recreo) | — |
+| Ana Torres | Tutora de 3.º A: la tutoría a la que se llama desde las fichas de 3.º B | — |
+| Pilar Serrano | Coordinadora del 2.º ciclo de Primaria | — |
+| Ramón Esteban | Jefe del Departamento de Matemáticas | — |
 | Beatriz Romero | Tutora de 2.º ESO B | — |
 | Nuria Castro | Coordinadora de bienestar y protección | — |
-| Marta Ramos, Luis García, Pilar Serrano | Docentes que han compartido recursos en el banco | — |
+| Marta Ramos, Luis García | Docentes que han compartido recursos en el banco, con Pilar Serrano | — |
 
-**Alumnado.** Solo nombre de pila, o nombre e inicial, siempre inventados:
+**Alumnado: ninguno.** DirectorIA no guarda datos de alumnos (§5), y la demo tampoco los tiene: ni nombres ni iniciales. Se habla de grupos («3.º B», «4.º A»), de cifras agregadas («6 recibos devueltos») y de «su hijo» o «su hija» en lo que escriben las familias. El único nombre que se parece al de un alumno es el que escribe la docente para probar el filtro del material con Claude («Lucas y Sara»): el filtro lo para y no se envía nada.
 
-- **3.º B:** Mario, Lucía, Hugo (los de la ficha).
-- **4.º A:** Daniel M. e Irene. Amira llegó en octubre y su familia prefiere el inglés.
-- **1.º ESO A:** Nora D.
-- **2.º ESO B:** el caso de acoso. Ahí nunca hay nombres: «Alumno/a A», «Alumno/a B», «Alumno/a C».
+**Familias:** escriben de temas generales, sin nombres de alumnos y sin nada de salud, y firman con su nombre de pila:
 
-**Familias:** «la familia de Daniel M.», «la madre de Mario».
+- Raquel y Nadia, de 4.º A (docente): qué llevar a la salida y el chándal, en inglés;
+- Inés, de 4.º B (secretaría): cómo pagar la salida;
+- Elisa, de 5.º (orientación): una charla para familias sobre pantallas;
+- Marcos, de 4.º ESO B (jefatura): cuándo salen las fechas de los exámenes.
+
+**Docentes:** con su nombre entero, también en el banco de recursos («De Marta Ramos»). Nombre e inicial es como se nombraba antes a los alumnos, y `validar.mjs` lo rechaza.
 
 **Organismos:** se nombran de forma genérica:
 
@@ -68,22 +73,25 @@ Cada perfil tiene un archivo de datos, `src/datos/<id>.js`. Este documento fija:
 - «Consejería de Educación»;
 - «Ayuntamiento»;
 - «AMPA del colegio»;
+- «la universidad» (el Máster de Formación del Profesorado);
 - empresas sin marca, por ejemplo «la empresa de fotocopiadoras».
 
-**Sin direcciones de correo ni teléfonos.** Solo una extensión interna (ext. 201) en la ficha.
+**Sin direcciones de correo ni teléfonos.** Solo las extensiones internas de las fichas: conserjería (ext. 200), jefatura de estudios (ext. 202) y la tutoría de 3.º A (ext. 213).
 
 ## 3. La historia común (lo que cada perfil ve tiene que cuadrar)
 
 ### E1. Ausencia de Sergio Prieto
 
-A las 7:45 avisa por la app de que tiene fiebre y no viene. DirectorIA propone cómo cubrir sus sesiones con 3.º B y jefatura lo revisa:
+A las 7:45 avisa por la app de que no viene. **El motivo no se guarda:** el registro de ausencias dice que falta y a qué horas (toda la jornada) y, del justificante, «pendiente». Cuando lo tenga, lo sube desde DirectorIA (E8). En ningún perfil se dice por qué falta, ni de pasada («que te mejores»).
+
+DirectorIA propone cómo cubrir sus sesiones con 3.º B y jefatura lo revisa:
 
 | Sesión | Grupo y materia | Propuesta | Motivo |
 |---|---|---|---|
 | 1.ª hora, 9:00-9:45 | 3.º B, Lengua | Pablo Sanz | Tiene guardia a esa hora. Lleva 2 guardias este mes; la media es 3. |
 | 3.ª hora, 10:30-11:15 | 3.º B, Ciencias de la Naturaleza | Rosa Medina | Tiene guardia. |
 | Recreo, 11:15-11:45 | Vigilancia del patio de Primaria (turno de Sergio) | Teresa Gil | — |
-| 6.ª hora, 15:15-16:00 | 3.º B, Matemáticas | Pablo Sanz | — |
+| 6.ª hora, 15:15-16:00 | 3.º B, Matemáticas | Pablo Sanz | También hace la salida de las 16:00. |
 
 Las sesiones 2.ª, 4.ª y 5.ª de 3.º B las dan especialistas: Inglés, Educación Física y Música.
 
@@ -100,67 +108,59 @@ Se marca con `bandera: 'guardias'`; ver el formato.
 
 ### E2. Ficha de sustitución de la 6.ª hora
 
-**3.º B · Matemáticas · 6.ª hora**, para Pablo Sanz.
+**3.º B · Matemáticas · 6.ª hora**, para Pablo Sanz. **Solo la clase:**
 
 | Apartado | Contenido |
 |---|---|
-| Tarea | Ejercicios 4 a 9 de la página 58. Los libros están en el armario del aula. |
-| Necesidades | Mario: instrucciones por escrito y más tiempo. |
-| Salud | Lucía: alérgica a frutos secos. Su autoinyector está en conserjería. |
-| Recogida · última hora | Hugo solo puede salir con su madre o su abuela. Si viene otra persona, no lo entregues y avisa a dirección (ext. 201). |
+| Hora y aula | 15:15-16:00 · Aula de 3.º B, planta baja |
+| Origen | «Preparada por DirectorIA · confirmada por jefatura», sin insignia |
+| Tarea | Ejercicios 4 a 9 de la página 58, de la programación quincenal de Sergio Prieto. |
+| Material | Los libros de Matemáticas, en el armario del aula. Las hojas de cuadrícula, en la bandeja de la mesa del tutor. |
+| A quién llamar | Tutoría: Ana Torres, tutora de 3.º A (ext. 213) · Jefatura de estudios (ext. 202) · Conserjería (ext. 200) |
+| Al acabar | A las 16:00, acompaña al grupo a la puerta de Primaria. |
+| Antes de empezar | La línea fija (abajo). |
+
+**La línea fija**, igual en todas las fichas, en un aviso con el triángulo: «Las indicaciones de salud y de recogida de los alumnos no están en DirectorIA: las tiene el colegio. Pregúntalas en conserjería o a la tutora antes de empezar.» No es un dato: la pone el motor (`LINEA_FICHA` en `src/app.js`) y `validar.mjs` la deja pasar, también cuando se cita en otro sitio («Las indicaciones de salud y de recogida de los alumnos no están en DirectorIA: las tiene el colegio», en la entradilla de «Tus fichas de hoy»).
 
 **Cómo funciona la ficha:**
 
-- **Origen:** «Preparada por DirectorIA para Pablo Sanz», sin IA. La tarea sale de la programación quincenal de Sergio. Las pautas las pone orientación y tutoría; la salud y las recogidas, la dirección y la tutoría.
+- **Lo que no lleva:** nada de «Necesidades», «Salud» ni «Recogida», ni nombres de alumnos. Lo de salud y recogidas lo tiene el colegio: por eso Pablo pregunta en conserjería antes de la salida de las 16:00.
+- **Origen:** la tarea sale de la programación quincenal de Sergio; el material, de su programación y del aula; a quién llamar, de la lista del centro. Sin IA.
 - **Apertura:** se abre antes de la sesión y se cierra al acabar la jornada.
 - **Registro:** queda registrado quién la ve.
 
-También hay una ficha más corta de la 1.ª hora (3.º B, Lengua), con la tarea: lectura de las páginas 40-41 y las preguntas 1 a 3 en el cuaderno.
+También hay una ficha más corta de la 1.ª hora (3.º B, Lengua: lectura de las páginas 40-41 y las preguntas 1 a 3 en el cuaderno; al acabar, a las 9:45, llega Teresa Gil, la maestra de Inglés) y, en la vista previa de jefatura, la de la 3.ª de Rosa Medina (3.º B, Ciencias de la Naturaleza; al acabar, a las 11:15, acompaña al grupo al patio, donde vigila Teresa Gil).
 
-### E3. Caso 2026-07, posible acoso escolar
+### E3. Guías de los protocolos
 
-Alumno/a A, 2.º ESO B. Lo comunicó la tutora (Beatriz Romero) el lunes 16 a las 9:40.
+Dirección y orientación tienen las guías de tres protocolos: acoso escolar, absentismo y accidentes. Son las mismas y se escriben una vez, en `orientacion`; dirección las toma de ahí (`guias: 'orientacion/protocolos'`, §6.4). **DirectorIA explica cómo se hace y los pasos que hay que seguir**, según el protocolo vigente de la Comunidad de Madrid. En cada paso:
 
-**Estado de hoy:** paso 4 de 9, recogida de información (Anexo II), del martes 17 al lunes 23.
+- qué se hace;
+- quién lo hace;
+- el plazo («Según el protocolo vigente» si no hay uno fijo);
+- el anexo: la plantilla oficial en blanco, para descargar e imprimir;
+- dónde queda (Raíces, el expediente del centro), si hace falta;
+- qué hay que cuidar: la confidencialidad, no prejuzgar, que decide la dirección.
 
-**Pasos del protocolo** (protocolo de la Comunidad de Madrid):
+**Los pasos del protocolo de acoso escolar:**
 
-1. Comunicación a la dirección (hecho, lun 16 nov, Anexo I.a).
-2. Apertura y comunicación oficial (hecho, lun 16 nov, Raíces).
-3. Medidas de protección (hecho, adoptadas el lun 16 nov).
-4. Recogida de información (en curso, Anexo II, 17-23 nov).
-5. Reunión para la toma de decisiones (pendiente, Anexo III, mar 24 nov).
-6. Fiscalía de Menores e Inspección (si se confirma).
-7. Familias y plan de intervención (si se confirma).
-8. Procedimiento disciplinario (si se confirma).
-9. Seguimiento y cierre (pendiente, Anexo IV.c, Raíces).
+1. Comunicación a la dirección (Anexo I.a o I.b).
+2. Apertura y comunicación oficial (en Raíces).
+3. Medidas de protección (las decide la dirección).
+4. Recogida de información (Anexo II, dos docentes que designa la dirección).
+5. Reunión para la toma de decisiones (Anexo III).
+6. Si se confirma: comunicación a Fiscalía de Menores e Inspección.
+7. Si se confirma: familias y plan de intervención.
+8. Si se confirma: procedimiento disciplinario (Decreto 32/2019 de convivencia).
+9. Seguimiento y cierre (Anexo IV.c, en Raíces).
 
-**Entrevistas:**
+Los pasos 6 a 8 van detrás de «Si se confirma el acoso», con el número en borde discontinuo. Las guías de absentismo (cinco pasos, de las faltas en Raíces o en el programa de gestión del colegio a la derivación al programa municipal) y de accidentes (cinco pasos, de atender y llamar al 112 al parte del seguro escolar) siguen el mismo formato.
 
-- Alumno/a A: hecha hoy, mié 18.
-- Compañeros observadores y profesorado: jue 19 y vie 20.
-- Familia de Alumno/a A: vie 20 nov, 17:00, despacho de orientación.
-- Alumnado mencionado (B y C) y sus familias: lun 23.
+**No se abre ningún caso en DirectorIA.** No hay «Caso 2026-07», ni «Alumno/a A», ni citaciones a una familia, ni recordatorios de un caso: los datos del caso van donde manda el protocolo, Raíces y el expediente del centro. La guía lo dice así, arriba, y lo repiten los pasos («El caso se registra en Raíces, no en DirectorIA»).
 
-**Equipo del caso:**
+**Lo legal, como lectura del equipo.** El pie de la guía: «Es la lectura del protocolo vigente que ha hecho el equipo de DirectorIA, no la de un abogado: manda siempre el texto oficial. Si hay acoso, y con qué medidas, lo decide la dirección.»
 
-- los dos docentes que designó la dirección el mar 17;
-- el orientador (Andrés Vidal);
-- la coordinadora de bienestar (Nuria Castro);
-- el jefe de estudios;
-- la tutora.
-
-**Pendiente de la directora:** firmar la citación a la familia de Alumno/a A para el vie 20 a las 17:00.
-
-**Confidencialidad:**
-
-- solo lo ve el equipo del caso, con registro de accesos;
-- en el resumen de las 8:00 aparece solo «Caso 2026-07»;
-- en las fichas, solo instrucciones, nunca el caso;
-- los datos del caso nunca se envían a Claude;
-- el expediente del caso (anexos, guiones y citaciones) se prepara con las plantillas del protocolo y no pasa por la IA. Por correo, solo el número del caso.
-
-**Decisiones:** DirectorIA guía, recuerda y prepara los documentos con las plantillas del protocolo. Si hay acoso, y con qué medidas, lo decide el equipo del centro.
+**En la historia:** Nuria Castro quiere dedicar 20 minutos del claustro del miércoles 25, a las 16:15, a explicar el protocolo de acoso, y le pide a Andrés Vidal un guion antes del lunes 23. Andrés lo prepara con la guía. Sin ejemplos de casos del colegio. En dirección, la guía recuerda que en el de acoso casi todos los pasos son de la dirección, y el Inicio de Elena Ruiz la enlaza desde «Para saber».
 
 ### E4. Visita de inspección
 
@@ -169,9 +169,9 @@ Inspección educativa (DAT Madrid-Capital) visitará el colegio el **jueves 26 d
 - el plan de convivencia 2026-27;
 - los horarios de 2.º ESO;
 - las programaciones de Matemáticas de ESO;
-- las actas de la evaluación inicial de ESO.
+- las actas de las reuniones del Departamento de Matemáticas de este trimestre.
 
-DirectorIA reúne un dosier con lo que hay en el servidor del colegio. Falta el acta de la evaluación inicial de 2.º ESO A: no está en el archivo, y la directora decide si se la pide a jefatura.
+DirectorIA reúne un dosier con lo que hay en el servidor del colegio: documentos del centro, sin datos de alumnos. Falta el acta de la reunión del Departamento de Matemáticas del martes 17 (la reunión en la que se habló del examen de 4.º ESO): todavía no está en el archivo, y la directora decide si se la pide a Ramón Esteban.
 
 ### E5. Claustro del lunes 16
 
@@ -185,7 +185,7 @@ Asistieron 47 de 52 docentes.
 
 **Lo que hay que revisar:**
 
-- que los acuerdos recogen lo que se votó;
+- que los acuerdos recogen lo que se votó. El borrador avisa de que, en el dictado, el recuento del tercer acuerdo no queda claro (39 o 38 votos a favor): pone 39, que es lo que suma con los 47 asistentes;
 - que no hay datos de alumnos.
 
 Una vez aprobada, el acta se guarda en el archivo de actas, con buscador.
@@ -198,7 +198,7 @@ Lo usa sobre todo secretaría, y el informe mensual llega a dirección y a la ti
 
 - El contrato de las fotocopiadoras se renueva solo el 1 de diciembre; se puede negociar o cambiar antes del 21 de noviembre (preaviso del contrato).
 - La potencia de luz contratada es mayor que la que se usa: bajarla ahorraría unos 1.800 € al año (estimación).
-- Hay dos presupuestos de seguro escolar comparados.
+- Hay dos presupuestos de seguro escolar comparados (la póliza vence el 31 de diciembre).
 - El banco cobra 46 € al mes de comisión de mantenimiento: conviene pedir que la quite.
 - Cobros pendientes de octubre: 6 recibos devueltos (1.240 €). Solo se dan cifras agregadas, sin nombres.
 
@@ -208,27 +208,51 @@ No sustituye a la gestoría ni lleva la contabilidad oficial.
 
 Pide los datos para la estadística de inicio de curso 2026-27.
 
-- **Qué hay que entregar:** los datos de matrícula por curso y grupo, y los del profesorado.
+- **Qué hay que entregar:** cuántos alumnos hay por curso y grupo (cifras, sin nombres) y los datos del profesorado, por etapa y jornada.
 - **Quién:** secretaría.
 - **Cómo y cuándo:** por la plataforma de la Consejería, antes del viernes 27 de noviembre. DirectorIA avisa el miércoles 25.
 
-### E8. Certificado de matrícula de Nora D. (1.º ESO)
+### E8. Justificantes del profesorado
 
-Su familia lo pide por correo para una beca deportiva del club. DirectorIA lo prepara con los datos del centro: curso 2026-27, 1.º ESO A, matrícula del 3 de julio de 2026.
+Una función de las dos versiones, Esencial y Completo, sin IA.
 
-**Cómo sigue:** secretaría lo revisa y lo pasa a la firma; firma la secretaría con el visto bueno de la directora. Después se envía a la familia.
+- **Cada docente sube el suyo** (médico o de cualquier tipo) desde DirectorIA, no por correo, y elige la ausencia a la que corresponde.
+- **Un programa, con reglas y sin IA, lo renombra y lo archiva en su carpeta:** Justificantes / curso / mes / docente. Por ejemplo, «Justificantes/2026-27/2026-11/Laura Sánchez/2026-11-16 justificante.pdf».
+- **Ni la IA ni ningún programa lee su contenido:** nada lo extrae. La IA no tiene acceso a esa carpeta: no la busca, no la resume y el asistente no la usa. Solo lo abren las personas que pueden verlo (abajo).
+- **En el registro de ausencias** solo pone «Justificante: entregado» o «pendiente», nunca el motivo.
+- **Lo ven** el propio docente y quien lleva el personal (en el Colegio Ejemplo, secretaría), con registro de accesos: quién sube cada uno y quién lo abre («Carmen López abrió el de Teresa Gil del jueves 12 de noviembre, el viernes 13 a las 18:05»). Jefatura ve el registro de ausencias, no los archivos.
+- **Se borra** cuando pasa el plazo que fija el colegio.
+- Es el único dato de salud que guarda DirectorIA, y es del profesorado: guardado y ordenado, nunca leído.
 
-### E9. Autorizaciones de imagen
+Se dice así: «Los justificantes los archiva un programa en su carpeta; la IA no los lee.»
 
-Hay fotos del festival de otoño de Primaria para la web y la revista. Según el registro de autorizaciones, en esos grupos hay tres alumnos sin autorización:
+**En la historia:**
 
-| Alumno | Grupo |
-|---|---|
-| Iker P. | 4.º A |
-| Sofía L. | 4.º B |
-| Adrián C. | 3.º B |
+| Docente | Ausencia | Justificante |
+|---|---|---|
+| Sergio Prieto | Miércoles 18 de noviembre (hoy), toda la jornada | Pendiente |
+| Laura Sánchez | Lunes 16 de noviembre, 9:00-10:30 | Pendiente: lo sube en la demo |
+| Teresa Gil | Jueves 12 de noviembre, toda la jornada | Entregado |
+| Rosa Medina | Jueves 5 de noviembre, 9:00-11:15 | Entregado |
+| Beatriz Romero | Martes 27 de octubre, 8:15-10:05 | Entregado |
+| Ramón Esteban | Miércoles 21 de octubre, 12:30-14:45 | Entregado |
+| Laura Sánchez | Jueves 8 de octubre, toda la jornada | Entregado |
 
-DirectorIA **no reconoce caras ni mira las fotos**. Solo dice quién no puede aparecer, y una persona revisa las fotos antes de publicar.
+Mientras está pendiente, en la carpeta no hay archivo: su hueco dice «Sin archivo todavía». Cuando Laura sube el suyo (en la demo, un archivo de ejemplo, «escaneo_0001.pdf»), sale en su carpeta con su nuevo nombre, la cifra de secretaría pasa de 5 a 6 de 7 entregados y el informe de jefatura dice «Entregado». Sergio Prieto le pregunta a secretaría cómo hacerle llegar el suyo, y las respuestas propuestas le explican cómo subirlo.
+
+### E9. Convocatoria del consejo escolar
+
+La directora convoca la sesión ordinaria del consejo escolar el **jueves 3 de diciembre a las 17:00**, en la sala de reuniones. DirectorIA prepara la convocatoria con la plantilla del centro, sin IA, y la directora la firma.
+
+**Orden del día:**
+
+1. Lectura y aprobación, si procede, del acta de la sesión anterior.
+2. Información de la visita de Inspección educativa del jueves 26 de noviembre.
+3. Calendario de la 1.ª evaluación y fecha del festival de Navidad.
+4. Plan de lectura de Primaria, desde enero.
+5. Ruegos y preguntas.
+
+El borrador avisa de que la fecha del festival depende de lo que la directora responda al AMPA, que propone el viernes 11, en plenas sesiones de evaluación. Si la firma hoy, llega con dos semanas de margen; después la envía ella desde su correo.
 
 ### E10. Calendario de mantenimiento (ejemplo)
 
@@ -245,28 +269,30 @@ DirectorIA **no reconoce caras ni mira las fotos**. Solo dice quién no puede ap
 
 - **Horario:** salida a las 9:15 y vuelta a las 13:30.
 - **Qué hay que llevar:** almuerzo, agua, gorra y ropa cómoda.
-- **Autorizaciones:** firmadas antes del viernes 20.
-- **Precio:** 6 € (entrada y autobús).
+- **Autorizaciones:** firmadas antes del viernes 20. Las tutorías las llevan a secretaría y dicen cuántas faltan (una cifra, sin lista de nombres).
+- **Precio:** 6 € (entrada y autobús), en el recibo de diciembre.
+
+La circular es general: orientación la adapta a lectura fácil y al inglés para las familias de 4.º que lo prefieren, y sale a todas las familias de 4.º con las tres versiones. Laura Sánchez dicta además un recordatorio para las familias de 4.º A (el correo dictado, en `docente`).
 
 ### E12. Banco de recursos
 
-Laura busca «flashcards de alimentos para EF 2.º ciclo». La IA lo entiende como: Flashcards · Alimentación saludable · Educación Física · 3.º y 4.º de Primaria.
+Laura busca «flashcards de alimentos para EF 2.º ciclo». La IA lo entiende como: Flashcards · Alimentación saludable · Educación Física · 3.º y 4.º de Primaria («con IA», sin la insignia: entiende la petición y busca en el catálogo, no escribe).
 
 Aviso: «Todavía no hay de Educación Física en 2.º ciclo. Te enseñamos lo más parecido:»
 
 | Resultado | Datos | Etiqueta |
 |---|---|---|
-| Flashcards: los grupos de alimentos | Educación Física · 6.º de Primaria · De Marta R. · Hecho con IA y revisado | «Misma materia, ciclo siguiente» (con el botón «Adaptar a 3.º–4.º») |
-| Tarjetas de hábitos saludables | Educación Física · 2.º de Primaria · De Luis G. | «Misma materia, ciclo anterior» |
-| Juego: la pirámide de los alimentos | Ciencias de la Naturaleza · 4.º de Primaria · De Pilar S. | «Mismo curso, materia afín» |
+| Flashcards: los grupos de alimentos | Educación Física · 6.º de Primaria · De Marta Ramos · Hecho con IA y revisado | «Misma materia, ciclo siguiente» (con el botón «Adaptar a 3.º–4.º») |
+| Tarjetas de hábitos saludables | Educación Física · 2.º de Primaria · De Luis García | «Misma materia, ciclo anterior» |
+| Juego: la pirámide de los alimentos | Ciencias de la Naturaleza · 4.º de Primaria · De Pilar Serrano | «Mismo curso, materia afín» |
 
-Al subir un recurso, el curso y la materia son obligatorios. Declarar que está hecho con IA es voluntario: si se marca, el recurso lleva la etiqueta «Hecho con IA y revisado».
+Al subir un recurso, el curso y la materia son obligatorios, y la IA sugiere los contenidos del catálogo («Sugeridos del catálogo · con IA», sin la insignia: elige, no escribe). Declarar que está hecho con IA es voluntario: si se marca, el recurso lleva la etiqueta «Hecho con IA y revisado». Al leer el archivo, DirectorIA comprueba con reglas que no lleve un DNI, un © ni un ISBN, y con IA («con IA», sin la insignia: lee, no escribe) que no lleve nombres ni datos de salud. Es el filtro que impide que entren datos de alumnos en el banco.
 
 La gamificación no tiene clasificaciones ni premios a la cantidad. Los datos de uso nunca sirven para evaluar a nadie.
 
 ### E13. Material didáctico con Claude (opcional)
 
-Es un módulo en la nube, solo para material didáctico y sin acceso a los datos del colegio. Un filtro está pensado para bloquear datos personales, y la norma de uso es no introducirlos. Cada colegio lo paga en su propia cuenta.
+Es un módulo en la nube, solo para material didáctico y sin acceso a los datos del colegio. Un filtro está pensado para bloquear datos personales, y la norma de uso es no introducirlos. Cada colegio lo paga en su propia cuenta. En la demo, el filtro se prueba con una petición que lleva dos nombres («que el cartel final lo presenten Lucas y Sara»): la para y no se envía nada.
 
 ## 4. Voz (obligatorio)
 
@@ -297,22 +323,48 @@ Es un módulo en la nube, solo para material didáctico y sin acceso a los datos
 
 **Privacidad:**
 
-- No digas que los datos «no salen del colegio». La fórmula es: «la IA trata los datos de los alumnos en el servidor del colegio».
+- La frase aprobada sobre los datos: «La aplicación y los datos están en un servidor dentro del colegio. La copia de seguridad, cifrada, está en la UE. Los correos salen por la cuenta del propio colegio. El mantenimiento a distancia queda registrado.» Nunca digas que los datos «no salen del colegio».
+- Y esta: «DirectorIA no guarda datos de alumnos: solo del profesorado y del funcionamiento del colegio.» Nada de «la IA trata los datos de los alumnos» ni parecidas; en Completo, si hace falta: «La IA trabaja dentro del colegio, también con el correo.»
+- De los justificantes del profesorado: «Los justificantes los archiva un programa en su carpeta; la IA no los lee.» De su contenido se dice «Ni la IA ni ningún programa leen lo que pone»; nunca «Nadie lee lo que pone», que choca con «lo ves tú y secretaría»: el docente y quien lleva el personal sí los abren.
+- Lo legal se presenta como lectura del equipo, no de un abogado (el pie de las guías de los protocolos).
 - Nada de «riesgo cero» ni de «cumplimiento garantizado».
 
 **Etiquetas de origen.** Decisión del 25-11-2026 (documento «qué funciones necesitan IA»):
 
-- «Preparado con IA» y la insignia van solo en lo que prepara la IA: resúmenes y respuestas de correo, dictados, actas, plazos sacados de circulares, banco de recursos, traducciones y material con Claude.
-- Lo que sale de reglas y plantillas lleva «Preparado por DirectorIA», sin insignia: guardias, fichas, certificados, dosier, protocolos, registros e informe de gastos.
+- «Preparado con IA» y la insignia van solo en lo que prepara la IA: resúmenes y respuestas de correo, dictados, actas, plazos sacados de circulares, en el banco de recursos la versión adaptada a otro curso y el título que propone al subir, traducciones y material con Claude.
+- Lo que sale de reglas y plantillas lleva «Preparado por DirectorIA», sin insignia: guardias, fichas, dosier, convocatorias, guías de los protocolos, justificantes, registros e informe de gastos.
+- Lo que la IA busca, lee o detecta sin escribir nada lleva «con IA», sin insignia: en la demo, en el banco de recursos, lo que entiende de la búsqueda («Entendido como»), los contenidos que sugiere del catálogo al subir un recurso y la comprobación de nombres y datos de salud.
 - «Hecho con IA y revisado» es la etiqueta de los recursos del banco que el docente declara hechos con IA.
 
 ## 5. Privacidad en la demo
 
-- Todos los nombres son inventados y los datos de alumnos, los mínimos.
-- **Datos de salud:** solo donde hacen falta (la ficha) y nunca en correos a terceros.
-- **Caso de acoso:** solo «Alumno/a A/B/C». Fuera del perfil de orientación y de la firma de la directora, solo «Caso 2026-07».
-- **Respuestas propuestas:** no incluyen datos de otros alumnos.
-- **En el Inicio:** ningún dato de salud de nadie (ni «fiebre», ni alergias, ni diagnósticos): basta con «Sergio Prieto no viene». «Alumno/a A» solo sale en el de orientación, que es el equipo del caso; los demás nombran el Caso 2026-07 solo por su número. `validar.mjs` lo comprueba en todos los textos del Inicio.
+Decisión del 26-28 de noviembre de 2026: **DirectorIA no guarda datos de alumnos: solo del profesorado y del funcionamiento del colegio.**
+
+- **Lo que no guarda:** nombres ni iniciales de alumnos, salud, alergias, necesidades o adaptaciones, recogidas, anotaciones, pautas personales, notas, certificados de un alumno, autorizaciones de imagen, optativas elegidas por un alumno, reclamaciones de una familia ni casos.
+- **Lo que sí:** horarios, grupos («3.º B» no es un dato personal), aulas, guardias, plazos, documentos del centro, gastos y contratos. Las cifras agregadas sin identificar a nadie valen («6 recibos devueltos», «cuántos alumnos hay por grupo»).
+- **Del profesorado:** el registro de ausencias guarda que alguien falta y a qué horas, nunca el motivo («Sergio Prieto no viene», nunca «tiene fiebre»). El justificante va a su carpeta (E8) y el registro solo dice «Justificante: entregado» o «pendiente».
+- **El correo es la única excepción:** lo que llega por correo puede traer nombres de alumnos, porque lo escriben las familias. En Completo, la IA lo lee en el servidor del colegio para resumirlo, y DirectorIA no crea fichas de alumnos ni guarda sus datos aparte. En la demo, las familias escriben de temas generales y sin nombres de alumnos («mi hijo», «una familia de 4.º A»), y nada de salud.
+- **La ficha de sustitución:** solo la clase, con la línea fija de salud y recogidas (E2).
+- **Los protocolos:** guías de pasos, sin casos (E3).
+- **Funciones que salieron de la demo:** certificados de matrícula y de estudios, autorizaciones de imagen, optativas por alumno, reclamaciones de familias, pautas y anotaciones de orientación, el acta de la junta de evaluación por dictado y las cartas personalizadas a una familia (el correo dictado de la docente es ahora un aviso general a las familias de su grupo).
+
+**Lo comprueba `validar.mjs`** en todos los textos de los seis perfiles (el Inicio, el correo y los módulos). Falla si sale:
+
+- un caso («Caso 2026-07») o «Alumno/a»;
+- uno de los alumnos que tenía la demo (Mario, Lucía, Hugo, Daniel, Irene, Amira, Nora, Iker, Sofía, Adrián, Gonzalo, Carla, Alba, Óliver, Samuel) o un nombre con inicial («Nora D.»);
+- datos de salud o diagnósticos (alergias, autoinyector, intolerancias, medicación…), necesidades o adaptaciones, recogidas («Recogida · última hora», «solo puede salir con…»);
+- autorizaciones de imagen, certificados de un alumno, optativas, reclamaciones o pautas de un alumno;
+- un motivo de ausencia («fiebre», «médico», «gripe», «que te mejores», «recupérate»…);
+- en una ficha, otro apartado que no sea Tarea, Material, A quién llamar o Al acabar, o un aviso de alumnos;
+- en una guía, un caso, un paso con estado («hecho», «en curso») o un progreso en el Inicio.
+
+Deja pasar la línea fija de la ficha (también citada: «Las indicaciones de salud y de recogida de los alumnos»), los grupos, las cifras agregadas, «Recogida de información» (el paso del protocolo), «la información recogida» y «la recogida de datos» de la estadística.
+
+**Lo vuelve a comprobar `probar.mjs`** en la página montada: recorre todas las pantallas de los seis perfiles, abre cada correo y busca lo mismo en el texto, con las guardias confirmadas para ver las fichas.
+
+- **Respuestas propuestas:** no incluyen datos de alumnos.
+- **En el Inicio:** ningún dato de salud de nadie: basta con «Sergio Prieto no viene».
+- Todos los nombres son inventados.
 
 ## 6. Formato de los datos
 
@@ -341,7 +393,7 @@ DEMO.rol({
   acceso: 'Resumen de las 8:00, correo resumido, actas y dosier para inspección', // ≤ 90 caracteres
   inicio: { ... },                       // ver 6.2
   correo: [ ... ],                       // 4-6 correos, ver 6.3
-  modulos: [ ... ],                      // 2-4 funciones propias, ver 6.4
+  modulos: [ ... ],                      // 2-5 funciones propias, ver 6.4
 });
 ```
 
@@ -404,8 +456,8 @@ Están hechas con las mismas piezas del generador de la marca (`src/ilustracione
 - `'correo:<id>'`: hecho cuando el correo se ha respondido o archivado. Archivar no es responder: en la lista, la fila pasa a «Archivado a las…» sin su `si`; en una cifra, sale «Archivado» en lugar de `alTerminar` (salvo en una cuenta atrás, que sigue corriendo); y en la agenda no cuenta, porque el plazo sigue en pie;
 - `'correo:<id>#<n>'`: hecho solo si se ha enviado la respuesta propuesta `n` (se cuentan desde 0), la que de verdad cumple el plazo: la que comunica el preaviso o la que adjunta el dosier. Varias, con comas: `'correo:<id>#0,1'`. El correo guarda qué respuesta se envió;
 - `'correo:<id>#archivado'`: hecho si el correo se ha archivado sin responder (sirve en `aMedias`);
-- `'<módulo>'`: hecho cuando el módulo está terminado (documento firmado o con el visto bueno, dictado enviado, tabla aprobada, todas las propuestas confirmadas, todos los plazos hechos…);
-- `'<módulo>#<elemento>'`: una propuesta de `aprobaciones` (por su id, `guardias#g1`) o un plazo de `plazos` (por su posición, desde 0: `plazos#3`);
+- `'<módulo>'`: hecho cuando el módulo está terminado (documento firmado o con el visto bueno, dictado enviado, tabla aprobada, todas las propuestas confirmadas, todos los plazos hechos, todos los justificantes entregados…). Una guía de un protocolo nunca está hecha: no se abre ningún caso;
+- `'<módulo>#<elemento>'`: una propuesta de `aprobaciones` (por su id, `guardias#g1`), un plazo de `plazos` (por su posición, desde 0: `plazos#3`) o una ausencia de `justificantes` (por su id, `justificantes#j1`: hecho cuando su justificante está entregado);
 - `'bandera:guardias'`;
 - lo mismo de otro perfil, con su id delante: `'jefatura/guardias#g1'`;
 - una lista de las anteriores, hecha cuando lo están todas: `['dosier', 'correo:c-inspeccion#1']` (el dosier con el visto bueno y enviado con la respuesta que lo adjunta). La hora es la de la última.
@@ -450,11 +502,11 @@ inicio: {
     { etiqueta: 'Correos por responder', icono: 'correo', cuenta: 'correo', accion: 'Abrir el correo', alTerminar: 'Al día' },
 
     // Cuenta lo que queda, sin medidor: los pendientes que siguen sin hacer. La nota los resume con «corto»
-    // («La citación y el acta del claustro»); si queda uno, dice su «texto». La acción y el destino son los del primero
+    // («La convocatoria y el acta del claustro»); si queda uno, dice su «texto». La acción y el destino son los del primero
     // que queda. «ir» es obligatorio también en la cifra: es adonde lleva cuando ya no queda nada pendiente.
     { etiqueta: 'Pendiente de tu firma', icono: 'firma', ir: 'firma',
       pendientes: [
-        { texto: 'La citación del Caso 2026-07', corto: 'la citación', sigue: 'firma', ir: 'firma', hoy: true, accion: 'Revisar y firmar', accionCorta: 'Firmar' },
+        { texto: 'La convocatoria del consejo escolar del jueves 3', corto: 'la convocatoria', sigue: 'firma', ir: 'firma', hoy: true, accion: 'Revisar y firmar', accionCorta: 'Firmar' },
         { texto: 'El acta del claustro del lunes 16', corto: 'el acta del claustro', sigue: 'acta', ir: 'acta', accion: 'Dar el visto bueno', accionCorta: 'Visto bueno' },
       ],
       alTerminar: 'Todo firmado', accionHecha: 'Ver lo firmado' },
@@ -462,15 +514,13 @@ inicio: {
     // Progreso «X de Y», con el medidor rotulado por la cifra. Vale:
     // - un documento con «documentos»: cuenta las piezas listas; el medidor pinta las listas (rellenas), las que hay que
     //   revisar (solo con borde) y las que faltan (borde discontinuo), en ese orden; el globo da las piezas en su orden;
-    // - un protocolo con «pasos»: el paso en curso («4 de 9», rotulado «en curso»); el medidor pinta los pasos hechos,
-    //   el que está en curso (con borde), los pendientes (vacíos) y los que solo van si se confirma (discontinuo);
     // - un dictado: los pasos Dictar, Revisar y Enviar; ya dictado, la nota y la acción son las de «siDictado»
     //   (si no, «Ya lo has dictado. Te queda revisar el correo y enviarlo tú.» y «Revisar y enviar»);
-    // - aprobaciones o plazos: los hechos de todos.
-    // rotulo: lo que se cuenta («listas» en un dosier y «en curso» en un protocolo, por defecto).
-    { etiqueta: 'Dosier para inspección', icono: 'carpeta', progreso: 'dosier', nota: 'Falta el acta de 2.º ESO A y revisar el escrito de remisión.',
+    // - aprobaciones, plazos o justificantes: los hechos (o entregados) de todos. Una guía de un protocolo no tiene progreso.
+    // rotulo: lo que se cuenta («listas» en un dosier, por defecto; «entregados» en los justificantes).
+    { etiqueta: 'Dosier para inspección', icono: 'carpeta', progreso: 'dosier', nota: 'Falta el acta de Matemáticas del martes 17 y revisar el escrito.',
       ir: 'dosier', accion: 'Revisar el dosier', accionCorta: 'Revisar', alTerminar: 'Visto bueno dado', accionHecha: 'Ver el dosier' },
-    { etiqueta: 'Tutoría de Daniel M.', icono: 'microfono', progreso: 'dictado', hoy: true, nota: '...', ir: 'dictado', accion: 'Empezar a dictar', accionCorta: 'Dictar',
+    { etiqueta: 'Correo a las familias', icono: 'microfono', progreso: 'dictado', hoy: true, nota: '...', ir: 'dictado', accion: 'Empezar a dictar', accionCorta: 'Dictar',
       siDictado: { nota: 'Ya lo has dictado. Te queda revisar el correo y enviarlo tú.', accion: 'Revisar y enviar', accionCorta: 'Revisar' },
       alTerminar: 'Enviado', accionHecha: 'Ver lo enviado' },
 
@@ -511,7 +561,7 @@ inicio: {
   //   · alTerminarUna ≤ 24 · siNinguna.nota ≤ 90 (lo mismo en las variantes)
   //   · corto ≤ 30, en minúscula
   // hoy: true pinta la cifra en pizarra con «Hoy» (una como mucho; en «pendientes», va en el pendiente).
-  // El globo de una cifra (las piezas del dosier, los pasos del caso) sale con el ratón al detenerse en la cifra o en su
+  // El globo de una cifra (las piezas del dosier) sale con el ratón al detenerse en la cifra o en su
   //   medidor, no al cruzar la tarjeta camino de su acción o de la rejilla (así no tapa lo que se iba a pulsar), y con el
   //   foco del teclado. Lo mismo está en su módulo y en la descripción para el lector de pantalla.
   // La nota resume: no repite la primera fila de la lista. Sin medidor, la nota sube justo debajo de la cifra.
@@ -583,10 +633,10 @@ inicio: {
     titulo: 'Lo que te necesita',
     items: [
       { grupo: 'Hoy', icono: 'correo', titulo: 'Inspección: confírmale la visita del jueves 26', detalle: '...', estado: 'pendiente', ir: 'correo:c-inspeccion', sigue: 'correo:c-inspeccion' },
-      { grupo: 'Hoy', icono: 'firma', titulo: 'Caso 2026-07: citación a la familia', detalle: '...', estado: 'hoy', ir: 'firma', sigue: 'firma', verbo: 'Firmada' },
-      { grupo: 'Hoy', icono: 'microfono', titulo: 'Tutoría con la familia de Daniel M.', detalle: '...', estado: 'hoy', ir: 'dictado', sigue: 'dictado', siDictado: { detalle: 'Ya la has dictado. Te queda revisar el correo y enviarlo.' } },
+      { grupo: 'Hoy', icono: 'firma', titulo: 'Consejo escolar: la convocatoria del jueves 3', detalle: '...', estado: 'hoy', ir: 'firma', sigue: 'firma', verbo: 'Firmada' },
+      { grupo: 'Hoy', icono: 'microfono', titulo: 'Recordatorio de la salida a las familias de 4.º A', detalle: '...', estado: 'hoy', ir: 'dictado', sigue: 'dictado', siDictado: { detalle: 'Ya lo has dictado. Te queda revisar el correo y enviarlo.' } },
       { grupo: 'Esta semana', icono: 'correo', titulo: 'AMPA: fecha del festival de Navidad', detalle: '...', estado: 'pendiente', choque: true, ir: 'correo:c-ampa', sigue: 'correo:c-ampa' },
-      { grupo: 'Para saber', icono: 'documento', titulo: '...', detalle: '...', estado: 'info', sigue: 'secretaria/certificados', si: { detalle: '...', estado: 'info' } },
+      { grupo: 'Para saber', icono: 'documento', titulo: '...', detalle: '...', estado: 'info', sigue: 'secretaria/gastos', si: { detalle: '...', estado: 'info' } },
     ],
   },
   // 1-10 · grupo ≤ 20 · titulo ≤ 70 · detalle ≤ 130 · fecha ≤ 12 (opcional: una etiqueta a la derecha) · verbo ≤ 24
@@ -622,13 +672,13 @@ inicio: {
       // Un «si» con estado 'pendiente' cambia el texto sin dar la marca por hecha (lo que contesta otro perfil, por ejemplo).
       { fecha: '2026-11-19', hora: '11:45', tipo: 'evento', titulo: '...', detalle: '...', sigue: 'jefatura/correo:c-laura', si: { detalle: '...', estado: 'pendiente' } },
       // Una lista en «sigue»: hecho cuando lo están todas (el visto bueno y la respuesta que adjunta el dosier). Aun así no pasa
-      // a ✓ («si» con estado 'pendiente'): esa respuesta lo envía sin el acta de 2.º ESO A. Lo que va hacia ello, a medias
+      // a ✓ («si» con estado 'pendiente'): esa respuesta lo envía sin el acta del martes 17. Lo que va hacia ello, a medias
       // (vale la primera que está hecha).
-      { fecha: '2026-11-23', tipo: 'plazo', titulo: 'Dosier para inspección', detalle: 'Envíalo antes de este día. Falta el acta de 2.º ESO A.', fuente: 'correo', ir: 'dosier',
+      { fecha: '2026-11-23', tipo: 'plazo', titulo: 'Dosier para inspección', detalle: 'Envíalo antes de este día. Falta el acta de Matemáticas del martes 17.', fuente: 'correo', ir: 'dosier',
         sigue: ['dosier', 'correo:c-inspeccion#1'],
-        si: { detalle: 'Enviado sin el acta de 2.º ESO A. Esa acta, antes de este día.', estado: 'pendiente' },
+        si: { detalle: 'Enviado sin el acta del martes 17. Esa acta, antes de este día.', estado: 'pendiente' },
         aMedias: [
-          { sigue: 'correo:c-inspeccion#1', detalle: 'Enviado sin el acta de 2.º ESO A y sin tu visto bueno al dosier. Esa acta, antes de este día.', ir: 'dosier' },
+          { sigue: 'correo:c-inspeccion#1', detalle: 'Enviado sin el acta del martes 17 y sin tu visto bueno al dosier. Esa acta, antes de este día.', ir: 'dosier' },
           { sigue: 'correo:c-inspeccion', detalle: 'Has confirmado la visita sin el dosier. Envíaselo antes de este día.' },
           { sigue: 'dosier', detalle: 'Visto bueno dado. Falta enviarlo a Inspección desde el correo.', ir: 'correo:c-inspeccion' },
         ] },
@@ -639,9 +689,9 @@ inicio: {
   //   enseña las formas que hay («Plazo», «Cita, salida o fecha», «Aviso», «Hecho» y «Hoy»); con cuatro o cinco, en dos filas
   //   parejas. Nada de puntos ● ni ○. Un correo archivado no cuenta como hecho.
   // fecha: después de hoy y dentro del calendario · hora: opcional (9:15) · titulo ≤ 60 · detalle ≤ 110 · verbo ≤ 24
-  // Un plazo solo pasa a ✓ con lo que lo cumple: si una respuesta no lo cumple (las de la reclamación del comedor dejan el
-  //   fondo para después), usa «si» con estado 'pendiente' o sigue la respuesta que sí lo cumple ('correo:<id>#<n>') con
-  //   «aMedias» para lo demás.
+  // Un plazo solo pasa a ✓ con lo que lo cumple: si una respuesta no lo cumple (en las prácticas del máster, la que solo
+  //   dice que lo hablará con Matemáticas), sigue la respuesta que sí lo cumple ('correo:<id>#<n>') con «aMedias» para lo
+  //   demás, o usa «si» con estado 'pendiente'.
   // Encima de cada día va cuándo es, contado desde hoy: «Mañana», «Pasado mañana», «Este sábado» o «Este domingo»,
   //   «La semana que viene» (del lunes 23 al domingo 29), «Dentro de dos semanas» (del lunes 30 al domingo 6) y
   //   «Dentro de tres semanas» (del lunes 7 en adelante: el sábado 12 de diciembre, en secretaría). Si el día tiene una
@@ -694,7 +744,7 @@ Iconos de las cifras y de la lista: `correo`, `firma`, `carpeta`, `reloj`, `cale
 ```
 
 - Ordena los correos como en una bandeja: el más importante o el más reciente primero.
-- Al menos uno tiene que ser de una familia, salvo en `sustituto`.
+- Al menos uno tiene que ser de una familia, salvo en `sustituto`. Las familias escriben de temas generales, sin nombres de alumnos («mi hijo», «una familia de 4.º A») y sin nada de salud (§5).
 - Si un correo no pide respuesta, `respuestas: []` y una `nota`, por ejemplo: «Solo para leer. DirectorIA ha añadido la fecha a tus plazos».
 - Si una respuesta no va a quien escribió, por ejemplo una circular para las familias, lleva `para` (≤ 60 caracteres) y `asunto` (≤ 90); con `para`, el validador pide también `asunto`. Si no, va a quien escribió, con «Re: » y su asunto.
 - Si una respuesta lleva algo adjunto, como el dosier en la respuesta a Inspección, va en `adjuntos`. El editor y la ventana «¿Enviar esta respuesta?» enseñan el Para, el Asunto y los Adjuntos de la respuesta elegida.
@@ -711,7 +761,7 @@ Todos los módulos comparten estos campos:
   antetitulo: 'Del dictado al acta', // ≤ 50 caracteres
   titulo: 'Acta del claustro del lunes 16', // ≤ 70 caracteres
   entradilla: '...',          // ≤ 220 caracteres: qué hace aquí la persona
-  confidencial: 'Confidencial · solo equipo del caso', // opcional: muestra una banda de confidencialidad
+  confidencial: 'Reservado · lo ves tú y secretaría, con registro de accesos', // opcional, ≤ 60: la banda con el candado (los justificantes)
 }
 ```
 
@@ -721,7 +771,7 @@ Cada tipo añade sus propios campos.
 
 ```js
 { tipo: 'aprobaciones',
-  contexto: { titulo: 'Sergio Prieto · tutor de 3.º B', texto: 'Avisó a las 7:45 de que tiene fiebre y no viene hoy.' },
+  contexto: { titulo: 'Sergio Prieto · tutor de 3.º B', texto: 'Avisó a las 7:45 de que no viene hoy.' }, // sin el motivo
   items: [
     {
       id: 'g1',
@@ -783,20 +833,40 @@ Cada tipo añade sus propios campos.
 }
 ```
 
-#### `protocolo`: un protocolo paso a paso (solo para el caso de acoso)
+#### `protocolo`: la guía de un protocolo, paso a paso (`orientacion` y `direccion`)
+
+Explica cómo se aplica cada protocolo (acoso escolar, absentismo, accidentes). Es una guía: no se abre ningún caso en DirectorIA, no hay estados («hecho», «en curso») y no tiene progreso en el Inicio. Sin banda confidencial: no lleva datos de nadie.
+
+Las guías se escriben una vez. Otro perfil las toma con una referencia en lugar de la lista: `guias: 'orientacion/protocolos'` (así las tiene dirección, con su propia entradilla). El motor enseña las de ese módulo y cada perfil guarda su pestaña; el validador comprueba que el módulo existe, que es de tipo `protocolo` y que tiene sus guías escritas, no otra referencia.
 
 ```js
 { tipo: 'protocolo',
-  caso: 'Alumno/a A, 2.º ESO B · comunicado el lun 16 nov a las 9:40',
-  pasos: [ { nombre: 'Comunicación a la dirección', estado: 'hecho', nota: 'lun 16 nov · Anexo I.a' } ], // estado: hecho | curso | pendiente | condicional
-  actual: {
-    titulo: 'Paso 4 de 9 · Recogida de información (Anexo II)',
-    secciones: [ { titulo: 'Entrevistas previstas', items: ['...'] } ], // 2-4 secciones
-  },
-  documentos: [ { nombre: 'Anexo II con los datos del caso', estado: 'Listo para los docentes' } ],
-  pie: 'DirectorIA guía, recuerda y prepara los documentos con las plantillas del protocolo. Si hay acoso, y con qué medidas, lo decide el equipo del centro. El expediente del caso no pasa por la IA.', // ≤ 220 caracteres
+  aviso: 'No se abre ningún caso en DirectorIA. Los datos de cada caso van donde manda el protocolo: Raíces y el expediente del centro.', // ≤ 180
+  guias: [                               // 1-4: una pestaña por protocolo (o 'orientacion/protocolos': las de otro perfil)
+    {
+      id: 'acoso',
+      nombre: 'Acoso escolar',           // ≤ 30: el nombre de la pestaña
+      fuente: 'Según el protocolo vigente de la Comunidad de Madrid para la actuación contra el acoso escolar.', // ≤ 140
+      si: 'Si se confirma el acoso',     // ≤ 40: el título que va antes de los pasos condicionales (obligatorio si los hay)
+      pasos: [                           // 3-12, en orden
+        { nombre: 'Comunicación a la dirección',          // ≤ 60
+          que: 'Quien conozca o sospeche una situación de acoso lo comunica por escrito a la dirección del centro.', // ≤ 220: qué se hace
+          quien: 'Cualquier persona del centro: profesorado, personal, familias o alumnado', // ≤ 90
+          plazo: 'En cuanto se conozcan los hechos',      // ≤ 60: «Según el protocolo vigente» si no hay uno fijo
+          anexo: 'Anexo I.a o I.b',                       // opcional, ≤ 40: la plantilla oficial en blanco
+          donde: 'Raíces',                                // opcional, ≤ 50: dónde queda (Raíces, el expediente del centro)
+          cuidar: 'Confidencialidad desde el primer momento… No se prejuzga a nadie.', // opcional, ≤ 160
+          condicional: true,                              // opcional: solo va si se confirma (borde discontinuo)
+        },
+      ],
+      plantillas: [ { nombre: 'Anexo I.a', detalle: 'Notificación a la dirección' } ], // opcional, 1-8: «Descargar» (en la demo, un aviso)
+    },
+  ],
+  pie: 'Es la lectura del protocolo vigente que ha hecho el equipo de DirectorIA, no la de un abogado: manda siempre el texto oficial. …', // ≤ 220
 }
 ```
+
+El validador avisa si el aviso no dice que no se abre ningún caso, si el pie no presenta lo legal como lectura del equipo («no la de un abogado») o si una plantilla no la usa ningún paso. Falla si la guía lleva `caso`, `actual` o `documentos` (el formato de antes) o si un paso lleva `estado`.
 
 #### `banco`: banco de recursos (solo `docente`)
 
@@ -807,13 +877,13 @@ Cada tipo añade sus propios campos.
   aviso: 'Todavía no hay de Educación Física en 2.º ciclo. Te enseñamos lo más parecido:',
   resultados: [
     { titulo: 'Flashcards: los grupos de alimentos',
-      meta: 'Educación Física · 6.º de Primaria · De Marta R. · Hecho con IA y revisado',
+      meta: 'Educación Física · 6.º de Primaria · De Marta Ramos · Hecho con IA y revisado', // los docentes, con su nombre entero
       cercania: 'Misma materia, ciclo siguiente',
       adaptar: {                         // opcional: solo en el primero
         boton: 'Adaptar a 3.º–4.º',
         titulo: 'Flashcards: los grupos de alimentos · versión para 3.º y 4.º',
         texto: ['Tarjeta 1 · Frutas: ...', '...'],  // 4-8 líneas de la versión adaptada
-        nota: 'Versión preparada con IA a partir del recurso de Marta R. Revísala antes de usarla; queda enlazada al original.',
+        nota: 'Versión preparada con IA a partir del recurso de Marta Ramos. Revísala antes de usarla; queda enlazada al original.',
       },
     },
   ],
@@ -823,6 +893,10 @@ Cada tipo añade sus propios campos.
     materia: ['Educación Física'],
     contenidos: ['Alimentación saludable', 'Hábitos de vida activa'],   // los sugiere la IA
     casillas: ['Sin fotos ni datos de alumnos', 'Es mío o puedo compartirlo'], // 2-3: obligatorias para compartir
+    comprobado: [                        // opcional, 1-4: lo que se comprueba al leer el archivo, sin la insignia
+      { texto: 'Sin DNI, ni ©, ni ISBN', como: 'reglas' },        // «con reglas, sin IA»
+      { texto: 'Sin nombres ni datos de salud', como: 'ia' },     // «con IA»: el filtro que impide que entren datos de alumnos
+    ],
     declaracion: 'Lo he hecho con IA y lo he revisado', // opcional: casilla voluntaria; si se marca, el recurso lleva «Hecho con IA y revisado»
   },
   impacto: {                             // lo que ve en privado
@@ -833,15 +907,15 @@ Cada tipo añade sus propios campos.
 }
 ```
 
-#### `dictado`: correo dictado (solo `docente`)
+#### `dictado`: correo dictado (solo `docente`): un correo general a las familias de un grupo, sin datos de ningún alumno
 
 ```js
 { tipo: 'dictado',
-  para: 'Familia de Daniel M. (4.º A)',
+  para: 'Familias de 4.º A',
   transcripcion: 'Lo que dice la docente al dictar, tal cual, con muletillas (60-110 palabras).',
   asunto: '...',
   borrador: 'El correo redactado en el tono adecuado (90-160 palabras), firmado por la docente.',
-  notas: ['Tono cercano y sin juicios', 'Propone una tutoría con dos horarios'], // 2-3
+  notas: ['Tono cordial y de usted, como en las circulares del colegio', 'Fecha, horas y plazo, comprobados con la circular'], // 2-3
 }
 ```
 
@@ -851,35 +925,44 @@ Cada tipo añade sus propios campos.
 { tipo: 'material',
   aviso: 'Módulo opcional en la nube. Solo para material didáctico: no tiene acceso a los datos del colegio, y un filtro está pensado para bloquear datos personales.',
   peticion: 'Situación de aprendizaje sobre alimentación saludable para 4.º de Primaria, de tres sesiones.',
-  bloqueo: { intento: 'Adáptala para Daniel, que ...', mensaje: 'He quitado «Daniel»: en el módulo de Claude no se escriben datos de alumnos. Escríbelo sin nombres.' },
+  bloqueo: { intento: '... y que el cartel final lo presenten Lucas y Sara.', mensaje: 'Lleva nombres, «Lucas» y «Sara», y en el módulo de Claude no se escriben datos de alumnos. No se ha enviado nada. …' },
   respuesta: { titulo: '...', bloques: [ { tipo: 'titulo', texto: '...' }, { tipo: 'parrafo', texto: '...' }, { tipo: 'lista', items: ['...'] } ] },
 }
 ```
 
-#### `traduccion`: una carta o circular en lectura fácil o en otro idioma (solo `orientacion`)
+#### `traduccion`: una circular general en lectura fácil o en otro idioma (solo `orientacion`)
 
 ```js
 { tipo: 'traduccion',
-  para: 'Familia de Amira (4.º A)',
+  para: 'Las familias de 4.º de Primaria',          // con su artículo: el motor dice «¿Enviarlo a las familias…?»
   original: { titulo: 'Salida al Jardín Botánico', texto: '...' },
   versiones: [ { idioma: 'Lectura fácil', texto: '...' }, { idioma: 'Inglés', texto: '...' } ], // el inglés, correcto y natural
-  comprobaciones: ['La fecha, la hora y el precio coinciden con el original', 'No hay datos de otros alumnos'],
-  boton: 'Enviar a la familia',
-  alTerminar: 'Enviado desde la cuenta del colegio, con la versión en inglés y el original en español.',
+  comprobaciones: ['La fecha, la hora y el precio coinciden con el original', 'No hay nombres ni datos de alumnos'],
+  boton: 'Enviar a las familias',
+  alTerminar: 'Enviado a las familias de 4.º desde la cuenta del colegio, con el original en español y las dos versiones.',
 }
 ```
 
 #### `ficha`: fichas de sustitución (`sustituto` y, como vista previa, `jefatura`)
+
+Solo la clase. El motor añade a cada ficha la línea fija, con el triángulo y «Antes de empezar»: «Las indicaciones de salud y de recogida de los alumnos no están en DirectorIA: las tiene el colegio. Pregúntalas en conserjería o a la tutora antes de empezar.» (`LINEA_FICHA` en `src/app.js`).
 
 ```js
 { tipo: 'ficha',
   bandera: 'guardias',                   // opcional: si las guardias aún no están confirmadas, avisa y deja ir a jefatura
   fichas: [
     {
-      sesion: '3.º B · Matemáticas · 6.ª hora',
+      sesion: '3.º B · Matemáticas · 6.ª hora', // grupo, materia y hora
       hora: '15:15-16:00',
-      origen: 'Preparada por DirectorIA para Pablo Sanz', // sin insignia: sale de reglas y plantillas (§4)
-      datos: [ { dt: 'Tarea', dd: '...' }, { dt: 'Salud', dd: '...', aviso: true } ],
+      aula: 'Aula de 3.º B, planta baja',       // ≤ 50
+      para: 'Pablo Sanz',                       // opcional, ≤ 40: «Para Pablo Sanz»
+      origen: 'Preparada por DirectorIA · confirmada por jefatura', // exactamente así, sin insignia
+      datos: [                                  // 3-5, solo estos apartados
+        { dt: 'Tarea', dd: '…' },               // de la programación quincenal de quien falta
+        { dt: 'Material', dd: '…' },            // qué hay y dónde está
+        { dt: 'A quién llamar', dd: 'Tutoría: … (ext. 213) · Jefatura de estudios (ext. 202) · Conserjería (ext. 200)' }, // una por línea
+        { dt: 'Al acabar', dd: '…' },           // opcional: la salida, quién entra después
+      ],
       pie: 'Se abre antes de la sesión y se cierra al acabar la jornada. Queda registrado quién la ve.',
     },
   ],
@@ -887,9 +970,11 @@ Cada tipo añade sus propios campos.
 }
 ```
 
+Nada de «Necesidades», «Salud» ni «Recogida», ni nombres de alumnos, ni `aviso` en los datos: el validador falla. «A quién llamar» nombra la tutoría, jefatura y conserjería, con su extensión.
+
 #### `tabla`: tabla con avisos y una acción opcional
 
-Sirve para el calendario de exámenes, las programaciones, las autorizaciones de imagen, el mantenimiento o los certificados.
+Sirve para el calendario de exámenes o el estado de las programaciones.
 
 ```js
 { tipo: 'tabla',
@@ -915,6 +1000,32 @@ Sirve para el calendario de exámenes, las programaciones, las autorizaciones de
 }
 ```
 
+#### `justificantes`: los justificantes del profesorado (`docente`, `secretaria` y `jefatura`)
+
+E8. Sin la insignia de la IA en ninguna vista: los archiva un programa, con reglas. El motor pone arriba, siempre, «Los justificantes los archiva un programa en su carpeta; la IA no los lee.», y compone el nombre de cada archivo: Justificantes/<curso>/<AAAA-MM>/<docente>/<AAAA-MM-DD> justificante.pdf. En «carpetas», un pendiente no tiene archivo: su hueco dice «Sin archivo todavía». En «subir», el desplegable de la ausencia lleva la fecha corta de las etiquetas («Lun 16 nov · 9:00-10:30»), que cabe en el móvil.
+
+```js
+{ tipo: 'justificantes',
+  vista: 'subir',                        // subir (el docente) | carpetas (secretaría) | informe (jefatura, sin los archivos)
+  curso: '2026-27',
+  confidencial: 'Reservado · lo ves tú y secretaría, con registro de accesos', // obligatorio en subir y carpetas, ≤ 60
+  nota: 'Aquí no se ven: los ve secretaría.', // opcional, ≤ 80: va detrás de la frase fija
+  archivo: 'escaneo_0001.pdf',           // solo en subir: el archivo de ejemplo que se elige en la demo
+  ausencias: [                           // 1-12. Nunca el motivo
+    // En «subir», las de la persona del perfil; la pendiente lleva id (es la que se elige al subir).
+    { id: 'j1', fecha: '2026-11-16', horas: '9:00-10:30', justificante: 'pendiente' },
+    // En «carpetas» e «informe», con docente. Si se sube en otro perfil, «sigue» y empieza pendiente.
+    { docente: 'Laura Sánchez', fecha: '2026-11-16', horas: '9:00-10:30', justificante: 'pendiente', sigue: 'docente/justificantes#j1' },
+  ],
+  reglas: ['Un programa, con reglas y sin IA, lo renombra…', '…'], // 2-6, ≤ 150: «Cómo se guardan» o «Qué guarda el registro»
+  registro: ['Carmen López abrió el de Teresa Gil del jueves 12 de noviembre, el viernes 13 a las 18:05', 'Teresa Gil subió el de su ausencia del jueves 12 de noviembre, el viernes 13 a las 17:40'], // opcional, solo en carpetas: quién sube y quién abre, lo más reciente arriba (el motor añade antes lo que se sube en la demo)
+}
+```
+
+- `progreso: 'justificantes'` en una cifra cuenta los entregados de todos («5 de 7 entregados»), con los entregados primero en el medidor.
+- `'justificantes#j1'` (o `'docente/justificantes#j1'`) sigue a una ausencia: hecho cuando su justificante está entregado.
+- El validador comprueba que el `sigue` de una ausencia lleva a la vista `subir` de otro perfil, a la misma persona y el mismo día.
+
 ## 7. Qué tiene cada perfil
 
 ### `direccion` · Elena Ruiz · orden 1
@@ -922,42 +1033,44 @@ Sirve para el calendario de exámenes, las programaciones, las autorizaciones de
 **Inicio: «Tu resumen de las 8:00»**, como panel de mando (6.2 bis), con la ilustración de la directora (la propia de la demo, con el ✓ de «al día» en la tableta y sin la insignia de la IA):
 
 - **Cifras:**
-  - Pendiente de tu firma: 2, la citación del Caso 2026-07 (hoy) y el acta del claustro. La nota dice «La citación y el acta del claustro». Con las dos hechas, «Todo firmado» y «Ver lo firmado», que lleva a la citación (`ir: 'firma'`).
+  - Pendiente de tu firma: 2, la convocatoria del consejo escolar del jueves 3 (hoy, E9) y el acta del claustro. La nota dice «La convocatoria y el acta del claustro». Con las dos hechas, «Todo firmado» y «Ver lo firmado», que lleva a la convocatoria (`ir: 'firma'`).
   - Correos por responder: 5, resumidos con IA. Sin ninguno por responder, «Al día».
   - Fotocopiadoras: «3 días», «para avisar, antes del sáb 21». La cuenta atrás va de miércoles a viernes: el preaviso del contrato es antes del sábado 21 (E6). Solo lo cumple la 2.ª respuesta propuesta, «Comunicar el preaviso» (`sigue: 'correo:c-fotocopiadoras#1'`): entonces, «Preaviso enviado» y la hora. Con otra respuesta (la que sale elegida, «Pedir la oferta por escrito», o «Proponer una reunión el jueves»), la cuenta atrás sigue y la nota dice «Has respondido sin el preaviso. Si no avisas, se renueva solo el 1 de diciembre.». Si se archiva el correo, también sigue: «Archivado sin avisar. Si no avisas, el contrato se renueva solo el 1 de diciembre.» (`aMedias`).
-  - Dosier para inspección: «6 de 8 listas». Hay seis piezas listas, el escrito de remisión por revisar y el acta de 2.º ESO A, que falta. El medidor va en ese orden; el globo da las ocho piezas en el orden del dosier. Con el visto bueno, «Visto bueno dado».
+  - Dosier para inspección: «6 de 8 listas». Hay seis piezas listas, el escrito de remisión por revisar y el acta de Matemáticas del martes 17, que falta. El medidor va en ese orden; el globo da las ocho piezas en el orden del dosier. Con el visto bueno, «Visto bueno dado».
 - **Quién cubre 3.º B hoy:** cada sesión de 3.º B, con la persona que la cubre. Sigue a `jefatura/guardias`, también a la persona que elija jefatura en el desplegable («Elección: Rosa Medina» y, al confirmar, «Cubre Rosa Medina · Confirmada a las 8:01»). «Confirmar todas» deja todas a la misma hora. Mientras falten guardias, «Las guardias las confirma jefatura.» y el atajo a la propuesta. Si jefatura las confirma una a una, la línea dice cuántas lleva: «Jefatura ha confirmado 2 de 4. Hasta que confirme las demás, no se avisa a quien las cubre.», con el atajo (`parcial`). La salida de las 16:00 la hace quien cubre la 6.ª.
 - **Lo que te necesita:**
-  - Hoy: confirmar la visita a Inspección y la citación (solo «Caso 2026-07: citación a la familia»).
+  - Hoy: confirmar la visita a Inspección y la convocatoria del consejo escolar («Si la firmas hoy, llega con dos semanas de margen.»).
   - Esta semana: el acta y el choque del festival del AMPA con las sesiones de evaluación.
-  - Para saber: el certificado de Nora D. (1.º ESO A), que sigue a `secretaria/certificados`. Cuando secretaría lo pasa a la firma, sigue siendo para saber: «Carmen López lo ha pasado a la firma y te lo lleva para tu visto bueno.» (en dirección no hay un módulo para firmarlo).
+  - Para saber: el seguro escolar, con dos presupuestos para decidir (la póliza vence el 31 de diciembre). Sigue a `secretaria/gastos`: cuando secretaría envía el informe de octubre, sigue siendo para saber: «Carmen López te ha enviado el informe de gastos de octubre, con los dos presupuestos.». Y las guías de los protocolos, «Casi todos los pasos del de acoso son de la dirección. Con los anexos en blanco; ningún caso se abre en DirectorIA.», sin insignia y con enlace a «Guías de protocolos».
 - **Lo que viene.** Cada plazo pasa a ✓ solo con lo que lo cumple; lo que va hacia ello lo dice sin el ✓ (`aMedias`):
   - sáb 21: fotocopiadoras, avisar antes de este día (sale del analista de gastos, sin insignia). Sigue a la respuesta del preaviso (`#1`): «Preaviso enviado a las…». Con otra respuesta, lo mismo que dice la cifra: «Has respondido sin el preaviso. Si no avisas, se renueva solo el 1 de diciembre.»;
-  - lun 23: el dosier, sacado del correo de Inspección: «Envíalo antes de este día. Falta el acta de 2.º ESO A.». Sigue a dos cosas a la vez (`['dosier', 'correo:c-inspeccion#1']`): el visto bueno y la respuesta que lo adjunta, «Confirmar y enviar ya el dosier». Ni así pasa a ✓, porque esa respuesta lo envía «salvo la de 2.º ESO A, que le enviaré antes del lunes 23»: «Enviado sin el acta de 2.º ESO A. Esa acta, antes de este día.» (un `si` con estado `pendiente`). A medias:
-    - enviado sin el visto bueno: «Enviado sin el acta de 2.º ESO A y sin tu visto bueno al dosier. Esa acta, antes de este día.», con el enlace al dosier;
+  - lun 23: el dosier, sacado del correo de Inspección: «Envíalo antes de este día. Falta el acta de Matemáticas del martes 17.». Sigue a dos cosas a la vez (`['dosier', 'correo:c-inspeccion#1']`): el visto bueno y la respuesta que lo adjunta, «Confirmar y enviar ya el dosier». Ni así pasa a ✓, porque esa respuesta lo envía «salvo la de la reunión del martes 17, que le enviaré antes del lunes 23»: «Enviado sin el acta del martes 17. Esa acta, antes de este día.» (un `si` con estado `pendiente`). A medias:
+    - enviado sin el visto bueno: «Enviado sin el acta del martes 17 y sin tu visto bueno al dosier. Esa acta, antes de este día.», con el enlace al dosier;
     - con otra respuesta (confirmar la visita o preguntar por los horarios), que no lo adjunta: «Has confirmado la visita sin el dosier. Envíaselo antes de este día.»;
     - con el visto bueno y el correo sin responder: «Visto bueno dado. Falta enviarlo a Inspección desde el correo.», con el enlace al correo;
   - jue 26: la visita de inspección a las 10:00;
-  - vie 27: la reclamación del comedor («Familia de 5.º A: respóndeles antes de este día…») y la salida de 4.º a las 9:15. Las tres respuestas propuestas dejan el fondo para después, así que contestar no cumple el plazo: «Ya les has contestado. La respuesta por escrito, antes de este día.» (un `si` con estado `pendiente`);
-  - lun 30: el corte de la calle y los exámenes de ESO, con el calendario de «Cita, salida o fecha». El corte sigue a la circular a las familias (`correo:c-ayuntamiento#0`): «Enviado a las…». Si se responde al Ayuntamiento para pedir paso seguro, la circular, que era la otra respuesta del mismo correo, ya no se puede enviar desde ahí: «De 7:00 a 19:00. Has escrito al Ayuntamiento; falta avisar a las familias.»; archivado, sigue igual.
+  - vie 27: las prácticas del máster («Prácticas del máster: responde antes de este día», sacado del correo) y la salida de 4.º a las 9:15. Lo cumplen las dos respuestas que dicen cuántos estudiantes acoge el colegio (`correo:c-practicas#0,1`); la que lo habla antes con Matemáticas no: «Le has dicho que lo hablas con Matemáticas. La respuesta, antes de este día.» (`aMedias`);
+  - lun 30: el corte de la calle y los exámenes de ESO, con el calendario de «Cita, salida o fecha». El corte sigue a la circular a las familias (`correo:c-ayuntamiento#0`): «Enviado a las…». Si se responde al Ayuntamiento para pedir paso seguro, la circular, que era la otra respuesta del mismo correo, ya no se puede enviar desde ahí: «De 7:00 a 19:00. Has escrito al Ayuntamiento; falta avisar a las familias.»; archivado, sigue igual;
+  - jue 3 dic, 17:00: el consejo escolar, que lleva a la convocatoria («Pendiente de firma»).
 
 **Correo (5):**
 
 1. Inspección, la visita del jueves 26 → «Dosier para inspección».
-2. Una familia de 5.º de Primaria, con una reclamación por el cambio de horario del comedor. Plazo de respuesta: vie 27 nov. La IA solo controla el plazo.
+2. La universidad: dos estudiantes del Máster de Formación del Profesorado, de Matemáticas, en prácticas del 11 de enero al 26 de marzo. Hay que responder antes del viernes 27.
 3. El AMPA propone fecha para el festival de Navidad.
 4. La empresa de fotocopiadoras ofrece renovar. Nota con el aviso del analista: se renueva solo el 1 dic.
 5. El Ayuntamiento avisa de un corte de la calle por obras el lunes 30. Informativo, con una respuesta propuesta para avisar a las familias.
 
 **Módulos:**
 
-- `dosier` (documento con `documentos`): documentos para inspección; uno falta.
-- `acta` (documento): acta del claustro del lunes 16 (E5).
-- `firma` (documento, `confidencial`): «Citación a la familia de Alumno/a A», Caso 2026-07. El borrador lo hace la app y lo revisa y firma la dirección. Las comprobaciones son las de la presentación:
-  - ningún dato de otros alumnos ni detalles del caso;
-  - tono neutro: no da nada por probado;
-  - fecha y hora acordadas antes con la familia;
-  - idioma de la familia y canal de entrega.
+- `dosier` (documento con `documentos`): documentos para inspección, sin datos de alumnos; falta el acta de Matemáticas del martes 17.
+- `acta` (documento): acta del claustro del lunes 16 (E5), con el aviso del recuento del tercer acuerdo.
+- `firma` (documento, `ia: false`): «Convocatoria del consejo escolar del jueves 3» (E9). La prepara DirectorIA con la plantilla del centro y la firma la directora. Las comprobaciones:
+  - el orden del día recoge todo lo que quiere tratar;
+  - la fecha y la sala están libres en el calendario;
+  - va a todos los miembros, también a los representantes de las familias;
+  - no lleva datos de alumnos.
+- `protocolos` (protocolo): «Guías de protocolos», E3. Son las de orientación, escritas una vez (`guias: 'orientacion/protocolos'`): acoso escolar, absentismo y accidentes, con sus anexos en blanco. Su entradilla añade: «En el de acoso, casi todos los pasos son de la dirección: abrirlo, decidir las medidas y comunicarlo.». Sin banda confidencial y sin insignia.
 
 ### `jefatura` · Javier Martín · orden 2
 
@@ -971,10 +1084,11 @@ Sirve para el calendario de exámenes, las programaciones, las autorizaciones de
 - **Quién cubre 3.º B hoy:** el mismo carril que dirección, pero siguiendo su propio módulo (`guardias#g1`…`g4`). Mientras falten guardias, una línea recuerda que en «Guardias de hoy» se puede elegir a otra persona para cada sesión antes de confirmar. Si jefatura elige a otra persona en el desplegable, la celda la enseña ya antes de confirmar («Elección: Rosa Medina») y, después, «Cubre Rosa Medina · Confirmada a las 8:01». «Confirmar todas» deja todas a la misma hora. Como lo confirma él, los globos le hablan de tú: «Falta que la confirmes», «Has elegido a Rosa Medina. Falta que lo confirmes» y «La has confirmado a las 8:01». Si confirma una a una, la línea dice «Has confirmado 2 de 4. Hasta que confirmes las demás, no se avisa a quien las cubre.» (`parcial`).
 - **Lo que te necesita:**
   - Hoy: las fichas de 1.ª, 3.ª y 6.ª hora de 3.º B, que pasan a «Enviadas» al confirmar las guardias, y la petición de Laura Sánchez: «Laura Sánchez pide que cubran su guardia de mañana», con «A 4.ª hora tiene una tutoría con una familia de 4.º A. Quién la cubre lo decides tú.». Resume su correo, así que lleva «Resumido con IA». No va como choque: el choque de su guardia del viernes 27 va en la agenda.
-  - Esta semana: la familia de 2.º ESO A que pide cambiar de optativa.
-  - Para saber: la nota de la Consejería. Las calificaciones, en Raíces antes del viernes 18 de diciembre.
+  - Esta semana: una familia de 4.º ESO pregunta cuándo salen las fechas de los exámenes (salen cuando apruebe el calendario).
+  - Para saber: la nota de la Consejería (las calificaciones, en Raíces antes del viernes 18 de diciembre) y las ausencias del profesorado de noviembre: «cuatro», con «Dos con el justificante entregado. Faltan el de hoy de Sergio Prieto y el del lunes 16 de Laura Sánchez.». Sigue a `docente/justificantes#j1`: cuando Laura sube el suyo, «Tres con el justificante entregado. Falta el de hoy de Sergio Prieto.». Sin motivos.
 - **Lo que viene:**
-  - jue 19 y vie 20: «Caso 2026-07: entrevistas», del equipo del caso (solo el número);
+  - jue 19, 11:45: «La guardia de 4.ª de Laura Sánchez» (un plazo), con la propuesta de DirectorIA: Rosa Medina, la única con la 4.ª libre. Sigue a las respuestas a Laura (`correo:c-laura#0,1`): «Decidido a las…», con «La cubre Rosa Medina. Ya se lo has dicho a Laura.»;
+  - vie 20: la entrega de las programaciones quincenales de Primaria, de las que sale la tarea de las fichas (una fecha del colegio, sin enlace);
   - vie 20: contestar a Matemáticas con la fecha del examen de 4.º ESO («Respóndele a Ramón Esteban antes de este día: quieren decírselo a los alumnos esta semana.»), sacado del correo. Lo cumplen las dos respuestas que dan fecha (`correo:c-matematicas#0,1`); la que pregunta antes si el examen es de una sesión no la da: «Le has preguntado a Matemáticas. La fecha, antes de este día.»;
   - vie 27: la salida de 4.º al Jardín Botánico a las 9:15, con Laura Sánchez, y el choque de su guardia de 3.ª con la salida: «La guardia de 3.ª de Laura Sánchez y la salida», con «Tiene guardia a 3.ª hora y estará en la salida con 4.º A: hay que cubrirla.». Lo detecta DirectorIA cruzando el horario de Laura con la salida (reglas y fechas), así que va sin insignia (en docente, el mismo choque). Sigue a las respuestas a Laura (`correo:c-laura#0,1`), que le dicen que esa guardia también la cubre otra persona: entonces dice «Ya le has dicho a Laura que la cubre otra persona. Quién la cubre lo decides ese día, en «Guardias de hoy».», no pasa a ✓ (un `si` con estado `pendiente`) y pierde el enlace (`ir: null`), porque en su correo, ya respondido, no se decide nada. Si se archiva su correo, no cambia;
   - lun 30: empiezan los exámenes de ESO;
@@ -982,8 +1096,8 @@ Sirve para el calendario de exámenes, las programaciones, las autorizaciones de
 
 **Correo (5):**
 
-1. Sergio Prieto, a las 7:45: «No voy a poder ir hoy». Respuestas: «Recupérate; tu clase está cubierta» y otras.
-2. La familia de un alumno de 2.º ESO pide cambiar de optativa, de Francés a Tecnología. Respuesta propuesta según el plazo del centro.
+1. Sergio Prieto, a las 7:45: «No voy a poder ir hoy», sin el motivo. Respuestas: «Decirle que su clase está cubierta», «Pedir que avise esta tarde» y «Recordarle cómo subir el justificante» (desde DirectorIA, no por correo). Ninguna habla de su salud.
+2. Una familia de 4.º ESO B (Marcos) pregunta cuándo salen las fechas de los exámenes de la 1.ª evaluación → exámenes.
 3. El Departamento de Matemáticas propone fecha para el examen de 4.º ESO; enlaza con exámenes.
 4. Laura Sánchez: «Mi guardia del jueves coincide con una tutoría». El jueves 19 tiene guardia a 4.ª hora y una familia de su tutoría solo puede venir a esa hora; pide que cubra su guardia otra persona y no propone a nadie: lo decide jefatura. La nota es de DirectorIA, sin insignia: «DirectorIA propone a Rosa Medina, la única con la 4.ª libre. Ojo: el viernes 27 Laura está en la salida y hay que cubrir su guardia de 3.ª.» (a 4.ª no hay nadie más de guardia, así que va quien tiene hora libre; como solo la tiene Rosa, no hace falta mirar cuántas guardias lleva, aunque hoy DirectorIA también la propone para la 3.ª de 3.º B). Las dos respuestas propuestas le dicen que el jueves la cubre Rosa Medina y que la del viernes 27 también la cubre otra persona, sin pedirle nada: «Decirle que la cubre Rosa» y «Explicarle por qué la cubre Rosa», que cuenta la regla («Rosa Medina es la única que tiene esa hora libre») y promete decirle quién cubre el viernes cuando cierre las guardias de ese día.
 5. La Consejería avisa de las instrucciones sobre las sesiones de evaluación. Informativo.
@@ -991,25 +1105,27 @@ Sirve para el calendario de exámenes, las programaciones, las autorizaciones de
 **Módulos:**
 
 - `guardias` (aprobaciones, `bandera: 'guardias'`): E1. Los items de 3.º B que llevan ficha, con `ficha: true`.
-- `fichas` (ficha, vista previa de lo que reciben quienes sustituyen): la de 6.ª y la de 1.ª, de Pablo Sanz, y la de 3.ª, de Rosa Medina. Las tres llevan la pauta de Mario y la alergia de Lucía. Como las de Pablo, siguen la propuesta inicial: si jefatura elige a otra persona (Rosa Medina en el recreo, por ejemplo), la de 3.ª sigue diciendo «Hoy vigila Teresa Gil». En la demo no se abren después de cambiar la propuesta (lo dicen «Guardias de hoy» y el README).
+- `fichas` (ficha, vista previa de lo que reciben quienes sustituyen): la de 6.ª y la de 1.ª, de Pablo Sanz, y la de 3.ª, de Rosa Medina. Solo la clase (E2), con la línea fija. Como las de Pablo, siguen la propuesta inicial: si jefatura elige a otra persona (Rosa Medina en el recreo, por ejemplo), la de 3.ª sigue diciendo «Hoy vigila Teresa Gil». En la demo no se abren después de cambiar la propuesta (lo dicen «Guardias de hoy» y el README).
 - `examenes` (tabla): calendario de la 1.ª evaluación de ESO, del lun 30 nov al vie 4 dic. Un choque en 4.º ESO A el miércoles 2, con la propuesta de moverlo. Botón para aprobar.
 - `programaciones` (tabla): estado de las programaciones por departamento frente al modelo del centro. Dos con apartados que faltan; por ejemplo, «evaluación de la práctica docente».
+- `ausencias` (justificantes, vista `informe`): «Ausencias del profesorado en noviembre» (E8): quién ha faltado, qué día y a qué horas, y «Entregado» o «Pendiente». Sin motivos y sin los archivos, que ve secretaría.
 
 ### `secretaria` · Carmen López · orden 3
 
-**Inicio:** panel de mando (6.2 bis), con la ilustración de la secretaria: la propia de la demo, una mujer de unos 60 con el sello del centro (6.2 bis). Va sin el día por sesiones: su trabajo no sigue el horario de Primaria. La entradilla: «Certificados, gastos, plazos y revisiones del edificio. Nada se envía ni se firma sin ti.»
+**Inicio:** panel de mando (6.2 bis), con la ilustración de la secretaria: la propia de la demo, una mujer de unos 60 con el sello del centro (6.2 bis). Va sin el día por sesiones: su trabajo no sigue el horario de Primaria. Secretaría no guarda datos de alumnos: lleva gastos y contratos, plazos, el edificio y los justificantes del profesorado. La entradilla: «Gastos, justificantes, plazos y revisiones del edificio. Nada se envía ni se firma sin ti.»
 
 - **Cifras:**
-  - Certificados por revisar: 1, hoy y en pizarra. Es el de matrícula de Nora D. (1.º ESO A, E8), que su familia necesita antes del viernes 20. Pasa a «Pasado a la firma» con la hora, y en dirección la fila del certificado cambia a la vez.
+  - Informe de gastos: «5 avisos para dirección», hoy y en pizarra: los del informe de octubre (E6). La nota da el más urgente: las fotocopiadoras, que dirección decide antes del sábado 21. Pasa a «Enviado» al enviar el informe (y en dirección, la fila del seguro escolar lo dice).
   - Correos por responder: 5, resumidos con IA. Sin ninguno por responder, «Al día».
-  - Informe de gastos: «5 avisos para dirección», los del informe de octubre (E6). La nota da el más urgente: las fotocopiadoras, que dirección decide antes del sábado 21. Pasa a «Enviado» al enviar el informe.
-  - Fotos del festival: «3 alumnos sin autorización», los de E9. Pasa a «Lista enviada» al enviar la lista a las tutorías.
+  - Justificantes del profesorado: «5 de 7 entregados» (`progreso: 'justificantes'`), con la nota «Los justificantes los archiva un programa en su carpeta; la IA no los lee.». Cuando Laura Sánchez sube el suyo en su perfil, «6 de 7». El de hoy de Sergio Prieto sigue pendiente, así que la cifra no se da por hecha.
+  - Estadística 2026-27: «vie 27», «para subirla», con la nota «Los recuentos por curso y grupo están listos: cifras, sin nombres.». Pasa a «Datos subidos» al marcarla en «Circulares y plazos».
 - **Lo que te necesita:**
-  - Esta semana: la familia de Iker P., que quiere cambiar su autorización; los extintores, como choque, y el acuse de recibo de la estadística («Estadística: acusa recibo a la Consejería»). También la comisión de mantenimiento del banco. Las cuatro salen de correos y llevan «Resumido con IA». Con cuatro filas aquí y dos en «Para saber», este grupo va más ancho.
+  - Hoy: Sergio Prieto pregunta cómo entregar su justificante (correo, resumido con IA). Las respuestas le explican cómo subirlo desde DirectorIA.
+  - Esta semana: una familia de 4.º B pregunta cómo pagar la salida; los extintores, como choque, y el acuse de recibo de la estadística («Estadística: acusa recibo a la Consejería»). También la comisión de mantenimiento del banco. Las cuatro salen de correos y llevan «Resumido con IA».
   - El choque de los extintores: la empresa propone el jueves 26, de 9:00 a 12:00, cuando llega la inspección (E4), o el martes 24 por la tarde, que Carmen tiene libre. Al responder, la fila pasa a «Extintores: el día de la revisión».
   - Para saber: la inspección del ascensor (vie 15 ene) y la caldera, «Hecha el lun 2 nov».
 - **Lo que viene,** en cuatro semanas, hasta los electrodos. Cada plazo sigue a su línea de «Circulares y plazos»:
-  - vie 20: las autorizaciones de la salida, que las tutorías de 4.º traen antes de las 14:00 (sacado de la circular). Al marcarlo: «Recogidas a las…»;
+  - vie 20: las autorizaciones de la salida, que las tutorías de 4.º traen antes de las 14:00 y dicen cuántas faltan (sacado de la circular). Al marcarlo: «Recibidas a las…»;
   - jue 26: la visita de inspección a las 10:00. Es una fecha del colegio: secretaría no tiene ese correo, así que va sin insignia;
   - vie 27: la estadística, que se sube antes de ese día (sacado de la circular);
   - lun 30: vence la revisión de los extintores, que sale del calendario de mantenimiento y va sin insignia. Cuando Carmen responde a la empresa, el detalle lo dice y el plazo sigue pendiente (si archiva el correo, no cambia). Ese día, además, cortan la calle de 7:00 a 19:00 y hay que avisar a los proveedores. En «Circulares y plazos» sale «De: Aviso del Ayuntamiento», sin IA, así que aquí también va sin insignia;
@@ -1017,25 +1133,24 @@ Sirve para el calendario de exámenes, las programaciones, las autorizaciones de
 
 **Correo (5):**
 
-1. La familia de Nora D. pide el certificado de matrícula → certificados.
-2. La Consejería, con la circular de la estadística (E7) → plazos.
-3. La empresa mantenedora, para fijar la revisión de extintores antes del 30 nov.
-4. El banco, con la nueva tarifa de comisiones. Nota del analista.
-5. La familia de Iker P. pregunta si puede cambiar su autorización de imagen → registro de autorizaciones.
+1. Sergio Prieto: «¿Cómo te hago llegar el justificante de hoy?». No lo adjunta. Las tres respuestas le dicen que lo suba desde DirectorIA, en «Tus justificantes», y no por correo → justificantes.
+2. Una familia de 4.º B (Inés) pregunta si puede pagar la salida por transferencia o en secretaría, porque cambia de banco. Nota: las cuentas de las familias están en el programa de gestión del colegio, no en DirectorIA.
+3. La Consejería, con la circular de la estadística (E7) → plazos.
+4. La empresa mantenedora, para fijar la revisión de extintores antes del 30 nov.
+5. El banco, con la nueva tarifa de comisiones. Nota del analista.
 
 **Módulos:**
 
 - `gastos` (informe): analista de gastos, informe de octubre (E6).
-- `certificados` (documento): el certificado de matrícula de Nora D. Botón: «Pasar a la firma».
-- `imagen` (tabla): autorizaciones de imagen para las fotos del festival de otoño (E9). La app no mira las fotos.
-- `circulares` (plazos): lo que sale de las circulares y el mantenimiento: E7 y E10, con quién y cuándo.
+- `justificantes` (justificantes, vista `carpetas`): las carpetas de los justificantes del profesorado (E8), Justificantes / curso / mes / docente, con el estado de cada uno (un pendiente, «Sin archivo todavía»), las reglas («Cómo se guardan») y el registro de accesos, que dice quién sube cada uno y quién lo abre. Lleva la banda «Solo cada docente y secretaría, con registro de accesos». Sin la insignia de la IA.
+- `circulares` (plazos): lo que sale de las circulares y del mantenimiento del edificio: E7, E10 y las autorizaciones de la salida, con quién y cuándo.
 
 ### `docente` · Laura Sánchez · orden 4
 
 **Inicio:** panel de mando (6.2 bis), con la ilustración de la docente:
 
 - **Cifras:**
-  - la tutoría de Daniel M., hoy, con sus pasos (dictar, revisar y enviar) y la nota «Dicta la propuesta para su familia. Te llega redactada para revisar.». Ya dictada, «Por revisar», con la nota «Ya lo has dictado. Te queda revisar el correo y enviarlo tú.» y la acción «Revisar y enviar» (`siDictado`); enviada, «Enviado». Si se sale del dictado mientras escucha, al volver sigue escuchando;
+  - el correo a las familias de 4.º A, hoy, con sus pasos (dictar, revisar y enviar) y la nota «El recordatorio de la salida, para 4.º A. Te llega redactado para revisar.». Ya dictado, «Por revisar», con la nota «Ya lo has dictado. Te queda revisar el correo y enviarlo tú.» y la acción «Revisar y enviar» (`siDictado`); enviado, «Enviado». Si se sale del dictado mientras escucha, al volver sigue escuchando;
   - correos por responder: 4, resumidos con IA. Sin ninguno por responder, «Al día»;
   - entregas del viernes 20: 2. La nota dice «La programación y las autorizaciones». Con las dos marcadas, «Todo entregado» y «Ver tus plazos» (`ir: 'plazos'`).
 - **Tu día:** sus sesiones del miércoles (dato de la demo):
@@ -1051,62 +1166,64 @@ Sirve para el calendario de exámenes, las programaciones, las autorizaciones de
 
   Bajo el título va «Hoy no viene Sergio Prieto, el tutor de 3.º B: tu Educación Física con ellos no cambia.», y en la 4.ª, con 3.º B, el aviso «Falta su tutor».
 - **Lo que te necesita:**
-  - Hoy: las dos familias (resumidas con IA) y la tutoría: «Dicta el correo y te llega redactado para revisar.»; ya dictada, «Ya lo has dictado. Te queda revisar el correo y enviarlo.».
-  - Para saber: el choque de su guardia del viernes 27 a 3.ª hora con la salida y el plan de lectura. El choque, «Tu guardia del viernes 27 coincide con la salida», con «Estarás en el Jardín Botánico de 9:15 a 13:30, así que la cubre otra persona. Jefatura ya lo sabe.», va primero. Lo detecta DirectorIA cruzando su horario con la salida (reglas y fechas, no sale de ningún correo), así que va sin insignia (`ia: false`). Va en «Para saber» (`estado: 'info'`) y no en «Esta semana»: es la semana que viene y Laura no tiene que hacer nada. Sigue a las respuestas de jefatura a su correo (`jefatura/correo:c-laura#0,1`), que le dicen que esa guardia también la cubre otra persona: entonces pasa a «Confirmado a las…», con «Jefatura te ha confirmado que la cubre otra persona.». Si jefatura archiva su correo, no cambia. Sin «Esta semana», la lista va en dos columnas: «Hoy», con tres filas, y «Para saber», con dos.
+  - Hoy: las dos familias de 4.º A (resumidas con IA), sin nombres de alumnos: «Una familia de 4.º A: qué llevar a la salida» y «Una familia de 4.º A escribe en inglés por el chándal». Y el recordatorio de la salida: «Dicta el correo y te llega redactado para revisar.»; ya dictado, «Ya lo has dictado. Te queda revisar el correo y enviarlo.».
+  - Esta semana: «Tu justificante del lunes 16», con «El de tu ausencia de 9:00 a 10:30. Súbelo desde aquí, no por correo: un programa lo archiva en tu carpeta.». Sigue a `justificantes#j1`: al subirlo, «Entregado a las…». Sin insignia: no sale de un correo.
+  - Para saber: el choque de su guardia del viernes 27 a 3.ª hora con la salida y el plan de lectura. El choque, «Tu guardia del viernes 27 coincide con la salida», con «Estarás en el Jardín Botánico de 9:15 a 13:30, así que la cubre otra persona. Jefatura ya lo sabe.», va primero. Lo detecta DirectorIA cruzando su horario con la salida (reglas y fechas, no sale de ningún correo), así que va sin insignia (`ia: false`). Va en «Para saber» (`estado: 'info'`): es la semana que viene y Laura no tiene que hacer nada. Sigue a las respuestas de jefatura a su correo (`jefatura/correo:c-laura#0,1`), que le dicen que esa guardia también la cubre otra persona: entonces pasa a «Confirmado a las…», con «Jefatura te ha confirmado que la cubre otra persona.». Si jefatura archiva su correo, no cambia.
 - **Lo que viene,** de «Tus plazos»:
-  - jue 19: la tutoría de las 11:45, que coincide con su guardia (sacada de su correo a jefatura, con la insignia): «Coincide con tu guardia. Has pedido a jefatura que la cubra otra persona y aún no te ha contestado.». Sigue al correo de Laura en jefatura (`jefatura/correo:c-laura`): cuando jefatura lo responde (las dos respuestas le dicen que la cubre Rosa Medina), dice «Coincide con tu guardia. Jefatura te ha contestado: la cubre Rosa Medina.»; si lo archiva, sigue sin contestar;
-  - vie 20: la programación quincenal y las autorizaciones. Al marcarlas en «Tus plazos», «Entregada a las…» y «Entregadas a las…»;
+  - jue 19: la tutoría de las 11:45 con una familia de 4.º A, que coincide con su guardia (sacada de su correo a jefatura, con la insignia): «Coincide con tu guardia. Has pedido a jefatura que la cubra otra persona y aún no te ha contestado.». Sigue al correo de Laura en jefatura (`jefatura/correo:c-laura`): cuando jefatura lo responde (las dos respuestas le dicen que la cubre Rosa Medina), dice «Coincide con tu guardia. Jefatura te ha contestado: la cubre Rosa Medina.»; si lo archiva, sigue sin contestar;
+  - vie 20: la programación quincenal y las autorizaciones («Las de 4.º A firmadas, en secretaría. Dile a Carmen cuántas faltan.»). Al marcarlas en «Tus plazos», «Entregada a las…» y «Entregadas a las…»;
   - vie 27: la salida a las 9:15 y el choque con su guardia de 3.ª hora, sin insignia: «Estarás en la salida, así que la cubre otra persona. Jefatura ya lo sabe.». Como la fila de «Lo que te necesita», pasa a ✓ («Confirmado a las…») cuando jefatura le contesta, y no cambia si archiva su correo;
   - vie 4 dic: los títulos para el lote de lectura. Al marcarlo, «Pedidos a las…».
 
 **Correo (5):**
 
-1. La familia de Daniel M. pregunta qué llevar a la salida (E11).
-2. La madre de Amira escribe en inglés por el uniforme de Educación Física. Respuestas propuestas en inglés, con traducción al español entre corchetes al final.
-3. Secretaría: recoger las autorizaciones firmadas antes del vie 20.
+1. Una familia de 4.º A (Raquel) pregunta qué llevar a la salida (E11): no le ha llegado la circular. Escribe «mi hijo», sin su nombre.
+2. Una familia de 4.º A (Nadia) escribe en inglés por el chándal de Educación Física: «my daughter», sin su nombre. Respuestas propuestas en inglés, con traducción al español entre corchetes al final.
+3. Secretaría: llevar las autorizaciones firmadas antes del vie 20 y decir cuántas faltan.
 4. La coordinadora de ciclo: entregar la programación quincenal antes del viernes.
 5. Dirección: el plan de lectura de enero. Informativo.
 
 **Módulos:**
 
-- `dictado`: correo a la familia de Daniel M.: lleva una semana sin traer los deberes y se le ve cansado; propone una tutoría.
-- `banco`: E12.
-- `material`: E13, una situación de aprendizaje sobre alimentación saludable.
-- `plazos`: tus plazos y entregas. La tutoría del jueves 19 sale de su correo a jefatura («Sacado con IA de: Tu correo a jefatura del martes 17»), con «Es a 4.ª hora, en tu guardia. Has pedido a jefatura que la cubra otra persona.». No dice si jefatura ha contestado, porque «Tus plazos» no cambia cuando jefatura actúa: eso lo dice la marca del jueves 19 en el Inicio. Su guardia del viernes 27 no va como plazo aparte, porque Laura no tiene nada que entregar: la nombra la salida («Jefatura organiza quién cubre esa clase y tu guardia de 3.ª.», de «Acuerdo del claustro del lunes 16», sin insignia), y el choque va en el Inicio. La fila y la marca del choque llevan a «Tus plazos», a esa salida.
+- `dictado`: correo a las familias de 4.º A, una comunicación general, sin datos de ningún alumno: el recordatorio de la salida (horario, qué llevar, el precio en el recibo de diciembre y las autorizaciones antes del viernes 20).
+- `banco`: E12, con lo que se comprueba al subir un recurso.
+- `material`: E13, una situación de aprendizaje sobre alimentación saludable. El aviso de la respuesta no habla de alergias: «Antes de usar alimentos de verdad en clase, pregunta en el colegio: las indicaciones de salud de los alumnos no están en DirectorIA.».
+- `plazos`: tus plazos y entregas. El de hoy es recordar a las familias de 4.º A la salida y las autorizaciones (en «Correo dictado»). La tutoría del jueves 19 sale de su correo a jefatura («Sacado con IA de: Tu correo a jefatura del martes 17»), con «Es a 4.ª hora, en tu guardia. Has pedido a jefatura que la cubra otra persona.». No dice si jefatura ha contestado, porque «Tus plazos» no cambia cuando jefatura actúa: eso lo dice la marca del jueves 19 en el Inicio. Su guardia del viernes 27 no va como plazo aparte, porque Laura no tiene nada que entregar: la nombra la salida («Jefatura organiza quién cubre esa clase y tu guardia de 3.ª.», de «Acuerdo del claustro del lunes 16», sin insignia), y el choque va en el Inicio. La fila y la marca del choque llevan a «Tus plazos», a esa salida.
+- `justificantes` (justificantes, vista `subir`): «Tus justificantes» (E8). El pendiente, de su ausencia del lunes 16 de 9:00 a 10:30: elige la ausencia («Lun 16 nov · 9:00-10:30») y el archivo (en la demo, «escaneo_0001.pdf», un ejemplo), ve cómo se va a llamar («Justificantes/2026-27/2026-11/Laura Sánchez/2026-11-16 justificante.pdf») y lo sube. Debajo, los entregados, con su carpeta; al lado, «Cómo se guardan». Lleva la banda «Reservado · lo ves tú y secretaría, con registro de accesos», y la entradilla dice «Ni la IA ni ningún programa leen lo que pone», no «Nadie lee lo que pone». Sin la insignia de la IA.
 
 ### `orientacion` · Andrés Vidal · orden 5
 
-**Inicio:** panel de mando (6.2 bis), con la ilustración del orientador: la propia de la demo, un hombre con gafas y el bocadillo con el corazón (6.2 bis). Aquí sí salen el Caso 2026-07 con su paso y Alumno/a A: es el perfil del equipo del caso. Va sin el día por sesiones: las entrevistas no siguen el horario de Primaria. La entradilla: «El Caso 2026-07, tus entrevistas, las pautas y la circular de Amira. Nada se envía sin ti.»
+**Inicio:** panel de mando (6.2 bis), con la ilustración del orientador: la propia de la demo, un hombre con gafas y el bocadillo con el corazón (6.2 bis). Orientación no guarda datos de alumnos: ni casos, ni pautas personales, ni anotaciones. Trabaja con las guías de los protocolos, el plan de convivencia, los documentos del departamento y circulares generales adaptadas. Va sin el día por sesiones: su trabajo no sigue el horario de Primaria. La entradilla: «La circular adaptada, la sesión del claustro y el plan de convivencia. Nada se envía sin ti.»
 
 - **Cifras:**
-  - Entrevista de hoy: «10:15», hoy y en pizarra, con Alumno/a A en su despacho. El guion ya está revisado. En el móvil, la acción es «Repasar».
-  - Paso del Caso 2026-07: «4 de 9», rotulado «en curso»: la recogida de información (Anexo II), hasta el lunes 23. Es un progreso del protocolo (`progreso: 'acoso'`): el medidor tiene un tramo por paso, con los tres hechos rellenos, el 4.º con borde, los pendientes vacíos y los tres que solo van si se confirma con borde discontinuo. El globo da los nueve pasos con su estado.
+  - Circular adaptada: «Por enviar», hoy y en pizarra. Es la de la salida, en lectura fácil y en inglés, para las familias de 4.º (E11): las autorizaciones son antes del viernes 20. Pasa a «Enviada» al enviarla.
   - Correos por responder: 4, resumidos con IA. Sin ninguno por responder, «Al día».
-  - Circular adaptada: «Por enviar». Es la de la salida, en lectura fácil y en inglés, para la familia de Amira (E11). Pasa a «Enviada» al enviarla.
+  - Sesión para el claustro: «mié 25», «a las 16:15»: el protocolo de acoso, paso a paso (E3). Está hecha cuando le pasa a Nuria Castro el guion (`correo:c-nuria#0`), así que lleva a su correo, con «Pasarle el guion»; hecha, «Guion enviado» y «Ver el correo». Con otra respuesta, la nota dice «Ya has contestado a Nuria Castro. El guion, antes del lunes 23.» y la cifra lleva a la guía, con «Ver la guía» (`aMedias`), porque el guion se prepara con ella. La guía también está enlazada desde la nota del correo y desde «Para saber».
+  - Plan de convivencia: «1 de 6 hechas» (`progreso: 'convivencia'`), con la nota «Esta semana, el Día de los Derechos de la Infancia, el viernes 20.».
 - **Lo que te necesita:**
-  - Hoy: el guion que pide Nuria Castro y la reunión que pide la madre de Mario. Salen de correos y llevan «Resumido con IA».
-  - Esta semana: la convocatoria de la reunión del martes 24 (Anexo III), lista para revisar. Sale de la plantilla del protocolo y va sin insignia.
-  - Para saber: la citación a la familia de Alumno/a A, que sigue a `direccion/firma` y pasa a «Firmada por la directora a las…», con el detalle «Para el viernes 20 a las 17:00.». También la pauta de Mario, que sigue a `jefatura/guardias` y pasa a «Guardias confirmadas a las…»; no nombra a nadie, porque jefatura puede elegir a otra persona. Y la pauta de Amira, «Actualizada el lun 16».
-- **Lo que viene,** del calendario del protocolo (sin insignia):
-  - jue 19: el alumnado observador por la mañana y el profesorado del grupo, de 15:00 a 17:00;
-  - vie 20: el alumnado observador por la mañana y la familia de Alumno/a A a las 17:00, en su despacho;
-  - lun 23: termina la recogida de información, con el alumnado mencionado y sus familias. El Anexo II, completo por la tarde;
-  - mar 24: la reunión para la toma de decisiones (Anexo III);
-  - lun 30: las pautas para 2.º ESO B que pide Beatriz Romero (sacado del correo). Solo las envía la 1.ª respuesta propuesta (`correo:c-beatriz#0`): «Enviadas a las…». Con las otras dos (ver una clase antes, preparar juntos una hoja), «Ya has contestado a Beatriz Romero. Las pautas, antes de este día.». Si se archiva su correo sin responder, el plazo sigue en pie.
+  - Hoy: Beatriz Romero pide materiales de técnicas de estudio para todo 2.º ESO B, y una familia de 5.º pregunta por una charla sobre pantallas. Salen de correos y llevan «Resumido con IA».
+  - Esta semana: el Día de los Derechos de la Infancia, el viernes 20, con la actividad de tutoría para toda Primaria. Sigue a `convivencia#1`: «Hecha a las…».
+  - Para saber: las guías de los protocolos («Paso a paso y con los anexos en blanco. Ningún caso se abre en DirectorIA: va a Raíces y al expediente del centro.»), sin insignia, y el curso de lectura fácil (resumido con IA).
+- **Lo que viene,** en cuatro semanas:
+  - vie 20: el Día de los Derechos de la Infancia (del plan de convivencia, sin insignia);
+  - lun 23: el guion de la sesión del claustro, para Nuria Castro (sacado del correo). Solo lo envía la 1.ª respuesta propuesta (`correo:c-nuria#0`): «Enviado a las…». Con las otras, «Ya has contestado a Nuria Castro. El guion, antes de este día.»;
+  - mié 25, 16:15: el protocolo de acoso en el claustro, con la guía y los anexos en blanco;
+  - jue 26: los materiales de técnicas de estudio para 2.º ESO B (sacado del correo). Solo los envía la 1.ª respuesta propuesta (`correo:c-beatriz#0`); con las otras, «Ya has contestado a Beatriz Romero. Los materiales, antes de este día.»;
+  - vie 11 dic: la inscripción en el curso de lectura fácil (sacado del correo).
 
 **Correo (5):**
 
-1. Nuria Castro, coordinadora de bienestar: recordatorio de las entrevistas del Caso 2026-07. Interno: solo el número del caso.
-2. La madre de Mario (3.º B) pide una reunión para hablar de cómo va.
-3. Beatriz Romero, tutora de 2.º ESO B, pide pautas de organización para el aula, sobre otro tema: un alumno con dificultades de atención y sin diagnóstico. Sin nombres.
-4. Laura Sánchez: la familia de Amira prefiere el inglés y le pide que revise la circular → traducción.
+1. Nuria Castro, coordinadora de bienestar: la sesión del claustro sobre el protocolo de acoso, el miércoles 25 a las 16:15. Pide un guion antes del lunes 23, práctico y sin ejemplos de casos del colegio → guías.
+2. Una familia de 5.º (Elisa) pregunta si habrá una charla para familias sobre móviles y pantallas; ofrece la ayuda del AMPA → plan de convivencia.
+3. Beatriz Romero, tutora de 2.º ESO B: materiales de técnicas de estudio para hacer en la tutoría del jueves 26 con todo el grupo, antes de los exámenes. Nada de un alumno en concreto.
+4. Laura Sánchez: la circular de la salida en inglés y en lectura fácil, para las familias de 4.º → circulares adaptadas.
 5. Un centro de formación, con un curso de lectura fácil. Informativo.
 
 **Módulos:**
 
-- `acoso` (protocolo, `confidencial`): E3 completo.
-- `pautas` (tabla): pautas para el aula por grupo y alumno, con nombre de pila inventado, y quién las ve. Las de Mario, en la ficha de 3.º B: «Instrucciones por escrito y más tiempo». Añade un aviso: «Pablo Sanz (1.ª y 6.ª hora) y Rosa Medina (3.ª hora) verán la pauta de Mario en sus fichas de 3.º B; queda registrado».
-- `traduccion`: E11 para la familia de Amira: lectura fácil e inglés.
+- `protocolos` (protocolo): «Guías de protocolos», E3 completo: acoso escolar (nueve pasos y cinco anexos en blanco), absentismo y accidentes. Sin banda confidencial: no lleva datos de nadie. Las guías están escritas aquí; dirección las toma de este módulo (`guias: 'orientacion/protocolos'`), así que un cambio en ellas vale para los dos perfiles.
+- `convivencia` (plazos, `ia: false`): el plan de convivencia 2026-27, con sus actividades del curso y quién lleva cada una: normas de aula (hecho), Día de los Derechos de la Infancia (vie 20), el protocolo de acoso en el claustro (mié 25), charlas sobre el uso seguro de internet con el Plan Director (enero), sesión para familias sobre pantallas con el AMPA (enero) y la memoria (junio).
+- `traduccion`: E11, para todas las familias de 4.º: lectura fácil e inglés («su hijo o hija», «your child»). Se envía a las familias de 4.º con las tres versiones; Laura Sánchez va en copia.
 
 ### `sustituto` · Pablo Sanz · orden 6
 
@@ -1122,9 +1239,9 @@ Sirve para el calendario de exámenes, las programaciones, las autorizaciones de
   - si jefatura confirma una parte: «Jefatura ha confirmado que cubres la 1.ª. La 6.ª y la salida, por confirmar.» (`parcial`, con `{hechas}` y `{Faltan}`);
   - con todo confirmado: «Jefatura ha confirmado que cubres a Sergio Prieto: la 1.ª, la 6.ª y la salida.» (`{hechas}`), con la 3.ª o el recreo si jefatura lo ha elegido para ellos.
 - **Lo que te necesita:**
-  - Hoy: el material que le pide Laura Sánchez (resumido con IA) y la salida de 3.º B a las 16:00. A las 8:00 es para saber: «16:00: te proponen para la salida de 3.º B», «Va con la 6.ª. Cuando jefatura lo confirme, lee el aviso de recogida de tu ficha de 6.ª.», y no suma en el recuento («Hoy · 1»). Con las guardias confirmadas, «16:00: haces tú la salida de 3.º B», con el aviso de recogida de la ficha de 6.ª, y ya cuenta («Hoy · 2»).
+  - Hoy: el material que le pide Laura Sánchez (resumido con IA) y la salida de 3.º B a las 16:00. A las 8:00 es para saber: «16:00: te proponen para la salida de 3.º B», «Va con la 6.ª. Si jefatura lo confirma, pregunta antes en conserjería cómo se hace la salida.», y no suma en el recuento («Hoy · 1»). Con las guardias confirmadas, «16:00: haces tú la salida de 3.º B», con «Antes, lee tu ficha de 6.ª y pregunta en conserjería cómo se hace la salida.», y ya cuenta («Hoy · 2»). Las indicaciones de recogida de los alumnos no están en DirectorIA: las tiene el colegio.
   - Esta semana: un choque. Desde enero se lee de 14:30 a 14:50 en toda Primaria y sus apoyos de 5.ª empiezan a las 14:30; lo tiene que tener en cuenta en la propuesta para Pilar Serrano (lo dicen los correos de Pilar y de dirección). Lo resuelven las respuestas a Pilar que hablan de la lectura (`correo:c-ciclo#0,2`: empezar los apoyos a las 14:50 o preguntarle cómo encajarla). Si solo le pide más tiempo (la 2.ª), sigue el choque: «Le has pedido a Pilar Serrano más tiempo. Tenlo en cuenta en tu propuesta.» (`aMedias`).
-  - Para saber: la ficha se abre antes de cada sesión, se cierra al acabar la jornada y queda registrado quién la ve.
+  - Para saber: «Tus fichas se cierran al acabar la jornada», con «Cada una trae solo la clase: la tarea, el material y a quién llamar. Queda registrado quién la ve.».
 - **Lo que viene,** del correo de Pilar Serrano:
   - vie 20: la propuesta de apoyos para enero, antes de este día;
   - mar 24: la reunión del 2.º ciclo, de 16:15 a 17:15.
@@ -1152,5 +1269,5 @@ No hay correos de familias.
 
 **Módulos:**
 
-- `ficha` (ficha, `bandera: 'guardias'`): la de 6.ª y la de 1.ª (E2), con el registro.
-- `jornada` (plazos): tu horario de hoy como plazos con hora; los estados según la hora: 9:00 «pronto», etc.
+- `ficha` (ficha, `bandera: 'guardias'`): la de 6.ª y la de 1.ª (E2), solo la clase y con la línea fija, y el registro.
+- `jornada` (plazos): tu horario de hoy como plazos con hora; los estados según la hora: 9:00 «pronto», etc. La salida de las 16:00: «Acompañas al grupo a la puerta de Primaria. Antes, pregunta en conserjería cómo se hace la salida de 3.º B.».

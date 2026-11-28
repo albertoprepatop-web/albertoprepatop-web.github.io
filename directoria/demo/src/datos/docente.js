@@ -7,7 +7,7 @@ DEMO.rol({
     detalle: 'Tutora de 4.º A · Educación Física en 2.º ciclo',
     ilustracion: 'docente',
   },
-  acceso: 'Correo resumido y dictado, banco de recursos, plazos y material con Claude',
+  acceso: 'Correo y dictado, banco de recursos, plazos, justificantes y material con Claude',
 
   // ───────────────────────────── Inicio ─────────────────────────────
   // Panel de mando. Cifras, día y calendario salen de reglas y de los datos del colegio: sin insignia de IA.
@@ -19,11 +19,12 @@ DEMO.rol({
 
     cifras: [
       {
-        etiqueta: 'Tutoría de Daniel M.',
+        // Un correo general a las familias de un grupo, sin datos de ningún alumno.
+        etiqueta: 'Correo a las familias',
         icono: 'microfono',
         progreso: 'dictado',
         hoy: true,
-        nota: 'Dicta la propuesta para su familia. Te llega redactada para revisar.',
+        nota: 'El recordatorio de la salida, para 4.º A. Te llega redactado para revisar.',
         ir: 'dictado',
         accion: 'Empezar a dictar',
         accionCorta: 'Dictar',
@@ -78,9 +79,12 @@ DEMO.rol({
     lista: {
       titulo: 'Lo que te necesita',
       items: [
-        { grupo: 'Hoy', icono: 'familia', titulo: 'Familia de Daniel M.: qué llevar a la salida', detalle: 'No les ha llegado la circular. Tienes tres respuestas propuestas.', estado: 'hoy', ir: 'correo:c-daniel', sigue: 'correo:c-daniel' },
-        { grupo: 'Hoy', icono: 'familia', titulo: 'Madre de Amira: el chándal, en inglés', detalle: 'Amira tiene Educación Física mañana. Las respuestas están en inglés y traducidas.', estado: 'hoy', ir: 'correo:c-amira', sigue: 'correo:c-amira' },
-        { grupo: 'Hoy', icono: 'microfono', titulo: 'Tutoría con la familia de Daniel M.', detalle: 'Dicta el correo y te llega redactado para revisar.', estado: 'hoy', ir: 'dictado', sigue: 'dictado', siDictado: { detalle: 'Ya lo has dictado. Te queda revisar el correo y enviarlo.' } },
+        { grupo: 'Hoy', icono: 'familia', titulo: 'Una familia de 4.º A: qué llevar a la salida', detalle: 'No les ha llegado la circular. Tienes tres respuestas propuestas.', estado: 'hoy', ir: 'correo:c-salida', sigue: 'correo:c-salida' },
+        { grupo: 'Hoy', icono: 'familia', titulo: 'Una familia de 4.º A escribe en inglés por el chándal', detalle: 'Tu Educación Física con 4.º A es mañana. Las respuestas están en inglés y traducidas.', estado: 'hoy', ir: 'correo:c-chandal', sigue: 'correo:c-chandal' },
+        { grupo: 'Hoy', icono: 'microfono', titulo: 'Recordatorio de la salida a las familias de 4.º A', detalle: 'Dicta el correo y te llega redactado para revisar.', estado: 'hoy', ir: 'dictado', sigue: 'dictado', siDictado: { detalle: 'Ya lo has dictado. Te queda revisar el correo y enviarlo.' } },
+        // El justificante de su ausencia del lunes 16 (E8): lo sube desde DirectorIA, no por correo, y un programa lo archiva
+        // en su carpeta. Sin el motivo y sin la insignia de la IA (no sale de un correo).
+        { grupo: 'Esta semana', icono: 'documento', titulo: 'Tu justificante del lunes 16', detalle: 'El de tu ausencia de 9:00 a 10:30. Súbelo desde aquí, no por correo: un programa lo archiva en tu carpeta.', estado: 'pendiente', ir: 'justificantes', sigue: 'justificantes#j1', verbo: 'Entregado' },
         // El choque lo detecta DirectorIA cruzando tu horario con la salida: son reglas y fechas, así que va sin insignia
         // (ia: false, aunque siga a tu correo en jefatura). Va en «Para saber»: es la semana que viene, la guardia la cubre
         // otra persona y tú no haces nada. Pasa a hecho («Confirmado») cuando jefatura te contesta: las dos respuestas dicen
@@ -101,7 +105,7 @@ DEMO.rol({
       marcas: [
         { fecha: '2026-11-19', hora: '11:45', tipo: 'evento', titulo: 'Tutoría con una familia de 4.º A', detalle: 'Coincide con tu guardia. Has pedido a jefatura que la cubra otra persona y aún no te ha contestado.', fuente: 'correo', ir: 'plazos', sigue: 'jefatura/correo:c-laura', si: { detalle: 'Coincide con tu guardia. Jefatura te ha contestado: la cubre Rosa Medina.', estado: 'pendiente' } },
         { fecha: '2026-11-20', tipo: 'plazo', titulo: 'Programación quincenal', detalle: 'Del 23 de noviembre al 4 de diciembre, con el modelo del ciclo.', fuente: 'correo', ir: 'plazos', sigue: 'plazos#3', verbo: 'Entregada' },
-        { fecha: '2026-11-20', tipo: 'plazo', titulo: 'Autorizaciones de la salida, antes de las 14:00', detalle: 'Las de 4.º A firmadas, en secretaría y con la lista de quién falta.', fuente: 'correo', ir: 'plazos', sigue: 'plazos#4', verbo: 'Entregadas' },
+        { fecha: '2026-11-20', tipo: 'plazo', titulo: 'Autorizaciones de la salida, antes de las 14:00', detalle: 'Las de 4.º A firmadas, en secretaría. Dile a Carmen cuántas faltan.', fuente: 'correo', ir: 'plazos', sigue: 'plazos#4', verbo: 'Entregadas' },
         { fecha: '2026-11-27', hora: '9:15', tipo: 'evento', titulo: 'Salida al Jardín Botánico', detalle: 'Con 4.º. Vuelta a las 13:30.', ir: 'plazos' },
         { fecha: '2026-11-27', tipo: 'aviso', choque: true, titulo: 'Tu guardia de 3.ª hora y la salida', detalle: 'Estarás en la salida, así que la cubre otra persona. Jefatura ya lo sabe.', ir: 'plazos', sigue: 'jefatura/correo:c-laura#0,1', verbo: 'Confirmado', si: { detalle: 'Jefatura te ha confirmado que la cubre otra persona.' } },
         { fecha: '2026-12-04', tipo: 'plazo', titulo: 'Títulos para el lote de lectura', detalle: 'Si quieres libros concretos para 4.º A, pídeselos a la biblioteca antes de este día.', fuente: 'correo', ir: 'plazos', sigue: 'plazos#6', verbo: 'Pedidos' },
@@ -112,67 +116,68 @@ DEMO.rol({
   // ───────────────────────────── Correo ─────────────────────────────
   correo: [
     {
-      id: 'c-daniel',
-      de: 'Familia de Daniel M.',
-      deDetalle: '4.º A de Primaria',
-      asunto: 'Excursión al Botánico: ¿qué tiene que llevar Daniel?',
+      // Las familias escriben de temas generales y sin nombres de alumnos: «mi hijo», «una familia de 4.º A».
+      id: 'c-salida',
+      de: 'Raquel',
+      deDetalle: 'Familia de 4.º A de Primaria',
+      asunto: 'Excursión al Botánico: ¿qué tienen que llevar?',
       hora: '7:38',
       categoria: 'Familias',
       etiqueta: { texto: 'Autorización antes del vie 20', tipo: 'plazo' },
       resumen: [
-        'La circular de la salida al Jardín Botánico del viernes 27 no ha llegado a casa de Daniel M.',
-        'Su madre pregunta el horario, qué tiene que llevar, si comen allí y cuánto cuesta.',
+        'A una familia de 4.º A no le ha llegado la circular de la salida al Jardín Botánico del viernes 27.',
+        'Pregunta el horario, qué hay que llevar, si comen allí y cuánto cuesta.',
         'Ofrece traer la autorización firmada el lunes 23, pero el plazo acaba el viernes 20.',
       ],
-      piden: 'Saber el horario, qué tiene que llevar Daniel, si comen allí, el precio y si hay que firmar algo.',
-      original: 'Hola, Laura:\n\nDaniel nos ha dicho que el viernes 27 os vais de excursión al Jardín Botánico, pero la circular no ha llegado a casa. Suponemos que estará en el fondo de la mochila, como casi todo últimamente.\n\n¿Nos puedes decir a qué hora salís y a qué hora volvéis, y qué tiene que llevar? No sabemos si hace falta almuerzo o si comen allí. Tampoco sabemos cuánto cuesta.\n\nSi hay que firmar algo, dínoslo y Daniel te lo lleva el lunes sin falta.\n\nMuchas gracias y un saludo,\nRaquel, madre de Daniel M. (4.º A)',
+      piden: 'Saber el horario, qué hay que llevar, si comen allí, el precio y si hay que firmar algo.',
+      original: 'Hola, Laura:\n\nMi hijo nos ha dicho que el viernes 27 os vais de excursión al Jardín Botánico, pero la circular no ha llegado a casa. Suponemos que estará en el fondo de la mochila, como casi todo últimamente.\n\n¿Nos puedes decir a qué hora salís y a qué hora volvéis, y qué tienen que llevar? No sabemos si hace falta almuerzo o si comen allí. Tampoco sabemos cuánto cuesta.\n\nSi hay que firmar algo, dínoslo y te lo llevamos el lunes sin falta.\n\nMuchas gracias y un saludo,\nRaquel',
       respuestas: [
         {
           titulo: 'Contarle todo y mandar otra copia',
-          texto: 'Hola, Raquel:\n\nGracias por escribir. Le cuento: el viernes 27 salimos a las 9:15 y volvemos a las 13:30. No comen allí: llegamos a tiempo para la comida. Daniel tiene que llevar almuerzo, agua, gorra y ropa cómoda. Cuesta 6 €, con la entrada y el autobús, y en la circular viene cómo pagarlo.\n\nHoy le pongo a Daniel en la agenda otra copia, con la autorización. Tiene que volver firmada antes del viernes 20: el lunes ya sería tarde para confirmar las plazas.\n\nUn saludo,\nLaura Sánchez\nTutora de 4.º A',
+          texto: 'Hola, Raquel:\n\nGracias por escribir. Le cuento: el viernes 27 salimos a las 9:15 y volvemos a las 13:30. No comen allí: llegamos a tiempo para la comida. Tienen que llevar almuerzo, agua, gorra y ropa cómoda. Cuesta 6 €, con la entrada y el autobús, y va en el recibo de diciembre.\n\nHoy le doy a su hijo otra copia de la circular, con la autorización. Tiene que volver firmada antes del viernes 20: el lunes ya sería tarde para confirmar las plazas.\n\nUn saludo,\nLaura Sánchez\nTutora de 4.º A',
         },
         {
           titulo: 'Dársela hoy en mano a la salida',
-          texto: 'Hola, Raquel:\n\nGracias por avisar. Si viene a recoger a Daniel hoy a las 16:00, le doy la circular en mano a la salida y le cuento lo que necesite.\n\nLo principal: el viernes 27 salimos a las 9:15 y volvemos a las 13:30, a tiempo para la comida. Daniel tiene que llevar almuerzo, agua, gorra y ropa cómoda, y cuesta 6 €. La autorización tiene que estar firmada antes del viernes 20; el lunes ya sería tarde.\n\nUn saludo,\nLaura Sánchez\nTutora de 4.º A',
+          texto: 'Hola, Raquel:\n\nGracias por avisar. Si viene hoy a las 16:00 a la salida del colegio, le doy la circular en mano y le cuento lo que necesite.\n\nLo principal: el viernes 27 salimos a las 9:15 y volvemos a las 13:30, a tiempo para la comida. Tienen que llevar almuerzo, agua, gorra y ropa cómoda, y cuesta 6 €. La autorización tiene que estar firmada antes del viernes 20; el lunes ya sería tarde.\n\nUn saludo,\nLaura Sánchez\nTutora de 4.º A',
         },
         {
           titulo: 'Proponer que la firme en secretaría',
-          texto: 'Hola, Raquel:\n\nGracias por escribir. Como la circular no ha llegado a casa, puede pasar a firmar la autorización por secretaría cualquier mañana hasta el viernes 20: allí tienen copias. El lunes ya sería tarde para confirmar las plazas.\n\nLo que necesita saber: salimos a las 9:15 y volvemos a las 13:30, a tiempo para la comida. Daniel tiene que llevar almuerzo, agua, gorra y ropa cómoda. Cuesta 6 €, con la entrada y el autobús.\n\nUn saludo,\nLaura Sánchez\nTutora de 4.º A',
+          texto: 'Hola, Raquel:\n\nGracias por escribir. Como la circular no ha llegado a casa, puede pasar a firmar la autorización por secretaría cualquier mañana hasta el viernes 20: allí tienen copias. El lunes ya sería tarde para confirmar las plazas.\n\nLo que necesita saber: salimos a las 9:15 y volvemos a las 13:30, a tiempo para la comida. Tienen que llevar almuerzo, agua, gorra y ropa cómoda. Cuesta 6 €, con la entrada y el autobús.\n\nUn saludo,\nLaura Sánchez\nTutora de 4.º A',
         },
       ],
-      nota: 'Datos sacados de la circular de la salida. Si quieres proponerles la tutoría que tienes apuntada, díctala en «Correo dictado».',
+      nota: 'Datos sacados de la circular de la salida. Si quieres recordárselo a todas las familias de 4.º A, díctalo en «Correo dictado».',
       ir: 'dictado',
     },
     {
-      id: 'c-amira',
-      de: 'Madre de Amira',
-      deDetalle: '4.º A de Primaria',
-      asunto: 'PE uniform for Amira',
+      id: 'c-chandal',
+      de: 'Nadia',
+      deDetalle: 'Familia de 4.º A de Primaria',
+      asunto: 'PE uniform',
       hora: 'ayer',
       categoria: 'Familias',
       etiqueta: { texto: 'Responder hoy', tipo: 'hoy' },
       resumen: [
-        'La madre de Amira escribe en inglés. Amira llegó a 4.º A en octubre y hace Educación Física con su ropa de deporte.',
+        'Una familia de 4.º A escribe en inglés: su hija hace Educación Física con su propia ropa de deporte.',
         'Pregunta si vale así de momento, dónde se compra el chándal del colegio, cuánto cuesta y qué días hay Educación Física.',
-        'Amira tiene Educación Física mañana: conviene contestar hoy.',
+        'Tu Educación Física con 4.º A es mañana: conviene contestar hoy.',
       ],
-      piden: 'Saber si vale su ropa de deporte, dónde se compra el chándal, cuánto cuesta y qué días tiene Educación Física.',
-      original: 'Dear Ms Sánchez,\n\nMy name is Nadia and I am Amira’s mother. Amira started in 4.º A in October and she is very happy in your class.\n\nShe told me that she needs a special uniform for PE and that the other children wear the school tracksuit. At the moment she wears her own leggings and trainers. I hope this is OK for now.\n\nI would like to know where we can buy the tracksuit and how much it costs. I would also like to know which days she has PE, so she always brings the right clothes.\n\nSorry for writing in English. My Spanish is still very basic.\n\nThank you very much,\nNadia',
+      piden: 'Saber si vale su ropa de deporte, dónde se compra el chándal, cuánto cuesta y qué días hay Educación Física.',
+      original: 'Dear Ms Sánchez,\n\nMy daughter is in your class, 4.º A, and she is very happy there. She told me that the other children wear the school tracksuit for PE. At the moment she wears her own leggings and trainers. I hope this is OK for now.\n\nI would like to know where we can buy the tracksuit and how much it costs. I would also like to know which days the class has PE, so she always brings the right clothes.\n\nSorry for writing in English. My Spanish is still very basic.\n\nThank you very much,\nNadia',
       respuestas: [
         {
           titulo: 'Contestar a todo',
-          texto: 'Dear Nadia,\n\nThank you for your message. Amira can wear her own leggings and trainers until you buy the PE kit. The school tracksuit (€42) and T-shirt (€12) are sold at the uniform shop next to the school office, on Tuesdays and Thursdays from 16:00 to 17:30. She has PE on Mondays and Thursdays.\n\nBest wishes,\nLaura Sánchez\nClass teacher of 4.º A and PE teacher\n\n[En español: Gracias por su mensaje. Amira puede venir con sus mallas y sus zapatillas hasta que compren el uniforme. El chándal (42 €) y la camiseta (12 €) se venden en la tienda de uniformes, junto a secretaría, los martes y jueves de 16:00 a 17:30. Tiene Educación Física los lunes y los jueves.]',
+          texto: 'Dear Nadia,\n\nThank you for your message. Your daughter can wear her own leggings and trainers until you buy the PE kit. The school tracksuit (€42) and T-shirt (€12) are sold at the uniform shop next to the school office, on Tuesdays and Thursdays from 16:00 to 17:30. The class has PE on Mondays and Thursdays.\n\nBest wishes,\nLaura Sánchez\nClass teacher of 4.º A and PE teacher\n\n[En español: Gracias por su mensaje. Su hija puede venir con sus mallas y sus zapatillas hasta que compren el uniforme. El chándal (42 €) y la camiseta (12 €) se venden en la tienda de uniformes, junto a secretaría, los martes y jueves de 16:00 a 17:30. La clase tiene Educación Física los lunes y los jueves.]',
         },
         {
           titulo: 'Quedar mañana a la salida',
-          texto: 'Dear Nadia,\n\nThank you for writing, and please don’t worry about your Spanish. Amira can wear her own sports clothes for now. We can meet tomorrow at 16:00 at the school gate, and I will show you the PE kit and the uniform shop. The tracksuit costs €42 and the T-shirt €12. She has PE on Mondays and Thursdays.\n\nKind regards,\nLaura Sánchez\nClass teacher of 4.º A and PE teacher\n\n[En español: Gracias por escribir, y no se preocupe por el español. De momento, Amira puede venir con su ropa de deporte. Podemos vernos mañana a las 16:00 en la puerta del colegio y le enseño el uniforme y la tienda. El chándal cuesta 42 € y la camiseta, 12 €. Tiene Educación Física los lunes y los jueves.]',
+          texto: 'Dear Nadia,\n\nThank you for writing, and please don’t worry about your Spanish. Your daughter can wear her own sports clothes for now. We can meet tomorrow at 16:00 at the school gate, and I will show you the PE kit and the uniform shop. The tracksuit costs €42 and the T-shirt €12. The class has PE on Mondays and Thursdays.\n\nKind regards,\nLaura Sánchez\nClass teacher of 4.º A and PE teacher\n\n[En español: Gracias por escribir, y no se preocupe por el español. De momento, su hija puede venir con su ropa de deporte. Podemos vernos mañana a las 16:00 en la puerta del colegio y le enseño el uniforme y la tienda. El chándal cuesta 42 € y la camiseta, 12 €. La clase tiene Educación Física los lunes y los jueves.]',
         },
         {
-          titulo: 'Pedirle la talla',
-          texto: 'Dear Nadia,\n\nAmira can wear her own sports clothes for now, and she has PE on Mondays and Thursdays.\n\nCould you tell me her size? I will ask the uniform shop next to the school office to keep a tracksuit (€42) and a T-shirt (€12) for her. It is open on Tuesdays and Thursdays from 16:00 to 17:30.\n\nBest wishes,\nLaura Sánchez\nClass teacher of 4.º A and PE teacher\n\n[En español: De momento, Amira puede venir con su ropa de deporte, y tiene Educación Física los lunes y los jueves. ¿Me dice su talla? Pediré a la tienda de uniformes, junto a secretaría, que le guarde un chándal (42 €) y una camiseta (12 €). Abre los martes y jueves de 16:00 a 17:30.]',
+          titulo: 'Explicarle cómo encargarlo',
+          texto: 'Dear Nadia,\n\nYour daughter can wear her own sports clothes for now, and the class has PE on Mondays and Thursdays.\n\nThe uniform shop next to the school office can keep a tracksuit (€42) and a T-shirt (€12) for you: just tell them the size when you go. It is open on Tuesdays and Thursdays from 16:00 to 17:30.\n\nBest wishes,\nLaura Sánchez\nClass teacher of 4.º A and PE teacher\n\n[En español: De momento, su hija puede venir con su ropa de deporte, y la clase tiene Educación Física los lunes y los jueves. En la tienda de uniformes, junto a secretaría, le pueden guardar un chándal (42 €) y una camiseta (12 €): basta con decirles la talla. Abre los martes y jueves de 16:00 a 17:30.]',
         },
       ],
-      nota: 'Tienda y precios, de la guía para familias del colegio. La circular de la salida en inglés la está revisando orientación.',
+      nota: 'Tienda y precios, de la guía para familias del colegio. Orientación está adaptando la circular de la salida al inglés y a lectura fácil.',
     },
     {
       id: 'c-secretaria',
@@ -183,24 +188,24 @@ DEMO.rol({
       categoria: 'Equipo directivo',
       etiqueta: { texto: 'En secretaría el vie 20', tipo: 'plazo' },
       resumen: [
-        'Las autorizaciones firmadas de 4.º A tienen que estar en secretaría el viernes 20 antes de las 14:00, con la lista de quién falta.',
+        'Las autorizaciones firmadas de 4.º A tienen que estar en secretaría el viernes 20 antes de las 14:00. Quiere saber cuántas faltan.',
         'El lunes 23 Carmen confirma las entradas del Jardín y las plazas del autobús: no puede esperar más.',
         'Sin autorización firmada no se puede ir. Si una familia tiene problemas con el pago, que hable con ella.',
       ],
-      piden: 'Llevar las autorizaciones de 4.º A a secretaría el viernes 20 antes de las 14:00, con la lista de quién falta.',
-      original: 'Hola, Laura:\n\nTe recuerdo que las autorizaciones de la salida al Jardín Botánico tienen que estar en secretaría como muy tarde el viernes 20, antes de las 14:00. Tráemelas todas juntas, con una lista de quién no la ha entregado.\n\nEl lunes 23 a primera hora tengo que confirmar al Jardín el número de entradas y a la empresa de autobuses las plazas, así que no puedo esperar más.\n\nYa sabes que quien no tenga la autorización firmada no puede ir. Si alguna familia tiene algún problema con el pago, que hable conmigo y lo resolvemos con discreción.\n\nGracias,\nCarmen López\nSecretaría',
+      piden: 'Llevar las autorizaciones de 4.º A a secretaría el viernes 20 antes de las 14:00 y decir cuántas faltan.',
+      original: 'Hola, Laura:\n\nTe recuerdo que las autorizaciones de la salida al Jardín Botánico tienen que estar en secretaría como muy tarde el viernes 20, antes de las 14:00. Tráemelas todas juntas y dime cuántas faltan.\n\nEl lunes 23 a primera hora tengo que confirmar al Jardín el número de entradas y a la empresa de autobuses las plazas, así que no puedo esperar más.\n\nYa sabes que quien no tenga la autorización firmada no puede ir. Si alguna familia tiene algún problema con el pago, que hable conmigo y lo resolvemos con discreción.\n\nGracias,\nCarmen López\nSecretaría',
       respuestas: [
         {
           titulo: 'Confirmar que se las llevas el viernes',
-          texto: 'Hola, Carmen:\n\nDe acuerdo. El viernes 20 te llevo las de 4.º A antes de las 14:00, todas juntas y con la lista de quién falta.\n\nHoy lo recuerdo en clase y lo apunto en las agendas, para que no se quede ninguna en la mochila.\n\nGracias,\nLaura Sánchez\nTutora de 4.º A',
+          texto: 'Hola, Carmen:\n\nDe acuerdo. El viernes 20 te llevo las de 4.º A antes de las 14:00, todas juntas, y te digo cuántas faltan.\n\nHoy lo recuerdo en clase y lo apunto en las agendas, para que no se quede ninguna en la mochila.\n\nGracias,\nLaura Sánchez\nTutora de 4.º A',
         },
         {
           titulo: 'Pedirle más copias',
-          texto: 'Hola, Carmen:\n\n¿Me puedes dejar cinco copias más de la autorización en mi casillero de la sala de profesores? A alguna familia no le ha llegado la circular y prefiero dársela hoy en mano.\n\nEl viernes 20 te las llevo todas antes de las 14:00, con la lista de quién falta.\n\nGracias,\nLaura Sánchez\nTutora de 4.º A',
+          texto: 'Hola, Carmen:\n\n¿Me puedes dejar cinco copias más de la autorización en mi casillero de la sala de profesores? A alguna familia no le ha llegado la circular y prefiero dársela hoy en mano.\n\nEl viernes 20 te las llevo todas antes de las 14:00 y te digo cuántas faltan.\n\nGracias,\nLaura Sánchez\nTutora de 4.º A',
         },
         {
           titulo: 'Preguntar por una que llegue tarde',
-          texto: 'Hola, Carmen:\n\nEl viernes 20 te llevo las de 4.º A antes de las 14:00. Una pregunta: a una familia de mi clase le llega esta semana la circular en inglés. Si su autorización me la traen el lunes 23 a primera hora, ¿todavía la puedes contar antes de confirmar las plazas?\n\nGracias,\nLaura Sánchez\nTutora de 4.º A',
+          texto: 'Hola, Carmen:\n\nEl viernes 20 te llevo las de 4.º A antes de las 14:00. Una pregunta: esta semana sale la circular en inglés y en lectura fácil. Si alguna autorización me la traen el lunes 23 a primera hora, ¿todavía la puedes contar antes de confirmar las plazas?\n\nGracias,\nLaura Sánchez\nTutora de 4.º A',
         },
       ],
       nota: 'DirectorIA ha añadido la entrega a tus plazos: viernes 20, antes de las 14:00.',
@@ -259,22 +264,22 @@ DEMO.rol({
 
   // ───────────────────────────── Módulos ─────────────────────────────
   modulos: [
-    // Correo dictado a la familia de Daniel M.
+    // Correo dictado a las familias de 4.º A: una comunicación general, sin datos de ningún alumno.
     {
       id: 'dictado',
       tipo: 'dictado',
       menu: 'Correo dictado',
       antetitulo: 'Del dictado al correo',
-      titulo: 'Correo a la familia de Daniel M.',
-      entradilla: 'Dicta el correo como se lo contarías a un compañero. DirectorIA lo redacta en el tono adecuado para la familia; tú lo revisas, lo cambias si quieres y lo envías.',
-      para: 'Familia de Daniel M. (4.º A)',
-      transcripcion: 'Vale, a ver. Es para la familia de Daniel, el de mi clase. Eh… quiero contarles que lleva como una semana sin traer los deberes, desde el martes pasado o así, y que en clase le veo cansado, que le cuesta arrancar por las mañanas. Pero que no es una queja, ¿eh? Que Daniel participa un montón y es un cielo con los compañeros. Bueno, que me gustaría verles para hablarlo con calma. Proponles el lunes a las cuatro y cuarto, que es mi hora de tutorías, o el miércoles 25 a mediodía, a la una menos cuarto. Y si no les va bien ninguna, que me digan ellos.',
-      asunto: 'Tutoría para hablar de Daniel',
-      borrador: 'Estimada familia:\n\nMe gustaría que nos viéramos para hablar de Daniel con calma.\n\nDesde hace una semana, más o menos, no trae los deberes hechos, y en clase lo noto más cansado de lo habitual: le cuesta arrancar por las mañanas. No se lo cuento como una queja. Daniel participa mucho y se lleva muy bien con sus compañeros, y quiero que entre todos le ayudemos a estar a gusto.\n\nLes propongo el lunes 23 de noviembre a las 16:15 o el miércoles 25 a las 12:45, en el aula de 4.º A. Si ninguno de los dos momentos les viene bien, díganme qué día les encaja mejor y lo buscamos.\n\nY si en casa han notado algo, será un buen momento para hablarlo.\n\nUn saludo cordial,\nLaura Sánchez\nTutora de 4.º A',
+      titulo: 'Correo a las familias de 4.º A',
+      entradilla: 'Dicta el correo como se lo contarías a un compañero. DirectorIA lo redacta en el tono de las circulares del colegio; tú lo revisas, lo cambias si quieres y lo envías.',
+      para: 'Familias de 4.º A',
+      transcripcion: 'Vale, a ver. Es para todas las familias de mi clase. Eh… que el viernes 27 nos vamos al Botánico, salimos a las nueve y cuarto y volvemos a la una y media, a tiempo para comer. Que traigan almuerzo, agua, gorra y ropa cómoda. Y lo importante: que la autorización tiene que estar firmada el viernes 20 como muy tarde, que el lunes ya no se pueden confirmar las plazas. Ah, y que si a alguien no le ha llegado la circular, que me lo diga y le doy otra copia.',
+      asunto: 'Salida al Jardín Botánico: autorizaciones antes del viernes 20',
+      borrador: 'Estimadas familias:\n\nLes recuerdo que el viernes 27 de noviembre 4.º A va de excursión al Jardín Botánico. Saldremos del colegio a las 9:15 y volveremos a las 13:30, a tiempo para la comida.\n\nCada alumno tiene que llevar almuerzo, agua, gorra y ropa cómoda. La salida cuesta 6 €, con la entrada y el autobús, y se cobra en el recibo de diciembre: no hace falta que traigan dinero.\n\nLo más importante: la autorización tiene que estar firmada antes del viernes 20. El lunes 23 ya no podremos confirmar las plazas.\n\nSi la circular no les ha llegado a casa, díganmelo y les doy otra copia.\n\nUn saludo cordial,\nLaura Sánchez\nTutora de 4.º A',
       notas: [
-        'Tono cercano y sin juicios: cuenta lo que ves en clase, sin dar nada por supuesto',
-        'Dos horarios, comprobados en tu agenda: lun 23 a las 16:15 y mié 25 a las 12:45',
-        'Añade algo que no dijiste: una invitación a contar lo que hayan notado en casa',
+        'Tono cordial y de usted, como en las circulares del colegio',
+        'Fecha, horas y plazo, comprobados con la circular de la salida',
+        'Añade algo que no dijiste: el precio y que va en el recibo de diciembre',
       ],
     },
 
@@ -292,7 +297,7 @@ DEMO.rol({
       resultados: [
         {
           titulo: 'Flashcards: los grupos de alimentos',
-          meta: 'Educación Física · 6.º de Primaria · De Marta R. · Hecho con IA y revisado',
+          meta: 'Educación Física · 6.º de Primaria · De Marta Ramos · Hecho con IA y revisado',
           cercania: 'Misma materia, ciclo siguiente',
           adaptar: {
             boton: 'Adaptar a 3.º–4.º',
@@ -306,17 +311,17 @@ DEMO.rol({
               'Tarjeta 6 · Agua. «La mejor bebida antes, durante y después de hacer deporte».',
               'Juego para el gimnasio: reparte las tarjetas por la pista. Cada equipo corre a por ellas y monta en su aro un almuerzo para el recreo.',
             ],
-            nota: 'Versión preparada con IA a partir del recurso de Marta R., con frases más cortas, seis tarjetas en vez de diez y sin la tabla de nutrientes. Revísala antes de usarla; queda enlazada al original.',
+            nota: 'Versión preparada con IA a partir del recurso de Marta Ramos, con frases más cortas, seis tarjetas en vez de diez y sin la tabla de nutrientes. Revísala antes de usarla; queda enlazada al original.',
           },
         },
         {
           titulo: 'Tarjetas de hábitos saludables',
-          meta: 'Educación Física · 2.º de Primaria · De Luis G.',
+          meta: 'Educación Física · 2.º de Primaria · De Luis García',
           cercania: 'Misma materia, ciclo anterior',
         },
         {
           titulo: 'Juego: la pirámide de los alimentos',
-          meta: 'Ciencias de la Naturaleza · 4.º de Primaria · De Pilar S.',
+          meta: 'Ciencias de la Naturaleza · 4.º de Primaria · De Pilar Serrano',
           cercania: 'Mismo curso, materia afín',
         },
       ],
@@ -326,6 +331,12 @@ DEMO.rol({
         materia: ['Educación Física'],
         contenidos: ['Alimentación saludable', 'Hábitos de vida activa'],
         casillas: ['Sin fotos ni datos de alumnos', 'Es mío o puedo compartirlo'],
+        // Lo que se comprueba al leer el archivo: con reglas (un DNI, un ©, un ISBN) y con IA (nombres o datos de salud).
+        // Es el filtro que impide que entren datos de alumnos en el banco.
+        comprobado: [
+          { texto: 'Sin DNI, ni ©, ni ISBN', como: 'reglas' },
+          { texto: 'Sin nombres ni datos de salud', como: 'ia' },
+        ],
         declaracion: 'Lo he hecho con IA y lo he revisado',
       },
       impacto: {
@@ -346,8 +357,8 @@ DEMO.rol({
       aviso: 'Solo para material didáctico. No tiene acceso a los datos del colegio, un filtro está pensado para bloquear datos personales y la norma de uso es no introducirlos. El colegio lo paga en su propia cuenta.',
       peticion: 'Situación de aprendizaje sobre alimentación saludable para 4.º de Primaria: tres sesiones de 45 minutos, una en el gimnasio, y una versión con tareas más cortas para quien lo necesite.',
       bloqueo: {
-        intento: 'Situación de aprendizaje sobre alimentación saludable para 4.º de Primaria: tres sesiones, una en el gimnasio, y tareas más cortas para Daniel M., que necesita las instrucciones de una en una.',
-        mensaje: 'Lleva un nombre, «Daniel M.», y en el módulo de Claude no se escriben datos de alumnos. No se ha enviado nada. Quita el nombre y pídelo así: «para quien lo necesite».',
+        intento: 'Situación de aprendizaje sobre alimentación saludable para 4.º A: tres sesiones, una en el gimnasio, y que el cartel final lo presenten Lucas y Sara.',
+        mensaje: 'Lleva nombres, «Lucas» y «Sara», y en el módulo de Claude no se escriben datos de alumnos. No se ha enviado nada. Quita los nombres y pídelo sin ellos.',
       },
       respuesta: {
         titulo: 'Situación de aprendizaje · Almuerzos con energía (4.º de Primaria)',
@@ -396,7 +407,7 @@ DEMO.rol({
           },
           { tipo: 'titulo', texto: 'Para tu evaluación' },
           { tipo: 'parrafo', texto: 'Una lista de cotejo con cuatro aspectos: clasifica los alimentos en el plato, diseña un almuerzo equilibrado, explica por qué da energía y colabora con su equipo. La observación y la valoración son tuyas.' },
-          { tipo: 'aviso', texto: 'Ten en cuenta las alergias e intolerancias de tu grupo al elegir los alimentos de las tarjetas y de los almuerzos. Ese dato lo conoces tú: no hace falta escribirlo aquí.' },
+          { tipo: 'aviso', texto: 'Antes de usar alimentos de verdad en clase, pregunta en el colegio: las indicaciones de salud de los alumnos no están en DirectorIA. No hace falta escribirlas aquí.' },
         ],
       },
     },
@@ -413,15 +424,15 @@ DEMO.rol({
         {
           fecha: 'mar 17 nov',
           titulo: 'Repartir en 4.º A la circular de la salida',
-          detalle: 'Repartida en clase. La versión en inglés para la familia de Amira la está revisando orientación.',
+          detalle: 'Repartida en clase. Las versiones en inglés y en lectura fácil las está preparando orientación.',
           quien: 'Tú',
           origen: 'Acuerdo del claustro del lunes 16',
           estado: 'hecho',
         },
         {
           fecha: 'Hoy, mié 18 nov',
-          titulo: 'Proponer una tutoría a la familia de Daniel M.',
-          detalle: 'Díctalo en «Correo dictado»: te llega redactado y con dos horarios para elegir.',
+          titulo: 'Recordar a las familias de 4.º A la salida y las autorizaciones',
+          detalle: 'Díctalo en «Correo dictado»: te llega redactado para revisar y enviarlo tú.',
           quien: 'Tú',
           origen: 'Tu nota del lunes 16',
           estado: 'hoy',
@@ -446,7 +457,7 @@ DEMO.rol({
         {
           fecha: 'vie 20 nov · 14:00',
           titulo: 'Autorizaciones de la salida al Jardín Botánico',
-          detalle: 'Las de 4.º A firmadas, en secretaría, todas juntas y con la lista de quién falta. Sin autorización no se puede ir.',
+          detalle: 'Las de 4.º A firmadas, en secretaría, todas juntas. Dile a Carmen cuántas faltan. Sin autorización no se puede ir.',
           quien: 'Tú',
           origen: 'Correo de secretaría',
           estado: 'pronto',
@@ -477,6 +488,33 @@ DEMO.rol({
           origen: 'Acuerdo del claustro del lunes 16',
           estado: 'despues',
         },
+      ],
+    },
+
+    // E8. Tus justificantes: lo subes desde aquí (no por correo) y eliges la ausencia; un programa lo renombra y lo guarda
+    // en tu carpeta. Ni la IA ni ningún programa leen lo que pone: solo lo abrís tú y secretaría. En el registro de ausencias
+    // solo pone «entregado» o «pendiente».
+    {
+      id: 'justificantes',
+      tipo: 'justificantes',
+      vista: 'subir',
+      menu: 'Tus justificantes',
+      antetitulo: 'Personal · tus ausencias',
+      titulo: 'Tus justificantes',
+      entradilla: 'Sube el justificante y elige la ausencia a la que corresponde. Un programa lo renombra y lo guarda en tu carpeta. Ni la IA ni ningún programa leen lo que pone, y el motivo no se guarda.',
+      confidencial: 'Reservado · lo ves tú y secretaría, con registro de accesos',
+      curso: '2026-27',
+      archivo: 'escaneo_0001.pdf',
+      ausencias: [
+        { id: 'j1', fecha: '2026-11-16', horas: '9:00-10:30', justificante: 'pendiente' },
+        { fecha: '2026-10-08', horas: 'Toda la jornada', justificante: 'entregado' },
+      ],
+      reglas: [
+        'Un programa, con reglas y sin IA, lo renombra con la fecha y lo guarda en tu carpeta: Justificantes / curso / mes / tu nombre.',
+        'Ni la IA ni ningún programa leen lo que pone: no se extrae nada de él.',
+        'En el registro de ausencias solo pone «Justificante: entregado» o «pendiente», nunca el motivo.',
+        'Lo ves tú y secretaría, que lleva el personal, con registro de accesos.',
+        'Se borra cuando pasa el plazo que fija el colegio.',
       ],
     },
   ],

@@ -7,7 +7,7 @@ DEMO.rol({
     detalle: 'Jefatura de estudios · Primaria y ESO',
     ilustracion: 'jefatura',
   },
-  acceso: 'Guardias y fichas de sustitución, exámenes, programaciones y correo resumido',
+  acceso: 'Guardias, fichas de sustitución, exámenes, ausencias, programaciones y correo',
 
   // ─── Inicio: el panel de mando de jefatura (6.2 bis) ───────────────
   // Cifras, día y calendario salen de reglas y de los datos del colegio: sin insignia de IA.
@@ -115,21 +115,33 @@ DEMO.rol({
           detalle: 'A 4.ª hora tiene una tutoría con una familia de 4.º A. Quién la cubre lo decides tú.',
           estado: 'hoy', ir: 'correo:c-laura', sigue: 'correo:c-laura',
         },
-        { grupo: 'Esta semana', icono: 'familia', titulo: 'Una familia de 2.º ESO A pide cambiar de optativa', detalle: 'De Francés a Tecnología. El plazo del centro terminó el 30 de septiembre.', estado: 'pendiente', ir: 'correo:c-optativa', sigue: 'correo:c-optativa' },
+        { grupo: 'Esta semana', icono: 'familia', titulo: 'Una familia de 4.º ESO pregunta por las fechas de los exámenes', detalle: 'Las quieren para organizarse en casa. Salen cuando apruebes el calendario de la 1.ª evaluación.', estado: 'pendiente', ir: 'correo:c-fechas', sigue: 'correo:c-fechas' },
         { grupo: 'Para saber', icono: 'info', titulo: 'Consejería: instrucciones de las sesiones de evaluación', detalle: 'Calificaciones en Raíces antes del viernes 18 de diciembre. Las sesiones del 9 al 11 encajan en ese plazo.', estado: 'info', ir: 'correo:c-consejeria', sigue: 'correo:c-consejeria' },
+        {
+          // El informe de ausencias: quién falta y a qué horas, sin motivos, y si el justificante está entregado o pendiente.
+          // Cuando Laura Sánchez sube el suyo en su perfil, el recuento cambia.
+          grupo: 'Para saber', icono: 'persona', titulo: 'Ausencias del profesorado en noviembre: cuatro',
+          detalle: 'Dos con el justificante entregado. Faltan el de hoy de Sergio Prieto y el del lunes 16 de Laura Sánchez.', estado: 'info', ir: 'ausencias',
+          sigue: 'docente/justificantes#j1', si: { detalle: 'Tres con el justificante entregado. Falta el de hoy de Sergio Prieto.', estado: 'info' },
+        },
       ],
     },
 
     // Lo que viene: plazos (lo que haces tú), citas o salidas y choques, en las próximas tres semanas.
     // fuente: 'correo' para lo que la IA ha sacado de un correo (lleva la insignia).
-    // El Caso 2026-07 solo va por su número.
     agenda: {
       titulo: 'Lo que viene',
       desde: '2026-11-16',
       semanas: 3,
       marcas: [
-        { fecha: '2026-11-19', tipo: 'evento', titulo: 'Caso 2026-07: entrevistas', detalle: 'Las hace el equipo del caso.' },
-        { fecha: '2026-11-20', tipo: 'evento', titulo: 'Caso 2026-07: entrevistas', detalle: 'Las hace el equipo del caso.' },
+        // La guardia del jueves 19 de Laura Sánchez: la decide jefatura al contestarle (las dos respuestas dicen que la cubre
+        // Rosa Medina). Si archivas su correo, sigue pendiente.
+        {
+          fecha: '2026-11-19', hora: '11:45', tipo: 'plazo', titulo: 'La guardia de 4.ª de Laura Sánchez', detalle: 'Tiene una tutoría a esa hora. DirectorIA propone a Rosa Medina, la única con la 4.ª libre.',
+          ir: 'correo:c-laura', sigue: 'correo:c-laura#0,1', verbo: 'Decidido', si: { detalle: 'La cubre Rosa Medina. Ya se lo has dicho a Laura.' },
+        },
+        // De las programaciones quincenales sale la tarea de las fichas de sustitución. Es una fecha del colegio: sin enlace.
+        { fecha: '2026-11-20', tipo: 'evento', titulo: 'Entrega de las programaciones quincenales de Primaria', detalle: 'Del 23 de noviembre al 4 de diciembre. De ellas sale la tarea de las fichas de sustitución.' },
         // Lo cumplen las dos respuestas que dan fecha (#0 y #1). La que pregunta antes si el examen es de una sesión (#2)
         // no la da: el plazo sigue pendiente (aMedias).
         {
@@ -169,58 +181,61 @@ DEMO.rol({
       categoria: 'Claustro',
       etiqueta: { texto: 'Ausencia de hoy', tipo: 'hoy' },
       resumen: [
-        'Sergio Prieto tiene fiebre y no viene hoy. Lo ha marcado en la app a las 7:45.',
+        'Sergio Prieto no viene hoy. Lo ha marcado en la app a las 7:45.',
         'La tarea de 3.º B está en su programación quincenal. Hoy le tocaba vigilar el patio en el recreo.',
-        'Mañana a primera hora dirá si puede venir.',
+        'Mañana a primera hora te confirmará si viene.',
       ],
       piden: 'Que se cubran sus sesiones con 3.º B y su turno de patio.',
-      original: 'Hola, Javier:\n\nMe he levantado con fiebre y no voy a poder ir hoy. Ya lo he marcado en la app. Siento avisar tan justo.\n\nLo de hoy con 3.º B está en la programación quincenal que subí, con las páginas de cada asignatura. Los libros están en el armario del aula, como siempre.\n\nHoy me tocaba vigilar el patio en el recreo, por si hay que buscar a alguien.\n\nMañana a primera hora te digo cómo sigo.\n\nUn abrazo,\nSergio',
+      original: 'Hola, Javier:\n\nHoy no voy a poder ir. Ya lo he marcado en la app. Siento avisar tan justo.\n\nLo de hoy con 3.º B está en la programación quincenal que subí, con las páginas de cada asignatura. Los libros están en el armario del aula, como siempre.\n\nHoy me tocaba vigilar el patio en el recreo, por si hay que buscar a alguien.\n\nMañana a primera hora te confirmo si voy.\n\nUn abrazo,\nSergio',
       respuestas: [
         {
-          titulo: 'Recupérate; tu clase está cubierta',
-          texto: 'Hola, Sergio:\n\nRecupérate tranquilo. Tu clase está cubierta: Pablo Sanz entra en 1.ª y en 6.ª hora, Rosa Medina en 3.ª y Teresa Gil se queda con tu turno de patio. Pablo y Rosa tienen su ficha con la tarea de tu programación quincenal.\n\nNo tienes que preparar nada más. Cuídate.\n\nUn abrazo,\nJavier Martín\nJefe de estudios',
+          titulo: 'Decirle que su clase está cubierta',
+          texto: 'Hola, Sergio:\n\nNo te preocupes por la clase: está cubierta. Pablo Sanz entra en 1.ª y en 6.ª hora, Rosa Medina en 3.ª y Teresa Gil se queda con tu turno de patio. Pablo y Rosa tienen su ficha con la tarea de tu programación quincenal.\n\nNo tienes que preparar nada más.\n\nUn abrazo,\nJavier Martín\nJefe de estudios',
         },
         {
           titulo: 'Pedir que avise esta tarde',
-          texto: 'Hola, Sergio:\n\nGracias por avisar. Hoy está todo cubierto y la tarea sale de tu programación quincenal, así que olvídate de la clase.\n\nSi puedes, dime esta tarde, antes de las 18:00, si mañana vas a poder venir. Así dejo cerradas las guardias del jueves y quien te cubra tiene su ficha desde primera hora.\n\nQue te mejores.\n\nJavier Martín\nJefe de estudios',
+          texto: 'Hola, Sergio:\n\nGracias por avisar. Hoy está todo cubierto y la tarea sale de tu programación quincenal, así que olvídate de la clase.\n\nSi puedes, dime esta tarde, antes de las 18:00, si mañana vienes. Así dejo cerradas las guardias del jueves y quien te cubra tiene su ficha desde primera hora.\n\nUn abrazo,\nJavier Martín\nJefe de estudios',
         },
         {
-          titulo: 'Recordar el justificante',
-          texto: 'Hola, Sergio:\n\nQue te mejores. Tu clase está cubierta y no tienes que preparar nada.\n\nCuando vuelvas, deja en secretaría el justificante del médico, que Carmen lo necesita para el registro de ausencias. Si al final son más días, avísame y vemos con ella qué papeles hacen falta.\n\nUn abrazo,\nJavier Martín\nJefe de estudios',
+          titulo: 'Recordarle cómo subir el justificante',
+          texto: 'Hola, Sergio:\n\nTu clase está cubierta y no tienes que preparar nada.\n\nCuando puedas, sube el justificante desde DirectorIA, en «Tus justificantes», y elige la ausencia de hoy: lo archiva un programa en tu carpeta y solo lo ves tú y secretaría. No lo mandes por correo. En el registro de ausencias solo pondrá que está entregado.\n\nUn abrazo,\nJavier Martín\nJefe de estudios',
         },
       ],
       nota: 'La propuesta para cubrirlo está en «Guardias de hoy». Confírmala antes de contestarle.',
       ir: 'guardias',
     },
     {
-      id: 'c-optativa',
-      de: 'Madre de Gonzalo R.',
-      deDetalle: '2.º ESO A',
-      asunto: 'Cambio de optativa: de Francés a Tecnología',
+      // Una familia pregunta por algo general (las fechas de los exámenes): sin nombres de alumnos.
+      id: 'c-fechas',
+      de: 'Marcos',
+      deDetalle: 'Familia de 4.º ESO B',
+      asunto: '¿Cuándo salen las fechas de los exámenes?',
       hora: '7:20',
       categoria: 'Familias',
       etiqueta: { texto: 'Responder esta semana', tipo: 'plazo' },
       resumen: [
-        'La madre de Gonzalo R. (2.º ESO A) pide pasarlo de Francés a Tecnología: le cuesta mucho seguir las clases.',
-        'El plazo del centro para cambiar de optativa terminó el 30 de septiembre.',
-        'Las normas permiten un cambio excepcional al acabar la 1.ª evaluación, si hay plaza. En Tecnología de 2.º quedan 3.',
+        'Una familia de 4.º ESO B pregunta cuándo se publican las fechas de los exámenes de la 1.ª evaluación.',
+        'Las quieren para organizar en casa las tardes de estudio.',
+        'Los exámenes de ESO son del lunes 30 al viernes 4. El calendario por materias está por aprobar.',
       ],
-      piden: 'Saber si Gonzalo puede pasar de Francés a Tecnología este curso.',
-      original: 'Buenos días:\n\nLes escribo porque a mi hijo Gonzalo, de 2.º ESO A, le está costando mucho el Francés este curso. Se esfuerza, pero no consigue seguir las clases y está bastante desmotivado.\n\nNos gustaría saber si es posible cambiarlo a Tecnología, que le gusta mucho y en la que creemos que estaría más a gusto. Sabemos que el curso ya ha empezado, pero preferimos preguntarlo antes de que acabe el trimestre.\n\nQuedamos a la espera de su respuesta. Muchas gracias.\n\nUn saludo,\nCristina, madre de Gonzalo R. (2.º ESO A)',
+      piden: 'Saber cuándo se publican las fechas de los exámenes de la 1.ª evaluación.',
+      original: 'Buenos días:\n\nSomos una familia de 4.º de ESO B. Nos han dicho que los exámenes de la 1.ª evaluación empiezan a finales de mes, pero todavía no sabemos qué día es cada asignatura.\n\n¿Cuándo vais a publicar las fechas? Lo preguntamos para organizarnos en casa las tardes de estudio, que entre semana vamos con el tiempo muy justo.\n\nMuchas gracias y un saludo,\nMarcos',
       respuestas: [
         {
-          titulo: 'Explicar el plazo y cómo pedirlo',
-          texto: 'Buenos días:\n\nGracias por contarnos cómo está Gonzalo. El plazo para cambiar de optativa terminó el 30 de septiembre, así que ahora no podemos hacer el cambio directamente.\n\nLas normas del centro sí permiten estudiarlo de forma excepcional al acabar la 1.ª evaluación. Si quieren pedirlo, envíennos antes del viernes 4 de diciembre la solicitud firmada, que tienen en secretaría. El equipo docente lo valorará en la sesión de evaluación y les comunicaré la decisión. Si sale adelante, Gonzalo empezaría Tecnología en enero, con un plan para ponerse al día.\n\nUn saludo,\nJavier Martín\nJefe de estudios del Colegio Ejemplo',
+          titulo: 'Darle la semana y cuándo se publica',
+          texto: 'Buenos días, Marcos:\n\nGracias por escribirnos. Los exámenes de la 1.ª evaluación de ESO son del lunes 30 de noviembre al viernes 4 de diciembre.\n\nEl calendario por asignaturas lo publicaremos esta semana para todas las familias de ESO, en cuanto quede cerrado con los departamentos.\n\nUn saludo,\nJavier Martín\nJefe de estudios del Colegio Ejemplo',
         },
         {
-          titulo: 'Proponer una reunión',
-          texto: 'Buenos días:\n\nGracias por escribirnos. Antes de plantear el cambio, me gustaría hablarlo con ustedes con calma y saber cómo lo está viviendo Gonzalo. El plazo ordinario terminó el 30 de septiembre, pero hay margen para estudiar un cambio excepcional al acabar el trimestre.\n\n¿Les vendría bien el miércoles 25 a las 15:30 o el viernes 27 a las 9:00? Si ninguna de las dos fechas les encaja, díganme qué día les viene mejor.\n\nUn saludo,\nJavier Martín\nJefe de estudios del Colegio Ejemplo',
+          titulo: 'Explicar dónde se publica',
+          texto: 'Buenos días, Marcos:\n\nGracias por preguntarlo. El calendario de exámenes de la 1.ª evaluación sale esta semana: lo recibirán por correo todas las familias de ESO y estará también en el tablón de la entrada de Secundaria.\n\nLos exámenes son del lunes 30 de noviembre al viernes 4 de diciembre, como mucho uno al día por grupo.\n\nUn saludo,\nJavier Martín\nJefe de estudios del Colegio Ejemplo',
         },
         {
-          titulo: 'Contestar antes del viernes',
-          texto: 'Buenos días:\n\nGracias por escribirnos y por contarnos cómo está Gonzalo. Antes de darles una respuesta, quiero hablarlo con el Departamento de Lenguas Extranjeras y con la tutoría de 2.º ESO A.\n\nLes escribiré antes del viernes 20 con una respuesta concreta y, si el cambio es posible, con los pasos que hay que dar.\n\nUn saludo,\nJavier Martín\nJefe de estudios del Colegio Ejemplo',
+          titulo: 'Pedirle un poco de paciencia',
+          texto: 'Buenos días, Marcos:\n\nGracias por escribirnos. Estamos cerrando con los departamentos un último cambio, para que ningún grupo tenga dos exámenes el mismo día. En cuanto quede aprobado, se lo enviaremos a todas las familias de ESO, como muy tarde el viernes 20.\n\nPara ir organizándose: los exámenes son del lunes 30 de noviembre al viernes 4 de diciembre.\n\nUn saludo,\nJavier Martín\nJefe de estudios del Colegio Ejemplo',
         },
       ],
+      nota: 'Las fechas salen del calendario de exámenes, que tienes por aprobar en «Exámenes».',
+      ir: 'examenes',
     },
     {
       // Laura pide que otra persona cubra su guardia del jueves, sin proponer a nadie: lo decide jefatura. La nota es de
@@ -319,7 +334,7 @@ DEMO.rol({
       entradilla: 'DirectorIA propone quién cubre cada sesión de Sergio, con las guardias bien repartidas. Revisa cada propuesta, cámbiala si hace falta y confírmala: hasta entonces no se avisa a nadie.',
       contexto: {
         titulo: 'Sergio Prieto · tutor de 3.º B',
-        texto: 'Avisó a las 7:45 de que tiene fiebre y no viene hoy. Hay que cubrir tres sesiones con 3.º B y su turno de patio. Inglés, Educación Física y Música las dan especialistas.',
+        texto: 'Avisó a las 7:45 de que no viene hoy. Hay que cubrir tres sesiones con 3.º B y su turno de patio. Inglés, Educación Física y Música las dan especialistas.',
       },
       items: [
         {
@@ -353,7 +368,7 @@ DEMO.rol({
           cuando: '6.ª hora · 15:15-16:00',
           que: '3.º B · Matemáticas',
           propuesta: 'Pablo Sanz',
-          motivo: 'Así 3.º B acaba el día con la misma persona que lo empezó. Es la última hora: su ficha incluye la recogida de las 16:00.',
+          motivo: 'Así 3.º B acaba el día con la misma persona que lo empezó. Es la última hora: también hace la salida de las 16:00.',
           alternativas: ['Rosa Medina', 'Teresa Gil'],
           ficha: true,
         },
@@ -364,47 +379,54 @@ DEMO.rol({
       bandera: 'guardias',
     },
 
-    // E2. Vista previa de las fichas de sustitución
+    // E2. Vista previa de las fichas de sustitución: solo la clase. La línea fija de salud y recogidas la pone el motor.
     {
       id: 'fichas',
       tipo: 'ficha',
       menu: 'Fichas de sustitución',
       antetitulo: 'Vista previa · lo que recibe quien sustituye',
       titulo: 'Fichas de hoy para 3.º B',
-      entradilla: 'Así verán Pablo Sanz y Rosa Medina sus fichas cuando confirmes las guardias. La tarea sale de la programación quincenal de Sergio; las pautas, la salud y las recogidas las ponen tutoría, orientación y dirección.',
+      entradilla: 'Así verán Pablo Sanz y Rosa Medina sus fichas cuando confirmes las guardias. Solo la clase: la tarea de la programación quincenal de Sergio, el material y a quién llamar.',
       fichas: [
         {
           sesion: '3.º B · Matemáticas · 6.ª hora',
           hora: '15:15-16:00',
-          origen: 'Preparada por DirectorIA para Pablo Sanz',
+          aula: 'Aula de 3.º B, planta baja',
+          para: 'Pablo Sanz',
+          origen: 'Preparada por DirectorIA · confirmada por jefatura',
           datos: [
-            { dt: 'Tarea', dd: 'Ejercicios 4 a 9 de la página 58. Los libros están en el armario del aula.' },
-            { dt: 'Necesidades', dd: 'Mario: instrucciones por escrito y más tiempo.' },
-            { dt: 'Salud', dd: 'Lucía: alérgica a frutos secos. Su autoinyector está en conserjería.', aviso: true },
-            { dt: 'Recogida · última hora', dd: 'Hugo solo puede salir con su madre o su abuela. Si viene otra persona, no lo entregues y avisa a dirección (ext. 201).', aviso: true },
+            { dt: 'Tarea', dd: 'Ejercicios 4 a 9 de la página 58, de la programación quincenal de Sergio Prieto.' },
+            { dt: 'Material', dd: 'Los libros de Matemáticas, en el armario del aula. Las hojas de cuadrícula, en la bandeja de la mesa del tutor.' },
+            { dt: 'A quién llamar', dd: 'Tutoría: Ana Torres, tutora de 3.º A (ext. 213) · Jefatura de estudios (ext. 202) · Conserjería (ext. 200)' },
+            { dt: 'Al acabar', dd: 'A las 16:00, acompaña al grupo a la puerta de Primaria.' },
           ],
           pie: 'Se abre antes de la sesión y se cierra al acabar la jornada. Queda registrado quién la ve.',
         },
         {
           sesion: '3.º B · Lengua · 1.ª hora',
           hora: '9:00-9:45',
-          origen: 'Preparada por DirectorIA para Pablo Sanz',
+          aula: 'Aula de 3.º B, planta baja',
+          para: 'Pablo Sanz',
+          origen: 'Preparada por DirectorIA · confirmada por jefatura',
           datos: [
-            { dt: 'Tarea', dd: 'Lectura de las páginas 40-41 y las preguntas 1 a 3 en el cuaderno.' },
-            { dt: 'Necesidades', dd: 'Mario: instrucciones por escrito y más tiempo.' },
-            { dt: 'Salud', dd: 'Lucía: alérgica a frutos secos. Su autoinyector está en conserjería.', aviso: true },
+            { dt: 'Tarea', dd: 'Lectura de las páginas 40-41 y las preguntas 1 a 3 en el cuaderno, de la programación quincenal de Sergio Prieto.' },
+            { dt: 'Material', dd: 'Los libros de Lengua y los cuadernos, en el armario del aula.' },
+            { dt: 'A quién llamar', dd: 'Tutoría: Ana Torres, tutora de 3.º A (ext. 213) · Jefatura de estudios (ext. 202) · Conserjería (ext. 200)' },
+            { dt: 'Al acabar', dd: 'A las 9:45 llega Teresa Gil, la maestra de Inglés: espera en el aula hasta que entre.' },
           ],
           pie: 'Se abre antes de la sesión y se cierra al acabar la jornada. Queda registrado quién la ve.',
         },
         {
           sesion: '3.º B · Ciencias de la Naturaleza · 3.ª hora',
           hora: '10:30-11:15',
-          origen: 'Preparada por DirectorIA para Rosa Medina',
+          aula: 'Aula de 3.º B, planta baja',
+          para: 'Rosa Medina',
+          origen: 'Preparada por DirectorIA · confirmada por jefatura',
           datos: [
             { dt: 'Tarea', dd: 'Unidad 3, los animales vertebrados: lectura de la página 34 y el cuadro de la página 35 en el cuaderno.' },
-            { dt: 'Necesidades', dd: 'Mario: instrucciones por escrito y más tiempo.' },
-            { dt: 'Salud', dd: 'Lucía: alérgica a frutos secos. Su autoinyector está en conserjería.', aviso: true },
-            { dt: 'Al acabar', dd: 'A las 11:15 acompaña al grupo al patio. Hoy vigila Teresa Gil.' },
+            { dt: 'Material', dd: 'Los libros de Ciencias, en el armario del aula. Las láminas de los vertebrados, en el corcho del fondo.' },
+            { dt: 'A quién llamar', dd: 'Tutoría: Ana Torres, tutora de 3.º A (ext. 213) · Jefatura de estudios (ext. 202) · Conserjería (ext. 200)' },
+            { dt: 'Al acabar', dd: 'A las 11:15, acompaña al grupo al patio. Hoy vigila Teresa Gil.' },
           ],
           pie: 'Se abre antes de la sesión y se cierra al acabar la jornada. Queda registrado quién la ve.',
         },
@@ -477,6 +499,32 @@ DEMO.rol({
       ],
       boton: 'Pedir lo que falta',
       alTerminar: 'Has pedido a Educación Física y a Música que completen lo que falta. DirectorIA te avisará cuando suban la nueva versión.',
+    },
+
+    // E8. Informe de ausencias del profesorado: quién falta y a qué horas, sin motivos. Del justificante, solo si está
+    // entregado o pendiente: los archivos los ve secretaría, no jefatura.
+    {
+      id: 'ausencias',
+      tipo: 'justificantes',
+      vista: 'informe',
+      menu: 'Ausencias',
+      antetitulo: 'Profesorado · noviembre de 2026',
+      titulo: 'Ausencias del profesorado en noviembre',
+      entradilla: 'Quién ha faltado este mes y a qué horas, y si el justificante está entregado. Sin motivos: el justificante va a su carpeta, y aquí solo pone «entregado» o «pendiente».',
+      nota: 'Aquí no se ven: los ve secretaría.',
+      curso: '2026-27',
+      ausencias: [
+        { docente: 'Sergio Prieto', fecha: '2026-11-18', horas: 'Toda la jornada', justificante: 'pendiente' },
+        { docente: 'Laura Sánchez', fecha: '2026-11-16', horas: '9:00-10:30', justificante: 'pendiente', sigue: 'docente/justificantes#j1' },
+        { docente: 'Teresa Gil', fecha: '2026-11-12', horas: 'Toda la jornada', justificante: 'entregado' },
+        { docente: 'Rosa Medina', fecha: '2026-11-05', horas: '9:00-11:15', justificante: 'entregado' },
+      ],
+      reglas: [
+        'El registro guarda quién falta y a qué horas. Nunca el motivo.',
+        'Del justificante solo dice si está entregado o pendiente.',
+        'Cada docente lo sube desde DirectorIA, no por correo.',
+        'Las guardias de cada ausencia se proponen en «Guardias de hoy», con las reglas del colegio.',
+      ],
     },
   ],
 });

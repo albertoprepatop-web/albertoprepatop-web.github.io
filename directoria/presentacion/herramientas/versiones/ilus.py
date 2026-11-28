@@ -32,6 +32,11 @@ def OK(cls='vs-ok', label='Incluido'):
 NO = '<span class="vs-no" role="img" aria-label="No incluido"></span>'
 CON_IA = '<span class="vs-tag ia">con IA</span>'
 
+# Ficha de sustitución (decisión del 26-28 de noviembre de 2026): solo la clase. Esta línea es fija, igual en todas las fichas,
+# y no es un dato: la ficha no lleva «Necesidades», «Salud» ni «Recogida», ni nombres de alumnos.
+FICHA_LINEA_FIJA = ('Las indicaciones de salud y de recogida de los alumnos no están en DirectorIA: las tiene el colegio. '
+                    'Pregúntalas en conserjería o a la tutora antes de empezar.')
+
 # Antetítulo con la etiqueta de la versión: «sin IA» clara en Esencial, «con IA» oscura en Completo.
 def antetitulo(texto, version):
     tag = '<span class="vs-tag">sin IA</span>' if version == 'esencial' else '<span class="vs-tag ia">con IA</span>'

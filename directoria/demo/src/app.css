@@ -41,7 +41,7 @@
   --mostaza-tinte: #FAF4CD;   /* plazos y calendario: fondo del icono */
   --mostaza-medio: #9D8B09;   /* 3,4:1 sobre papel; 3,1:1 sobre su tinte y sobre tiza. Amarillo, no naranja */
   --mostaza-tinta: #615604;   /* 7,3:1 sobre papel; 6,6:1 sobre su tinte */
-  --rosa-tinte: #FDD6DC;      /* protocolos y casos, confidencial: fondo del icono, el más rosado */
+  --rosa-tinte: #FDD6DC;      /* protocolos y convivencia: fondo del icono, el más rosado */
   --rosa-medio: #CB5672;      /* 4,0:1 sobre papel; 3,1:1 sobre su tinte */
   --rosa-tinta: #86374B;      /* 7,8:1 sobre papel; 5,9:1 sobre su tinte */
   --verde-tinte: #E0FBDC;     /* las funciones de recursos (gastos, banco y material): fondo del icono */
@@ -85,7 +85,7 @@
 
 /* ---------- Color por significado ----------
    Un tono por tipo de trabajo, el mismo en toda la app y nunca por posición. El motor pone data-cat: el color dice adónde
-   lleva una pieza (su función; si es de un caso confidencial, protocolos) y el icono, de qué trata. Lo que lleva al correo
+   lleva una pieza (su función) y el icono, de qué trata. Lo reservado lo dicen la banda y el candado, no el color. Lo que lleva al correo
    («comunicacion») o a ningún sitio va sin tono, en los colores de la marca. En la pantalla de acceso, data-perfil: el tono
    de la función principal de cada perfil (jefatura y quien sustituye comparten la turquesa: las guardias y la ficha).
    Cada pieza pinta con --cat-tinte, --cat-medio y --cat-tinta; sin tono, con los colores de la marca. Los estados (hecho,
@@ -377,9 +377,9 @@ html:has(.principal-inicio) { scroll-padding-top: calc(var(--cabecera) + env(saf
 .medidor i { flex: 1; height: .625rem; border-radius: 999px; background: var(--linea); box-shadow: inset 0 0 0 1px var(--borde-campo); }
 .indicador-barra .medidor i { height: .75rem; }
 .medidor i.lleno { background: var(--pizarra); box-shadow: none; }
-.medidor i.revisar, .medidor i.actual { background: transparent; box-shadow: inset 0 0 0 2px var(--pizarra); }
+.medidor i.revisar { background: transparent; box-shadow: inset 0 0 0 2px var(--pizarra); }
 /* El borde discontinuo, en un rectángulo de esquinas suaves: en una píldora estrecha los trazos se rompen en las curvas */
-.medidor i.falta, .medidor i.condicional { background: transparent; box-shadow: none; border: 1.5px dashed var(--pizarra); border-radius: 4px; }
+.medidor i.falta { background: transparent; box-shadow: none; border: 1.5px dashed var(--pizarra); border-radius: 4px; }
 .tramos { display: grid; grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: .375rem; font-size: var(--t-xs); font-weight: 700; line-height: 1.2; color: var(--cuerpo); }
 .tramos > span { display: grid; gap: .3125rem; min-width: 0; white-space: nowrap; }
 .tramos > span::before { content: ""; height: .75rem; border-radius: 999px; background: var(--linea); box-shadow: inset 0 0 0 1px var(--borde-campo); }
@@ -463,8 +463,8 @@ html:has(.principal-inicio) { scroll-padding-top: calc(var(--cabecera) + env(saf
 .indicador.es-hoy .medidor i { background: var(--tiza-velo); box-shadow: inset 0 0 0 1px var(--texto-suave); }
 .indicador.es-hoy .tramos > span::before { background: var(--tiza-velo); box-shadow: inset 0 0 0 1px var(--texto-suave); }
 .indicador.es-hoy .medidor i.lleno, .indicador.es-hoy .tramos .hecho::before, .indicador.es-hoy .tramos .queda::before { background: var(--tiza); box-shadow: none; }
-.indicador.es-hoy .medidor i.revisar, .indicador.es-hoy .medidor i.actual { background: transparent; box-shadow: inset 0 0 0 2px var(--tiza); }
-.indicador.es-hoy .medidor i.falta, .indicador.es-hoy .medidor i.condicional { background: transparent; box-shadow: none; border-color: var(--tiza); }
+.indicador.es-hoy .medidor i.revisar { background: transparent; box-shadow: inset 0 0 0 2px var(--tiza); }
+.indicador.es-hoy .medidor i.falta { background: transparent; box-shadow: none; border-color: var(--tiza); }
 .indicador.es-hoy .tramos { color: var(--texto-suave); }
 .indicador.es-hoy .tramos .actual, .indicador.es-hoy .tramos .queda { color: var(--tiza); }
 .indicador.es-hoy .tramos .actual::before { background: transparent; box-shadow: inset 0 0 0 2px var(--tiza); }
@@ -842,21 +842,60 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .plazo.hecho { background: var(--tiza); }
 .plazo.hecho .t { text-decoration: line-through; text-decoration-color: var(--pizarra-linea); }
 
-/* Protocolo */
-.protocolo { display: grid; grid-template-columns: minmax(15rem, 20rem) minmax(0, 1fr); gap: 1rem; align-items: start; }
-.pasos { list-style: none; display: grid; gap: 0; }
-.paso { position: relative; display: grid; grid-template-columns: 1.75rem 1fr; gap: .25rem .75rem; padding: .5rem 0 .875rem; }
-.paso::before { content: ""; position: absolute; left: .8125rem; top: 2.1rem; bottom: -.15rem; width: 2px; background: var(--borde); }
-.paso:last-child::before { display: none; }
-.paso .punto { width: 1.75rem; height: 1.75rem; border-radius: 50%; display: grid; place-items: center; font-size: var(--t-xs); font-weight: 700; background: var(--papel); border: 2px solid var(--linea); color: var(--cuerpo); }
-.paso.hecho .punto { background: var(--pizarra); border-color: var(--pizarra); }
-.paso.curso .punto { border-color: var(--pizarra); color: var(--tinta); box-shadow: 0 0 0 4px var(--salvia); }
-.paso.condicional .punto { border-style: dashed; }
-.paso .n { font-weight: 700; color: var(--tinta); line-height: 1.3; }
-.paso .e { grid-column: 2; font-size: var(--t-xs); color: var(--cuerpo); }
-.paso.condicional .n { color: var(--cuerpo); font-weight: 600; }
-.secciones { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 15rem), 1fr)); gap: 1rem; }
-.secciones h4 { font-size: var(--t-m); font-weight: 600; margin-bottom: .5rem; }
+/* Guías de los protocolos: los pasos numerados en un disco de su tono, como los del recorrido; los que solo van si se
+   confirma, con el número en borde discontinuo y detrás de su título. Las etiquetas, en la tinta; nada de estados: es una
+   guía, no un caso. */
+.guia { display: grid; gap: .875rem; }
+.guia > .tarjeta-cabeza { margin-bottom: 0; }
+.guia-fuente { font-size: var(--t-s); color: var(--cuerpo); }
+.guia-pasos { list-style: none; display: grid; gap: .625rem; }
+.guia-paso { display: grid; grid-template-columns: 2rem minmax(0, 1fr); gap: .375rem .875rem; align-items: start; padding: 1rem 1.125rem; border: 1px solid var(--borde); border-radius: var(--radio-l); background: var(--papel); }
+.guia-num { display: grid; place-items: center; width: 2rem; height: 2rem; border-radius: 50%; background: var(--cat-tinte, var(--salvia)); color: var(--cat-tinta, var(--tinta)); box-shadow: inset 0 0 0 2.25px var(--cat-medio, var(--pizarra-linea)); font-family: var(--f-tit); font-weight: 600; font-size: var(--t-s); }
+.guia-paso.condicional .guia-num { background: var(--papel); box-shadow: none; border: 2px dashed var(--cat-medio, var(--pizarra-linea)); }
+.guia-paso h3 { align-self: center; font-size: var(--t-l); font-weight: 600; line-height: 1.3; }
+.guia-datos { grid-column: 2; display: grid; gap: .375rem; margin: 0; }
+.guia-datos > div { display: grid; grid-template-columns: minmax(6.5rem, 8rem) minmax(0, 1fr); gap: 1rem; }
+.guia-datos dt { font-size: var(--t-s); font-weight: 700; color: var(--cat-tinta, var(--pizarra-linea)); }
+.guia-datos dd { margin: 0; font-size: var(--t-s); color: var(--tinta); }
+.guia-si { display: flex; align-items: center; gap: .5rem; padding: .5rem 0 0; font-family: var(--f-tit); font-weight: 600; color: var(--tinta); }
+.guia-si .glifo { color: var(--cat-tinta, var(--tinta)); }
+.ayuda-tarjeta { margin-top: .25rem; font-size: var(--t-s); color: var(--cuerpo); }
+.plantillas { list-style: none; display: grid; gap: .5rem; margin-top: .75rem; }
+.plantilla { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .125rem .75rem; align-items: center; padding: .625rem .75rem; border: 1px solid var(--borde); border-radius: var(--radio); background: var(--papel); }
+.plantilla .n { font-weight: 700; color: var(--tinta); font-size: var(--t-s); }
+.plantilla .d { grid-column: 1; font-size: var(--t-xs); color: var(--cuerpo); }
+.plantilla .boton { grid-row: 1 / span 2; grid-column: 2; }
+
+/* Justificantes del profesorado: subir el del docente, las carpetas de secretaría y el informe de jefatura. Sin la
+   insignia de la IA: lo hace un programa, con reglas. La ruta del archivo, en una píldora de tiza que se parte por las barras. */
+.columna { display: grid; gap: 1rem; min-width: 0; }
+/* Una sola columna que no crece con el desplegable: en el móvil, el nombre largo de la ausencia no empuja la tarjeta
+   hasta el borde (el desplegable se queda en el ancho de la tarjeta). */
+.subir-justificante { display: grid; grid-template-columns: minmax(0, 1fr); gap: .875rem; }
+.subir-justificante > .tarjeta-cabeza { margin-bottom: 0; }
+.campo-j { display: grid; grid-template-columns: minmax(0, 1fr); gap: .375rem; }
+.campo-j .etq { font-size: var(--t-s); font-weight: 700; color: var(--cuerpo); }
+.campo-j select { justify-self: start; max-width: 100%; min-height: 2.5rem; padding: .25rem 2rem .25rem .75rem; border: 1.5px solid var(--borde-campo); border-radius: var(--radio-s); background: var(--papel); color: var(--tinta); font-weight: 700; }
+.archivo-elegido { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem .5rem; font-weight: 700; color: var(--tinta); }
+.archivo-elegido small { font-weight: 600; color: var(--cuerpo); font-size: var(--t-xs); }
+.ruta { justify-self: start; max-width: 100%; padding: .25rem .625rem; border-radius: var(--radio-s); background: var(--tiza); border: 1px solid var(--borde); color: var(--tinta); font-size: var(--t-s); font-weight: 600; overflow-wrap: anywhere; }
+.pieza .ruta { font-size: var(--t-xs); }
+.arbol, .arbol ul { list-style: none; display: grid; gap: .375rem; }
+.arbol ul { margin: .375rem 0 0 .4375rem; padding-left: 1rem; border-left: 2px solid var(--linea); }
+.carpeta-nombre { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem .5rem; font-weight: 700; color: var(--tinta); }
+.carpeta-nombre .glifo { color: var(--cat-tinta, var(--tinta)); }
+.carpeta-nombre small { font-weight: 600; font-size: var(--t-xs); color: var(--cuerpo); }
+.arbol .archivo { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .125rem .75rem; align-items: center; padding: .5rem .75rem; border: 1px solid var(--borde); border-radius: var(--radio); background: var(--papel); }
+.arbol .archivo .n { display: flex; align-items: center; gap: .375rem; min-width: 0; font-weight: 600; font-size: var(--t-s); color: var(--tinta); overflow-wrap: anywhere; }
+.arbol .archivo .d { grid-column: 1; font-size: var(--t-xs); color: var(--cuerpo); }
+.arbol .archivo .pastilla { grid-row: 1 / span 2; grid-column: 2; }
+.arbol .archivo.pendiente { background: transparent; border-style: dashed; border-color: var(--borde-campo); }
+.arbol .archivo.pendiente .n { color: var(--cuerpo); }
+tbody th.fila-cabeza { text-transform: none; letter-spacing: 0; font-size: var(--t-s); color: var(--tinta); background: var(--papel); white-space: normal; }
+/* Lo que el banco comprueba al leer el archivo: con reglas o «con IA», sin la insignia */
+.comprobado { list-style: none; display: grid; gap: .375rem; }
+.comprobado li { display: flex; flex-wrap: wrap; align-items: center; gap: .25rem .5rem; font-size: var(--t-s); color: var(--tinta); font-weight: 600; }
+.comprobado small { font-size: var(--t-xs); color: var(--cuerpo); font-weight: 600; }
 .lista-puntos { list-style: none; display: grid; gap: .375rem; }
 .lista-puntos li { position: relative; padding-left: 1.125rem; font-size: var(--t-s); color: var(--tinta); }
 .lista-puntos li::before { content: ""; position: absolute; left: 0; top: .6em; width: .375rem; height: .375rem; border-radius: 50%; background: var(--cat-medio, var(--pizarra-linea)); }
@@ -917,15 +956,18 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 .ficha-cabeza { padding-bottom: 1rem; border-bottom: 1px solid var(--linea); }
 .ficha-sesion { font-family: var(--f-tit); font-weight: 600; font-size: var(--t-xl); color: var(--pizarra); line-height: 1.25; }
 .ficha-hora { font-size: var(--t-s); font-weight: 700; color: var(--cuerpo); margin-top: .125rem; }
-.ficha-origen { display: flex; align-items: center; gap: .5rem; margin-top: .5rem; font-size: var(--t-s); color: var(--texto); }
+.ficha-para { margin-top: .5rem; font-size: var(--t-s); font-weight: 700; color: var(--tinta); }
+.ficha-origen { display: flex; align-items: center; gap: .5rem; margin-top: .125rem; font-size: var(--t-s); color: var(--texto); }
 .ficha-origen .insignia { width: 1.125rem; height: 1.125rem; }
 .ficha-datos { display: grid; gap: 1rem; margin: 1.125rem 0 0; }
 /* Como el componente de la marca, salvo las etiquetas: en la app van en la tinta de su tipo de trabajo, porque el
    naranja es solo de la IA y la ficha la prepara DirectorIA con reglas */
 .ficha-datos dt { font-size: var(--t-s); font-weight: 700; letter-spacing: .02em; color: var(--cat-tinta, var(--pizarra-linea)); }
 .ficha-datos dd { margin: .125rem 0 0; font-size: .96875rem; line-height: 1.5; color: var(--pizarra); }
+.ficha-datos .llamar { display: block; }
 .ficha-aviso { padding: .875rem 1rem; border-radius: var(--radio); background: var(--chispa-suave); --hueco: var(--chispa-suave); }
-/* El aviso lleva el triángulo delante de su título, como los demás avisos: no se distingue solo por el fondo */
+/* La línea fija («Antes de empezar»), la misma en todas las fichas: lleva el triángulo delante de su título, como los
+   demás avisos, y no se distingue solo por el fondo */
 .ficha-aviso dt { display: flex; align-items: center; gap: .375rem; color: var(--pizarra); }
 .ficha-pie { margin-top: 1.125rem; padding-top: .875rem; border-top: 1px solid var(--linea); font-size: var(--t-s); color: var(--texto); }
 .espera { display: flex; gap: 1.25rem; align-items: center; flex-wrap: wrap; }
@@ -938,7 +980,7 @@ details.original .texto-original { padding: 0 1rem 1rem; display: grid; gap: .75
 table { width: 100%; border-collapse: collapse; font-size: var(--t-s); }
 th, td { padding: .75rem .875rem; text-align: left; border-bottom: 1px solid var(--borde); vertical-align: top; color: var(--tinta); }
 th { font-weight: 700; color: var(--cat-tinta, var(--pizarra-linea)); font-size: var(--t-xs); letter-spacing: .04em; text-transform: uppercase; background: var(--tiza); white-space: nowrap; }
-tr:last-child td { border-bottom: 0; }
+tr:last-child td, tbody tr:last-child th { border-bottom: 0; }
 td:first-child { font-weight: 700; }
 td.m-aviso { background: var(--chispa-suave); }
 td.m-ok { background: var(--salvia); }
@@ -998,7 +1040,7 @@ dialog.confirmar::backdrop { background: var(--velo); }
   .menu .grupo, .menu-pie { display: none; }
 }
 @media (max-width: 1100px) {
-  .dos-columnas, .protocolo { grid-template-columns: minmax(0, 1fr); }
+  .dos-columnas { grid-template-columns: minmax(0, 1fr); }
   .lateral { position: static; }
   .chip-hora { display: none; }
   .cabeza-ilus { width: 6.5rem; height: 6.5rem; }
@@ -1045,6 +1087,13 @@ dialog.confirmar::backdrop { background: var(--velo); }
   .aviso-informe { grid-template-columns: minmax(0, 1fr); }
   .aviso-informe .d { grid-column: 1; }
   .aviso-informe .pastilla { justify-self: start; }
+  /* Guías y justificantes: en el móvil, cada dato debajo de su etiqueta y el estado del archivo debajo de su nombre */
+  .guia-paso { padding: .875rem 1rem; }
+  .guia-datos { grid-column: 1 / -1; }
+  .guia-datos > div { grid-template-columns: minmax(0, 1fr); gap: 0; }
+  .arbol ul { margin-left: .25rem; padding-left: .625rem; }
+  .arbol .archivo { grid-template-columns: minmax(0, 1fr); }
+  .arbol .archivo .pastilla { grid-row: auto; grid-column: 1; justify-self: start; }
   .principal { padding-block: 1.5rem 3rem; }
   .principal-inicio { padding-top: 1.25rem; }
   .cabeza-inicio { grid-template-columns: minmax(0, 1fr); }

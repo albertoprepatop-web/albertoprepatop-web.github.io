@@ -108,7 +108,7 @@ DEMO.rol({
             { franja: '4', titulo: 'Apoyo de Lengua', detalle: '4.º B', tipo: 'clase', nota: 'Grupo pequeño en el aula de apoyo: comprensión lectora.' },
             { franja: '5', titulo: 'Apoyo de Matemáticas', detalle: '2.º A', tipo: 'clase', nota: 'Dentro del aula: sumas con llevada.' },
             { franja: '6', titulo: 'Matemáticas', detalle: '3.º B', tipo: 'cubre', sigue: 'jefatura/guardias#g4', nota: 'Cubres a Sergio Prieto en tu hora de preparación.' },
-            { franja: 'salida', titulo: 'Salida de 3.º B', tipo: 'cubre', sigue: 'jefatura/guardias#g4', nota: 'Acompañas al grupo a la puerta de Primaria. Antes, lee el aviso de recogida de tu ficha de 6.ª.' },
+            { franja: 'salida', titulo: 'Salida de 3.º B', tipo: 'cubre', sigue: 'jefatura/guardias#g4', nota: 'Acompañas al grupo a la puerta de Primaria. Antes, pregunta en conserjería cómo se hace la salida de 3.º B.' },
           ],
         },
       ],
@@ -121,11 +121,12 @@ DEMO.rol({
         { grupo: 'Hoy', icono: 'correo', titulo: 'Laura Sánchez te pide material', detalle: 'Saquitos y aros del aula de apoyo, para su Educación Física de mañana con 4.º A.', estado: 'hoy', ir: 'correo:c-laura', sigue: 'correo:c-laura' },
         {
           // La salida va con la 6.ª (g4). A las 8:00 es una propuesta: para saber, sin pedir nada. Cuando jefatura confirma
-          // (siConfirmada), pasa a hoy y pide leer el aviso de recogida de la ficha de 6.ª, que llega con todas las guardias.
-          grupo: 'Hoy', icono: 'persona', titulo: '16:00: te proponen para la salida de 3.º B', detalle: 'Va con la 6.ª. Cuando jefatura lo confirme, lee el aviso de recogida de tu ficha de 6.ª.', estado: 'info', ir: 'jornada',
+          // (siConfirmada), pasa a hoy: antes de la salida, pregunta en conserjería cómo se hace. Las indicaciones de recogida
+          // de los alumnos no están en DirectorIA: las tiene el colegio (lo dice la línea fija de cada ficha).
+          grupo: 'Hoy', icono: 'persona', titulo: '16:00: te proponen para la salida de 3.º B', detalle: 'Va con la 6.ª. Si jefatura lo confirma, pregunta antes en conserjería cómo se hace la salida.', estado: 'info', ir: 'jornada',
           siConfirmada: [
-            { cuando: 'jefatura/guardias', titulo: '16:00: haces tú la salida de 3.º B', detalle: 'Antes, lee el aviso de recogida de tu ficha de 6.ª.', estado: 'hoy', ir: 'ficha', sigue: 'jornada#7', verbo: 'Hecha' },
-            { cuando: 'jefatura/guardias#g4', titulo: '16:00: haces tú la salida de 3.º B', detalle: 'El aviso de recogida te llega con tu ficha de 6.ª, cuando jefatura confirme las demás guardias.', estado: 'hoy', sigue: 'jornada#7', verbo: 'Hecha' },
+            { cuando: 'jefatura/guardias', titulo: '16:00: haces tú la salida de 3.º B', detalle: 'Antes, lee tu ficha de 6.ª y pregunta en conserjería cómo se hace la salida.', estado: 'hoy', ir: 'ficha', sigue: 'jornada#7', verbo: 'Hecha' },
+            { cuando: 'jefatura/guardias#g4', titulo: '16:00: haces tú la salida de 3.º B', detalle: 'Tu ficha de 6.ª te llega cuando jefatura confirme las demás guardias. Antes, pregunta en conserjería.', estado: 'hoy', sigue: 'jornada#7', verbo: 'Hecha' },
           ],
           // Si jefatura la da a otra persona, la fila pasa a ser para saber, sin enlace.
           siOtra: [{ cuando: 'jefatura/guardias#g4', titulo: '16:00: la salida de 3.º B ya no es tuya', detalle: 'Va con la 6.ª, y para la 6.ª jefatura ha elegido a otra persona.', estado: 'info', ir: null }],
@@ -139,7 +140,7 @@ DEMO.rol({
           estado: 'pendiente', choque: true, ir: 'correo:c-ciclo', sigue: 'correo:c-ciclo#0,2',
           aMedias: { sigue: 'correo:c-ciclo', detalle: 'Le has pedido a Pilar Serrano más tiempo. Tenlo en cuenta en tu propuesta.' },
         },
-        { grupo: 'Para saber', icono: 'documento', titulo: 'Tus fichas se cierran al acabar la jornada', detalle: 'Cada una se abre antes de su sesión y solo trae lo que necesitas para la clase. Queda registrado quién la ve.', estado: 'info' },
+        { grupo: 'Para saber', icono: 'documento', titulo: 'Tus fichas se cierran al acabar la jornada', detalle: 'Cada una trae solo la clase: la tarea, el material y a quién llamar. Queda registrado quién la ve.', estado: 'info' },
       ],
     },
 
@@ -171,11 +172,11 @@ DEMO.rol({
         'Las fichas te llegan cuando confirme las guardias. A las 16:00 haces tú la salida de 3.º B.',
       ],
       piden: 'Que entres en 3.º B a 1.ª y a 6.ª, leas antes las fichas y hagas la salida de las 16:00.',
-      original: 'Buenos días, Pablo:\n\nSergio Prieto no viene hoy. Te adelanto lo que te va a llegar: cubres 3.º B a 1.ª hora, Lengua, en tu guardia, y a 6.ª, Matemáticas, en tu hora de preparación. Así el grupo empieza y acaba el día contigo, y tus apoyos no se tocan.\n\nAhora reviso la propuesta en DirectorIA y, en cuanto la confirme, te llegan las dos fichas con la tarea de su programación quincenal y lo que tienes que saber del grupo. Léete con calma la de 6.ª: la salida de las 16:00 la haces tú.\n\nRosa entra en 3.ª y Teresa se queda con su turno de patio.\n\nGracias por echar una mano.\n\nUn abrazo,\nJavier Martín\nJefe de estudios',
+      original: 'Buenos días, Pablo:\n\nSergio Prieto no viene hoy. Te adelanto lo que te va a llegar: cubres 3.º B a 1.ª hora, Lengua, en tu guardia, y a 6.ª, Matemáticas, en tu hora de preparación. Así el grupo empieza y acaba el día contigo, y tus apoyos no se tocan.\n\nAhora reviso la propuesta en DirectorIA y, en cuanto la confirme, te llegan las dos fichas con la tarea de su programación quincenal, el material y a quién llamar. La salida de las 16:00 la haces tú: antes, pásate por conserjería.\n\nRosa entra en 3.ª y Teresa se queda con su turno de patio.\n\nGracias por echar una mano.\n\nUn abrazo,\nJavier Martín\nJefe de estudios',
       respuestas: [
         {
           titulo: 'Confirmar y dejar nota a Sergio',
-          texto: 'Buenos días, Javier:\n\nDe acuerdo: entro con 3.º B a 1.ª y a 6.ª. Leeré las fichas antes de cada sesión y a las 16:00 hago yo la salida, atento a las recogidas que indique la de 6.ª.\n\nAl terminar le dejo a Sergio en su mesa una nota con lo que hemos hecho en Lengua y en Matemáticas, para que sepa por dónde seguir cuando vuelva.\n\nUn abrazo,\nPablo Sanz\nMaestro de apoyo de Primaria',
+          texto: 'Buenos días, Javier:\n\nDe acuerdo: entro con 3.º B a 1.ª y a 6.ª. Leeré las fichas antes de cada sesión y a las 16:00 hago yo la salida; antes paso por conserjería a preguntar cómo se hace.\n\nAl terminar le dejo a Sergio en su mesa una nota con lo que hemos hecho en Lengua y en Matemáticas, para que sepa por dónde seguir cuando vuelva.\n\nUn abrazo,\nPablo Sanz\nMaestro de apoyo de Primaria',
         },
         {
           titulo: 'Ofrecerse también para mañana',
@@ -275,36 +276,42 @@ DEMO.rol({
 
   // ───────────────────────────── Módulos ─────────────────────────────
   modulos: [
-    // E2. Fichas de sustitución de 3.º B (las mismas que ve jefatura en su vista previa)
+    // E2. Fichas de sustitución de 3.º B (las mismas que ve jefatura en su vista previa). Solo la clase: grupo, materia,
+    // hora y aula; la tarea, el material y a quién llamar. La línea fija de salud y recogidas la pone el motor.
     {
       id: 'ficha',
       tipo: 'ficha',
       menu: 'Tus fichas de hoy',
       antetitulo: 'Sustitución de hoy · 3.º B',
       titulo: 'Tus fichas para cubrir a Sergio Prieto en 3.º B',
-      entradilla: 'Lo que necesitas para entrar en 3.º B, y nada más. La tarea sale de la programación quincenal de Sergio; las pautas, de orientación y tutoría; la salud y las recogidas, de dirección y tutoría.',
+      entradilla: 'Solo la clase: la tarea de la programación quincenal de Sergio, el material y a quién llamar. Las indicaciones de salud y de recogida de los alumnos no están en DirectorIA: las tiene el colegio.',
       bandera: 'guardias',
       fichas: [
         {
           sesion: '3.º B · Matemáticas · 6.ª hora',
           hora: '15:15-16:00',
-          origen: 'Preparada por DirectorIA para Pablo Sanz',
+          aula: 'Aula de 3.º B, planta baja',
+          para: 'Pablo Sanz',
+          origen: 'Preparada por DirectorIA · confirmada por jefatura',
           datos: [
-            { dt: 'Tarea', dd: 'Ejercicios 4 a 9 de la página 58. Los libros están en el armario del aula.' },
-            { dt: 'Necesidades', dd: 'Mario: instrucciones por escrito y más tiempo.' },
-            { dt: 'Salud', dd: 'Lucía: alérgica a frutos secos. Su autoinyector está en conserjería.', aviso: true },
-            { dt: 'Recogida · última hora', dd: 'Hugo solo puede salir con su madre o su abuela. Si viene otra persona, no lo entregues y avisa a dirección (ext. 201).', aviso: true },
+            { dt: 'Tarea', dd: 'Ejercicios 4 a 9 de la página 58, de la programación quincenal de Sergio Prieto.' },
+            { dt: 'Material', dd: 'Los libros de Matemáticas, en el armario del aula. Las hojas de cuadrícula, en la bandeja de la mesa del tutor.' },
+            { dt: 'A quién llamar', dd: 'Tutoría: Ana Torres, tutora de 3.º A (ext. 213) · Jefatura de estudios (ext. 202) · Conserjería (ext. 200)' },
+            { dt: 'Al acabar', dd: 'A las 16:00, acompaña al grupo a la puerta de Primaria.' },
           ],
           pie: 'Se abre antes de la sesión y se cierra al acabar la jornada. Queda registrado quién la ve.',
         },
         {
           sesion: '3.º B · Lengua · 1.ª hora',
           hora: '9:00-9:45',
-          origen: 'Preparada por DirectorIA para Pablo Sanz',
+          aula: 'Aula de 3.º B, planta baja',
+          para: 'Pablo Sanz',
+          origen: 'Preparada por DirectorIA · confirmada por jefatura',
           datos: [
-            { dt: 'Tarea', dd: 'Lectura de las páginas 40-41 y las preguntas 1 a 3 en el cuaderno.' },
-            { dt: 'Necesidades', dd: 'Mario: instrucciones por escrito y más tiempo.' },
-            { dt: 'Salud', dd: 'Lucía: alérgica a frutos secos. Su autoinyector está en conserjería.', aviso: true },
+            { dt: 'Tarea', dd: 'Lectura de las páginas 40-41 y las preguntas 1 a 3 en el cuaderno, de la programación quincenal de Sergio Prieto.' },
+            { dt: 'Material', dd: 'Los libros de Lengua y los cuadernos, en el armario del aula.' },
+            { dt: 'A quién llamar', dd: 'Tutoría: Ana Torres, tutora de 3.º A (ext. 213) · Jefatura de estudios (ext. 202) · Conserjería (ext. 200)' },
+            { dt: 'Al acabar', dd: 'A las 9:45 llega Teresa Gil, la maestra de Inglés: espera en el aula hasta que entre.' },
           ],
           pie: 'Se abre antes de la sesión y se cierra al acabar la jornada. Queda registrado quién la ve.',
         },
@@ -326,7 +333,7 @@ DEMO.rol({
         {
           fecha: 'Antes de las 9:00',
           titulo: 'Lee tu ficha de 1.ª',
-          detalle: 'Tarea, pautas y salud de 3.º B. Aparece en «Tus fichas de hoy» cuando jefatura confirma las guardias.',
+          detalle: 'La tarea, el material y a quién llamar. Aparece en «Tus fichas de hoy» cuando jefatura confirma las guardias.',
           quien: 'Tú',
           origen: 'Fichas de sustitución',
           estado: 'hoy',
@@ -382,7 +389,7 @@ DEMO.rol({
         {
           fecha: '16:00',
           titulo: 'Salida de 3.º B',
-          detalle: 'Acompañas al grupo a la puerta de Primaria. Antes, lee el aviso de recogida de tu ficha de 6.ª.',
+          detalle: 'Acompañas al grupo a la puerta de Primaria. Antes, pregunta en conserjería cómo se hace la salida de 3.º B.',
           quien: 'Tú',
           origen: 'Ficha de 6.ª hora',
           estado: 'despues',

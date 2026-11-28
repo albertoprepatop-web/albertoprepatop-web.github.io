@@ -4,7 +4,7 @@
 # Uso: python3 tools/derivar.py project/slides
 import os, re, sys
 sys.path.insert(0, os.path.dirname(os.path.abspath(__file__)))
-from ilus import B, OK, antetitulo, servidor_sin_chispa
+from ilus import B, OK, antetitulo, servidor_sin_chispa, FICHA_LINEA_FIJA
 
 D = sys.argv[1]
 def deriva(origen, destino, cambios):
@@ -37,7 +37,25 @@ deriva('cover', 'cover-dos', [
  ('<p class="eyebrow">Presentación para equipos directivos</p>', '<p class="eyebrow">Esencial y Completo · Presentación para equipos directivos</p>'),
  ('<h1 class="display cv-w">Vuestra IA, dentro del colegio</h1>', '<h1 class="display cv-w">DirectorIA propone. Vosotros decidís.</h1>'),
  ('re', r'<p class="sub cv-w">.*?</p>', '<p class="sub cv-w">Esencial organiza el colegio con sus reglas: quién cubre cada ausencia, plazos y protocolos. Completo suma la IA, que redacta actas y correos. Las dos, dentro del colegio.</p>'),
- notas('Presentarse en una frase. El título es la segunda línea del eslogan, que vale para las dos versiones. La idea que tiene que quedar: DirectorIA organiza el colegio desde un servidor dentro del propio colegio; con Esencial, con las reglas y los datos del centro, y con Completo, además, con una IA propia que trata ahí los datos de los alumnos. Es para el equipo directivo y el claustro, no un chat más en la nube. Las guardias y las fichas las prepara DirectorIA con las reglas del colegio, sin IA, en las dos versiones; con Completo, la IA redacta actas y correos. DirectorIA prepara y propone; decidís vosotros. Contar cómo va la presentación: primero, todo lo de Esencial, sin IA; después, lo que añade Completo, con IA, y al final la comparativa y los precios.'),
+ notas('Presentarse en una frase. El título es la segunda línea del eslogan, que vale para las dos versiones. La idea que tiene que quedar: DirectorIA organiza el colegio desde un servidor dentro del propio colegio; con Esencial, con las reglas del centro, y con Completo, además, con una IA propia que trabaja dentro del colegio, también con el correo. Y desde la primera diapositiva: DirectorIA no guarda datos de alumnos, solo del profesorado y del funcionamiento del colegio. Es para el equipo directivo y el claustro, no un chat más en la nube. Las guardias y las fichas las prepara DirectorIA con las reglas del colegio, sin IA, en las dos versiones; con Completo, la IA redacta actas y correos. DirectorIA prepara y propone; decidís vosotros. Contar cómo va la presentación: primero, todo lo de Esencial, sin IA; después, lo que añade Completo, con IA, y al final la comparativa y los precios.'),
+])
+
+# Frases de la decisión del 26-28 de noviembre de 2026 (sin datos de alumnos), iguales en todas las piezas
+FRASE_DATOS = '«La aplicación y los datos están en un servidor dentro del colegio. La copia de seguridad, cifrada, está en la UE. Los correos salen por la cuenta del propio colegio. El mantenimiento a distancia queda registrado.»'
+FRASE_ALUMNOS = '«DirectorIA no guarda datos de alumnos: solo del profesorado y del funcionamiento del colegio.»'
+FRASE_CORREO = '«La IA trabaja dentro del colegio, también con el correo.»'
+FRASE_JUSTIFICANTES = '«Los justificantes los archiva un programa en su carpeta; la IA no los lee.»'
+CORREO_EXCEPCION = ('El correo es la única excepción, y hay que decirla bien: lo que llega por correo puede traer nombres de alumnos, porque lo escriben las familias. '
+                    'Con Completo, la IA lo lee en el servidor del colegio para resumirlo, y DirectorIA no crea fichas de alumnos ni guarda sus datos aparte.')
+
+# El dato que engancha la presentación. La pregunta ya no gira alrededor de «los datos de vuestros alumnos», que DirectorIA no
+# guarda; en las notas, la frase nueva justo después de lo de la Agencia de Protección de Datos. La frase del final, sin corte:
+# «sino con qué datos y dónde acaban» va entera en la segunda línea.
+deriva('dato', 'dato-dos', [
+ ('<section id="dato" class="accent statement">', '<section id="dato-dos" class="accent statement">'),
+ ('<p class="say">La pregunta ya no es si usar IA en el colegio, sino dónde acaban los datos de vuestros alumnos.</p>',
+  '<p class="say">La pregunta ya no es si usar IA en el colegio, sino con qué datos y dónde acaban.</p>'),
+ ('en los públicos, la Administración educativa.', f'en los públicos, la Administración educativa. Enlazar con la frase: {FRASE_ALUMNOS}'),
 ])
 
 # Privacidad, común a las dos versiones: va en la apertura, sin etiqueta de versión. El servidor, sin la chispa
@@ -47,12 +65,26 @@ deriva('funciona-datos', 'funciona-datos-dos', [
  ('<p class="eyebrow">Privacidad</p>', '<p class="eyebrow">Las dos versiones · Privacidad</p>'),
  ('re', r'<img class="fn-ill" src="[^"]+" alt="Servidor de DirectorIA, dentro del colegio" width="160" height="160">',
   servidor_sin_chispa('fn-ill', 'Servidor de DirectorIA, dentro del colegio', 160)),
+ # Se guarda, no «se trata»: DirectorIA no guarda datos de alumnos (decisión del 26-28 de noviembre de 2026)
+ ('<h2 class="title">Qué se trata dentro del colegio y qué sale</h2>', '<h2 class="title">Qué se guarda dentro del colegio y qué sale</h2>'),
  ('<p class="fnd-at fnd-zt fn-line">Horarios, ausencias, salud, recogidas y actas:<br>en el servidor del colegio, cifrado<br>y con permisos por cargo</p>',
-  '<p class="fnd-at fnd-zt fn-line">Horarios, ausencias, salud, recogidas y actas:<br>en el servidor del colegio, cifrado<br>y con permisos por cargo.<br><b>Con Completo, la IA también los trata aquí.</b></p>'),
+  '<p class="fnd-at fnd-zt fn-line fnd-solo">Horarios, guardias, plazos, gastos y actas,<br>cifrados y con permisos por cargo.<br><b>DirectorIA no guarda datos de alumnos:<br>solo del profesorado y del funcionamiento<br>del colegio.</b></p>'),
  ('<h3 class="fn-name">Módulo de Claude (opcional)</h3><p class="fn-line">Solo peticiones de material didáctico,<br>con un filtro pensado para bloquear<br>datos personales</p>',
   '<h3 class="fn-name">Módulo de Claude (opcional)</h3><p class="fn-line fnd-solo"><b>Solo con Completo,</b> para material<br>didáctico y con un filtro pensado<br>para bloquear datos personales</p>'),
- ('<aside>Aquí se gana la confianza. La frase que hay que decir: «La IA trata los datos de los alumnos en un servidor dentro del colegio. La copia de seguridad, cifrada, está en la UE. Los correos salen por la cuenta del propio colegio. El mantenimiento a distancia queda registrado.» ',
-  '<aside>Vale para las dos versiones; el módulo de Claude es solo de Completo, y opcional. Aquí se gana la confianza, así que va antes de entrar en cada versión. La frase que hay que decir: «La aplicación y los datos están en un servidor dentro del colegio. La copia de seguridad, cifrada, está en la UE. Los correos salen por la cuenta del propio colegio. El mantenimiento a distancia queda registrado.» Con Completo, añadir: «Y la IA trata los datos de los alumnos en un servidor dentro del colegio.» El servidor del dibujo no lleva la luz naranja porque es el de los datos, el mismo en las dos versiones; con Completo, el servidor de IA va a su lado, también dentro del colegio. '),
+ # La única excepción, el correo: lo que llega puede traer nombres de alumnos (lo escriben las familias)
+ ('<h3 class="fn-name">Correo</h3><p class="fn-line">Los correos salen por la cuenta de correo<br>que ya tiene el colegio</p>',
+  '<h3 class="fn-name">Correo</h3><p class="fn-line fnd-solo">Sale por la cuenta del colegio.<br><b>Con\u00a0Completo,</b> la IA resume el que llega,<br>sin guardar aparte nombres de alumnos.</p>'),
+ notas('Vale para las dos versiones; el módulo de Claude es solo de Completo, y opcional. Aquí se gana la confianza, así que va antes de entrar en cada versión. '
+       f'La frase que hay que decir: {FRASE_DATOS} Y enseguida: {FRASE_ALUMNOS} Con Completo, añadir: {FRASE_CORREO} '
+       f'{CORREO_EXCEPCION} Lo que se guarda: horarios, grupos, aulas, guardias, ausencias del profesorado (sin el motivo), plazos, documentos del centro, gastos, contratos y actas, cifrados y con permisos por cargo. '
+       f'Los justificantes del profesorado los sube cada docente y un programa los archiva en su carpeta; ningún programa lee su contenido: {FRASE_JUSTIFICANTES} Es el único dato de salud que guarda DirectorIA, y es del profesorado. '
+       'El servidor del dibujo no lleva la luz naranja porque es el de los datos, el mismo en las dos versiones; con Completo, el servidor de IA va a su lado, también dentro del colegio. '
+       'No decir nunca que los datos «no salen del colegio»: hay una copia de seguridad fuera, el correo sale por la cuenta del colegio y hay mantenimiento a distancia. '
+       'Las copias de seguridad van cifradas: una en el colegio, en un disco de copias aparte, y otra fuera, en un centro de datos de la UE. '
+       'El mantenimiento a distancia no accede a datos personales o, si hace falta, accede desde el Espacio Económico Europeo, con permiso del colegio, registro y contrato de encargo. El colegio sigue siendo el responsable del tratamiento. '
+       'El módulo de Claude es opcional y solo para material didáctico: no tiene acceso a los datos del colegio, un filtro está pensado para bloquear datos personales y la norma de uso es no introducirlos. '
+       'Las actualizaciones entran revisadas y no sacan datos personales del colegio. Damos borradores del registro de actividades, de los textos para informar al profesorado y al comité y de la evaluación de impacto (en Esencial puede no hacer falta: es una pregunta para el abogado) para el delegado de protección de datos del colegio: '
+       'es nuestra lectura de la norma, no la de un abogado, y la última palabra la tiene su delegado.'),
 ])
 
 # ======================= Parte 1 · Esencial =======================
@@ -62,38 +94,41 @@ deriva('funciona-manana', 'funciona-manana-esencial', [
  # Sin la chispa del servidor, que en el kit marca dónde actúa la IA
  ('re', r'<img class="fn-ill" src="[^"]+" alt="Servidor de DirectorIA" width="160" height="160">',
   f'<img class="fn-ill" src="{B("colegio")}" alt="El colegio, con el servidor de DirectorIA dentro" width="160" height="160">'),
+ # La ficha solo lleva la clase (decisión del 26-28 de noviembre de 2026): nada de necesidades, alergias ni recogidas
+ ('<p class="fn-line">Quien sustituye recibe<br>su ficha: tarea, necesidades,<br>alergias y recogidas</p>',
+  '<p class="fn-line">Quien sustituye recibe<br>su ficha: tarea, material<br>y a quién llamar</p>'),
+ notas('Contarlo como una historia, mirando a jefatura de estudios. A las 7:45 un docente avisa de que no viene; DirectorIA apunta que falta y a qué horas, nunca el motivo. '
+       'DirectorIA propone quién cubre cada hora, con las reglas del colegio y un reparto equilibrado de guardias: no lo hace la IA, sino las reglas y los datos del centro. '
+       'Jefatura lo revisa y lo confirma: decide una persona. Quien sustituye recibe su ficha, que solo lleva la clase: la tarea, el material y a quién llamar. '
+       'Nada de los alumnos: las indicaciones de salud y de recogida las tiene el colegio, y la ficha recuerda que hay que preguntarlas en conserjería o a la tutora antes de empezar. '
+       'A las 8:00, dirección lo ve en su resumen del día. Es lo que enseñamos en directo en la demo, con una mañana de ejemplo y sin datos reales del colegio.'),
 ])
 
+# La ficha de sustitución: solo la clase (grupo, materia, hora y aula), la tarea, el material y a quién llamar, y la línea fija,
+# igual en todas las fichas, que no es un dato. Ni nombres de alumnos, ni «Necesidades», «Salud» o «Recogida».
+# Los textos son los de la ficha de la demo (BIBLIA, E2), para que sea la misma ficha; la clase fch-e da más ancho a la ficha.
 deriva('ficha', 'ficha-esencial', [
- ('<section id="ficha" class="alt">', '<section id="ficha-esencial" class="alt">'),
+ ('<section id="ficha" class="alt">', '<section id="ficha-esencial" class="alt fch-e">'),
  ('<p class="eyebrow">En detalle</p>', antetitulo('Esencial · En detalle', 'esencial')),
- ('</aside>', ' Es la ficha de Pablo Sanz, que cubre la 6.ª hora de 3.º B en el ejemplo anterior: el mismo caso que enseñamos en la demo.</aside>'),
+ ('re', r'<p class="lead">Quien sustituye sabe qué tiene que hacer.*?</p>',
+  '<p class="lead">Quien sustituye sabe qué clase tiene, qué tiene que hacer y\u00a0a\u00a0quién llamar. Solo la clase: ningún dato de los\u00a0alumnos.</p>'),
+ ('re', r'<li>Los datos los introducen tutoría, orientación.y.dirección\.</li>', '<li>La tarea sale de la programación quincenal de quien\u00a0falta.</li>'),
+ ('<p class="mock-head">3.º B · Matemáticas · 6.ª hora<span class="mock-origen">', '<p class="mock-head">3.º B · Matemáticas · 6.ª hora · Aula de 3.º B, planta\u00a0baja<span class="mock-origen">'),
+ ('re', r'<div class="item"><p class="label">Tarea</p>.*?</div>\n</div>\n</div>\n<p class="foot-quiet">',
+  '<div class="item"><p class="label">Tarea</p><p class="val">Ejercicios 4 a 9 de la página 58, de la programación quincenal de Sergio Prieto.</p></div>\n'
+  '<div class="item"><p class="label">Material</p><p class="val">Los libros de Matemáticas, en el armario del aula. Las hojas de cuadrícula, en la bandeja de la mesa del\u00a0tutor.</p></div>\n'
+  '<div class="item"><p class="label">A quién llamar</p><p class="val">Tutoría: Ana Torres, tutora de 3.º A (ext.\u00a0213)<br>Jefatura de estudios (ext.\u00a0202) · Conserjería (ext.\u00a0200)</p></div>\n'
+  f'<div class="item alert fch-fija"><p class="val">{FICHA_LINEA_FIJA}</p></div>\n'
+  '</div>\n</div>\n<p class="foot-quiet">'),
+ notas('La ficha solo lleva la clase: grupo, materia, hora y aula; la tarea, que sale de la programación quincenal del docente que falta; el material y dónde está, y a quién llamar, con su extensión. '
+       'No lleva nada de los alumnos: ni nombres, ni necesidades, ni salud, ni recogidas. La última línea es fija, igual en todas las fichas, y no es un dato: '
+       f'«{FICHA_LINEA_FIJA}» '
+       'Como hoy falta el tutor de 3.º B, la ficha da la tutora del grupo paralelo: Ana Torres, de 3.º A. Se abre antes de la sesión, se cierra al acabar la jornada y queda registrado quién la ha visto. '
+       'La prepara DirectorIA con los horarios y las programaciones del colegio, sin IA, y la confirma jefatura: «Preparada por DirectorIA · confirmada por jefatura». '
+       'Es la ficha de Pablo Sanz, que cubre la 6.ª hora de 3.º B en el ejemplo anterior: el mismo caso que enseñamos en la demo.'),
 ])
 
-# Protocolo de acoso: caso y documento en la parte 1; el plan, como anexo detrás del cierre. Sin menciones a Claude ni a la IA.
-deriva('acoso-caso', 'acoso-caso-esencial', [
- ('<section id="acoso-caso">', '<section id="acoso-caso-esencial">'),
- ('<p class="eyebrow">Ejemplo · Protocolo contra el acoso escolar · 1/3</p>', antetitulo('Esencial · Ejemplo · Protocolo contra el acoso escolar · 1/2', 'esencial')),
- ('<p>Datos del caso en el servidor del colegio;<br>nada se envía a Claude</p>', '<p>Datos del caso en el servidor<br>del colegio, cifrados</p>'),
- ('<b>Pendiente</b> · Anexo II</p>', '<b>Pendiente</b> · Anexo II · 17–23 nov</p>'),
- ('<b>Pendiente</b> · Anexo III</p>', '<b>Pendiente</b> · Anexo III · mar 24 nov</p>'),
- ('</aside>', ' Al abrirlo, cada paso queda con fecha y responsable: la recogida de información, del martes 17 al lunes 23, y la reunión para decidir, el martes 24. La app avisa a cada persona antes de su plazo.</aside>'),
-])
-deriva('acoso-documento', 'acoso-documento-esencial', [
- ('<section id="acoso-documento">', '<section id="acoso-documento-esencial">'),
- ('<p class="eyebrow">Ejemplo · Protocolo contra el acoso escolar · 3/3</p>', antetitulo('Esencial · Ejemplo · Protocolo contra el acoso escolar · 2/2', 'esencial')),
- ('<p class="ac-sub">Caso 2026-07 · borrador de la app · lo revisa y firma la dirección</p>', '<p class="ac-sub">Caso 2026-07 · Preparado por DirectorIA · lo revisa y firma la dirección</p>'),
- ('<p>Versión traducida o en lectura fácil, si hace falta</p>', '<p>El resto, texto fijo de la plantilla</p>'),
- ('<div class="ac-it"><span class="ac-bul"></span><p>La prepara DirectorIA en el colegio;<br>nunca pasa por Claude</p></div>\n', ''),
- ('La app rellena lo que el colegio ya sabe (curso, contacto, fecha y sala del plan, quién atiende) y ofrece versión traducida o en lectura fácil.', 'La app rellena lo que el colegio ya sabe (curso, contacto, fecha y sala del plan, quién atiende); el resto es el texto fijo de la plantilla del protocolo.'),
- ('Insistir: la prepara DirectorIA con la plantilla del protocolo y los datos del colegio, sin IA; si hace falta traducirla o pasarla a lectura fácil, lo hace la IA del servidor del colegio. Claude, si se activa, solo crea material didáctico.', 'Insistir: la prepara DirectorIA con la plantilla del protocolo y los datos del colegio, sin IA. Con Completo, además, la IA puede pasarla a lectura fácil o traducirla, y la dirección la revisa igual antes de firmar.'),
-])
-deriva('acoso-plan', 'acoso-plan-esencial', [
- ('<section id="acoso-plan">', '<section id="acoso-plan-esencial">'),
- ('<p class="eyebrow">Ejemplo · Protocolo contra el acoso escolar · 2/3</p>', antetitulo('Anexo · Esencial · Protocolo contra el acoso escolar', 'esencial')),
- (' Los datos del caso están en el servidor del colegio y nunca van a Claude.</p>', '</p>'),
- ('<aside>', '<aside>Anexo: enseñarla solo si preguntan cómo sigue el caso después de abrirlo. '),
-])
+# Protocolo de acoso: ya no se abre ningún caso en DirectorIA. La guía (cómo se hace y los pasos) la genera gen_protocolo.py.
 
 # Banco de recursos: subir sin IA. Otro recurso (Lengua, 3.er ciclo), para que no choque con la búsqueda de la parte 2.
 deriva('banco-compartir', 'banco-subir-esencial', [
@@ -108,7 +143,7 @@ deriva('banco-compartir', 'banco-subir-esencial', [
   '<div class="bk-f"><div class="bk-fr bs-two"><div class="bk-fr">' + CB + '<p class="bk-fv2">Sin fotos ni datos de alumnos</p></div><div class="bk-fr">' + CB + '<p class="bk-fv2">Es mío o puedo compartirlo</p></div></div></div>\n<div class="bk-f"><div class="bk-fr"><p class="bk-fl">Comprobado al subir:</p><p class="bk-chip bs-ok">' + OK(label='Comprobado') + 'Sin números de DNI</p><p class="bk-chip bs-ok">' + OK(label='Comprobado') + 'Sin © ni ISBN</p></div></div>'),
  ('<p class="bk-badge">Un compañero lo adaptó</p>', '<p class="bk-badge">Primer «Me ha servido»</p>'),
  ('<p class="bk-k">Reto del 2.º ciclo</p>', '<p class="bk-k">Reto del 3.er ciclo</p>'),
- notas('Al subir un recurso, el curso y la materia son obligatorios, y los contenidos se eligen del catálogo del colegio. En el ejemplo, una rúbrica de exposición oral de Lengua para 5.º y 6.º. Antes de compartir, el docente marca dos casillas: que no lleva fotos ni datos de alumnos y que puede compartirlo (nada de materiales de editoriales). Además, unas reglas revisan el archivo al subirlo y avisan si aparece un número de DNI, el símbolo © o un ISBN: no es IA, son reglas que buscan esos patrones. La gamificación reconoce lo que ayuda a los demás: cada docente ve en privado cuántas veces se han usado sus recursos y los «Me ha servido», tiene insignias informativas y comparte metas de equipo por ciclo o departamento, como responder a lo que los compañeros buscaron y no encontraron («Se busca»). No hay clasificaciones entre compañeros, y los datos de uso nunca sirven para evaluar al profesorado. Con Completo, además, la IA sugiere contenidos, detecta nombres o datos de salud al subir y adapta un recurso a otro curso.'),
+ notas('Al subir un recurso, el curso y la materia son obligatorios, y los contenidos se eligen del catálogo del colegio. En el ejemplo, una rúbrica de exposición oral de Lengua para 5.º y 6.º. Antes de compartir, el docente marca dos casillas: que no lleva fotos ni datos de alumnos y que puede compartirlo (nada de materiales de editoriales). Además, unas reglas revisan el archivo al subirlo y avisan si aparece un número de DNI, el símbolo © o un ISBN: no es IA, son reglas que buscan esos patrones. La gamificación reconoce lo que ayuda a los demás: cada docente ve en privado cuántas veces se han usado sus recursos y los «Me ha servido», tiene insignias informativas y comparte metas de equipo por ciclo o departamento, como responder a lo que los compañeros buscaron y no encontraron («Se busca»). No hay clasificaciones entre compañeros, y los datos de uso nunca sirven para evaluar al profesorado. Con Completo, además, la IA sugiere contenidos y, al subir, avisa si aparecen nombres o datos de salud: es el filtro que impide que entren en el banco. También adapta un recurso a otro curso.'),
 ])
 
 # ======================= Parte 2 · Completo =======================
@@ -123,14 +158,24 @@ deriva('funciona-papel', 'funciona-papel-ia', [
 ])
 
 # Por qué una IA dentro del colegio: abre la parte 2 (antes estaba en la apertura, como si DirectorIA fuera solo una IA).
+# Desde la decisión del 26-28 de noviembre de 2026, DirectorIA no guarda datos de alumnos: la diapositiva explica por qué no vale
+# cualquier IA con los datos del colegio y con el correo. Lo legal, como lectura del equipo, no de un abogado.
 deriva('datos-alumnos', 'datos-alumnos-ia', [
  ('<section id="datos-alumnos">', '<section id="datos-alumnos-ia">'),
  ('<p class="eyebrow">Antes de elegir una IA</p>', antetitulo('Completo · Antes de elegir una IA', 'completo')),
+ ('<h2 class="title">Con datos de alumnos, no vale cualquier IA</h2>', '<h2 class="title">Con datos del colegio, no vale cualquier IA</h2>'),
+ ('<h3 class="dal-h">Cuentas personales, sin datos de alumnos</h3>', '<h3 class="dal-h">Cuentas personales, sin datos personales</h3>'),
  ('re', r'<p>Con DirectorIA, la IA trata los datos de vuestros alumnos <b>en un servidor dentro del colegio</b>, y la copia de seguridad, cifrada, está en la.UE\.</p>',
-  '<p>Con Completo, la IA trata los datos de vuestros alumnos <b>en un servidor dentro del colegio</b>, y la copia de seguridad, cifrada, está en la&nbsp;UE.</p>'),
- ('<aside>No decir que', '<aside>Abre la parte de Completo: por qué la IA va dentro del colegio. No decir que'),
- ('Con DirectorIA, la IA trata los datos en el centro y', 'Con Completo, la IA trata los datos en el centro y'),
- ('Sobre Claude: es opcional y solo para material didáctico;', 'Sobre Claude, que es un módulo opcional de Completo: solo sirve para material didáctico;'),
+  '<p>Con Completo, la IA trabaja <b>en un servidor dentro del colegio</b>, también con el correo. DirectorIA no guarda datos de alumnos: solo del profesorado y del funcionamiento del&nbsp;colegio.</p>'),
+ ('<p class="dal-foot">RGPD,', '<p class="dal-foot">Nuestra lectura, no la de un abogado: RGPD,'),
+ notas('Abre la parte de Completo: por qué no vale cualquier IA con los datos del colegio y con el correo. Presentarlo como nuestra lectura de la norma, no como la de un abogado: la última palabra la tiene su delegado de protección de datos. '
+       'No decir que ChatGPT, Gemini o Copilot están prohibidos ni que la ley obliga a tratar los datos en la UE: es falso y su delegado lo rebatirá. '
+       'Sus versiones de empresa o educativas sirven con datos personales si hay base jurídica para cada uso, contrato de encargo, evaluación de impacto, control de transferencias e información a las familias; una cuenta personal, aunque sea de pago, no. '
+       f'Lo que tiene que quedar: {FRASE_ALUMNOS} Con Completo: {FRASE_CORREO} {CORREO_EXCEPCION} '
+       'Por eso la evaluación de impacto sigue haciendo falta: damos un borrador, la revisa su delegado y la aprueba el colegio. '
+       'La copia de seguridad, cifrada, está en un centro de datos de la UE: DirectorIA no saca del Espacio Económico Europeo los datos que guarda. '
+       'Sobre Claude, que es un módulo opcional de Completo: solo sirve para material didáctico; no tiene acceso a los datos del colegio, un filtro está pensado para bloquear datos personales y la norma de uso es no introducirlos. '
+       'Lo paga el colegio con su propia cuenta comercial de Anthropic. No citar multas a otros colegios.'),
 ])
 
 deriva('banco-buscar', 'banco-buscar-ia', [
@@ -154,7 +199,16 @@ deriva('limites', 'limites-ia', [
  lim_tambien('No decide nada por su cuenta'),
  # Dos líneas, como las otras dos tarjetas (el título ya dice de quién se habla)
  ('<p class="lim-p">DirectorIA propone; decide y firma una persona.</p>', '<p class="lim-p">Propone; decide y firma una persona.</p>'),
- ('</aside>', ' Las dos primeras valen igual para Esencial, y por eso llevan «También en Esencial»; la tercera es de Completo, porque Esencial no usa IA.</aside>'),
+ # La tercera, la de Completo: la IA no lee los justificantes del profesorado (antes: «No trata con IA los datos de los alumnos
+ # fuera del colegio», que ya no vale porque DirectorIA no guarda datos de alumnos).
+ ('<h3 class="lim-h">No trata con IA los datos de los alumnos fuera del colegio</h3>', '<h3 class="lim-h">No lee los justificantes del&nbsp;profesorado</h3>'),
+ ('re', r'<img class="lim-ill" src="[^"]+" alt="Colegio con el servidor de DirectorIA dentro" width="144" height="144"><p class="lim-p">La IA trabaja en el servidor del centro\.</p>',
+  f'<img class="lim-ill" src="{B("circular")}" alt="Justificante con sello, archivado" width="144" height="144"><p class="lim-p">Un programa los archiva en carpetas.</p>'),
+ notas('Los directores suelen preguntar por esto antes que por las funciones. Decirlo claro les quita el miedo. Arriba, lo que DirectorIA no hace; abajo, quién lo hace: el docente evalúa y una persona del equipo decide y firma. '
+       'Las dos primeras valen igual para Esencial, y por eso llevan «También en Esencial»; la tercera es de Completo, porque Esencial no usa IA. '
+       'Los justificantes del profesorado los sube cada docente desde DirectorIA, y un programa, con reglas, los renombra y los archiva en su carpeta. Ningún programa lee su contenido, y la IA no tiene acceso a esa carpeta: no la busca, no la resume y el asistente no la usa. '
+       f'La frase: {FRASE_JUSTIFICANTES} Y si preguntan por los datos: {FRASE_ALUMNOS} Con Completo: {FRASE_CORREO} La copia de seguridad, cifrada, está en la UE; los correos salen por la cuenta del propio colegio, y el mantenimiento a distancia queda registrado. '
+       'Sobre el Reglamento de IA: evaluar o clasificar alumnos sería un uso de alto riesgo, y por eso el producto no lo hace. Es nuestra lectura del Reglamento, no la de un abogado.'),
 ])
 
 # ======================= Cierre =======================

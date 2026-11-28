@@ -95,10 +95,10 @@ if (roles.includes('docente')) {
 for (const ancho of [390, 360]) {
   const q = await nueva(ancho, 800, true);
   await q.evaluate(() => {
-    const S = { reloj: 9, banderas: {}, correo: {}, sel: {}, leyendo: {}, borrador: {}, aprob: {}, docs: { direccion: { firma: { hecho: true, hora: '8:05' }, acta: { hecho: true, hora: '8:06' } } }, plazos: {}, tablas: {}, banco: {}, dictado: {}, material: {}, trad: {}, informe: {}, fichas: {} };
+    const S = { reloj: 9, banderas: {}, correo: {}, sel: {}, leyendo: {}, borrador: {}, aprob: {}, docs: { direccion: { firma: { hecho: true, hora: '8:05' }, acta: { hecho: true, hora: '8:06' } } }, plazos: {}, tablas: {}, banco: {}, dictado: {}, material: {}, trad: {}, informe: {}, fichas: {}, guias: {}, justificantes: {} };
     // Los enviados, con la 2.ª respuesta propuesta: en dirección, la que comunica el preaviso a la empresa de fotocopiadoras.
     Object.keys(window.DEMO.roles).forEach((r) => { S.correo[r] = {}; window.DEMO.roles[r].correo.forEach((c, i) => { S.correo[r][c.id] = { estado: i % 2 ? 'archivado' : 'enviado', hora: '8:0' + (i + 1), texto: 'x', opcion: 1 }; }); });
-    sessionStorage.setItem('directoria-demo-v1', JSON.stringify(S));
+    sessionStorage.setItem('directoria-demo-v2', JSON.stringify(S));
   });
   for (const rol of roles) {
     await ir(q, rol); await q.reload(); await q.waitForTimeout(120);
@@ -228,8 +228,8 @@ if (roles.includes('direccion')) {
     await q.context().close();
   }
 }
-// 4 quinquies. El dosier del lunes 23: la respuesta que lo adjunta lo envía sin el acta de 2.º ESO A, así que no pasa a ✓
-//    (ni con el visto bueno ni sin él), y sin visto bueno lo dice.
+// 4 quinquies. El dosier del lunes 23: la respuesta que lo adjunta lo envía sin el acta de Matemáticas del martes 17, así que
+//    no pasa a ✓ (ni con el visto bueno ni sin él), y sin visto bueno lo dice.
 if (roles.includes('direccion')) {
   for (const visto of [false, true]) {
     const q = await nueva(1440, 900);
@@ -246,8 +246,8 @@ if (roles.includes('direccion')) {
     await q.locator('#confirmar-si').click(); await q.waitForTimeout(150);
     await ir(q, 'direccion');
     const lun = await q.evaluate(() => { const d = document.getElementById('ag-2026-11-23'); return d ? { hechas: d.querySelectorAll('.ag-item.hecha').length, t: d.textContent } : null; });
-    if (!lun || lun.hechas) errores.push(`[dosier ${visto ? 'con' : 'sin'} visto bueno] el lunes 23 pasa a ✓ aunque falta el acta de 2.º ESO A`);
-    else if (!/sin el acta de 2\.º\sESO\sA/.test(lun.t) || (!visto && !/sin tu visto bueno/.test(lun.t))) errores.push(`[dosier ${visto ? 'con' : 'sin'} visto bueno] el lunes 23 no dice lo que falta: ${lun.t}`);
+    if (!lun || lun.hechas) errores.push(`[dosier ${visto ? 'con' : 'sin'} visto bueno] el lunes 23 pasa a ✓ aunque falta el acta del martes 17`);
+    else if (!/sin el acta del martes\s17/.test(lun.t) || (!visto && !/sin tu visto bueno/.test(lun.t))) errores.push(`[dosier ${visto ? 'con' : 'sin'} visto bueno] el lunes 23 no dice lo que falta: ${lun.t}`);
     await foto(q, `x-direccion-dosier-enviado-${visto ? 'con' : 'sin'}-visto-bueno`, false);
     await q.context().close();
   }
@@ -300,6 +300,122 @@ if (roles.includes('jefatura') && roles.includes('docente') && await p.evaluate(
     if (respondido) await foto(q, 'x-jefatura-guardia-respondida');
     await q.context().close();
   }
+}
+
+// 7. Justificantes del profesorado: la docente sube el de su ausencia del lunes 16 y un programa lo archiva en su carpeta,
+//    Justificantes / curso / mes / docente. En secretaría sale en la carpeta de noviembre y la cifra pasa de 5 a 6 de 7; en
+//    jefatura, el informe dice «Entregado» y no enseña archivos. Ninguna de las tres pantallas lleva la insignia de la IA.
+if (roles.includes('docente') && roles.includes('secretaria') && roles.includes('jefatura')) {
+  const q = await nueva(1440, 900);
+  const sinInsignia = async (donde) => { if (await q.locator('main .insignia').count()) errores.push(`[justificantes] en ${donde} sale la insignia de la IA`); };
+  const cifraSr = (re) => q.evaluate((src) => { const r = new RegExp(src); return ([...document.querySelectorAll('.indicador .sr')].map((x) => x.textContent).find((t) => r.test(t)) || ''); }, re);
+  await ir(q, 'secretaria');
+  let c = await cifraSr('^Justificantes');
+  if (!/5\sde\s7/.test(c)) errores.push(`[justificantes] al empezar, la cifra de secretaría no dice 5 de 7: ${c}`);
+  // Antes de subirlo: un pendiente no tiene archivo («Sin archivo todavía», sin nombre de archivo), y el registro de accesos
+  // dice también quién ha abierto uno, no solo quién ha subido.
+  await ir(q, 'secretaria-justificantes');
+  const pend = await q.evaluate(() => [...document.querySelectorAll('.arbol .archivo.pendiente')].map((x) => x.textContent));
+  if (!pend.length || pend.some((t) => /\.(pdf|jpe?g|png)\b/.test(t) || !/Sin archivo todavía/.test(t))) errores.push(`[justificantes] en secretaría, un pendiente sale con nombre de archivo: ${pend.join(' | ')}`);
+  const reg = await q.evaluate(() => { const s = [...document.querySelectorAll('main section')].find((x) => /Registro de accesos/.test(x.textContent)); return s ? s.textContent : ''; });
+  if (!/abrió/.test(reg)) errores.push('[justificantes] el registro de accesos de secretaría no dice quién ha abierto un justificante');
+  await ir(q, 'docente-justificantes'); await sinInsignia('docente');
+  const subir = q.locator('[data-k="subir-justificantes"]');
+  if (!(await subir.count())) errores.push('[justificantes] la docente no tiene dónde subir el justificante de su ausencia');
+  else {
+    if (!(await subir.isDisabled())) errores.push('[justificantes] se puede subir sin elegir el archivo');
+    await q.locator('[data-k="elegir-justificantes"]').click(); await q.waitForTimeout(80);
+    const ruta = ((await q.locator('.subir-justificante .ruta').textContent()) || '').trim();
+    if (ruta !== 'Justificantes/2026-27/2026-11/Laura Sánchez/2026-11-16 justificante.pdf') errores.push(`[justificantes] la carpeta y el nombre no son los del programa: ${ruta}`);
+    await foto(q, 'x-docente-justificante-elegido', false);
+    await subir.click(); await q.waitForTimeout(200);
+    if (await q.locator('.subir-justificante').count()) errores.push('[justificantes] después de subirlo, sigue pidiendo el justificante');
+    await foto(q, 'x-docente-justificante-subido');
+    await q.waitForTimeout(600); // que el aviso «Justificante archivado» no salga en las capturas de los otros perfiles
+    await ir(q, 'docente');
+    const filaJ = await q.evaluate(() => { const li = [...document.querySelectorAll('.panel-lista .fila')].find((x) => /Tu justificante/.test(x.textContent)); return li ? { hecha: li.classList.contains('hecha'), t: li.textContent } : null; });
+    if (!filaJ || !filaJ.hecha || !/Entregado a las/.test(filaJ.t)) errores.push(`[justificantes] en el Inicio de la docente, su justificante no pasa a «Entregado a las…»: ${filaJ && filaJ.t}`);
+    await ir(q, 'secretaria-justificantes'); await sinInsignia('secretaría');
+    const archivo = await q.evaluate(() => { const li = [...document.querySelectorAll('.arbol .archivo')].find((x) => /2026-11-16 justificante\.pdf/.test(x.textContent)); return li ? li.textContent : ''; });
+    if (!/Entregado/.test(archivo)) errores.push(`[justificantes] en la carpeta de secretaría no sale entregado el del lunes 16: ${archivo}`);
+    await foto(q, 'x-secretaria-justificantes-tras-subir');
+    await ir(q, 'secretaria');
+    c = await cifraSr('^Justificantes');
+    if (!/6\sde\s7/.test(c)) errores.push(`[justificantes] tras subirlo, la cifra de secretaría no dice 6 de 7: ${c}`);
+    await ir(q, 'jefatura-ausencias'); await sinInsignia('jefatura');
+    const fila = await q.evaluate(() => { const tr = [...document.querySelectorAll('main tbody tr')].find((x) => /Laura Sánchez/.test(x.textContent)); return tr ? tr.textContent : ''; });
+    if (!/Entregado/.test(fila)) errores.push(`[justificantes] en el informe de jefatura no sale entregado el de Laura Sánchez: ${fila}`);
+    if (await q.evaluate(() => /justificante\.pdf|Justificantes\//.test(document.querySelector('main').textContent))) errores.push('[justificantes] el informe de jefatura enseña archivos: solo dice entregado o pendiente');
+    await foto(q, 'x-jefatura-ausencias-tras-subir');
+  }
+  await q.context().close();
+}
+
+// 8. Sin datos de alumnos en ninguna pantalla, también en el correo y con las fichas a la vista: ni casos, ni «Alumno/a», ni
+//    los alumnos que tenía la demo, ni salud, ni motivos de ausencia. Vale la línea fija de la ficha. Cada ficha trae esa
+//    línea y solo la clase; la guía del protocolo de acoso, sus nueve pasos, y cada guía, sus anexos en blanco, en orientación
+//    y en dirección.
+{
+  const q = await nueva(1440, 900);
+  await ir(q, 'jefatura-guardias'); await q.locator('[data-k="todo-guardias"]').click(); await q.waitForTimeout(150);
+  const LINEA = 'Las indicaciones de salud y de recogida de los alumnos no están en DirectorIA: las tiene el colegio. Pregúntalas en conserjería o a la tutora antes de empezar.';
+  const prohibido = (t) => q.evaluate(([texto, linea]) => {
+    const limpio = texto.split(linea).join(' ').replace(/[Ll]as indicaciones de salud y de recogida(?: de los alumnos)?/g, ' ');
+    const re = /Caso\s+\d{4}|Alumno\/a|(?<![\p{L}])(?:Mario|Lucía|Hugo|Daniel|Irene|Amira|Nora|Iker|Sofía|Adrián|Gonzalo|Carla|Alba|Óliver|Samuel)(?![\p{L}])|fiebre|al[ée]rgic|alergi|autoinyector|te mejores|recup[ée]rate|(?<!informaci[oó]n\s)\brecogidas?\b(?!\s+de\s+(?:la\s+|los\s+)?(?:informaci[oó]n|datos))/iu;
+    const m = limpio.match(re); return m ? m[0] : null;
+  }, [t, LINEA]);
+  for (const rol of roles) {
+    const vistas = ['inicio', 'correo'].concat(await q.evaluate((r) => window.DEMO.roles[r].modulos.map((m) => m.id), rol));
+    for (const v of vistas) {
+      await ir(q, rol + (v === 'inicio' ? '' : '-' + v));
+      const ids = v === 'correo' ? await q.evaluate((r) => window.DEMO.roles[r].correo.map((c) => c.id), rol) : [null];
+      for (const id of ids) {
+        if (id) { await q.locator(`[data-k="msg-${id}"]`).click(); await q.waitForTimeout(40); }
+        const m = await prohibido(await q.evaluate(() => (document.querySelector('main') || document.body).textContent));
+        if (m) errores.push(`[sin datos de alumnos] en ${rol} · ${v}${id ? ' · ' + id : ''} sale «${m}»`);
+      }
+    }
+  }
+  for (const [rol, v] of [['sustituto', 'ficha'], ['jefatura', 'fichas']]) {
+    if (!roles.includes(rol)) continue;
+    await ir(q, rol + '-' + v);
+    const fichas = await q.evaluate((linea) => [...document.querySelectorAll('article.ficha')].map((f) => ({ linea: f.textContent.includes(linea), dts: [...f.querySelectorAll('dt')].map((x) => x.textContent.trim()), origen: (f.querySelector('.ficha-origen') || {}).textContent })), LINEA);
+    if (!fichas.length) errores.push(`[ficha] en ${rol} no sale ninguna ficha`);
+    fichas.forEach((f, i) => {
+      if (!f.linea) errores.push(`[ficha] la ficha ${i + 1} de ${rol} no lleva la línea fija`);
+      const malas = f.dts.filter((x) => !['Tarea', 'Material', 'A quién llamar', 'Al acabar', 'Antes de empezar'].includes(x));
+      if (malas.length) errores.push(`[ficha] la ficha ${i + 1} de ${rol} lleva ${malas.join(', ')}`);
+      if (f.origen !== 'Preparada por DirectorIA · confirmada por jefatura') errores.push(`[ficha] la ficha ${i + 1} de ${rol} dice «${f.origen}»`);
+    });
+    if (rol === 'sustituto') await foto(q, 'x-sustituto-ficha-sin-datos-de-alumnos');
+  }
+  // Las guías de los protocolos, en orientación y en dirección. Dirección toma las de orientación («guias:
+  // 'orientacion/protocolos'»): se escriben una vez y cada perfil las enseña enteras.
+  const NOMBRE_ROL = { orientacion: 'orientación', direccion: 'dirección' };
+  for (const rol of ['orientacion', 'direccion'].filter((x) => roles.includes(x))) {
+    const info = await q.evaluate((r) => {
+      const m = window.DEMO.roles[r].modulos.find((x) => x.tipo === 'protocolo');
+      if (!m) return null;
+      let g = m.guias;
+      if (typeof g === 'string') { const [o, id] = g.split('/'); const x = window.DEMO.roles[o] && window.DEMO.roles[o].modulos.find((y) => y.id === id); g = x && x.guias; }
+      return { id: m.id, guias: Array.isArray(g) ? g.map((x) => [x.id, x.pasos.length, (x.plantillas || []).length]) : null };
+    }, rol);
+    if (!info || !info.guias) { errores.push(`[guía] ${NOMBRE_ROL[rol]} no tiene las guías de los protocolos, paso a paso`); continue; }
+    await ir(q, `${rol}-${info.id}`);
+    for (const [id, pasos, plantillas] of info.guias) {
+      await q.locator(`[data-k="guia-${id}"]`).click(); await q.waitForTimeout(80);
+      const n = await q.locator('.guia-paso').count(), np = await q.locator('.plantilla').count();
+      if (n !== pasos) errores.push(`[guía] en ${NOMBRE_ROL[rol]}, la de ${id} enseña ${n} pasos y tiene ${pasos}`);
+      if (np !== plantillas) errores.push(`[guía] en ${NOMBRE_ROL[rol]}, la de ${id} enseña ${np} anexos en blanco y tiene ${plantillas}`);
+      if (await q.locator('main .insignia').count()) errores.push(`[guía] en ${NOMBRE_ROL[rol]}, la de ${id} lleva la insignia de la IA`);
+      await foto(q, `x-${rol}-guia-${id}`);
+    }
+    if (!(await q.evaluate(() => /ningún caso/i.test(document.querySelector('main').textContent)))) errores.push(`[guía] en ${NOMBRE_ROL[rol]}, no dice que no se abre ningún caso en DirectorIA`);
+    await q.locator('[data-k="guia-acoso"]').click(); await q.waitForTimeout(80);
+    const cond = await q.locator('.guia-paso.condicional').count();
+    if (cond !== 3) errores.push(`[guía] en ${NOMBRE_ROL[rol]}, la de acoso tiene ${cond} pasos «si se confirma», y son tres`);
+  }
+  await q.context().close();
 }
 
 // Interacciones clave

@@ -5,7 +5,8 @@
 
   var D = window.DEMO;
   var PERFILES = Object.keys(D.roles).map(function (k) { return D.roles[k]; }).sort(function (a, b) { return a.orden - b.orden; });
-  var CLAVE = 'directoria-demo-v1';
+  // v2: la demo sin datos de alumnos (guías de protocolos, ficha nueva, justificantes). Lo guardado con la v1 no vale.
+  var CLAVE = 'directoria-demo-v2';
 
   var SVG_INSIGNIA = '<svg class="insignia" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="12" fill="#17322C"/><path d="M12 4.2 14.6 12 12 19.8 9.4 12z" fill="#E07A3A"/></svg>';
   var SVG_VISTO = '<svg class="visto" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="12" r="12" fill="#17322C"/><path d="M7.2 12.4l3.2 3.2 6.4-6.6" fill="none" stroke="#F6F3EC" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg>';
@@ -13,7 +14,7 @@
 
   /* ---------- Estado ---------- */
   function estadoInicial() {
-    return { reloj: 0, banderas: {}, correo: {}, sel: {}, leyendo: {}, borrador: {}, aprob: {}, docs: {}, plazos: {}, tablas: {}, banco: {}, dictado: {}, material: {}, trad: {}, informe: {}, fichas: {} };
+    return { reloj: 0, banderas: {}, correo: {}, sel: {}, leyendo: {}, borrador: {}, aprob: {}, docs: {}, plazos: {}, tablas: {}, banco: {}, dictado: {}, material: {}, trad: {}, informe: {}, fichas: {}, guias: {}, justificantes: {} };
   }
   var S = cargar() || estadoInicial();
   function cargar() {
@@ -71,7 +72,8 @@
   }
   function conInsignia(texto, suave) { return h('span', { class: 'con-insignia' + (suave ? ' suave' : '') }, insignia(), texto); }
   // La insignia de la IA solo va en lo que prepara la IA. Lo demás lo prepara DirectorIA con reglas y plantillas.
-  var TIPOS_IA = { banco: true, dictado: true, material: true, traduccion: true, documento: true, plazos: true, aprobaciones: false, ficha: false, protocolo: false, tabla: false, informe: false };
+  // Las guías de los protocolos y los justificantes del profesorado salen de reglas y plantillas: nunca llevan la insignia.
+  var TIPOS_IA = { banco: true, dictado: true, material: true, traduccion: true, documento: true, plazos: true, aprobaciones: false, ficha: false, protocolo: false, tabla: false, informe: false, justificantes: false };
   function esIA(m) { return m && m.ia !== undefined ? !!m.ia : !!TIPOS_IA[m && m.tipo]; }
   function sinInsignia(texto) { return h('span', { class: 'con-insignia suave' }, texto); }
   var NOMBRE_ESTADO = { hoy: 'Hoy', pendiente: 'Pendiente', hecho: 'Hecho', info: 'Para saber', plazo: 'Plazo', pronto: 'Pronto', despues: 'Más adelante', ok: 'Listo', falta: 'Falta', revisar: 'Revisar', aviso: 'Aviso', curso: 'En curso' };
@@ -173,7 +175,7 @@
   // descripción del elemento (solo en lo que recibe el foco). Va en un texto oculto propio, en una sola frase.
   // lado: se abre a un lado y no debajo (la última columna de una rejilla).
   // disparadores: con el ratón, el globo sale al pasar por estas piezas de la marca y no por toda ella; con el foco, solo
-  // con el del teclado. Es lo de las cifras: su globo es largo (las piezas del dosier, los pasos del caso) y, si saliera
+  // con el del teclado. Es lo de las cifras: su globo es largo (las piezas del dosier) y, si saliera
   // al cruzar la tarjeta camino de su acción o de la rejilla de debajo, la taparía. Sale al detenerse en la cifra o en
   // su medidor, que es lo que el globo detalla; lo mismo está en su módulo y en la descripción accesible.
   function conGlobo(el, lineas, describir, lado, disparadores) {
@@ -277,11 +279,12 @@
   /* ---------- Acceso ---------- */
   var RECORRIDO = [
     { rol: 'jefatura', vista: 'guardias', t: 'Falta un profesor', d: 'Revisa quién cubre cada hora y lo confirma.' },
-    { rol: 'sustituto', vista: 'ficha', t: 'La ficha de quien sustituye', d: 'Solo lo necesario, y solo para quien entra al aula.' },
+    { rol: 'sustituto', vista: 'ficha', t: 'La ficha de quien sustituye', d: 'Solo la clase: la tarea, el material y a quién llamar.' },
     { rol: 'direccion', vista: 'inicio', t: 'El resumen de las 8:00', d: 'Ve quién falta, qué vence y qué correos importan, y responde a inspección.' },
-    { rol: 'docente', vista: 'dictado', t: 'Un correo dictado', d: 'La tutora dicta; el correo llega redactado para revisar.' },
-    { rol: 'orientacion', vista: 'acoso', t: 'Un protocolo, con reserva', d: 'Paso a paso, con fechas, responsables y documentos.' },
+    { rol: 'docente', vista: 'dictado', t: 'Un correo dictado', d: 'La tutora dicta un aviso para las familias de su clase; llega redactado para revisar.' },
+    { rol: 'orientacion', vista: 'protocolos', t: 'La guía de un protocolo', d: 'El de acoso, paso a paso: qué se hace, quién, cuándo y con qué anexo.' },
     { rol: 'secretaria', vista: 'gastos', t: 'El analista de gastos', d: 'Facturas y contratos revisados, con avisos de renovaciones y ahorros.' },
+    { rol: 'docente', vista: 'justificantes', t: 'Un justificante, a su carpeta', d: 'La docente lo sube y un programa lo archiva. La IA no lo lee.' },
   ];
   function vistaAcceso() {
     var arriba = h('header', { class: 'acceso-banda acceso-arriba marco' },
@@ -319,7 +322,7 @@
           h('h2', { 'data-foco': '', tabindex: '-1' }, '¿Con qué perfil entras?'),
           h('p', { class: 'entradilla' }, 'Cada cargo tiene su resumen del día, su correo con respuestas propuestas y sus propias funciones. En el colegio, cada persona entra con su cuenta y solo ve lo suyo.')),
         lista,
-        h('p', { class: 'acceso-nota' }, 'Todos los nombres y datos son inventados. DirectorIA trata los datos de los alumnos en un servidor dentro del colegio; aquí, todo ocurre en esta página.')),
+        h('p', { class: 'acceso-nota' }, 'Todos los nombres y datos son inventados. DirectorIA no guarda datos de alumnos: solo del profesorado y del funcionamiento del colegio. Aquí, todo ocurre en esta página.')),
       banda);
   }
   function reiniciar() {
@@ -347,7 +350,7 @@
       h('span', { class: 'colegio' }, 'Colegio Ejemplo'),
       h('span', { class: 'relleno' }),
       h('span', { class: 'chip-hora' }, 'Miércoles 18 nov · ' + horaActual()),
-      h('span', { class: 'chip-servidor', title: 'La IA trata los datos de los alumnos en el servidor del colegio' }, ilus('servidor', null, ''), h('span', { class: 'largo' }, 'En el servidor del colegio')),
+      h('span', { class: 'chip-servidor', title: 'La aplicación y los datos están en un servidor dentro del colegio' }, ilus('servidor', null, ''), h('span', { class: 'largo' }, 'En el servidor del colegio')),
       h('div', { class: 'usuario' }, ilus(p.persona.ilustracion, null, ''), h('div', null, h('p', { class: 'nombre' }, p.persona.nombre), h('p', { class: 'cargo' }, p.persona.cargo))),
       // En un móvil estrecho (360 px) el botón dice «Cambiar», en una línea; su nombre sigue siendo «Cambiar de perfil».
       boton([h('span', { class: 'cambiar-largo' }, 'Cambiar de perfil'), h('span', { class: 'cambiar-corto' }, 'Cambiar')], function () { ir(null); }, { cls: 'boton-borde boton-pequeno boton-cambiar', 'aria-label': 'Cambiar de perfil' }));
@@ -525,14 +528,16 @@
   // color dice adónde lleva una pieza (su función) y el icono, de qué trata. Lo que lleva al correo es «comunicacion»,
   // que va sin tono (es donde escribe la IA, y su único color es la chispa); lo que no lleva a ninguna función, sin tono.
   var CATEGORIA_TIPO = { dictado: 'comunicacion', traduccion: 'comunicacion', aprobaciones: 'personas', ficha: 'personas', documento: 'documentos',
-    tabla: 'documentos', plazos: 'plazos', protocolo: 'protocolos', informe: 'recursos', banco: 'recursos', material: 'recursos' };
-  // Dos funciones cuyo tipo no dice su trabajo: «Tu jornada» es el día (como el panel del día) y «Exámenes», un calendario.
-  var CATEGORIA_MODULO = { jornada: 'personas', examenes: 'plazos' };
-  // El icono de la cabecera de una función, si ninguna cifra del Inicio lleva a ella (o llevan varias), por su tipo.
+    tabla: 'documentos', plazos: 'plazos', protocolo: 'protocolos', informe: 'recursos', banco: 'recursos', material: 'recursos', justificantes: 'documentos' };
+  // Funciones cuyo tipo no dice su trabajo: «Tu jornada» es el día (como el panel del día), «Exámenes» es un calendario,
+  // «Ausencias» va con las guardias (personas) y el «Plan de convivencia», con las guías de los protocolos.
+  var CATEGORIA_MODULO = { jornada: 'personas', examenes: 'plazos', ausencias: 'personas', convivencia: 'protocolos' };
+  // El icono de la cabecera de una función, si ninguna cifra del Inicio lleva a ella (o llevan varias): el de la función o el de su tipo.
   var ICONO_TIPO = { dictado: 'microfono', traduccion: 'documento', aprobaciones: 'persona', ficha: 'documento', documento: 'documento', tabla: 'documento',
-    plazos: 'calendario', protocolo: 'carpeta', informe: 'carpeta', banco: 'libro', material: 'libro' };
-  // Lo confidencial (el protocolo y lo que es de un caso, como la citación que firma la directora) va siempre en su tono.
-  function categoriaModulo(m) { return m ? (m.confidencial ? 'protocolos' : CATEGORIA_MODULO[m.id] || CATEGORIA_TIPO[m.tipo] || null) : null; }
+    plazos: 'calendario', protocolo: 'carpeta', informe: 'carpeta', banco: 'libro', material: 'libro', justificantes: 'carpeta' };
+  var ICONO_MODULO = { ausencias: 'persona' };
+  // El tono sale del tipo de trabajo, también en lo reservado (los justificantes): la reserva la dicen la banda y el candado.
+  function categoriaModulo(m) { return m ? (CATEGORIA_MODULO[m.id] || CATEGORIA_TIPO[m.tipo] || null) : null; }
   // Lo que lleva a una función (cifra, fila o marca) toma su tono: la cifra del dosier, su fila, su marca y
   // «Dosier para inspección» en el menú van del mismo color. Se mira el enlace vigente: si cambia, el tono lo sigue.
   function categoria(rol, ir) {
@@ -544,10 +549,10 @@
     return D.roles[otro] ? categoriaModulo(modulo(otro, s.split('#')[0])) : null;
   }
   // El icono de la cabecera de una función: el mismo dibujo que la cifra que lleva a ella en el Inicio; si no la hay, o si
-  // llevan varias (el protocolo: la entrevista con un reloj y el paso del caso con una carpeta), el de su tipo.
+  // llevan varias, el de la función («Ausencias», la persona) o el de su tipo.
   function iconoModulo(rol, m) {
     var cs = ((D.roles[rol].inicio || {}).cifras || []).filter(function (c) { return c.ir === m.id; });
-    return cs.length === 1 && cs[0].icono ? cs[0].icono : ICONO_TIPO[m.tipo];
+    return cs.length === 1 && cs[0].icono ? cs[0].icono : ICONO_MODULO[m.id] || ICONO_TIPO[m.tipo];
   }
   // Glifos de estado y formas del calendario, sin disco: toman el color del texto (currentColor).
   // Banderín: plazo. Calendario: cita, salida o fecha del colegio. Triángulo: aviso. ✓: hecho. «…»: por confirmar.
@@ -559,6 +564,9 @@
     espera: '<circle class="trazo" cx="8" cy="8" r="6.5"/><circle class="relleno" cx="5.2" cy="8" r="1.05"/><circle class="relleno" cx="8" cy="8" r="1.05"/><circle class="relleno" cx="10.8" cy="8" r="1.05"/>',
     reloj: '<circle class="trazo" cx="8" cy="8" r="6.5"/><path class="trazo" d="M8 4.6V8l2.4 1.6"/>',
     info: '<circle class="trazo" cx="8" cy="8" r="6.5"/><path class="trazo grueso" d="M8 7.3v4"/><circle class="relleno" cx="8" cy="4.8" r="1.05"/>',
+    // Las carpetas y los archivos de los justificantes (Justificantes / curso / mes / docente).
+    carpeta: '<path class="trazo" d="M1.8 4.4v8.1a1.2 1.2 0 0 0 1.2 1.2h10a1.2 1.2 0 0 0 1.2-1.2V6.2A1.2 1.2 0 0 0 13 5H8.1L6.6 3.2H3a1.2 1.2 0 0 0-1.2 1.2z"/>',
+    archivo: '<path class="trazo" d="M4 1.8h5.2l3 3v8.4a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2.8a1 1 0 0 1 1-1z"/><path class="trazo" d="M9 1.8v3.2h3.2M5.4 8.4h5.2M5.4 11h3.6"/>',
   };
   // «Cita, salida o fecha»: el calendario vale también para una fecha del colegio (el corte de la calle, el inicio de los exámenes).
   var NOMBRE_FORMA = { plazo: 'Plazo', evento: 'Cita, salida o fecha', aviso: 'Aviso', hecho: 'Hecho' };
@@ -571,7 +579,7 @@
   // y lo mismo de otro perfil con su id delante: 'jefatura/guardias#g1'. Devuelve { hecho, hora, verbo } y, si cuenta,
   // { n, de, partes }; una propuesta de aprobaciones devuelve además quién la cubre (quien), que es la persona que
   // jefatura ha elegido en el desplegable o, si no ha cambiado nada, la propuesta. Solo lee el estado: no lo cambia.
-  var SECCION = { documento: 'docs', aprobaciones: 'aprob', plazos: 'plazos', tabla: 'tablas', dictado: 'dictado', traduccion: 'trad', informe: 'informe', banco: 'banco', material: 'material', ficha: 'fichas' };
+  var SECCION = { documento: 'docs', aprobaciones: 'aprob', plazos: 'plazos', tabla: 'tablas', dictado: 'dictado', traduccion: 'trad', informe: 'informe', banco: 'banco', material: 'material', ficha: 'fichas', protocolo: 'guias', justificantes: 'justificantes' };
   function leer(seccion, rol, id) { var a = S[seccion] && S[seccion][rol]; return (a && a[id]) || {}; }
   function ultimaHora(horas) { return horas.filter(Boolean).sort(function (a, b) { return a.length - b.length || (a < b ? -1 : 1); }).pop() || null; }
   function estadoDe(rol, ref) {
@@ -621,9 +629,18 @@
       }
       return res;
     }
+    if (m.tipo === 'justificantes') {
+      // Los justificantes entregados ('justificantes', o uno solo: 'justificantes#j1'), como los plazos: «5 de 7». En el
+      // medidor, los entregados primero, como las piezas listas del dosier.
+      var js = ausenciasDe(r, m).filter(function (x) { return partes[1] === undefined || x.id === partes[1]; });
+      var nj = js.filter(function (x) { return x.entregado; }).length;
+      return { hecho: js.length > 0 && nj === js.length, n: nj, de: js.length, partes: js.map(function (x, i) { return i < nj; }),
+        hora: ultimaHora(js.map(function (x) { return x.hora; })), verbo: 'Entregado' };
+    }
     if (m.tipo === 'dictado') return { hecho: est.fase === 'enviado', hora: est.hora || null, fase: est.fase || 'inicio', verbo: 'Enviado' };
     if (m.tipo === 'ficha') return { hecho: !m.bandera || !!S.banderas[m.bandera] };
     if (m.tipo === 'banco' || m.tipo === 'material') return { hecho: !!(est.guardado || est.compartido) };
+    // Una guía no se termina: explica cómo se aplica el protocolo, y ningún caso se abre en DirectorIA.
     if (m.tipo === 'protocolo') return { hecho: false };
     return { hecho: !!est.hecho, hora: est.hora || null };
   }
@@ -736,8 +753,8 @@
     ordenarPanel(pn);
     if (observador) observador.observe(pn);
   }
-  // «3.º B», «1.ª hora», «2.º ESO A», «sáb 21», «sábado 21», «las 8:00», «Daniel M.», «1 de diciembre»: el ordinal, el día, la hora,
-  // la inicial o el número no se quedan solos al final de una línea.
+  // «3.º B», «1.ª hora», «2.º ESO A», «sáb 21», «sábado 21», «las 8:00», «1 de diciembre»: el ordinal, el día, la hora o el
+  // número no se quedan solos al final de una línea.
   function juntarOrdinales(el) {
     var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), n;
     while ((n = w.nextNode())) {
@@ -755,7 +772,7 @@
     while ((n = w.nextNode())) if (/ESO [A-D]\b/.test(n.nodeValue)) n.nodeValue = n.nodeValue.replace(/ESO ([A-D])\b/g, 'ESO\u00a0$1');
     return el;
   }
-  // «Caso 2026-07» no se parte por el guion: el número va en un trozo que no se corta. El texto entero pasa a un solo
+  // «2026-27» (el curso) no se parte por el guion: el número va en un trozo que no se corta. El texto entero pasa a un solo
   // elemento, para no partir la línea si el contenedor es una rejilla (la nota de una cifra).
   function noPartir(el) {
     var w = document.createTreeWalker(el, NodeFilter.SHOW_TEXT), n, cuales = [];
@@ -766,8 +783,8 @@
     return el;
   }
   // Pasa a minúscula el principio de un título que va dentro de una frase, salvo que empiece por un nombre propio
-  // («Caso 2026-07», «AMPA», «Laura Sánchez»).
-  function minusculaTitulo(s) { return /^(Caso \d|[A-ZÁÉÍÓÚÑ]{2,}|[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+ [A-ZÁÉÍÓÚÑ])/.test(s || '') ? s : minuscula(s); }
+  // («AMPA», «Laura Sánchez»).
+  function minusculaTitulo(s) { return /^([A-ZÁÉÍÓÚÑ]{2,}|[A-ZÁÉÍÓÚÑ][a-záéíóúñ]+ [A-ZÁÉÍÓÚÑ])/.test(s || '') ? s : minuscula(s); }
 
   /* Cifras: 3-4 tarjetas grandes; cada una es un enlace a donde se actúa y tiene un solo sentido:
      o cuenta lo que queda (sin medidor), o es un progreso «X de Y» con su medidor rotulado,
@@ -777,10 +794,6 @@
   var POR_REVISAR = { nota: 'Ya lo has dictado. Te queda revisar el correo y enviarlo tú.', accion: 'Revisar y enviar', accionCorta: 'Revisar' };
   var NOMBRE_PIEZA = { ok: 'lista', revisar: 'por revisar', falta: 'falta' };
   var ORDEN_PIEZA = { ok: 0, revisar: 1, falta: 2 };
-  // Los pasos de un protocolo en el medidor: hechos (rellenos), en curso (con borde), pendientes (vacíos)
-  // y los que solo van si se confirma (borde discontinuo).
-  var TRAMO_PASO = { hecho: 'lleno', curso: 'actual', pendiente: null, condicional: 'condicional' };
-  var NOMBRE_PASO = { hecho: 'hecho', curso: 'en curso', pendiente: 'pendiente', condicional: 'solo si se confirma' };
   function valorCifra(rol, c) {
     var p = D.roles[rol];
     if (c.cuenta === 'correo') {
@@ -795,7 +808,7 @@
         hora: ultimaHora(con.map(function (x) { return est[x.id] && est[x.id].hora; })) };
     }
     if (c.pendientes) {
-      // Lo que queda, sin medidor. La nota resume lo que queda («La citación y el acta del claustro»); si queda uno, lo dice entero.
+      // Lo que queda, sin medidor. La nota resume lo que queda («La convocatoria y el acta del claustro»); si queda uno, lo dice entero.
       // Hecho todo, la cifra lleva a su «ir» o, si no lo tiene, adonde llevaba el último pendiente.
       var es = c.pendientes.map(function (x) { return estadoDe(rol, x.sigue); });
       var resto = c.pendientes.filter(function (x, i) { return !es[i].hecho; });
@@ -819,15 +832,6 @@
         r.valorTexto = listas + ' de ' + m.documentos.length;
         r.barra = medidor(piezas.map(function (d) { return d.estado === 'ok' ? 'lleno' : d.estado; }));
         r.globo = [c.etiqueta + ': ' + listas + ' de ' + m.documentos.length + ' ' + r.rotulo].concat(m.documentos.map(function (d) { return d.nombre + ': ' + NOMBRE_PIEZA[d.estado] + '.'; }));
-      } else if (m.tipo === 'protocolo' && m.pasos) {
-        // El paso en curso de un protocolo («4 de 9», rotulado «en curso»), con un tramo por paso. El globo da los pasos.
-        var k = m.pasos.map(function (x) { return x.estado; }).indexOf('curso');
-        var n = k >= 0 ? k + 1 : m.pasos.filter(function (x) { return x.estado === 'hecho'; }).length;
-        r.rotulo = c.rotulo || 'en curso';
-        r.valor = [String(n), h('small', null, ' de ' + m.pasos.length)];
-        r.valorTexto = n + ' de ' + m.pasos.length;
-        r.barra = medidor(m.pasos.map(function (x) { return TRAMO_PASO[x.estado]; }));
-        r.globo = [c.etiqueta + ': ' + r.valorTexto + ', ' + r.rotulo].concat(m.pasos.map(function (x, i) { return (i + 1) + '. ' + x.nombre + ': ' + NOMBRE_PASO[x.estado] + '.'; }));
       } else if (m.tipo === 'dictado') {
         var f = FASE_DICTADO[e.fase] || FASE_DICTADO.inicio;
         r.valor = f[0];
@@ -836,6 +840,7 @@
         // Ya dictado y por revisar: la nota y la acción lo dicen, para no pedir otra vez que se dicte.
         if (f[1] === 1) { var pd = Object.assign({}, POR_REVISAR, c.siDictado || {}); r.nota = pd.nota; r.accion = pd.accion; r.accionCorta = pd.accionCorta; }
       } else if (e.de) {
+        // Aprobaciones, plazos o justificantes: los hechos (o entregados) de todos.
         r.valor = [String(e.n), h('small', null, ' de ' + e.de)];
         r.valorTexto = e.n + ' de ' + e.de;
         r.barra = medidor(e.partes.map(function (x) { return x ? 'lleno' : null; }));
@@ -890,8 +895,7 @@
   }
   function cifra(rol, c, v) {
     var destino = v.ir || c.ir;
-    // El tono de la función a la que lleva ahora: «Pendiente de tu firma» va en el de la citación (un caso) y, firmada,
-    // en el del acta.
+    // El tono de la función a la que lleva ahora: si su enlace cambia (lo que queda pendiente, o a medias), el tono lo sigue.
     var cat = categoria(rol, destino || c.cuenta);
     var larga = v.hecho ? accionHecha(rol, c, destino) : (v.accion || c.accion || etiquetaIr(rol, destino));
     // En el móvil, la acción corta. Hecha la cifra, «accionHecha», que ya es corta.
@@ -916,7 +920,7 @@
         h('span', null, h('span', { class: 'accion-larga' + (corta ? ' con-corta' : '') }, larga), corta ? h('span', { class: 'accion-corta' }, corta) : null),
         flecha())),
     ]);
-    // El globo de una cifra (las piezas del dosier, los pasos del caso): con el ratón, al detenerse en la cifra o en su
+    // El globo de una cifra (las piezas del dosier): con el ratón, al detenerse en la cifra o en su
     // medidor, no al cruzar la tarjeta; con el foco, solo con el del teclado (ver conGlobo).
     if (v.globo && !v.hecho) conGlobo(a, v.globo, true, false, [a.querySelector('.indicador-fila'), a.querySelector('.indicador-barra')]);
     return a;
@@ -1560,32 +1564,56 @@
     }));
   };
 
-  // El estado de un documento del protocolo viene en palabras («Firmado el lun 16», «Para revisar»): el motor le pone el
-  // glifo de su estado (✓, «…» o «i»), para que lo hecho y lo pendiente no se distingan solo leyendo. El texto no cambia.
-  function estadoDocumento(t) {
-    if (/^(firmad|revisad|enviad|hech|list)/i.test(t)) return 'hecho';
-    if (/^en curso/i.test(t)) return 'curso';
-    if (/^(para revisar|pendiente|por )/i.test(t)) return 'pendiente';
-    return 'info';
+  /* Guías de los protocolos (acoso escolar, absentismo, accidentes): cómo se aplica cada uno, paso a paso. En cada paso,
+     qué se hace, quién lo hace, el plazo, el anexo (la plantilla oficial en blanco, para descargar e imprimir), dónde queda
+     y qué hay que cuidar. Los pasos que solo van si se confirma (el acoso) van detrás de su título, con el número en borde
+     discontinuo. Es una guía: no se abre ningún caso en DirectorIA, y los datos de cada caso van donde manda el protocolo
+     (Raíces y el expediente del centro). Sale de reglas y plantillas, sin IA.
+     Las guías se escriben una vez: un perfil puede tomar las de otro con «guias: 'orientacion/protocolos'» (dirección usa
+     las de orientación). Cada perfil guarda su propia pestaña. */
+  function guiasDe(m) {
+    if (Array.isArray(m.guias)) return m.guias;
+    var s = String(m.guias || ''), b = s.indexOf('/');
+    var x = b > 0 && D.roles[s.slice(0, b)] ? modulo(s.slice(0, b), s.slice(b + 1)) : null;
+    return x && Array.isArray(x.guias) ? x.guias : [];
   }
   MODULOS.protocolo = function (rol, m) {
-    var pasos = h('section', { class: 'tarjeta' }, h('h2', { style: 'margin-bottom:.75rem' }, 'Pasos del protocolo'),
-      h('ol', { class: 'pasos' }, m.pasos.map(function (p, i) {
-        return h('li', { class: 'paso ' + p.estado },
-          h('span', { class: 'punto', 'aria-hidden': 'true', html: p.estado === 'hecho' ? SVG_VISTO.replace('class="visto"', 'class="visto" style="width:1.75rem;height:1.75rem"') : '' }, p.estado === 'hecho' ? null : String(i + 1)),
-          h('span', { class: 'n' }, p.nombre),
-          h('span', { class: 'e' }, ({ hecho: 'Hecho', curso: 'En curso', pendiente: 'Pendiente', condicional: 'Solo si se confirma' })[p.estado] + (p.nota ? ' · ' + p.nota : '')));
-      })));
-    var actual = h('div', { style: 'display:grid;gap:1rem' },
-      h('section', { class: 'tarjeta' },
-        h('div', { class: 'tarjeta-cabeza' }, h('h2', null, m.actual.titulo), pastilla('pendiente', 'En curso')),
-        h('p', { style: 'font-size:var(--t-s);margin-bottom:1rem' }, m.caso),
-        h('div', { class: 'secciones' }, m.actual.secciones.map(function (s) { return h('div', null, h('h4', null, s.titulo), h('ul', { class: 'lista-puntos' }, s.items.map(function (x) { return h('li', null, x); }))); }))),
-      h('section', { class: 'tarjeta' },
-        h('div', { class: 'tarjeta-cabeza' }, h('h2', null, 'Documentos preparados'), sinInsignia('Con las plantillas del protocolo')),
-        h('ul', { class: 'piezas' }, m.documentos.map(function (d) { return h('li', { class: 'pieza' }, h('span', { class: 'n' }, d.nombre), pastilla(estadoDocumento(d.estado), d.estado)); }))),
-      h('p', { class: 'nota-ia' }, m.pie));
-    return h('div', { class: 'protocolo' }, pasos, actual);
+    var est = bolsa('guias', rol, m.id);
+    var guias = guiasDe(m);
+    var k = Math.max(0, guias.map(function (g) { return g.id; }).indexOf(est.tab));
+    var g = guias[k];
+    var partes = [];
+    if (m.aviso) partes.push(h('div', { class: 'aviso info' }, glifo('info'), h('p', null, h('strong', null, m.aviso))));
+    if (guias.length > 1) partes.push(h('div', { class: 'pestanas', role: 'group', 'aria-label': 'Protocolos' }, guias.map(function (x, i) {
+      return h('button', { class: 'pestana', type: 'button', 'aria-pressed': i === k ? 'true' : 'false', 'data-k': 'guia-' + x.id, onclick: function () { est.tab = x.id; repintar(); } }, x.nombre);
+    })));
+    if (!g) return partes;
+    var n = 0, conSi = false;
+    var pasos = [];
+    g.pasos.forEach(function (p) {
+      n++;
+      // El título de los pasos que solo van si se confirma («Si se confirma el acoso») va antes del primero de ellos.
+      if (p.condicional && !conSi) { conSi = true; pasos.push(h('li', { class: 'guia-si', 'aria-hidden': 'true' }, glifo('espera'), g.si || 'Solo si se confirma')); }
+      var datos = [['Qué se hace', p.que], ['Quién', p.quien], ['Plazo', p.plazo], ['Anexo', p.anexo], ['Dónde queda', p.donde], ['Qué cuidar', p.cuidar]];
+      pasos.push(h('li', { class: 'guia-paso' + (p.condicional ? ' condicional' : '') },
+        h('span', { class: 'guia-num', 'aria-hidden': 'true' }, String(n)),
+        h('h3', null, sr('Paso ' + n + (p.condicional ? ', solo si se confirma' : '') + ': '), p.nombre),
+        h('dl', { class: 'guia-datos' }, datos.filter(function (x) { return x[1]; }).map(function (x) { return h('div', null, h('dt', null, x[0]), h('dd', null, x[1])); }))));
+    });
+    var plantillas = (g.plantillas || []).length ? h('section', { class: 'tarjeta' },
+      h('h2', null, 'Anexos en blanco'),
+      h('p', { class: 'ayuda-tarjeta' }, 'Las plantillas oficiales, sin datos, para descargarlas e imprimirlas.'),
+      h('ul', { class: 'plantillas' }, g.plantillas.map(function (x, i) {
+        return h('li', { class: 'plantilla' }, h('span', { class: 'n' }, x.nombre), x.detalle ? h('span', { class: 'd' }, x.detalle) : null,
+          boton('Descargar', function () { avisar(x.nombre + ', en blanco', 'En el colegio se descarga la plantilla oficial, sin datos, para imprimirla. En la demo no se descarga nada.'); }, { cls: 'boton-borde boton-pequeno', 'aria-label': 'Descargar en blanco: ' + x.nombre, 'data-k': 'plantilla-' + g.id + '-' + i }));
+      }))) : null;
+    partes.push(h('div', { class: 'dos-columnas' },
+      h('section', { class: 'tarjeta guia', 'aria-labelledby': 'guia-titulo' },
+        h('div', { class: 'tarjeta-cabeza' }, h('h2', { id: 'guia-titulo' }, g.nombre + ': los pasos'), sinInsignia('Preparada por DirectorIA')),
+        g.fuente ? h('p', { class: 'guia-fuente' }, g.fuente) : null,
+        h('ol', { class: 'guia-pasos' }, pasos)),
+      h('div', { class: 'lateral' }, plantillas, m.pie ? h('p', { class: 'nota-ia' }, m.pie) : null)));
+    return partes;
   };
 
   MODULOS.banco = function (rol, m) {
@@ -1609,7 +1637,8 @@
         // En la demo solo hay una búsqueda: si se escribe otra, se dice y se vuelve a la del ejemplo.
         h('form', { class: 'buscador', role: 'search', onsubmit: function (ev) { ev.preventDefault(); if ((est.consulta || m.consulta).trim() !== m.consulta.trim()) { est.consulta = m.consulta; repintar(); avisar('En la demo hay una sola búsqueda', 'Te enseñamos la del ejemplo: «' + m.consulta + '».'); return; } est.buscado = true; repintar(); avisar('Búsqueda hecha', 'Ordenada por lo que más se parece a lo que pides.'); } },
           h('label', { class: 'sr', for: 'buscar-' + m.id }, 'Qué buscas'), entrada, h('button', { class: 'boton', type: 'submit' }, 'Buscar')),
-        h('div', { class: 'chips' }, h('span', { class: 'con-insignia' }, insignia(), 'Entendido como'), m.entendido.map(function (c) { return h('span', { class: 'chip' }, c); })),
+        // El buscador entiende la petición y la lleva al catálogo, sin escribir nada: «con IA», sin la insignia.
+        h('div', { class: 'chips' }, h('span', { class: 'con-insignia' }, 'Entendido como'), m.entendido.map(function (c) { return h('span', { class: 'chip' }, c); }), sinInsignia('con IA')),
         h('div', { class: 'aviso' }, glifo('aviso'), h('p', null, m.aviso)),
         h('ul', { class: 'resultados' }, res),
         est.adaptado && adaptar ? h('section', { class: 'tarjeta adaptado' },
@@ -1635,7 +1664,12 @@
         h('div', { class: 'campo-f' }, h('label', { class: 'etq', for: 'titulo-recurso' }, 'Título'), h('input', { type: 'text', id: 'titulo-recurso', value: est.titulo || s.titulo, 'data-k': 'titulo-recurso', oninput: function (ev) { est.titulo = ev.target.value; guardar(); } }), h('span', { class: 'con-insignia suave' }, insignia(), 'Lo propone la IA leyendo el archivo. Puedes cambiarlo.')),
         h('fieldset', { class: 'campo-f', style: 'border:0;margin:0;padding:0 0 .875rem' }, h('legend', { class: 'etq' }, 'Curso ', h('b', null, '· obligatorio')), h('div', { class: 'chips' }, CURSOS.map(function (c) { return h('button', { type: 'button', class: 'chip-boton', 'aria-pressed': est.cursos.indexOf(c) >= 0 ? 'true' : 'false', 'data-k': 'curso-' + c, onclick: function () { conmutar(est.cursos, c); } }, c); }))),
         h('fieldset', { class: 'campo-f', style: 'border:0;margin:0;padding:0 0 .875rem' }, h('legend', { class: 'etq' }, 'Materia ', h('b', null, '· obligatoria')), h('div', { class: 'chips' }, MATERIAS.map(function (c) { return h('button', { type: 'button', class: 'chip-boton', 'aria-pressed': est.materias.indexOf(c) >= 0 ? 'true' : 'false', 'data-k': 'materia-' + c, onclick: function () { conmutar(est.materias, c); } }, c); }))),
-        h('div', { class: 'campo-f' }, h('span', { class: 'etq' }, 'Contenidos del currículo'), h('div', { class: 'chips' }, s.contenidos.map(function (c) { return h('span', { class: 'chip' }, c); }), h('span', { class: 'con-insignia suave' }, insignia(), 'sugeridos por la IA'))),
+        // Los contenidos los elige la IA del catálogo del colegio, sin escribir nada: «con IA», sin la insignia.
+        h('div', { class: 'campo-f' }, h('span', { class: 'etq' }, 'Contenidos del currículo'), h('div', { class: 'chips' }, s.contenidos.map(function (c) { return h('span', { class: 'chip' }, c); }), sinInsignia('Sugeridos del catálogo · con IA'))),
+        // Lo que se comprueba al leer el archivo: con reglas (un DNI, un ©, un ISBN) o «con IA» (nombres, datos de salud),
+        // que lee sin escribir nada: va sin la insignia. Es el filtro que impide que entren datos de alumnos en el banco.
+        s.comprobado ? h('div', { class: 'campo-f' }, h('span', { class: 'etq' }, 'Comprobado al leer el archivo'),
+          h('ul', { class: 'comprobado' }, s.comprobado.map(function (x) { return h('li', null, visto(), h('span', null, x.texto), h('small', null, x.como === 'ia' ? 'con IA' : 'con reglas, sin IA')); }))) : null,
         // Declarar que está hecho con IA es voluntario: no impide compartir. Si se marca, el recurso lleva la etiqueta.
         s.declaracion ? h('div', { class: 'campo-f' }, h('span', { class: 'etq' }, 'Si lo has hecho con IA'),
           h('label', { class: 'campo-casilla' }, h('input', { type: 'checkbox', checked: !!est.ia, disabled: est.compartido ? true : null, 'data-k': 'cas-ia', onchange: function (ev) { est.ia = ev.target.checked; repintar(); } }), h('span', null, s.declaracion)),
@@ -1757,7 +1791,7 @@
     }));
     var v = versiones[tab];
     var doc = h('article', { class: 'papel-doc version' + (/f[aá]cil/i.test(v.idioma) ? ' facil' : ''), lang: /ingl/i.test(v.idioma) ? 'en' : 'es' },
-      h('div', { class: 'doc-cabeza' }, h('h2', { class: 'doc-titulo' }, m.original.titulo), h('p', { class: 'doc-sub con-insignia suave' }, tab === 0 ? null : insignia(), (tab === 0 ? 'Circular original' : 'Versión preparada con IA: ' + minuscula(v.idioma)) + ' · para la ' + minuscula(m.para))),
+      h('div', { class: 'doc-cabeza' }, h('h2', { class: 'doc-titulo' }, m.original.titulo), h('p', { class: 'doc-sub con-insignia suave' }, tab === 0 ? null : insignia(), (tab === 0 ? 'Circular original' : 'Versión preparada con IA: ' + minuscula(v.idioma)) + ' · para ' + minuscula(m.para))),
       parrafos(v.texto));
     var lateral = h('div', { class: 'lateral' },
       h('section', { class: 'tarjeta' }, h('h2', null, 'Antes de enviar, comprueba'),
@@ -1765,13 +1799,16 @@
           return h('label', { class: 'campo-casilla' }, h('input', { type: 'checkbox', checked: !!est.checks[i] || est.hecho, disabled: est.hecho ? true : null, 'data-k': 'tchk-' + i, onchange: function (ev) { est.checks[i] = ev.target.checked; repintar(); } }), h('span', null, x));
         })),
         est.hecho ? h('div', { style: 'margin-top:.75rem' }, selloHecho(m.alTerminar)) : h('div', { class: 'acciones', style: 'margin-top:.875rem' }, boton(m.boton, function () {
-          confirmar({ titulo: '¿Enviarlo a la ' + minuscula(m.para) + '?', intro: 'Se envía desde la cuenta del colegio con las versiones que has revisado.', boton: m.boton, alAceptar: function () { est.hecho = true; est.hora = ahora(); repintar(); avisar('Enviado', m.alTerminar); } });
+          // «para» lleva su artículo («Las familias de 4.º de Primaria»): la circular es general, para todas las familias del curso.
+          confirmar({ titulo: '¿Enviarlo a ' + minuscula(m.para) + '?', intro: 'Se envía desde la cuenta del colegio con las versiones que has revisado.', boton: m.boton, alAceptar: function () { est.hecho = true; est.hora = ahora(); repintar(); avisar('Enviado', m.alTerminar); } });
         }, { disabled: listo ? null : true, 'data-k': 'enviar-trad' })),
         !listo && !est.hecho ? h('p', { style: 'font-size:var(--t-s);margin-top:.5rem' }, 'Marca las comprobaciones para poder enviarlo.') : null));
     // La insignia va en la versión, que es lo que prepara la IA; el destinatario lo pone el colegio.
     return [h('p', { class: 'linea-campo', style: 'color:var(--tinta)' }, h('b', null, 'Para: '), m.para), pest, h('div', { class: 'dos-columnas' }, doc, lateral)];
   };
 
+  // La línea fija de la ficha de sustitución: igual en todas, no es un dato (validar.mjs la conoce y la deja pasar).
+  var LINEA_FICHA = 'Las indicaciones de salud y de recogida de los alumnos no están en DirectorIA: las tiene el colegio. Pregúntalas en conserjería o a la tutora antes de empezar.';
   MODULOS.ficha = function (rol, m) {
     // Hasta que jefatura confirma las guardias, quien sustituye no ve ningún dato de la ficha.
     // El botón es solo un atajo de la demo para cambiar de perfil: en el colegio, solo jefatura confirma.
@@ -1784,11 +1821,22 @@
         mod ? h('div', { class: 'acciones' }, boton('Cambiar al perfil de jefatura', function () { ir('jefatura', mod.id); }, { 'data-k': 'ir-jefatura' })) : null,
         mod ? h('p', { class: 'ayuda' }, 'Atajo de la demo: en el colegio, solo jefatura confirma las guardias.') : null));
     }
+    // La ficha solo trae la clase: grupo, materia, hora y aula; la tarea, el material y a quién llamar. Lo de salud y
+    // recogidas de los alumnos no está en DirectorIA: lo dice la línea fija, igual en todas las fichas, con el triángulo.
     var partes = [h('div', { class: 'fichas' }, m.fichas.map(function (f) {
       return h('article', { class: 'ficha', 'aria-label': 'Ficha de ' + f.sesion },
-        h('div', { class: 'ficha-cabeza' }, h('p', { class: 'ficha-sesion' }, f.sesion), h('p', { class: 'ficha-hora' }, f.hora), h('p', { class: 'ficha-origen' }, esIA(m) ? insignia() : null, f.origen)),
-        // Un aviso de la ficha (salud, recogida) lleva el triángulo delante de su título, como los demás avisos.
-        h('dl', { class: 'ficha-datos' }, f.datos.map(function (d) { return h('div', { class: d.aviso ? 'ficha-aviso' : null }, h('dt', null, d.aviso ? [glifo('aviso'), d.dt] : d.dt), h('dd', null, d.dd)); })),
+        h('div', { class: 'ficha-cabeza' },
+          h('p', { class: 'ficha-sesion' }, f.sesion),
+          h('p', { class: 'ficha-hora' }, f.hora + (f.aula ? ' · ' + f.aula : '')),
+          f.para ? h('p', { class: 'ficha-para' }, 'Para ' + f.para) : null,
+          h('p', { class: 'ficha-origen' }, esIA(m) ? insignia() : null, f.origen)),
+        // «A quién llamar»: una persona por línea, y la extensión no se separa de su número.
+        h('dl', { class: 'ficha-datos' },
+          f.datos.map(function (d) {
+            var dd = String(d.dd).replace(/ext\. (\d)/g, 'ext. $1');
+            return h('div', null, h('dt', null, d.dt), h('dd', null, d.dt === 'A quién llamar' ? dd.split(' · ').map(function (x) { return h('span', { class: 'llamar' }, x); }) : dd));
+          }),
+          h('div', { class: 'ficha-aviso' }, h('dt', null, glifo('aviso'), 'Antes de empezar'), h('dd', null, LINEA_FICHA))),
         h('p', { class: 'ficha-pie' }, f.pie));
     }))];
     if (m.registro) {
@@ -1848,6 +1896,117 @@
     }, { 'data-k': 'enviar-informe' })));
     return partes;
   };
+
+  /* ---------- Justificantes del profesorado ----------
+     Cada docente sube el suyo desde DirectorIA (no por correo) y elige la ausencia a la que corresponde. Un programa, con
+     reglas y sin IA, lo renombra y lo archiva en su carpeta: Justificantes / curso / mes / docente. Ni la IA ni ningún
+     programa leen lo que pone: no se extrae nada. El registro de ausencias guarda que alguien falta y a qué horas, nunca el motivo,
+     y del justificante solo dice «entregado» o «pendiente». Lo ven el propio docente y quien lleva el personal (secretaría
+     o dirección), con registro de accesos, y se borra cuando pasa el plazo que fija el colegio. Tres vistas: «subir» (el
+     docente), «carpetas» (secretaría) e «informe» (jefatura, sin los archivos). Nada de esto lleva la insignia de la IA. */
+  var LINEA_JUSTIFICANTES = 'Los justificantes los archiva un programa en su carpeta; la IA no los lee.';
+  function rutaJustificante(m, docente, dia, archivo) {
+    var ext = (String(archivo || '').match(/\.([a-z0-9]+)$/i) || [0, 'pdf'])[1].toLowerCase();
+    return ['Justificantes', m.curso, dia.slice(0, 7), docente, dia + ' justificante.' + ext].join('/');
+  }
+  function nombreArchivo(ruta) { return ruta.split('/').pop(); }
+  // Cada ausencia con su estado: entregada en los datos, subida aquí (vista «subir») o subida en otro perfil («sigue»).
+  function ausenciasDe(rol, m) {
+    var yo = D.roles[rol].persona.nombre, est = leer('justificantes', rol, m.id);
+    return (m.ausencias || []).map(function (a) {
+      var aqui = a.id ? est[a.id] || null : null;
+      var fuera = a.sigue ? estadoDe(rol, a.sigue) : null;
+      var subido = !!((aqui && aqui.hecho) || (fuera && fuera.hecho));
+      var docente = a.docente || yo;
+      return { a: a, id: a.id || null, docente: docente, entregado: a.justificante === 'entregado' || subido,
+        hora: subido ? (aqui && aqui.hora) || (fuera && fuera.hora) || null : null,
+        ruta: rutaJustificante(m, docente, a.fecha, (aqui && aqui.archivo) || m.archivo) };
+    });
+  }
+  function diaCorto(iso) { var d = fecha(iso); return DIA_CORTO[d.getUTCDay()] + ' ' + d.getUTCDate() + ' ' + MES_CORTO[d.getUTCMonth()]; }
+  function cuandoAusencia(x) { return mayuscula(fechaLarga(x.a.fecha)) + ' · ' + x.a.horas; }
+  // En el desplegable, la fecha corta de las etiquetas («Lun 16 nov · 9:00-10:30»): la larga no cabe en el móvil y se cortaría.
+  function cuandoCorto(x) { return mayuscula(diaCorto(x.a.fecha)) + ' · ' + x.a.horas; }
+  function pastillaJustificante(x) { return x.entregado ? pastilla('hecho', 'Entregado') : pastilla('pendiente', 'Pendiente'); }
+  function reglasJustificantes(m, titulo) {
+    return (m.reglas || []).length ? h('section', { class: 'tarjeta' }, h('h2', null, titulo || 'Cómo se guardan'),
+      h('ul', { class: 'lista-puntos', style: 'margin-top:.625rem' }, m.reglas.map(function (x) { return h('li', null, x); }))) : null;
+  }
+  MODULOS.justificantes = function (rol, m) {
+    var xs = ausenciasDe(rol, m);
+    var cuerpo = m.vista === 'subir' ? subirJustificante(rol, m, xs) : m.vista === 'carpetas' ? carpetasJustificantes(rol, m, xs) : informeAusencias(rol, m, xs);
+    return [h('p', { class: 'nota-ia' }, glifo('carpeta'), h('span', null, h('strong', null, LINEA_JUSTIFICANTES), m.nota ? ' ' + m.nota : ''))].concat(cuerpo);
+  };
+  // El docente: elige la ausencia y el archivo (en la demo, uno de ejemplo), ve cómo se va a llamar y lo sube.
+  function subirJustificante(rol, m, xs) {
+    var est = bolsa('justificantes', rol, m.id);
+    var pend = xs.filter(function (x) { return !x.entregado && x.id; });
+    var hechos = xs.filter(function (x) { return x.entregado; }).sort(function (a, b) { return a.a.fecha < b.a.fecha ? 1 : -1; });
+    var izquierda = [];
+    if (pend.length) {
+      var elegido = pend.filter(function (x) { return x.id === est.elegido; })[0] || pend[0];
+      var archivo = est.archivo || null;
+      var sel = h('select', { id: 'ausencia-' + m.id, 'data-k': 'ausencia-' + m.id, onchange: function (ev) { est.elegido = ev.target.value; repintar(); } },
+        pend.map(function (x) { return h('option', { value: x.id, selected: x === elegido ? true : null }, cuandoCorto(x)); }));
+      izquierda.push(h('section', { class: 'tarjeta subir-justificante' },
+        h('div', { class: 'tarjeta-cabeza' }, h('h2', null, pend.length === 1 ? 'Te falta uno' : 'Te faltan ' + pend.length), pastilla('pendiente', 'Pendiente')),
+        h('div', { class: 'campo-j' }, h('label', { class: 'etq', for: 'ausencia-' + m.id }, '¿De qué ausencia es?'), sel),
+        h('div', { class: 'campo-j' }, h('span', { class: 'etq' }, 'El archivo'),
+          archivo ? h('p', { class: 'archivo-elegido' }, glifo('archivo'), h('span', null, archivo), h('small', null, 'Ejemplo de la demo'))
+            : h('div', null, boton('Elegir el archivo', function () { est.archivo = m.archivo; repintar(); }, { cls: 'boton-borde boton-pequeno', 'data-k': 'elegir-' + m.id }))),
+        archivo ? h('div', { class: 'campo-j' }, h('span', { class: 'etq' }, 'Se guarda como'), h('p', { class: 'ruta' }, rutaJustificante(m, elegido.docente, elegido.a.fecha, archivo))) : null,
+        h('div', { class: 'acciones' },
+          boton('Subir el justificante', function () {
+            est[elegido.id] = { hecho: true, hora: ahora(), archivo: archivo };
+            est.archivo = null; est.elegido = null;
+            repintar(); avisar('Justificante archivado', LINEA_JUSTIFICANTES);
+          }, { disabled: archivo ? null : true, 'aria-disabled': archivo ? null : 'true', 'data-k': 'subir-' + m.id }),
+          archivo ? null : h('span', { class: 'ayuda' }, 'Elige antes el archivo.'))));
+    }
+    izquierda.push(h('section', { class: 'tarjeta' }, h('h2', null, 'Entregados'),
+      hechos.length ? h('ul', { class: 'piezas', style: 'margin-top:.75rem' }, hechos.map(function (x) {
+        return h('li', { class: 'pieza' }, h('span', { class: 'n' }, cuandoAusencia(x)), h('span', { class: 'd ruta' }, x.ruta), pastilla('hecho', x.hora ? 'Subido a las ' + x.hora : 'Entregado'));
+      })) : h('p', { class: 'ayuda-tarjeta' }, 'Todavía no has entregado ninguno este curso.')));
+    return [h('div', { class: 'dos-columnas' }, h('div', { class: 'columna' }, izquierda), h('div', { class: 'lateral' }, reglasJustificantes(m)))];
+  }
+  // Secretaría: las carpetas, Justificantes / curso / mes / docente, con el mes más reciente arriba, y el registro de accesos
+  // (quién sube y quién abre cada uno). Un pendiente no tiene archivo: su hueco en la carpeta dice «Sin archivo todavía».
+  function carpetasJustificantes(rol, m, xs) {
+    var meses = {};
+    xs.forEach(function (x) { var k = x.a.fecha.slice(0, 7); meses[k] = meses[k] || {}; (meses[k][x.docente] = meses[k][x.docente] || []).push(x); });
+    var n = xs.filter(function (x) { return x.entregado; }).length;
+    var carpeta = function (nombre, extra, hijos) { return h('li', null, h('span', { class: 'carpeta-nombre' }, glifo('carpeta'), h('span', null, nombre), extra ? h('small', null, extra) : null), h('ul', null, hijos)); };
+    var arbol = h('ul', { class: 'arbol' }, carpeta('Justificantes', null, [carpeta(m.curso, 'curso', Object.keys(meses).sort().reverse().map(function (k) {
+      return carpeta(k, mayuscula(MES_LARGO[+k.slice(5, 7) - 1]), Object.keys(meses[k]).sort(function (a, b) { return a.localeCompare(b, 'es'); }).map(function (doc) {
+        return carpeta(doc, null, meses[k][doc].map(function (x) {
+          return h('li', { class: 'archivo' + (x.entregado ? '' : ' pendiente') },
+            h('span', { class: 'n' }, glifo('archivo'), h('span', null, x.entregado ? nombreArchivo(x.ruta) : 'Sin archivo todavía')),
+            h('span', { class: 'd' }, 'Ausencia del ' + fechaLarga(x.a.fecha) + ', ' + minuscula(x.a.horas) + '.' + (x.hora ? ' Subido hoy a las ' + x.hora + '.' : x.entregado ? ' Archivado.' : '')),
+            pastillaJustificante(x));
+        }));
+      }));
+    }))]));
+    var registro = xs.filter(function (x) { return x.hora; }).map(function (x) { return x.docente + ' ha subido el de su ausencia del ' + fechaLarga(x.a.fecha) + ', hoy a las ' + x.hora; }).concat(m.registro || []);
+    return [h('div', { class: 'dos-columnas' },
+      h('section', { class: 'tarjeta', 'aria-labelledby': 'carpetas-titulo' }, h('div', { class: 'tarjeta-cabeza' }, h('h2', { id: 'carpetas-titulo' }, 'Carpetas'), pastilla('info', n + ' de ' + xs.length + ' entregados')), arbol),
+      h('div', { class: 'lateral' }, reglasJustificantes(m),
+        registro.length ? h('section', { class: 'tarjeta' }, h('h2', null, 'Registro de accesos'), h('ul', { class: 'lista-puntos', style: 'margin-top:.625rem' }, registro.map(function (x) { return h('li', null, x); }))) : null))];
+  }
+  // Jefatura: quién ha faltado y a qué horas, con «Entregado» o «Pendiente». Sin motivos y sin los archivos.
+  function informeAusencias(rol, m, xs) {
+    var n = xs.filter(function (x) { return x.entregado; }).length;
+    var orden = xs.slice().sort(function (a, b) { return a.a.fecha < b.a.fecha ? 1 : -1; });
+    var cifraJ = function (v, t) { return h('div', { class: 'cifra-tarjeta' }, h('span', { class: 'v' }, String(v)), h('span', { class: 't' }, t)); };
+    return [
+      h('div', { class: 'cifras' }, cifraJ(xs.length, xs.length === 1 ? 'ausencia del profesorado' : 'ausencias del profesorado'),
+        cifraJ(n, 'con el justificante entregado'), cifraJ(xs.length - n, 'con el justificante pendiente')),
+      h('div', { class: 'tabla-caja', role: 'region', 'aria-label': m.titulo, tabindex: '0' }, h('table', null,
+        h('thead', null, h('tr', null, ['Docente', 'Día', 'Horas', 'Justificante'].map(function (c) { return h('th', { scope: 'col' }, c); }))),
+        h('tbody', null, orden.map(function (x) {
+          return h('tr', null, h('th', { scope: 'row', class: 'fila-cabeza' }, x.docente), h('td', null, diaCorto(x.a.fecha)), h('td', null, x.a.horas), h('td', null, pastillaJustificante(x)));
+        })))),
+      reglasJustificantes(m, 'Qué guarda el registro')];
+  }
 
   /* ---------- Arranque ---------- */
   document.body.append(zonaAvisos, dialogo, globo);
