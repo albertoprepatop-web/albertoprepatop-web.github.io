@@ -403,7 +403,7 @@ save('colegio-servidor', 'Colegio con el servidor de DirectorIA dentro, a la vis
   s += circle(80, 67, 9, C.papel) + textLine(98, 140, 67, C.papel, 6);
   for (let i = 0; i < 4; i++) {
     const yy = 104 + i * 22;
-    if (i === 2) {                                                                    // aviso (alergia, necesidad…): en pizarra, como las casillas
+    if (i === 2) {                                                                    // aviso (la línea fija de la ficha): en pizarra, como las casillas
       s += P(roundPoly([[80, yy - 9], [90, yy + 8], [70, yy + 8]], 2.5), C.pizarra);
       s += line(80, yy - 2.5, 80, yy + 1.5, C.papel, 2.6) + circle(80, yy + 4.8, 1.4, C.papel);
     } else {

@@ -8,7 +8,7 @@ DirectorIA instala en colegios privados y concertados una IA propia, en un servi
 4. **Dos tipografías.** Rubik (familia `titulares`) para titulares y nombres; Nunito Sans (familia `texto`) para todo lo que se lee. No hay una tercera.
 5. **Ilustraciones de la casa, siempre con su disco.** Planas, sobre el disco `linea` y sin retoques. Nada de fotos de banco, robots, cerebros ni circuitos.
 6. **El logotipo sale siempre del archivo.** Positivo sobre claro, negativo sobre pizarra y a una tinta para fotocopia o sello. Ver la sección Logotipo.
-7. **DirectorIA prepara, resume, propone y avisa; las personas deciden, aprueban, firman y evalúan.** «La IA» y su insignia, solo en lo que escribe la IA: resúmenes y respuestas de correo, dictados y actas, traducciones y lectura fácil, plazos sacados de circulares, la interpretación de una búsqueda y adaptación de recursos. Lo que la IA busca, lee o detecta sin escribir lleva la etiqueta «con IA», no la insignia. Guardias, sustituciones, horarios, la ficha de sustitución, plazos de jefatura, protocolos, certificados y dosier salen de las reglas y los datos del colegio: «DirectorIA propone quién cubre cada hora, con las reglas del colegio», nunca «La IA propone quién cubre…». Escribidlo siempre así, también en los botones y en los textos alternativos.
+7. **DirectorIA prepara, resume, propone y avisa; las personas deciden, aprueban, firman y evalúan.** «La IA» y su insignia, solo en lo que escribe la IA: resúmenes y respuestas de correo, dictados y actas, traducciones y lectura fácil, plazos sacados de circulares, la interpretación de una búsqueda y adaptación de recursos. Lo que la IA busca, lee o detecta sin escribir lleva la etiqueta «con IA», no la insignia. Guardias, sustituciones, horarios, la ficha de sustitución, plazos de jefatura, las guías de los protocolos, el archivo de los justificantes y el dosier salen de las reglas y los datos del colegio: «DirectorIA propone quién cubre cada hora, con las reglas del colegio», nunca «La IA propone quién cubre…». Escribidlo siempre así, también en los botones y en los textos alternativos.
 8. **Nada de la «IA de moda».** Sin degradados, brillos, destellos, neones, fondos de estrellas ni azules y morados. Si una pieza parece de una empresa de IA cualquiera, no es DirectorIA.
 
 ## Color
@@ -86,7 +86,7 @@ Explicad cómo funciona con dibujos: el colegio con el servidor en el centro, la
 DirectorIA no usa una colección de iconos de interfaz ni emojis. En su lugar hay cuatro recursos:
 
 - **Las ilustraciones** del grupo Ilustraciones, a partir de 96 px.
-- **La insignia de la IA:** un círculo `pizarra` con la aguja `chispa`. Marca solo lo que escribe la IA, en documentos y en la app: el resumen de un correo, una respuesta propuesta, un acta dictada, una traducción. La ficha de sustitución, las guardias, los avisos de plazos y los protocolos no la llevan: los prepara DirectorIA con las reglas del colegio. Los plazos sacados de una circular sí la llevan, porque los lee la IA. Ver el componente Insignia.
+- **La insignia de la IA:** un círculo `pizarra` con la aguja `chispa`. Marca solo lo que escribe la IA, en documentos y en la app: el resumen de un correo, una respuesta propuesta, un acta dictada, una traducción. La ficha de sustitución, las guardias, los avisos de plazos, las guías de los protocolos y el archivo de los justificantes no la llevan: los prepara DirectorIA con las reglas del colegio. Los plazos sacados de una circular sí la llevan, porque los lee la IA. Ver el componente Insignia.
 - **La marca de propuesta:** un aro `pizarra`, sin chispa. Acompaña lo que propone DirectorIA con las reglas del colegio y aún tiene que decidir una persona, como «DirectorIA propone.» en la portada de la web.
 - **El visto:** un círculo `pizarra` con una marca de verificación en `tiza`, o la marca sola en `pizarra` en las listas. Indica lo que está hecho o incluido.
 
@@ -103,3 +103,7 @@ Poco y tranquilo. En la web, botones y enlaces cambian de color o se desplazan u
 - **Zonas táctiles** de 44 px o más: botones, enlaces del pie y el logotipo de la cabecera.
 - **Texto alternativo** en todas las ilustraciones. Describe qué hace la persona («Profesor sustituto con su ficha»), no cómo es.
 - **El color nunca va solo:** cada estado lleva también una palabra o una marca, como «Hecho», «En curso» o el visto.
+
+## Cambio del 28 de noviembre de 2026: sin datos de alumnos
+
+DirectorIA no guarda datos de alumnos: solo del profesorado y del funcionamiento del colegio. La ficha de sustitución lleva solo la clase y una línea fija que remite al colegio para la salud y las recogidas (componente FichaSustitucion), los protocolos son guías de pasos sin ningún caso abierto, y los justificantes del profesorado los archiva un programa en su carpeta, sin que la IA los lea. Las frases que hay que usar están en Identidad verbal, en «Qué decimos sobre protección de datos».

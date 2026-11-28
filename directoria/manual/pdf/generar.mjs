@@ -78,7 +78,7 @@ const lamTipos = `<div class="ty">
 <p style="font:700 30px/1.15 var(--font-titulares);color:${C.pizarra}">700 · Vuestra IA, dentro del colegio</p>
 <p class="ty-abc" style="font:600 22px/1.3 var(--font-titulares)">ABCDEFGHIJKLMNÑOPQRSTUVWXYZ<br>abcdefghijklmnñopqrstuvwxyz · áéíóú ü ¿? ¡! 0123456789 € %</p></div>
 <div class="ty-b"><p class="ty-fam">Nunito Sans · texto</p>
-<p style="font:400 17px/1.55 var(--font-texto);color:${C.texto}">400 · Cuando falta un profesor, DirectorIA propone quién cubre cada hora, con las reglas del colegio, y prepara la ficha para quien sustituye: la tarea, las adaptaciones, las alergias y quién puede recoger a cada alumno.</p>
+<p style="font:400 17px/1.55 var(--font-texto);color:${C.texto}">400 · Cuando falta un profesor, DirectorIA propone quién cubre cada hora, con las reglas del colegio, y prepara la ficha para quien sustituye, solo con la clase: la tarea, el material y a quién llamar.</p>
 <p style="font:600 17px/1.55 var(--font-texto);color:${C.texto}">600 · DirectorIA propone. Vosotros decidís.</p>
 <p style="font:700 17px/1.55 var(--font-texto);color:${C.texto}">700 · Pedir una demo en el colegio</p>
 <p class="ty-abc" style="font:400 17px/1.4 var(--font-texto)">ABCDEFGHIJKLMNÑOPQRSTUVWXYZ · abcdefghijklmnñopqrstuvwxyz · 0123456789</p></div></div>`;
@@ -145,7 +145,8 @@ h1, h2, h3 { font-family: "Rubik", Arial, sans-serif; color: ${C.pizarra}; margi
 h2 { font-size: 17pt; font-weight: 600; line-height: 1.15; margin: 20pt 0 8pt; }
 h3 { font-size: 12pt; font-weight: 600; margin: 14pt 0 6pt; }
 p { margin: 0 0 7pt; } ul, ol { margin: 0 0 8pt; padding-left: 16pt; } li { margin-bottom: 3pt; }
-blockquote { margin: 8pt 0; padding: 10pt 14pt; background: ${C.salvia}; border-radius: 8pt; color: ${C.pizarra}; font-weight: 600; }
+blockquote { margin: 8pt 0; padding: 10pt 14pt; background: ${C.salvia}; border-radius: 8pt; color: ${C.pizarra}; font-weight: 600; break-inside: avoid; }
+p:has(+ blockquote) { break-after: avoid; }   /* «Discurso de 30 segundos.» no se queda solo al pie, lejos de su cita */
 blockquote p { margin: 0; }
 strong { color: ${C.pizarra}; }
 table { width: 100%; border-collapse: collapse; margin: 6pt 0 12pt; font-size: 8.8pt; line-height: 1.4; }

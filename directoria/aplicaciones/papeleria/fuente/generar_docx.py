@@ -262,8 +262,8 @@ def propuesta():
     r = m.run(p, 'Propuesta para', pt=32)
     r.add_break()
     m.run(p, '[Nombre del colegio]', pt=32)
-    doc.add_paragraph('Qué hace DirectorIA por vuestro equipo, cómo trata los datos de vuestros alumnos, '
-                      'cómo lo instalamos y cuánto cuesta. Todo por escrito y sin letra pequeña.', style='Subtitle')
+    doc.add_paragraph('Qué hace DirectorIA por vuestro equipo, qué datos guarda, cómo lo instalamos y cuánto '
+                      'cuesta. Todo por escrito y sin letra pequeña.', style='Subtitle')
 
     # La ilustración, con el borde del disco alineado con el margen (el disco deja 16/240 libres por lado)
     p = doc.add_paragraph()
@@ -317,23 +317,39 @@ def propuesta():
         ('Dirección', [
             'Un resumen del día a las 8:00: quién falta, qué vence hoy y qué correos importan.',
             'El correo, resumido y con una respuesta propuesta que revisáis antes de enviarla.',
-            'Las actas de claustro y de consejo escolar, a partir del dictado.']),
+            'El acta del claustro, a partir del dictado, y el archivo de las actas de claustro y consejo '
+            'escolar, con buscador.']),
         ('Jefatura de estudios', [
             'Cuando falta alguien, DirectorIA propone quién cubre cada hora, con las reglas del colegio y un '
             'reparto de guardias equilibrado. Jefatura lo revisa y lo confirma.',
-            'La ficha para quien sustituye: la tarea de la sesión, las pautas del alumnado con necesidades, '
-            'las alergias y las recogidas.']),
+            'La ficha para quien sustituye, solo con la clase: grupo, materia, hora y aula; la tarea, que sale de '
+            'la programación quincenal de quien falta; el material y dónde está, y a quién llamar. Las '
+            'indicaciones de salud y de recogida de los alumnos no están en DirectorIA: las tiene el colegio, y la '
+            'ficha recuerda preguntarlas en conserjería o a la tutora.',
+            'El calendario de exámenes y el reparto de aulas, con aviso de cada choque.',
+            'El informe de ausencias del profesorado, sin el motivo: solo si el justificante está entregado o '
+            'pendiente.']),
         ('Secretaría y administración', [
             'Saca de cada circular qué hay que entregar, quién lo entrega y cuándo, y avisa antes de que '
             'venza el plazo.',
-            'Analiza las facturas y los contratos del colegio y señala dónde se puede ahorrar.']),
-        ('Orientación y tutoría', [
-            'Los protocolos de acoso escolar y de absentismo, paso a paso y con sus documentos preparados. '
-            'Valorar cada caso y decidir las medidas corresponde al equipo del centro.',
-            'Sus pautas llegan a la ficha de quien sustituye, solo con lo necesario.']),
+            'Analiza las facturas y los contratos del colegio y señala dónde se puede ahorrar.',
+            'Los justificantes del profesorado, cada uno en su carpeta: un programa, con reglas y sin IA, los '
+            'archiva por curso, mes y docente. La IA no los lee. Solo los ven el propio docente y quien lleve el '
+            'personal, con registro de accesos.']),
+        ('Orientación y convivencia', [
+            'Las guías de los protocolos de acoso escolar, absentismo y accidentes, según el protocolo vigente en '
+            'vuestra comunidad: en cada paso, qué se hace, quién, el plazo, qué anexo se usa (la plantilla '
+            'oficial, en blanco) y qué hay que cuidar. En DirectorIA no se abre ningún caso: los datos de cada '
+            'caso van donde manda el protocolo, como Raíces y el expediente del centro. Valorar cada caso y '
+            'decidir las medidas corresponde al equipo del centro.',
+            'Las circulares generales, traducidas o en lectura fácil, para revisarlas antes de enviarlas.',
+            'El plan de convivencia y los documentos del departamento, en un solo sitio.']),
         ('Cada docente', [
-            'Su propio asistente: dicta un correo y le llega redactado, listo para revisarlo y enviarlo.',
+            'Su propio asistente: dicta un correo para las familias del grupo y le llega redactado, listo para '
+            'revisarlo y enviarlo.',
             'Sus plazos a la vista, con aviso antes de que venzan.',
+            'Sube sus justificantes desde DirectorIA y elige la ausencia a la que corresponden. En el registro '
+            'de ausencias solo pone «Justificante: entregado» o «pendiente», nunca el motivo.',
             'Opcional: el módulo de Claude, en la nube, solo para preparar material didáctico, no para datos '
             'de alumnos.']),
     ]
@@ -342,7 +358,8 @@ def propuesta():
         for t in puntos:
             doc.add_paragraph(t, style='List Bullet')
     doc.add_paragraph('Lo que no hace, a propósito', style='Heading 2')
-    for t in ('No evalúa, puntúa ni clasifica a ningún alumno.',
+    for t in ('No guarda datos de alumnos: solo del profesorado y del funcionamiento del colegio.',
+              'No evalúa, puntúa ni clasifica a ningún alumno.',
               'No decide: prepara y propone, y una persona del colegio revisa, decide y firma.',
               'No contesta el correo por su cuenta: cada respuesta la revisa y la envía una persona.',
               'No sustituye a la gestoría ni lleva la contabilidad oficial.'):
@@ -350,14 +367,29 @@ def propuesta():
 
     # ---------------------------------------------------------- 3. Privacidad
     h1(doc, 3, 'Privacidad y protección de datos')
+    con_entradilla(doc, 'Qué datos guarda.',
+                   'DirectorIA no guarda datos de alumnos: solo del profesorado y del funcionamiento del colegio, '
+                   'como horarios, grupos, aulas, guardias, ausencias del profesorado (sin el motivo), plazos, '
+                   'documentos del centro, gastos y contratos. Los protocolos son guías de pasos: no se abre ningún '
+                   'caso, y los datos de cada caso van donde manda el protocolo.')
+    con_entradilla(doc, 'El correo.',
+                   'Es la única excepción: lo escriben las familias y puede traer nombres de alumnos. La IA lo lee en '
+                   'el servidor del colegio para resumirlo; DirectorIA no crea fichas de alumnos ni guarda sus datos '
+                   'aparte.')
+    con_entradilla(doc, 'Justificantes del profesorado, el único dato de salud que guarda DirectorIA.',
+                   'Los justificantes los archiva un programa en su carpeta; la IA no los lee. Solo los ven el '
+                   'propio docente y quien lleve el personal, con registro de accesos, y se borran cuando pasa el '
+                   'plazo que fije el colegio.')
     con_entradilla(doc, 'Dónde están los datos.',
-                   'La aplicación y los datos están en un servidor dentro del colegio, y la IA los trata ahí. Las '
-                   'copias de seguridad van cifradas: una en el colegio y otra en un centro de datos de la UE. Los '
-                   'correos salen por la cuenta del propio colegio. El mantenimiento a distancia queda registrado.')
+                   'La aplicación y los datos están en un servidor dentro del colegio. Las copias de seguridad van '
+                   'cifradas: una en el colegio y otra en un centro de datos de la UE. Los correos salen por la '
+                   'cuenta del propio colegio. El mantenimiento a distancia queda registrado. La IA trabaja dentro '
+                   'del colegio, también con el correo.')
     con_entradilla(doc, 'El responsable es el colegio.',
                    'El colegio sigue siendo el responsable del tratamiento. DirectorIA os entrega los borradores '
-                   'de la evaluación de impacto (EIPD) y del registro de actividades de tratamiento, para que '
-                   'vuestro delegado de protección de datos los revise y el colegio los apruebe.')
+                   'de la evaluación de impacto (EIPD), del registro de actividades de tratamiento y de los textos '
+                   'para informar al profesorado y al comité, para que vuestro delegado de protección de datos los '
+                   'revise y el colegio los apruebe.')
     con_entradilla(doc, 'Decide una persona.',
                    'DirectorIA propone y una persona del colegio decide. Nunca evalúa, puntúa ni clasifica a '
                    'ningún alumno.')
@@ -404,9 +436,10 @@ def propuesta():
     # Lo que incluye cada cuota, como en la hoja comercial. La formación y el borrador de la evaluación de impacto
     # son de una vez y los paga la cuota inicial: si fueran en la suscripción, se leerían como 6 horas cada año
     con_entradilla(doc, 'La cuota inicial incluye',
-                   'los equipos y su instalación, 6 horas de formación al claustro, con la alfabetización en IA, y el '
-                   'borrador de la evaluación de impacto, con su capítulo de IA, que revisa vuestro delegado de '
-                   'protección de datos y aprueba el colegio.')
+                   'los equipos y su instalación, 6 horas de formación al claustro, con la alfabetización en IA, el '
+                   'borrador de la evaluación de impacto, con su capítulo de IA, y los textos para informar al '
+                   'profesorado y al comité. Los borradores los revisa vuestro delegado de protección de datos y los '
+                   'aprueba el colegio.')
     con_entradilla(doc, 'La suscripción incluye',
                    'soporte en horario lectivo, actualizaciones (también las de seguridad, durante 5 años como '
                    'mínimo), una visita al año y la gestión de las garantías.')
@@ -500,13 +533,15 @@ def propuesta():
 
     doc.add_paragraph('Qué hace', style='Heading 2')
     for t_ in ('Todo lo que DirectorIA hace con las reglas y los datos del colegio, sin IA: guardias, sustituciones '
-               'y la ficha de quien sustituye; protocolos, plazos, certificados y el dosier para la inspección; el '
-               'resumen de las 8:00, el banco de recursos y el analista de gastos.',
+               'y la ficha de quien sustituye; las guías de los protocolos, los plazos y el dosier para la '
+               'inspección; los justificantes del profesorado, archivados en su carpeta; el resumen de las 8:00, el '
+               'banco de recursos y el analista de gastos.',
                'Lo que escribe la IA llega con el paso a Completo: resúmenes y respuestas de correo, actas a partir '
                'del dictado, traducciones y lectura fácil, y los plazos sacados de las circulares. Hasta entonces, '
                'algunas funciones van sin su parte de IA: el resumen de las 8:00, sin los correos, y el analista de '
                'gastos, solo con facturas electrónicas.',
-               'La aplicación y los datos están en un servidor dentro del colegio. La copia de seguridad, cifrada, '
+               'DirectorIA no guarda datos de alumnos: solo del profesorado y del funcionamiento del colegio. La '
+               'aplicación y los datos están en un servidor dentro del colegio. La copia de seguridad, cifrada, '
                'está en la UE. Los correos salen por la cuenta del propio colegio. El mantenimiento a distancia '
                'queda registrado.'):
         doc.add_paragraph(t_, style='List Bullet')
@@ -516,7 +551,11 @@ def propuesta():
                'En el plan Grande, dos servidores de datos.',
                '4 horas de formación al claustro.',
                'Soporte en horario lectivo, actualizaciones y una visita al año.',
-               'El borrador de la evaluación de impacto, con el anexo de IA ya redactado y sin activar.'):
+               # Sin datos de alumnos, quizá no haga falta evaluación de impacto (pregunta para el abogado); los
+               # demás papeles siguen, también la información al comité por el reparto de guardias (art. 64.4.d ET)
+               'Los borradores del contrato de encargo, del registro de actividades y de la información al '
+               'profesorado y al comité (por el reparto de guardias); el de la evaluación de impacto, si vuestro '
+               'delegado de protección de datos ve que hace falta, y el anexo de IA, ya redactado y sin activar.'):
         doc.add_paragraph(t_, style='List Bullet')
 
     p = doc.add_paragraph('Precio', style='Heading 2')
@@ -527,6 +566,7 @@ def propuesta():
     ])
     p = doc.add_paragraph()
     p.paragraph_format.space_before = Pt(8)
+    p.paragraph_format.keep_together = True  # que no se parta entre dos páginas
     m.run(p, 'Precios sin IVA; debajo de cada uno, con el 21 % de IVA.', bold=True, color=m.PIZARRA)
     m.run(p, ' Con IVA, el primer año sale a 14.399 € en el Básico, 17.303 € en el Centro y 23.353 € en el '
              'Grande, y los siguientes, a 8.712 €, 11.616 € y 15.972 €. La luz va aparte: unos 26-65 € al año. '
@@ -543,9 +583,9 @@ def propuesta():
                    'Empezar sin IA y pasar después cuesta lo mismo que empezar con IA, menos los meses sin IA.')
     con_entradilla(doc, 'Sin empezar de cero.',
                    'El servidor de datos sigue con vuestros datos, reglas, usuarios e historial, y el servidor de IA '
-                   'se añade a su lado, dentro del colegio. Con el paso llegan también los documentos de la IA: el '
-                   'anexo de la evaluación de impacto, la adenda al contrato y la información al personal y a las '
-                   'familias.')
+                   'se añade a su lado, dentro del colegio. Con el paso llegan también los documentos de la IA: la '
+                   'evaluación de impacto o su anexo de IA, la adenda al contrato y la información al personal y a '
+                   'las familias.')
     con_entradilla(doc, 'Fecha del paso a Completo:', '[fecha pactada / cuando lo decidáis].')
     con_entradilla(doc, 'Plan propuesto para la primera fase:',
                    'DirectorIA Esencial [Básico / Centro / Grande], para [n.º de docentes] docentes.')

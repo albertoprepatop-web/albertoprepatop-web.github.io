@@ -38,17 +38,17 @@ Veintidós ilustraciones planas para contar, desde la primera diapositiva, cómo
 | `docente.svg` | Maestra de unos 35, con pelo rizado | La tiza en la mano: dibuja en la pizarra un sol y una casa (dibujos, no letras ni números) |
 | `orientacion.svg` | Orientadora o tutora con hiyab | Bocadillo con un corazón |
 | `sustituto.svg` | Profesor sustituto joven | Su ficha: una lista con casillas marcadas |
-| `familia.svg` | Padre de unos 40 con su hija: la rodea con el brazo y le apoya la mano en el hombro | Son las familias que reciben cartas y circulares |
+| `familia.svg` | Padre de unos 40 con su hija: la rodea con el brazo y le apoya la mano en el hombro | Son las familias que reciben las circulares y los correos del colegio |
 
 ### Documentos e iconos
 
 | Archivo | Qué muestra |
 |---|---|
 | `documento-ia.svg` | Una hoja con la insignia de la IA (la chispa naranja sobre un círculo pizarra) en la esquina de abajo: este texto lo ha escrito la IA (un resumen, una respuesta, un acta dictada, una traducción). Solo para eso: no para la ficha, un informe de gastos ni un documento que rellena DirectorIA con una plantilla. |
-| `documento.svg` | La misma hoja, sin insignia y con un pequeño gráfico de barras: lo que prepara DirectorIA con las reglas, las plantillas y los datos del colegio. Es la del análisis y el informe de gastos, la evaluación de impacto y los documentos de un protocolo. |
+| `documento.svg` | La misma hoja, sin insignia y con un pequeño gráfico de barras: lo que prepara DirectorIA con las reglas, las plantillas y los datos del colegio. Es la del análisis y el informe de gastos, la evaluación de impacto y las plantillas en blanco de la guía de un protocolo. |
 | `circular.svg` | Una circular con sello oficial, un aro con un pequeño edificio institucional. |
 | `acta.svg` | Un acta con dos firmas. |
-| `ficha.svg` | La ficha de sustitución: una lista de tareas con un aviso (alergias, necesidades o recogidas) en un triángulo pizarra del tamaño de las casillas. No lleva la insignia de la IA: la prepara DirectorIA con las reglas y los datos del colegio («Preparada por DirectorIA · confirmada por jefatura»). |
+| `ficha.svg` | La ficha de sustitución: una lista de tareas con un aviso en un triángulo pizarra del tamaño de las casillas. Desde el 28 de noviembre de 2026 la ficha solo lleva la clase, y el aviso es la línea fija que recuerda preguntar la salud y las recogidas en conserjería o a la tutora: DirectorIA no guarda datos de alumnos. No lleva la insignia de la IA: la prepara DirectorIA con las reglas y los datos del colegio («Preparada por DirectorIA · confirmada por jefatura»). |
 | `correo.svg` | Un sobre. |
 | `calendario.svg` | Un calendario con un plazo marcado: un círculo pizarra con un punto claro, sin chispa, porque los avisos de plazos salen de las reglas del colegio. (Lo que sí hace la IA es sacar los plazos de una circular: para eso, `documento-ia`.) |
 | `candado.svg` | Un candado: la privacidad. |
@@ -81,7 +81,8 @@ Veintidós ilustraciones planas para contar, desde la primera diapositiva, cómo
   - `docente` + `microfono` + `acta`: del dictado al acta;
   - `jefatura` + `calendario` + `alerta`: plazos y choques avisados;
   - `secretaria` + `circular` + `correo` + `familia`: circulares a las familias;
-  - `colegio-servidor` + `candado`: la IA trata los datos de los alumnos dentro del colegio.
+  - `colegio-servidor` + `candado`: la aplicación y los datos, en un servidor dentro del colegio; DirectorIA no guarda datos de alumnos;
+  - `docente` + `candado`: los justificantes del profesorado, archivados en su carpeta y sin que la IA los lea.
 
 ## Para cambiarlas
 
@@ -96,3 +97,7 @@ Veintidós ilustraciones planas para contar, desde la primera diapositiva, cómo
   - copiad las que cambien a la web (`../web/img/ilustraciones/`), que lleva su propia copia;
   - rehaced `kit.png` desde esta carpeta, con las herramientas de `../presentacion/herramientas/` (Node 18 y Playwright con Chromium): `bash ../presentacion/herramientas/kit.sh`. Dibuja cada SVG a 240 px y los pone en una hoja de 5 columnas sobre tiza, en el orden de `generar.mjs`;
   - si la ilustración sale en la presentación o en el sistema de diseño, hay que subirla otra vez a ese artifact: el archivo nuevo tiene otra dirección `/_blob/…` (ver `../presentacion/herramientas/LEEME.md`).
+
+## Cambio del 28 de noviembre de 2026
+
+DirectorIA ya no guarda datos de alumnos. Ningún dibujo cambia: `ficha.svg` no lleva textos, así que su aviso vale para la línea fija de la ficha nueva. Cambian las descripciones de `ficha`, `documento` y `familia` y la pareja de `colegio-servidor` y `candado`, y se añade la de `docente` y `candado` para los justificantes del profesorado.

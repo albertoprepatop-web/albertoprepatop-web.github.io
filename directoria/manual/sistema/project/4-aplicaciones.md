@@ -5,12 +5,12 @@ Las piezas que ya existen, dónde están y qué hay que respetar en cada una. La
 ## Presentación comercial
 
 - **Dónde:** el mazo de Slides «DirectorIA Esencial y Completo · Presentación para equipos directivos», que se descarga como PowerPoint o PDF. Sus fuentes están en `presentacion/project/` (todos los estilos en `deck.css`, la única hoja que lee el visor de Slides) y la hoja `vista-general.png` está en el grupo **Laminas**.
-- **Estructura (35 diapositivas, en tres partes):** apertura con las dos versiones y qué se trata dentro del colegio; parte 1, DirectorIA Esencial, sin IA (cómo funciona, todas sus funciones por cargo y los ejemplos de guardias, ficha, protocolo de acoso, banco de recursos y analista de gastos); parte 2, DirectorIA Completo, con IA (por qué la IA va dentro del colegio, lo que añade a cada cargo, el correo, el banco y lo que no hace); parte 3, comparativa función a función, cuál os conviene, el paso de Esencial a Completo, precios y condiciones; cierre con cómo empezar y la oferta para el primer colegio, y un anexo con el plan del protocolo.
+- **Estructura (35 diapositivas, en tres partes):** apertura con las dos versiones y qué se guarda dentro del colegio y qué sale; parte 1, DirectorIA Esencial, sin IA (cómo funciona, todas sus funciones por cargo y los ejemplos de guardias, ficha, justificantes del profesorado, guía del protocolo de acoso, banco de recursos y analista de gastos); parte 2, DirectorIA Completo, con IA (por qué la IA va dentro del colegio, lo que añade a cada cargo, el correo, el banco y lo que no hace); parte 3, comparativa función a función, cuál os conviene, el paso de Esencial a Completo, precios y condiciones; cierre con cómo empezar y la oferta para el primer colegio, y un anexo con los pasos del protocolo.
 - **Marcas de versión:** cada diapositiva de la parte 1 lleva la etiqueta «sin IA» (pastilla salvia) junto al antetítulo, y cada una de la parte 2, «con IA» (pastilla oscura). En la parte 1 no hay insignia de la IA ni ilustraciones con la chispa.
 - **Reglas:**
   - Estilos `diapo-*`, margen `diapo-margen` e isotipo de 56 px arriba a la derecha (salvo en portada, cierre y diapositivas enteras de color).
   - Portada y cierre en `pizarra`, con el logotipo horizontal en negativo y una ilustración grande.
-  - Los casos de ejemplo llevan siempre el aviso «Ejemplo ficticio».
+  - Los ejemplos llevan siempre el aviso «Ejemplo ficticio». Ninguno lleva datos de alumnos: la ficha, solo la clase; el protocolo, la guía de pasos, sin ningún caso.
   - Ninguna cifra sin su fuente en la propia diapositiva.
 
 ## Web
@@ -21,6 +21,7 @@ Las piezas que ya existen, dónde están y qué hay que respetar en cada una. La
   - Cabecera con el logotipo horizontal a 172 × 32 px y pie con el de eslogan en negativo.
   - Botón principal «Pedir una demo en el colegio» y secundario «Análisis de gastos gratis».
   - Los textos legales tienen datos entre corchetes que hay que completar y revisar con un abogado antes de publicar.
+  - La ficha de ejemplo lleva solo la clase y la línea fija que remite al colegio para la salud y las recogidas; la sección de protocolos enseña una guía de pasos, sin ningún caso, y la de privacidad dice que DirectorIA no guarda datos de alumnos, con la excepción del correo y los justificantes del profesorado.
 
 ## Papelería y documentos
 

@@ -32,6 +32,7 @@ Veintidós ilustraciones planas cuentan cómo funciona DirectorIA: un servidor d
   - `docente`, `microfono` y `acta`: del dictado al acta.
   - `jefatura`, `calendario` y `alerta`: plazos y choques avisados.
   - `secretaria`, `circular`, `correo` y `familia`: circulares a las familias.
-  - `colegio-servidor` y `candado`: la IA trata los datos de los alumnos dentro del colegio.
+  - `colegio-servidor` y `candado`: la aplicación y los datos, en un servidor dentro del colegio; DirectorIA no guarda datos de alumnos.
+  - `docente` y `candado`: los justificantes del profesorado, archivados en su carpeta y sin que la IA los lea.
 - **Tamaños de referencia:** 96 a 128 px junto a un texto, 160 px en los diagramas y 260 a 560 px como imagen principal de una diapositiva o de la portada de la web.
 - **Nada de fotos de banco, robots, cerebros, circuitos ni imágenes generadas por IA.** Si hace falta una foto, que sea de un colegio real, con permiso y sin alumnos reconocibles.
