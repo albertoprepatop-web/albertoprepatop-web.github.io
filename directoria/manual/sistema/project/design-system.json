@@ -355,8 +355,8 @@
     },
     "vista-general.png": {
      "name": "vista-general.png",
-     "blob": "b710a3ce1bca0d99f29d6c6b6f32030c",
-     "size": 957310,
+     "blob": "1f1093d2241b2626ac4699f4578063b9",
+     "size": 933205,
      "type": "image/png"
     }
    }
@@ -369,8 +369,8 @@
  },
  "lastChange": {
   "by": "Claude",
-  "at": "2026-11-26T11:17:40Z",
+  "at": "2026-11-28T15:50:19Z",
   "via": "Claude Code",
-  "note": "Presentación en tres partes (Esencial, Completo y comparativa) y etiqueta «con IA» para lo que la IA busca, lee o detecta sin escribir"
+  "note": "Sin datos de alumnos: ficha solo con la clase, guías de los protocolos, justificantes del profesorado en carpetas y vista general nueva de la presentación"
  }
 }
